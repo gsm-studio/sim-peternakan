@@ -9,6 +9,9 @@
  * License MIT  (https://coreui.io/license/)
  */
 :root {
+  --rossa-warning: #D4780C;
+  --rossa-success: #0FA958;
+  --rossa-danger: #F31422;
   --rossa-text: rgba(15, 169, 88, 1);
   --rossa-avatar: rgba(15, 169, 88, 1);
   --rossa-bg: rgba(214, 237, 196, 1);
@@ -157,7 +160,75 @@ input[type=number]:focus,
 
 .bg-button-rossa {
   color: white !important;
-  background-color: var(--rossa-bg-button) !important;
+  background-color: var(--rossa-bg-button);
+}
+
+.list-group .list-group-item {
+  border: 2px solid var(--rossa-success); 
+
+}
+
+.modal-dialog {
+  max-width: 100%;
+  margin: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  display: flex;
+}
+
+.row-validasi {
+  cursor: pointer;
+}
+
+/* Styling for the popover */
+.popover-content {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 4px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.btnPersetujuan {
+  cursor: pointer;
+}
+
+.status-warning {
+  color: var(--rossa-warning);
+}
+
+.status-success {
+  color: var(--rossa-success);
+}
+
+.status-danger {
+  color: var(--rossa-danger);
+}
+
+.bg-status-warning {
+  background-color: var(--rossa-warning);
+}
+
+.bg-status-success {
+  background-color: var(--rossa-success);
+}
+
+.bg-status-danger {
+  background-color: var(--rossa-danger);
+}
+
+.search-table span, .search-table input {
+  border-color: var(--rossa-text) !important;
+}
+
+.search-table input::placeholder {
+  color: var(--rossa-text);
+  opacity: 1; /* Firefox */
 }
 
 .modal-content, .modal-dialog {
