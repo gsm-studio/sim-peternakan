@@ -206,21 +206,21 @@
                         </div>
                     </div>
                    <div class="ms-3">
-                    <span class="btnPopOver color-text-rossa">
+                    <span id="btnStrain" class="color-text-rossa">
                         Strain: Hisex
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
                             <path d="M1 1L5 7L9.5 1" stroke="#0FA958"/>
                           </svg>
                     </span>
-                    <div id="myPopover" class="popover-content p-0">
+                    <div id="myPopoverStrain" class="popover-content p-0">
                         <div>
                             <ul class="list-group">
-                                <li class="list-group-item">Kandang 1A</li>
-                                <li class="list-group-item">Kandang 1A</li>
-                                <li class="list-group-item">Kandang 1A</li>
-                                <li class="list-group-item">Kandang 1A</li>
-                                <li class="list-group-item">Kandang 1A</li>
-                                <li class="list-group-item">Kandang 1A</li>
+                                <li class="list-group-item">Hyline</li>
+                                <li class="list-group-item">Isa Brown</li>
+                                <li class="list-group-item">Lohmann Brown
+                                </li>
+                                <li class="list-group-item">Novogen</li>
+                                
                               </ul>
                         </div>
                     </div>
@@ -229,9 +229,6 @@
                     <div class="d-flex justify-content-between">
                         <!-- Button trigger modal -->
                         <div> 
-                          <button type="button" class="btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
-                            Select
-                          </button>
                           <button type="button" class="btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
                           Filter
                           </button>
@@ -408,66 +405,35 @@
                       <table class="table pelaporan table-bordered">
                         <thead>
                           <tr>
-                            <th scope="col">No</th>
-                            <th scope="col">Nama karyawan</th>
-                            <th scope="col">Devisi</th>
-                            <th scope="col">Kandang</th>
-                            <th scope="col">Usia Karyawan</th>
-                            <th scope="col">Kontrak</th>
-                            <th scope="col">Terakhir kirim laporan</th>
-                            <th scope="col"></th>
+                            <th scope="col">Usia (minggu)</th>
+                            <th scope="col">HD (%)</th>
+                            <th scope="col">Berat Butir (gr)</th>
+                            <th scope="col">Berat Telur (gr)</th>
+                            <th scope="col">FI</th>
+                            <th scope="col">FC</th>
+                            <th scope="col">Egg mass</th>
+                            
                           </tr>
                         </thead>
                         <tbody>
 
-                          <tr class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-                            <td>1</td>
-                            <td>Rossa Lia</td>
-                            <td>Peternak telur</td>
-                            <td>Kandang 1A</td>
+                          <tr class="row-validasi text-center">
+                            <td>18 minggu</td>
+                            <td>4,00 %</td>
+                            <td>1,520 gr</td>
+                            <td>48,80 gr</td>
                             <td>
-                                23
+                                85,00
                             </td>
                             <td>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none">
-                                    <path d="M2.57398 18C2.11398 18 1.72998 17.846 1.42198 17.538C1.11332 17.2293 0.958984 16.845 0.958984 16.385V1.615C0.958984 1.155 1.11332 0.771 1.42198 0.463C1.72998 0.154333 2.11398 0 2.57398 0H10.459L14.959 4.5V16.385C14.959 16.845 14.805 17.229 14.497 17.537C14.1883 17.8457 13.804 18 13.344 18H2.57398ZM9.95898 5H13.959L9.95898 1V5Z" fill="#0FA958"/>
-                                  </svg>
+                                209,5
                             </td>
                             <td>
-                                09  November 2023
+                                0,4
                             </td>
-                            <td>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
-                                <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
-                                <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
-                                <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
-                              </svg>
-                            </td>
+                            
                           </tr>
-                          <tr class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-                            <td>2</td>
-                            <td>Rossa Lia</td>
-                            <td>Peternak telur</td>
-                            <td>Kandang 1A</td>
-                            <td>
-                                23
-                            </td>
-                            <td>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none">
-                                    <path d="M2.57398 18C2.11398 18 1.72998 17.846 1.42198 17.538C1.11332 17.2293 0.958984 16.845 0.958984 16.385V1.615C0.958984 1.155 1.11332 0.771 1.42198 0.463C1.72998 0.154333 2.11398 0 2.57398 0H10.459L14.959 4.5V16.385C14.959 16.845 14.805 17.229 14.497 17.537C14.1883 17.8457 13.804 18 13.344 18H2.57398ZM9.95898 5H13.959L9.95898 1V5Z" fill="#0FA958"/>
-                                  </svg>
-                            </td>
-                            <td>
-                                09  November 2023
-                            </td>
-                            <td>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
-                                <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
-                                <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
-                                <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
-                              </svg>
-                            </td>
-                          </tr>
+                         
                           
                          
                         </tbody>
@@ -529,6 +495,9 @@
             const buttons = document.querySelectorAll('.btnPopOver');
             const popover = document.getElementById('myPopover');
 
+            const btnStrain = document.getElementById('btnStrain');
+            const popoverStrain = document.getElementById('myPopoverStrain');
+
             // Menampilkan atau menyembunyikan popover saat button diklik
             buttons.forEach(button => {
               button.addEventListener('click', function(event) {
@@ -541,10 +510,22 @@
               });
             });
 
+            btnStrain.addEventListener('click', function(event) {
+                  if (popoverStrain.style.display === 'block') {
+                    popoverStrain.style.display = 'none';
+                  } else {
+                    popoverStrain.style.display = 'block';
+                  }
+                  event.stopPropagation(); // Mencegah event bubbling
+              });
+
             // Menutup popover saat klik di luar popover
             document.addEventListener('click', function(event) {
                 if (!popover.contains(event.target)) {
                     popover.style.display = 'none';
+                }
+                if (!popoverStrain.contains(event.target)) {
+                    popoverStrain.style.display = 'none';
                 }
             });
 

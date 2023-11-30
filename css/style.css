@@ -163,6 +163,14 @@ input[type=number]:focus,
   background-color: var(--rossa-bg-button);
 }
 
+.login-page {
+  background-color: #D6EDC4 !important;
+}
+
+.login-page .card {
+  border-radius: 50px;
+}
+
 .list-group .list-group-item {
   border: 2px solid var(--rossa-success); 
 
@@ -192,6 +200,14 @@ input[type=number]:focus,
   padding: 10px;
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.btnPopOver {
+  cursor: pointer;
+}
+
+#btnStrain {
+  cursor: pointer;
 }
 
 .btnPersetujuan {
