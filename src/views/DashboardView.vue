@@ -259,4 +259,15 @@
 <script setup>
 import HeaderItem from '@/components/HeaderItem.vue'
 
+// import { storeToRefs } from 'pinia';
+
+// import { useAuthStore, useUsersStore } from '@/stores';
+
+// const authStore = useAuthStore();
+// const { user: authUser } = storeToRefs(authStore);
+
+// const usersStore = useUsersStore();
+// const { users } = storeToRefs(usersStore);
+
+// usersStore.getAll();
 </script>

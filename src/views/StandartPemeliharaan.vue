@@ -309,41 +309,47 @@
 </template>
 
 <script setup>
-    // Mengambil elemen button (icon SVG) dan popover
-    const buttons = document.querySelectorAll('.btnPopOver');
-    const popover = document.getElementById('myPopover');
+    import { onMounted } from 'vue';
 
-    const btnStrain = document.getElementById('btnStrain');
-    const popoverStrain = document.getElementById('myPopoverStrain');
+    onMounted(() => {
+        // Mengambil elemen button (icon SVG) dan popover
+        const buttons = document.querySelectorAll('.btnPopOver');
+        const popover = document.getElementById('myPopover');
 
-    // Menampilkan atau menyembunyikan popover saat button diklik
-    buttons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            if (popover.style.display === 'block') {
+        const btnStrain = document.getElementById('btnStrain');
+        const popoverStrain = document.getElementById('myPopoverStrain');
+
+        // Menampilkan atau menyembunyikan popover saat button diklik
+        buttons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                if (popover.style.display === 'block') {
+                    popover.style.display = 'none';
+                } else {
+                    popover.style.display = 'block';
+                }
+                event.stopPropagation(); // Mencegah event bubbling
+            });
+        });
+
+        btnStrain.addEventListener('click', function(event) {
+                if (popoverStrain.style.display === 'block') {
+                popoverStrain.style.display = 'none';
+                } else {
+                popoverStrain.style.display = 'block';
+                }
+                event.stopPropagation(); // Mencegah event bubbling
+            });
+
+        // Menutup popover saat klik di luar popover
+        document.addEventListener('click', function(event) {
+            if (!popover.contains(event.target)) {
                 popover.style.display = 'none';
-            } else {
-                popover.style.display = 'block';
             }
-            event.stopPropagation(); // Mencegah event bubbling
+            if (!popoverStrain.contains(event.target)) {
+                popoverStrain.style.display = 'none';
+            }
         });
     });
-
-    btnStrain.addEventListener('click', function(event) {
-            if (popoverStrain.style.display === 'block') {
-            popoverStrain.style.display = 'none';
-            } else {
-            popoverStrain.style.display = 'block';
-            }
-            event.stopPropagation(); // Mencegah event bubbling
-        });
-
-    // Menutup popover saat klik di luar popover
-    document.addEventListener('click', function(event) {
-        if (!popover.contains(event.target)) {
-            popover.style.display = 'none';
-        }
-        if (!popoverStrain.contains(event.target)) {
-            popoverStrain.style.display = 'none';
-        }
-    });
+    
+    
 </script>

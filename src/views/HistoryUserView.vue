@@ -258,41 +258,45 @@
 </template>
 
 <script setup>
-    // Mengambil elemen button (icon SVG) dan popover
-    const button = document.getElementById('idKandangPopOver');
-    const button2 = document.getElementById('actionPopOver');
-    const popover = document.getElementById('myPopover');
-    const popover2 = document.getElementById('myPopover2');
+    import { onMounted } from 'vue';
 
-    // Menampilkan atau menyembunyikan popover saat button diklik
-    
-        button.addEventListener('click', function(event) {
-            if (popover.style.display === 'block') {
+    onMounted(() => {
+         // Mengambil elemen button (icon SVG) dan popover
+        const button = document.getElementById('idKandangPopOver');
+        const button2 = document.getElementById('actionPopOver');
+        const popover = document.getElementById('myPopover');
+        const popover2 = document.getElementById('myPopover2');
+
+        // Menampilkan atau menyembunyikan popover saat button diklik
+        
+            button.addEventListener('click', function(event) {
+                if (popover.style.display === 'block') {
+                    popover.style.display = 'none';
+                } else {
+                    popover.style.display = 'block';
+                }
+                event.stopPropagation(); // Mencegah event bubbling
+            });
+
+            button2.addEventListener('click', function(event) {
+                if (popover2.style.display === 'block') {
+                popover2.style.display = 'none';
+                } else {
+                popover2.style.display = 'block';
+                }
+                event.stopPropagation(); // Mencegah event bubbling
+            });
+
+
+        // Menutup popover saat klik di luar popover
+        document.addEventListener('click', function(event) {
+            if (!popover.contains(event.target)) {
                 popover.style.display = 'none';
-            } else {
-                popover.style.display = 'block';
             }
-            event.stopPropagation(); // Mencegah event bubbling
-        });
-
-        button2.addEventListener('click', function(event) {
-            if (popover2.style.display === 'block') {
-            popover2.style.display = 'none';
-            } else {
-            popover2.style.display = 'block';
+            if (!popover2.contains(event.target)) {
+                popover2.style.display = 'none';
             }
-            event.stopPropagation(); // Mencegah event bubbling
         });
-
-
-    // Menutup popover saat klik di luar popover
-    document.addEventListener('click', function(event) {
-        if (!popover.contains(event.target)) {
-            popover.style.display = 'none';
-        }
-        if (!popover2.contains(event.target)) {
-            popover2.style.display = 'none';
-        }
     });
 
 </script>

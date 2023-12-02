@@ -206,8 +206,8 @@
                     <table class="table pelaporan table-bordered">
                     <thead>
                         <tr>
-                        <th scope="col">No</th>
                         <th scope="col">ID Kandang</th>
+                        <th scope="col">Nama Kandang</th>
                         <th scope="col">Anak Kandang</th>
                         <th scope="col">Nama Mandor</th>
                         <th scope="col">Alamat Kandang</th>
@@ -218,60 +218,30 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        <tr class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-                        <td>1</td>
-                        <td>Kandang 1A</td>
-                        <td>Rossa Lia</td>
-                        <td>Hartono Sucipto</td>
-                        <td>
-                            Jalan Ciliwung 
-                            No. 52, Blitar
-                        </td>
-                        <td>
-                            09  November 2023
-                        </td>
-                        <td>
-                            Vaksin ND
-                        </td>
-                        <td>
-                            Omega 3
-                        </td>
-                        <td>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
-                            <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
-                            <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
-                            <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
-                            </svg>
-                        </td>
-                        </tr>
-                        <tr class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-                        <td>2</td>
-                        <td>Kandang 1A</td>
-                        <td>Rossa Lia</td>
-                        <td>Hartono Sucipto</td>
-                        <td>
-                            Jalan Ciliwung 
-                            No. 52, Blitar
-                        </td>
-                        <td>
-                            09  November 2023
-                        </td>
-                        <td>
-                            Selfix
-                        </td>
-                        <td>
-                            Omega 3
-                        </td>
-                        <td>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
-                            <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
-                            <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
-                            <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
-                            </svg>
-                        </td>
-                        </tr>
                         
+                        <tr v-for="item in store.responseData.data.items" :key="item.id" class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.nama }}</td>
+                            <td>{{ item.nama_anak_kandang }}</td>
+                            <td>{{ item.nama_mandor }}</td>
+                            <td>{{ item.alamat }}</td>
+                            <td>
+                                09  November 2023
+                            </td>
+                            <td>
+                                Vaksin ND
+                            </td>
+                            <td>
+                                Omega 3
+                            </td>
+                            <td>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
+                                <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
+                                <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
+                                <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
+                                </svg>
+                            </td>
+                        </tr>
                         
                     </tbody>
                     </table>
@@ -314,26 +284,78 @@
 </template>
 
 <script setup>
-    // Mengambil elemen button (icon SVG) dan popover
-    const buttons = document.querySelectorAll('.btnPersetujuan');
-    const popover = document.getElementById('myPopover');
 
-    // Menampilkan atau menyembunyikan popover saat button diklik
-    buttons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            if (popover.style.display === 'block') {
-                popover.style.display = 'none';
-            } else {
-                popover.style.display = 'block';
-            }
-            event.stopPropagation(); // Mencegah event bubbling
-        });
+    import { onMounted } from 'vue'
+    import { defineStore } from 'pinia'
+    import axios from 'axios'
+
+    const baseUrl = `${import.meta.env.VITE_API_URL}`;
+
+    // Define Pinia store
+    const usePiniaStore = defineStore('kandangStore', {
+        state: () => ({
+            responseData: null,
+        }),
+        actions: {
+            setResponseData(data) {
+                this.responseData = data;
+            },
+        },
     });
 
-    // Menutup popover saat klik di luar popover
-    // document.addEventListener('click', function(event) {
-    //     if (!popover.contains(event.target)) {
-    //         popover.style.display = 'none';
-    //     }
-    // });
+    const store  = usePiniaStore();
+
+    onMounted(() => {
+        getKandang()
+        
+    });
+
+    async function getKandang() {
+        
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        // console.log(JSON.parse(token).token);
+        axios.get(baseUrl + '/kandang', {
+            params: {
+                page_number: 1, // Replace with the desired page number
+                page_size: 10, // Replace with the desired page size
+            },
+           
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                store.setResponseData(response.data);
+                console.log(store.responseData.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    onMounted(() => {
+        const buttons = document.querySelectorAll('.btnPersetujuan');
+        const popover = document.getElementById('myPopover');
+
+        // Menampilkan atau menyembunyikan popover saat button diklik
+        buttons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                if (popover.style.display === 'block') {
+                    popover.style.display = 'none';
+                } else {
+                    popover.style.display = 'block';
+                }
+                event.stopPropagation(); // Mencegah event bubbling
+            });
+        });
+
+        // Menutup popover saat klik di luar popover
+        // document.addEventListener('click', function(event) {
+        //     if (!popover.contains(event.target)) {
+        //         popover.style.display = 'none';
+        //     }
+        // });
+    });
+
 </script>

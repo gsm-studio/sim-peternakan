@@ -309,26 +309,79 @@
 </template>
 
 <script setup>
-    // Mengambil elemen button (icon SVG) dan popover
-    const buttons = document.querySelectorAll('.btnPersetujuan');
-    const popover = document.getElementById('myPopover');
+    import { onMounted } from 'vue';
+    import { defineStore } from 'pinia'
+    import axios from 'axios'
 
-    // Menampilkan atau menyembunyikan popover saat button diklik
-    buttons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            if (popover.style.display === 'block') {
+    const baseUrl = `${import.meta.env.VITE_API_URL}`;
+
+    // Define Pinia store
+    const usePiniaStore = defineStore('kandangStore', {
+        state: () => ({
+            responseData: null,
+        }),
+        actions: {
+            setResponseData(data) {
+                this.responseData = data;
+            },
+        },
+    });
+
+    const store  = usePiniaStore();
+
+    onMounted(() => {
+        getKandang()
+        
+    });
+
+    async function getKandang() {
+        
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        // console.log(JSON.parse(token).token);
+        axios.get(baseUrl + '/kandang', {
+            params: {
+                page_number: 1, // Replace with the desired page number
+                page_size: 10, // Replace with the desired page size
+            },
+           
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                store.setResponseData(response.data);
+                console.log(store.responseData.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    onMounted(() => {
+         // Mengambil elemen button (icon SVG) dan popover
+        const buttons = document.querySelectorAll('.btnPersetujuan');
+        const popover = document.getElementById('myPopover');
+
+        // Menampilkan atau menyembunyikan popover saat button diklik
+        buttons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                if (popover.style.display === 'block') {
+                    popover.style.display = 'none';
+                } else {
+                    popover.style.display = 'block';
+                }
+                event.stopPropagation(); // Mencegah event bubbling
+            });
+        });
+
+        // Menutup popover saat klik di luar popover
+        document.addEventListener('click', function(event) {
+            if (!popover.contains(event.target)) {
                 popover.style.display = 'none';
-            } else {
-                popover.style.display = 'block';
             }
-            event.stopPropagation(); // Mencegah event bubbling
         });
     });
 
-    // Menutup popover saat klik di luar popover
-    document.addEventListener('click', function(event) {
-        if (!popover.contains(event.target)) {
-            popover.style.display = 'none';
-        }
-    });
+   
 </script>

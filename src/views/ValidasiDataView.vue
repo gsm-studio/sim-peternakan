@@ -405,28 +405,33 @@
 </template>
 
 <script setup>
+    import { onMounted } from 'vue'
     import HeaderItem from '../components/HeaderItem.vue'
 
-     // Mengambil elemen button (icon SVG) dan popover
-     const buttons = document.querySelectorAll('.btnPersetujuan');
-    const popover = document.getElementById('myPopover');
+    onMounted(() => {
+        // Mengambil elemen button (icon SVG) dan popover
+        const buttons = document.querySelectorAll('.btnPersetujuan');
+        const popover = document.getElementById('myPopover');
 
-    // Menampilkan atau menyembunyikan popover saat button diklik
-    buttons.forEach(button => {
-        button.addEventListener('click', function(event) {
-            if (popover.style.display === 'block') {
-                popover.style.display = 'none';
-            } else {
-                popover.style.display = 'block';
-            }
-            event.stopPropagation(); // Mencegah event bubbling
+        // Menampilkan atau menyembunyikan popover saat button diklik
+        buttons.forEach(button => {
+            button.addEventListener('click', function(event) {
+                if (popover.style.display === 'block') {
+                    popover.style.display = 'none';
+                } else {
+                    popover.style.display = 'block';
+                }
+                event.stopPropagation(); // Mencegah event bubbling
+            });
         });
+
+        // Menutup popover saat klik di luar popover
+        // document.addEventListener('click', function(event) {
+        //     if (!popover.contains(event.target)) {
+        //         popover.style.display = 'none';
+        //     }
+        // });
     });
 
-    // Menutup popover saat klik di luar popover
-    document.addEventListener('click', function(event) {
-        if (!popover.contains(event.target)) {
-            popover.style.display = 'none';
-        }
-    });
+     
 </script>

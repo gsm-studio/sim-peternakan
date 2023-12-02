@@ -30,7 +30,7 @@
                 <span class="me-2">Rossa Lia</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end pt-0">
-                    <a class="dropdown-item" href="#">
+                    <a class="dropdown-item" href="#" @click="authStore.logout()">
                     <svg class="icon me-2">
                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
                     </svg>
@@ -44,5 +44,7 @@
     </header>
 </template>
 
-<script>
+<script setup>
+    import { useAuthStore } from '@/stores';
+    const authStore = useAuthStore();
 </script>

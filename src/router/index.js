@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores';
+
 import DashboardView from '../views/DashboardView.vue'
 import PencatatanProduksiView from '../views/PencatatanProduksiView.vue'
 import PelaporanView from '../views/PelaporanView.vue'
@@ -9,6 +11,7 @@ import KaryawanView from '../views/KaryawanView.vue'
 import StandartPemeliharaan from '../views/StandartPemeliharaan.vue'
 import DataUserView from '../views/DataUserView.vue'
 import HistoryUserView from '../views/HistoryUserView.vue'
+import LoginView from '../views/LoginView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -17,6 +20,14 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: DashboardView
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: LoginView,
+      meta: {
+        hideNavbar: true,
+      }
     },
     {
       path: '/pencatatan-produksi',
@@ -73,5 +84,17 @@ const router = createRouter({
     }
   ]
 })
+
+router.beforeEach(async (to) => {
+  // redirect to login page if not logged in and trying to access a restricted page
+  const publicPages = ['/login'];
+  const authRequired = !publicPages.includes(to.path);
+  const auth = useAuthStore();
+
+  if (authRequired && !auth.user) {
+      auth.returnUrl = to.fullPath;
+      return '/login';
+  }
+});
 
 export default router
