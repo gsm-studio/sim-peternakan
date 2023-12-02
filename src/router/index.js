@@ -1,5 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import DashboardView from '../views/DashboardView.vue'
+import PencatatanProduksiView from '../views/PencatatanProduksiView.vue'
+import PelaporanView from '../views/PelaporanView.vue'
+import PenjadwalanView from '../views/PenjadwalanView.vue'
+import ValidasiDataView from '../views/ValidasiDataView.vue'
+import KandangView from '../views/KandangView.vue'
+import KaryawanView from '../views/KaryawanView.vue'
+import StandartPemeliharaan from '../views/StandartPemeliharaan.vue'
+import DataUserView from '../views/DataUserView.vue'
+import HistoryUserView from '../views/HistoryUserView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,7 +16,52 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView
+      component: DashboardView
+    },
+    {
+      path: '/pencatatan-produksi',
+      name: 'pencatatan-produksi',
+      component: PencatatanProduksiView
+    },
+    {
+      path: '/pelaporan',
+      name: 'pelaporan',
+      component: PelaporanView
+    },
+    {
+      path: '/penjadwalan',
+      name: 'penjadwalan',
+      component: PenjadwalanView
+    },
+    {
+      path: '/validasi-data',
+      name: 'validasi-data',
+      component: ValidasiDataView
+    },
+    {
+      path: '/kandang',
+      name: 'kandang',
+      component: KandangView
+    },
+    {
+      path: '/karyawan',
+      name: 'karyawan',
+      component: KaryawanView
+    },
+    {
+      path: '/standar-pemeliharaan',
+      name: 'standar-pemeliharaan',
+      component: StandartPemeliharaan
+    },
+    {
+      path: '/data-user',
+      name: 'data-user',
+      component: DataUserView
+    },
+    {
+      path: '/history-user',
+      name: 'history-user',
+      component: HistoryUserView
     },
     {
       path: '/about',
