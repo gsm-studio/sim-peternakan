@@ -6,10 +6,12 @@
                 <svg class="icon icon-lg">
                 <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
                 </svg>
-            </button><a class="header-brand d-md-none" href="#">
-                <svg width="118" height="46" alt="CoreUI Logo">
+            </button>
+            <a class="header-brand d-md-none" href="#">
+                <!-- <svg width="118" height="46" alt="CoreUI Logo">
                 <use xlink:href="@/assets/brand/coreui.svg#full"></use>
-                </svg></a>
+                </svg> -->
+            </a>
             
                 <div class="input-group search" style="width: 400px;">
                 <input type="text" class="form-control" placeholder="Search" aria-label="Recipient's username" aria-describedby="basic-addon2">

@@ -1,4 +1,5 @@
 <template>
+    <HeaderItem />
     <div class="body flex-grow-1 px-3">
         <div class="container-lg">
             <!-- /.row-->
@@ -309,6 +310,8 @@
 </template>
 
 <script setup>
+    import HeaderItem from '../components/HeaderItem.vue'
+
     import { onMounted } from 'vue';
 
     onMounted(() => {

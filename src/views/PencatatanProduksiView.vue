@@ -18,7 +18,7 @@
                                     </svg>
                                 </div>
                                 <h5 class="color-text-rossa d-inline">Kandang 1A</h5>
-                                <img src="assets/img/vector-1.png" alt="">
+                                <img src="@/assets/img/vector-1.png" alt="">
                             </div>
                             <div class="col d-grid gap-2 d-md-block">
                                 <small class="color-text-rossa">09 November 2023</small>

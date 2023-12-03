@@ -1,4 +1,5 @@
 <template>
+    <HeaderItem />
     <div class="body flex-grow-1 px-3">
         <div class="container-lg">
             <div class="card mb-4 ps-2 pt-2">
@@ -258,45 +259,47 @@
 </template>
 
 <script setup>
+    import HeaderItem from '../components/HeaderItem.vue'
+
     import { onMounted } from 'vue';
 
     onMounted(() => {
          // Mengambil elemen button (icon SVG) dan popover
-        const button = document.getElementById('idKandangPopOver');
-        const button2 = document.getElementById('actionPopOver');
-        const popover = document.getElementById('myPopover');
-        const popover2 = document.getElementById('myPopover2');
+        // const button = document.getElementById('idKandangPopOver');
+        // const button2 = document.getElementById('actionPopOver');
+        // const popover = document.getElementById('myPopover');
+        // const popover2 = document.getElementById('myPopover2');
 
         // Menampilkan atau menyembunyikan popover saat button diklik
         
-            button.addEventListener('click', function(event) {
-                if (popover.style.display === 'block') {
-                    popover.style.display = 'none';
-                } else {
-                    popover.style.display = 'block';
-                }
-                event.stopPropagation(); // Mencegah event bubbling
-            });
+            // button.addEventListener('click', function(event) {
+            //     if (popover.style.display === 'block') {
+            //         popover.style.display = 'none';
+            //     } else {
+            //         popover.style.display = 'block';
+            //     }
+            //     event.stopPropagation(); 
+            // });
 
-            button2.addEventListener('click', function(event) {
-                if (popover2.style.display === 'block') {
-                popover2.style.display = 'none';
-                } else {
-                popover2.style.display = 'block';
-                }
-                event.stopPropagation(); // Mencegah event bubbling
-            });
+            // button2.addEventListener('click', function(event) {
+            //     if (popover2.style.display === 'block') {
+            //     popover2.style.display = 'none';
+            //     } else {
+            //     popover2.style.display = 'block';
+            //     }
+            //     event.stopPropagation(); 
+            // });
 
 
         // Menutup popover saat klik di luar popover
-        document.addEventListener('click', function(event) {
-            if (!popover.contains(event.target)) {
-                popover.style.display = 'none';
-            }
-            if (!popover2.contains(event.target)) {
-                popover2.style.display = 'none';
-            }
-        });
+        // document.addEventListener('click', function(event) {
+        //     if (!popover.contains(event.target)) {
+        //         popover.style.display = 'none';
+        //     }
+        //     if (!popover2.contains(event.target)) {
+        //         popover2.style.display = 'none';
+        //     }
+        // });
     });
 
 </script>

@@ -1,4 +1,5 @@
 <template>
+    <HeaderItem />
     <div class="body flex-grow-1 px-3">
         <div class="container-lg">
             <!-- /.row-->
@@ -204,71 +205,47 @@
                 </div>
                 <div class="table-responsive mt-3">
                     <table class="table pelaporan table-bordered">
-                    <thead>
-                        <tr>
-                        <th scope="col">No</th>
-                        <th scope="col">Nama karyawan</th>
-                        <th scope="col">Devisi</th>
-                        <th scope="col">Kandang</th>
-                        <th scope="col">Usia Karyawan</th>
-                        <th scope="col">Kontrak</th>
-                        <th scope="col">Terakhir kirim laporan</th>
-                        <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                        <tr class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-                        <td>1</td>
-                        <td>Rossa Lia</td>
-                        <td>Peternak telur</td>
-                        <td>Kandang 1A</td>
-                        <td>
-                            23
-                        </td>
-                        <td>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none">
-                                <path d="M2.57398 18C2.11398 18 1.72998 17.846 1.42198 17.538C1.11332 17.2293 0.958984 16.845 0.958984 16.385V1.615C0.958984 1.155 1.11332 0.771 1.42198 0.463C1.72998 0.154333 2.11398 0 2.57398 0H10.459L14.959 4.5V16.385C14.959 16.845 14.805 17.229 14.497 17.537C14.1883 17.8457 13.804 18 13.344 18H2.57398ZM9.95898 5H13.959L9.95898 1V5Z" fill="#0FA958"/>
-                                </svg>
-                        </td>
-                        <td>
-                            09  November 2023
-                        </td>
-                        <td>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
-                            <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
-                            <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
-                            <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
-                            </svg>
-                        </td>
-                        </tr>
-                        <tr class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
-                        <td>2</td>
-                        <td>Rossa Lia</td>
-                        <td>Peternak telur</td>
-                        <td>Kandang 1A</td>
-                        <td>
-                            23
-                        </td>
-                        <td>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none">
-                                <path d="M2.57398 18C2.11398 18 1.72998 17.846 1.42198 17.538C1.11332 17.2293 0.958984 16.845 0.958984 16.385V1.615C0.958984 1.155 1.11332 0.771 1.42198 0.463C1.72998 0.154333 2.11398 0 2.57398 0H10.459L14.959 4.5V16.385C14.959 16.845 14.805 17.229 14.497 17.537C14.1883 17.8457 13.804 18 13.344 18H2.57398ZM9.95898 5H13.959L9.95898 1V5Z" fill="#0FA958"/>
-                                </svg>
-                        </td>
-                        <td>
-                            09  November 2023
-                        </td>
-                        <td>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
-                            <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
-                            <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
-                            <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
-                            </svg>
-                        </td>
-                        </tr>
-                        
-                        
-                    </tbody>
+                        <thead>
+                            <tr>
+                            <th scope="col">No</th>
+                            <th scope="col">Nama karyawan</th>
+                            <th scope="col">Alamat</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Nomor Telepon</th>
+                            <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody v-if="store.responseData">
+                            <tr v-for="item in store.responseData.data.items" :key="item.id" class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.nama }}</td>
+                                <td>{{ item.alamat }}</td>
+                                <td>{{ item.email }}</td>
+                                <td>
+                                    {{ item.nomor_telepon  }}
+                                </td>
+                                <!-- <td>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none">
+                                        <path d="M2.57398 18C2.11398 18 1.72998 17.846 1.42198 17.538C1.11332 17.2293 0.958984 16.845 0.958984 16.385V1.615C0.958984 1.155 1.11332 0.771 1.42198 0.463C1.72998 0.154333 2.11398 0 2.57398 0H10.459L14.959 4.5V16.385C14.959 16.845 14.805 17.229 14.497 17.537C14.1883 17.8457 13.804 18 13.344 18H2.57398ZM9.95898 5H13.959L9.95898 1V5Z" fill="#0FA958"/>
+                                        </svg>
+                                </td> -->
+                                <!-- <td>
+                                    09  November 2023
+                                </td> -->
+                                <td>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
+                                    <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
+                                    <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
+                                    <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
+                                    </svg>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tbody v-else>
+                            <tr>
+                                <td colspan="6" class="text-center">No data available</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
                 <nav aria-label="Page navigation example">
@@ -309,6 +286,8 @@
 </template>
 
 <script setup>
+    import HeaderItem from '../components/HeaderItem.vue'
+
     import { onMounted } from 'vue';
     import { defineStore } from 'pinia'
     import axios from 'axios'
@@ -316,7 +295,7 @@
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
     // Define Pinia store
-    const usePiniaStore = defineStore('kandangStore', {
+    const usePiniaStore = defineStore('karyawanStore', {
         state: () => ({
             responseData: null,
         }),
@@ -330,16 +309,16 @@
     const store  = usePiniaStore();
 
     onMounted(() => {
-        getKandang()
+        getKaryawan()
         
     });
 
-    async function getKandang() {
+    async function getKaryawan() {
         
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         // console.log(JSON.parse(token).token);
-        axios.get(baseUrl + '/kandang', {
+        axios.get(baseUrl + '/karyawan', {
             params: {
                 page_number: 1, // Replace with the desired page number
                 page_size: 10, // Replace with the desired page size
@@ -360,27 +339,27 @@
 
     onMounted(() => {
          // Mengambil elemen button (icon SVG) dan popover
-        const buttons = document.querySelectorAll('.btnPersetujuan');
-        const popover = document.getElementById('myPopover');
+        // const buttons = document.querySelectorAll('.btnPersetujuan');
+        // const popover = document.getElementById('myPopover');
 
         // Menampilkan atau menyembunyikan popover saat button diklik
-        buttons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                if (popover.style.display === 'block') {
-                    popover.style.display = 'none';
-                } else {
-                    popover.style.display = 'block';
-                }
-                event.stopPropagation(); // Mencegah event bubbling
-            });
-        });
+        // buttons.forEach(button => {
+        //     button.addEventListener('click', function(event) {
+        //         if (popover.style.display === 'block') {
+        //             popover.style.display = 'none';
+        //         } else {
+        //             popover.style.display = 'block';
+        //         }
+        //         event.stopPropagation(); // Mencegah event bubbling
+        //     });
+        // });
 
         // Menutup popover saat klik di luar popover
-        document.addEventListener('click', function(event) {
-            if (!popover.contains(event.target)) {
-                popover.style.display = 'none';
-            }
-        });
+        // document.addEventListener('click', function(event) {
+        //     if (!popover.contains(event.target)) {
+        //         popover.style.display = 'none';
+        //     }
+        // });
     });
 
    

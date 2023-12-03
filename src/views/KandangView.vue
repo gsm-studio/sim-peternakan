@@ -1,4 +1,5 @@
 <template>
+    <HeaderItem />
     <div class="body flex-grow-1 px-3">
         <div class="container-lg">
             <!-- /.row-->
@@ -218,8 +219,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
-                        <tr v-for="item in store.responseData.data.items" :key="item.id" class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                        <div v-if="store.responseData">
+                            <tr v-for="item in store.responseData.data.items" :key="item.id" class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
                             <td>{{ item.id }}</td>
                             <td>{{ item.nama }}</td>
                             <td>{{ item.nama_anak_kandang }}</td>
@@ -242,6 +243,9 @@
                                 </svg>
                             </td>
                         </tr>
+                        </div>
+                        
+                        <tr v-else></tr>
                         
                     </tbody>
                     </table>
@@ -284,6 +288,7 @@
 </template>
 
 <script setup>
+    import HeaderItem from '../components/HeaderItem.vue';
 
     import { onMounted } from 'vue'
     import { defineStore } from 'pinia'

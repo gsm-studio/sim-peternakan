@@ -1,6 +1,7 @@
 <script setup>
 import { RouterView } from 'vue-router'
-import NavigateLayout from './components/NavigateLayout.vue'
+import NavigateLayout from '@/components/NavigateLayout.vue'
+
 </script>
 
 <template>
