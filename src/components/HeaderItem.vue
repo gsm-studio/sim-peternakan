@@ -1,3 +1,8 @@
+<script setup>
+    import { useAuthStore } from '@/stores';
+    const authStore = useAuthStore();
+</script>
+
 <template>
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
@@ -46,7 +51,3 @@
     </header>
 </template>
 
-<script setup>
-    import { useAuthStore } from '@/stores';
-    const authStore = useAuthStore();
-</script>

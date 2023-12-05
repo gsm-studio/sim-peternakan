@@ -163,6 +163,14 @@ input[type=number]:focus,
   background-color: var(--rossa-bg-button);
 }
 
+.add {
+  cursor: pointer;
+}
+
+.btnAction {
+  cursor: pointer;
+}
+
 .login-page {
   background-color: #D6EDC4 !important;
 }
@@ -197,7 +205,10 @@ input[type=number]:focus,
   position: absolute;
   background-color: #fff;
   border: 1px solid #ccc;
-  padding: 10px;
+  left: 0; 
+  top: 100%; 
+  transform: translateY(-100%);
+  padding: 5px;
   border-radius: 4px;
   box-shadow: 0 2px 5px rgba(0,0,0,0.2);
 }

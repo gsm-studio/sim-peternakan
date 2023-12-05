@@ -2,7 +2,7 @@
     <div class="login-page min-vh-100 d-flex flex-row align-items-center">
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-md-5 mt-5">
+          <div class="col-lg-5 mt-5">
             <div class="card-group d-block d-md-flex row">
               <div class="card col-md-7 p-4 mb-0">
                 <div class="card-body">
@@ -39,7 +39,7 @@
             
             </div>
           </div>
-          <div class="col-md-7">
+          <div class="col-lg-7">
             <div class="d-flex align-items-end h-100">
               <img class="img-fluid" src="@/assets/img/ayam.png" alt="Image Login Page">
             </div>
@@ -52,8 +52,14 @@
 <script setup>
 import { Form, Field } from 'vee-validate';
 import * as Yup from 'yup';
+import router  from '@/router';
 
 import { useAuthStore } from '@/stores';
+
+const authStore = useAuthStore();
+if (authStore.user) {
+    router.push('/');
+}
 
 const schema = Yup.object().shape({
     username: Yup.string().required('Username is required'),

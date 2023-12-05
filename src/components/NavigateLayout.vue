@@ -1,5 +1,9 @@
 <script setup>
+  import { onMounted } from 'vue';
 
+  onMounted(() => {
+      // CoreUIBundle()
+  })
 </script>
 
 <template>

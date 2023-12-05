@@ -12,11 +12,14 @@
                 
                 
                 <span class="ms-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12" fill="none">
-                    <path d="M0 6L13 6" stroke="#A3AAA6" stroke-width="2"/>
-                    <path d="M6 0V12" stroke="#A3AAA6" stroke-width="2"/>
-                    </svg>
-                    Tambah Kandang
+                    <a class="text-secondary add" data-toggle="modal" data-target="#exampleModal">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12" fill="none">
+                        <path d="M0 6L13 6" stroke="#A3AAA6" stroke-width="2"/>
+                        <path d="M6 0V12" stroke="#A3AAA6" stroke-width="2"/>
+                        </svg>
+                        Tambah Kandang
+                    </a>
+                    
                 </span>
                 <span class="ms-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -28,10 +31,10 @@
                 <div class="d-flex justify-content-between">
                     <!-- Button trigger modal -->
                     <div> 
-                        <button type="button" class="btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
+                        <button type="button" class="btn btn-success bg-button-rossa">
                         Select
                         </button>
-                        <button type="button" class="btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
+                        <button type="button" class="btn btn-success bg-button-rossa ms-2">
                         Filter
                         </button>
                     </div>
@@ -41,7 +44,7 @@
                         <div class="modal-dialog">
                         <div class="modal-content p-3">
                             <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Populasi Ayam : 3000 ekor</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">Tambah Kandang</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -212,29 +215,17 @@
                         <th scope="col">Anak Kandang</th>
                         <th scope="col">Nama Mandor</th>
                         <th scope="col">Alamat Kandang</th>
-                        <th scope="col">Tanggal</th>
-                        <th scope="col">Treatment</th>
-                        <th scope="col">Jenis pakan</th>
                         <th scope="col"></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <div v-if="store.responseData">
-                            <tr v-for="item in store.responseData.data.items" :key="item.id" class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                    <tbody v-if="store.responseData">
+                        <tr v-for="item in store.responseData.data.items" :key="item.id" class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
                             <td>{{ item.id }}</td>
                             <td>{{ item.nama }}</td>
                             <td>{{ item.nama_anak_kandang }}</td>
                             <td>{{ item.nama_mandor }}</td>
                             <td>{{ item.alamat }}</td>
-                            <td>
-                                09  November 2023
-                            </td>
-                            <td>
-                                Vaksin ND
-                            </td>
-                            <td>
-                                Omega 3
-                            </td>
+                           
                             <td>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
                                 <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
@@ -243,10 +234,11 @@
                                 </svg>
                             </td>
                         </tr>
-                        </div>
-                        
-                        <tr v-else></tr>
-                        
+                    </tbody>
+                    <tbody v-else>
+                        <tr>
+                            <td colspan="6" class="text-center">No data available</td>
+                        </tr>
                     </tbody>
                     </table>
                 </div>
