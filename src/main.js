@@ -16,7 +16,12 @@ import '@/assets/vendors/@coreui/chartjs/js/coreui-chartjs.js'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-import Paginate from 'vuejs-paginate'
+import Paginate from 'vuejs-paginate';
+
+
+import VueAwesomePaginate from "vue-awesome-paginate";
+
+import "vue-awesome-paginate/dist/style.css";
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -32,6 +37,9 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+
+app.use(VueAwesomePaginate);
 app.component('paginate', Paginate)
+
 
 app.mount('#app')

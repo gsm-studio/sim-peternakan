@@ -40,47 +40,58 @@
                     <div class="col-lg-7">
                     <div class="card-body">
                         <div class="d-flex justify-content-between mt-4">
-                        <div class="w-100">
-                            <div class="small text-medium-emphasis mb-2">
-                            Produksi Telur 
-                            <span class="color-text-rossa ms-3">Kandang 1A</span>
+                            <div class="w-100">
+                                <div class="small text-medium-emphasis mb-2">
+                                Produksi Telur 
+                                <span class="color-text-rossa ms-3">Kandang 1A</span>
+                                </div>
+                                <div class="w-100 d-flex align-items-center justify-content-between">
+                                <h5 class="card-title mb-0">52 gr/butir</h5>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
+                                    <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
+                                    </svg>
+                                <h5 class="card-title mb-0 text-secondary">408 gram</h5>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
+                                    <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
+                                    </svg>
+                                <h5 class="card-title mb-0 text-secondary">58gr/butir</h5>
+                                </div>
+                                <small class="color-text-rossa">
+                                (20,1 %)
+                                </small>
+                                <div class="row mt-3">
+                                <div class="col text-center">
+                                    <p>Telur utuh</p>
+                                    <div class="small text-medium-emphasis mt-2">7000</div>
+                                    <div class="small text-medium-emphasis mt-2">406 gr</div>
+                                </div>
+                                <div class="col text-center border-start">
+                                    <p>Telur utuh</p>
+                                    <div class="small text-medium-emphasis mt-2">7000</div>
+                                    <div class="small text-medium-emphasis mt-2">406 gr</div>
+                                </div>
+                                </div>
+                                
                             </div>
-                            <div class="w-100 d-flex align-items-center justify-content-between">
-                            <h5 class="card-title mb-0">52 gr/butir</h5>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
-                                <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
-                                </svg>
-                            <h5 class="card-title mb-0 text-secondary">408 gram</h5>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
-                                <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
-                                </svg>
-                            <h5 class="card-title mb-0 text-secondary">58gr/butir</h5>
-                            </div>
-                            <small class="color-text-rossa">
-                            (20,1 %)
-                            </small>
-                            <div class="row mt-3">
-                            <div class="col text-center">
-                                <p>Telur utuh</p>
-                                <div class="small text-medium-emphasis mt-2">7000</div>
-                                <div class="small text-medium-emphasis mt-2">406 gr</div>
-                            </div>
-                            <div class="col text-center border-start">
-                                <p>Telur utuh</p>
-                                <div class="small text-medium-emphasis mt-2">7000</div>
-                                <div class="small text-medium-emphasis mt-2">406 gr</div>
-                            </div>
-                            </div>
+                            <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                                
                             
+                            </div>
                         </div>
-                        <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                            
-                        
-                        </div>
-                        </div>
-                        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                        <canvas class="chart" id="main-chart" height="300"></canvas>
-                        </div>
+                        <CChart
+                            type="bar"
+                            :data="{
+                                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                                datasets: [
+                                {
+                                    label: 'GitHub Commits',
+                                    backgroundColor: '#f87979',
+                                    data: [40, 20, 12, 39, 10, 40, 39, 80, 40],
+                                },
+                                ],
+                            }"
+                            labels="months"
+                        />
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <span> 
@@ -133,9 +144,31 @@
                             <div class="small color-text-rossa">-</div>
                         </div>
                         </div>
-                        <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                        <canvas class="chart" id="main-chart-2" height="300"></canvas>
-                        </div>
+                        <CChart
+                            type="line"
+                            :wrapper="false"
+                            :data="{
+                                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                                datasets: [
+                                {
+                                    label: 'My First dataset',
+                                    backgroundColor: 'rgba(220, 220, 220, 0.2)',
+                                    borderColor: 'rgba(220, 220, 220, 1)',
+                                    pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+                                    pointBorderColor: '#fff',
+                                    data: [40, 20, 12, 39, 10, 40, 39]
+                                },
+                                {
+                                    label: 'My Second dataset',
+                                    backgroundColor: 'rgba(151, 187, 205, 0.2)',
+                                    borderColor: 'rgba(151, 187, 205, 1)',
+                                    pointBackgroundColor: 'rgba(151, 187, 205, 1)',
+                                    pointBorderColor: '#fff',
+                                    data: [50, 12, 28, 29, 7, 25, 12]
+                                }
+                                ]
+                            }"
+                        />
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <span> 
@@ -187,9 +220,31 @@
                                 </svg>
                             </div>
                             <div class="col-md-6">
-                                <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                                    <canvas class="chart" id="main-chart-3" height="300"></canvas>
-                                </div>
+                                <CChart
+                                    type="line"
+                                    :wrapper="false"
+                                    :data="{
+                                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                                        datasets: [
+                                        {
+                                            label: 'My First dataset',
+                                            backgroundColor: 'rgba(220, 220, 220, 0.2)',
+                                            borderColor: 'rgba(220, 220, 220, 1)',
+                                            pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+                                            pointBorderColor: '#fff',
+                                            data: [40, 20, 12, 39, 10, 40, 39]
+                                        },
+                                        {
+                                            label: 'My Second dataset',
+                                            backgroundColor: 'rgba(151, 187, 205, 0.2)',
+                                            borderColor: 'rgba(151, 187, 205, 1)',
+                                            pointBackgroundColor: 'rgba(151, 187, 205, 1)',
+                                            pointBorderColor: '#fff',
+                                            data: [50, 12, 28, 29, 7, 25, 12]
+                                        }
+                                        ]
+                                    }"
+                                />
                             </div>
                         </div>
                     </div>
@@ -237,5 +292,6 @@
 
 <script setup>
 import HeaderItem from '../components/HeaderItem.vue'
+import { CChart } from '@coreui/vue-chartjs'
 
 </script>

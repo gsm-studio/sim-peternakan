@@ -33,7 +33,20 @@
                       </div>
                     </div>
                     <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                      <canvas class="chart" id="main-chart" height="300"></canvas>
+                      <CChart
+                          type="bar"
+                          :data="{
+                            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                            datasets: [
+                              {
+                                label: 'GitHub Commits',
+                                backgroundColor: '#f87979',
+                                data: [40, 20, 12, 39, 10, 40, 39, 80, 40],
+                              },
+                            ],
+                          }"
+                          labels="months"
+                        />
                     </div>
                   </div>
                   <div class="card-footer d-flex justify-content-between">
@@ -84,9 +97,33 @@
                         <div class="small color-text-rossa">400</div>
                       </div>
                     </div>
-                    <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                      <canvas class="chart" id="main-chart-2" height="300"></canvas>
-                    </div>
+                    
+                      <CChart
+                          type="line"
+                          :wrapper="false"
+                          :data="{
+                            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                            datasets: [
+                              {
+                                label: 'My First dataset',
+                                backgroundColor: 'rgba(220, 220, 220, 0.2)',
+                                borderColor: 'rgba(220, 220, 220, 1)',
+                                pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+                                pointBorderColor: '#fff',
+                                data: [40, 20, 12, 39, 10, 40, 39]
+                              },
+                              {
+                                label: 'My Second dataset',
+                                backgroundColor: 'rgba(151, 187, 205, 0.2)',
+                                borderColor: 'rgba(151, 187, 205, 1)',
+                                pointBackgroundColor: 'rgba(151, 187, 205, 1)',
+                                pointBorderColor: '#fff',
+                                data: [50, 12, 28, 29, 7, 25, 12]
+                              }
+                            ]
+                          }"
+                        />
+                    
                   </div>
                   <div class="card-footer d-flex justify-content-between">
                     <span> 
@@ -258,10 +295,9 @@
 
 <script setup>
 import HeaderItem from '@/components/HeaderItem.vue'
-
-// import { storeToRefs } from 'pinia';
-
-// import { useAuthStore, useUsersStore } from '@/stores';
+import { CChart } from '@coreui/vue-chartjs'
+import { storeToRefs } from 'pinia';
+import { useAuthStore, useUsersStore } from '@/stores';
 
 // const authStore = useAuthStore();
 // const { user: authUser } = storeToRefs(authStore);

@@ -30,7 +30,7 @@ const router = createRouter({
       }
     },
     {
-      path: '/pencatatan-produksi',
+      path: '/pencatatan-produksi/:id',
       name: 'pencatatan-produksi',
       component: PencatatanProduksiView
     },

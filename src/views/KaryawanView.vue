@@ -237,7 +237,7 @@
                         </tbody> -->
                     </table>
                 </div>
-                <nav aria-label="Page navigation example">
+                <!-- <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-end align-items-center">
                     <li class="me-3">
                         Row per page: 
@@ -261,14 +261,16 @@
                         </svg>
                     </li>
                     </ul>
-                </nav>
-                <paginate
-                    :page-count="20"
-                    :click-handler="clickCallback"
-                    :prev-text="'Prev'"
-                    :next-text="'Next'"
-                    :container-class="'className'">
-                </paginate>
+                </nav> -->
+                    <div class="d-flex justify-content-end">
+                        <vue-awesome-paginate
+                            :total-items="totalItems"
+                            :items-per-page="pageSize"
+                            :max-pages-shown="3"
+                            v-model="currentPage"
+                            :on-click="onClickHandler"
+                        />
+                    </div>
                 </div>
             </div>
             </div>
@@ -354,7 +356,7 @@
                         <Field class="form-control text-center mb-3" name="role_ids" as="select" :class="{ 'is-invalid': errors.role_ids }">
                             <option value="">Pilih Role</option>
                             <template v-if="dataRole.responseData">
-                                <option v-for="item in dataRole.responseData.data.items" :key="item.id" :value="item.id" :selected="item.id === detailKaryawan.id">{{ item.nama }}</option>
+                                <option v-for="item in dataRole.responseData.data.items" :key="item.id" :value="item.id" :selected="item.id && detailKaryawan.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
                         <div class="text-end">
@@ -372,22 +374,12 @@
             </div>
         </div>
     </div>
-
+    
 </template>
-
-<script>
-    export default {
-        methods: {
-            clickCallback(pageNum) {
-                console.log(pageNum);
-            },
-            
-        }
-    }
-</script>
 
 <script setup>
     import HeaderItem from '../components/HeaderItem.vue'
+    import { karyawanStore } from '@/stores';
 
     import { defineStore, storeToRefs } from 'pinia'
     import { onMounted, reactive, ref, computed } from 'vue';
@@ -403,17 +395,6 @@
         password: Yup.string().required('Password is required'),
         nomor_telepon: Yup.string().required('Nomor Telepon is required'),
         role_ids: Yup.string().required('Role is required'),
-    });
-
-    const karyawanStore = defineStore('karyawanStore', {
-        state: () => ({
-            responseData: null,
-        }),
-        actions: {
-            setResponseData(data) {
-                this.responseData = data;
-            },
-        },
     });
 
     const roleStore = defineStore('roleStore', {
@@ -437,19 +418,26 @@
         nomor_telepon: '',
     });
     let search = ref("");
+    
+    const currentPage = ref(1);
+    const pageSize = ref(10);
+    const totalItems = dataKaryawan.responseData ? dataKaryawan.responseData.data.total_record : 0;
+
+    const onClickHandler = (page) => {
+        getKaryawan(page);
+    };
 
     // const { karyawanList } = storeToRefs(dataKaryawan);
     // const { roleList } = storeToRefs(dataRole);
 
     onMounted(() => {
-        getKaryawan()
-        
+        getKaryawan(1)
         // getRole()
     });
 
     function clearSearch() {
         search.value = '';
-        getKaryawan();
+        getKaryawan(1);
     }
 
     function searchItem() {
@@ -465,14 +453,14 @@
         });
     }
 
-    async function getKaryawan() {
+    async function getKaryawan(page_number) {
         getRole();
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/karyawan', {
             params: {
-                page_number: 1, 
-                page_size: 10, 
+                page_number: page_number, 
+                page_size: pageSize.value, 
             },
            
             headers: {
@@ -531,7 +519,7 @@
         })
             .then(response => {
                 console.log(response);
-                getKaryawan();
+                getKaryawan(1);
                 closeModal();
             })
             .catch(error => {
@@ -560,7 +548,7 @@
         })
             .then(response => {
                 console.log(response);
-                getKaryawan();
+                getKaryawan(1);
                 closeModal();
             })
             .catch(error => {
@@ -601,7 +589,7 @@
         })
             .then(response => {
                 console.log(response);
-                getKaryawan();
+                getKaryawan(1);
             })
             .catch(error => {
                 console.error(error);
@@ -628,12 +616,6 @@
                 console.error(error);
             });
     }
-
- 
-        function functionName(count) {
-            console.log(count);
-        }
-    
 
     
     onMounted(() => {

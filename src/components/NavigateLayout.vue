@@ -1,9 +1,57 @@
 <script setup>
-  import { onMounted } from 'vue';
+  import { onMounted, reactive } from 'vue';
+  import axios from 'axios';
+  import { useAuthStore, kandangStore } from '@/stores';
+    
+  const authStore = useAuthStore();
+  const dataKandang = reactive(kandangStore());
+  const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
   onMounted(() => {
-      // CoreUIBundle()
+      getKandang();
+      getKaryawan();
   })
+
+  async function getKandang() {
+        
+      const user = localStorage.getItem('user');
+      const token = JSON.parse(user);
+      // console.log(JSON.parse(token).token);
+      axios.get(baseUrl + '/kandang', {
+          headers: {
+              Authorization: `Bearer ${token.token}`,
+          },
+      })
+          .then(response => {
+              dataKandang.setResponseData(response.data);
+          })
+          .catch(error => {
+              console.error(error);
+          });
+  }
+
+  async function getKaryawan() {
+      
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/karyawan', {
+            params: {
+                page_number: 1, 
+                page_size: 10, 
+            },
+           
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                
+            })
+            .catch(error => {
+                console.error(error);
+                authStore.logout();
+            });
+  }
 </script>
 
 <template>
@@ -30,10 +78,18 @@
             Pencatatan Produksi
           </a>
           <ul class="nav-group-items">
-            <li class="nav-item">
-              <router-link to="/pencatatan-produksi" class="nav-link"><span class="nav-icon"></span> Kandang 1A
-              </router-link>
-            </li>
+            <template v-if="dataKandang.responseData">
+              <li v-for="item in dataKandang.responseData.data.items" :key="item.id" class="nav-item">
+                <router-link :to="{ name: 'pencatatan-produksi', params: { id: item.id }}" class="nav-link">
+                  <span class="nav-icon"></span> {{ item.nama }}
+                </router-link>
+              </li>
+            </template>
+            <template v-else>
+              <li class="nav-item">
+                Tidak ada kandang
+              </li>
+            </template>
           </ul>
         </li>
           <li class="nav-item">
