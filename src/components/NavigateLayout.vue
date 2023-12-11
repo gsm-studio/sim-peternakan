@@ -1,15 +1,13 @@
 <script setup>
   import { onMounted, reactive } from 'vue';
   import axios from 'axios';
-  import { useAuthStore, kandangStore } from '@/stores';
+  import { kandangStore } from '@/stores';
     
-  const authStore = useAuthStore();
   const dataKandang = reactive(kandangStore());
   const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
   onMounted(() => {
       getKandang();
-      getKaryawan();
   })
 
   async function getKandang() {
@@ -30,28 +28,6 @@
           });
   }
 
-  async function getKaryawan() {
-      
-        const user = localStorage.getItem('user');
-        const token = JSON.parse(user);
-        axios.get(baseUrl + '/karyawan', {
-            params: {
-                page_number: 1, 
-                page_size: 10, 
-            },
-           
-            headers: {
-                Authorization: `Bearer ${token.token}`,
-            },
-        })
-            .then(response => {
-                
-            })
-            .catch(error => {
-                console.error(error);
-                authStore.logout();
-            });
-  }
 </script>
 
 <template>

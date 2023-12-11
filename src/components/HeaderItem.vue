@@ -1,6 +1,37 @@
 <script setup>
+    import { onMounted } from 'vue';
+    import axios from 'axios';
     import { useAuthStore } from '@/stores';
+    
     const authStore = useAuthStore();
+    const baseUrl = `${import.meta.env.VITE_API_URL}`;
+
+    onMounted(() => {
+      getKaryawan();
+    })
+
+    async function getKaryawan() {
+      
+      const user = localStorage.getItem('user');
+      const token = JSON.parse(user);
+      axios.get(baseUrl + '/karyawan', {
+          params: {
+              page_number: 1, 
+              page_size: 10, 
+          },
+         
+          headers: {
+              Authorization: `Bearer ${token.token}`,
+          },
+      })
+          .then(response => {
+              
+          })
+          .catch(error => {
+              console.error(error);
+              authStore.logout();
+          });
+    }
 </script>
 
 <template>

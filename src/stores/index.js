@@ -4,3 +4,6 @@ export * from './karyawan.store';
 export * from './standart.store';
 export * from './strain.store';
 export * from './kandang.store';
+export * from './pakan.store';
+export * from './treatment.store';
+export * from './pencatatan.store';
