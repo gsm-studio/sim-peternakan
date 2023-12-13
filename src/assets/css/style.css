@@ -8672,6 +8672,12 @@ html:not([dir=rtl]) .sidebar-close {
 .sidebar-nav .nav-group-items .nav-item .nav-link.active, .sidebar-nav .nav-group-items .nav-item .nav-link.router-link-active {
   background: var(--rossa-success);
 }
+.nav-item .nav-link:hover, .nav-item .nav-link:focus {
+  color: var(--rossa-text);
+}
+.nav-group > .nav-link.nav-group-toggle:hover {
+  color: var(--rossa-text);
+}
 .sidebar-nav .nav-link.active .nav-icon {
   /* color: var(--cui-sidebar-nav-link-active-icon-color); */
   color: #0FA958;

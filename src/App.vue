@@ -6,9 +6,9 @@ import NavigateLayout from '@/components/NavigateLayout.vue'
 <template>
     <NavigateLayout v-if="!$route.meta.hideNavbar" />
     <div class="wrapper d-flex flex-column min-vh-100 bg-light" v-if="!$route.meta.hideNavbar">
-        <RouterView />
+        <RouterView :key="$route.fullPath"/>
     </div>
-    <RouterView  v-if="$route.meta.hideNavbar" />
+    <RouterView v-if="$route.meta.hideNavbar" />
 
 </template>
 

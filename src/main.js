@@ -18,7 +18,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
 import Paginate from 'vuejs-paginate';
 
-
 import VueAwesomePaginate from "vue-awesome-paginate";
 
 import "vue-awesome-paginate/dist/style.css";
