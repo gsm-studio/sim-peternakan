@@ -7,3 +7,5 @@ export * from './kandang.store';
 export * from './pakan.store';
 export * from './treatment.store';
 export * from './pencatatan.store';
+export * from './penjadwalan.store';
+export * from './tugas.store';

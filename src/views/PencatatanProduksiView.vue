@@ -25,8 +25,8 @@
                                 <!-- <button class="btn btn-secondary ms-3" type="button">Hisex</button> -->
                             </div>
                             <div class="col d-grid gap-2 d-md-block">
-                                <button class="btn btn-warning" type="button">Pending</button>
-                                <button @click="getKandang()" class="btn btn-success ms-3" type="button" data-toggle="modal" data-target="#exampleModal">
+                                <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Pending</button>
+                                <button @click="getKandang()" class="btn btn-success ms-3" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     Input 
                                     <svg class="icon">
                                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
@@ -121,7 +121,7 @@
                             
                         </div>
                         <div class="d-flex align-items-center">
-                            <button @click="getKandang()" data-toggle="modal" data-target="#exampleModal" class="btn btn-success bg-button-rossa" type="button">Pindah</button>
+                            <button @click="getKandang()" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-success bg-button-rossa" type="button">Pindah</button>
                         </div>
                         
                         </div>
@@ -286,9 +286,7 @@
         <div class="modal-dialog modal-dialog-scrollable modal-lg">
             <div class="modal-content p-3">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <Form
@@ -524,6 +522,140 @@
                 </div>
                 <div class="modal-footer">
                     <div v-if="apiError" class="alert alert-danger mt-3 mb-0">{{ apiError }}</div> 
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                <div class="bg-light p-4">
+                    <div class="title mb-5">
+                    <h5 class="d-inline">ID Kandang : {{ detailKandang.id }}</h5>
+                    <div class="p-2 ms-3 bg-button-rossa d-inline rounded">{{ formatTanggal() }}</div>
+                    </div>
+                    <div class="mb-4">
+                    <p>
+                        <span class="color-text-rossa">Populasi ayam: <span class="text-secondary">300</span></span>
+                        <span class="ms-4 color-text-rossa">FC: <span class="text-secondary">7,4</span></span>
+                        <span class="ms-4 color-text-rossa">Standart FC: <span class="text-secondary">7,6</span></span>
+                        <span class="ms-4 color-text-rossa">Egg mass: <span class="text-secondary">11,7</span></span>
+                        <span class="ms-4 color-text-rossa">Strain: <span class="text-secondary">11,7</span></span>
+                    </p>
+
+                    </div>
+                    <div>
+                    <span class="ms-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="21" viewBox="0 0 23 21" fill="none">
+                        <ellipse cx="11.5" cy="10.5" rx="11.5" ry="10.5" fill="#D9D9D9"/>
+                        </svg>
+                        Anak kandang : {{ detailKandang.nama_anak_kandang }}
+                    </span>
+                    <span class="ms-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="23" height="21" viewBox="0 0 23 21" fill="none">
+                        <ellipse cx="11.5" cy="10.5" rx="11.5" ry="10.5" fill="#D9D9D9"/>
+                        </svg>
+                        Mandor : {{ detailKandang.nama_mandor }}
+                    </span>
+                    </div>
+                </div>
+                <!-- table -->
+                <div class="table-responsive mt-5">
+                    <table class="table pelaporan table-bordered">
+                    <thead>
+                        <tr>
+                        
+                        <th scope="col">Usia</th>
+                        <th colspan="4" scope="col">Populasi</th>
+                        <th colspan="2" scope="col">Produksi Telur</th>
+                        <th colspan="2" scope="col">Berat Telur</th>
+                        <th colspan="2" scope="col">Standart Produksi</th>
+                        <th colspan="2" scope="col">Pakan</th>
+                        <th rowspan="2" scope="col">Treatment</th>
+                        <th rowspan="2" scope="col">Edit</th>
+                        <th rowspan="2" scope="col">Status</th>
+                        </tr>
+                        <tr>
+                        
+                        <th scope="col">Mgg</th>
+                        <th scope="col">Mati</th>
+                        <th scope="col">Afkir</th>
+                        <th scope="col">Pindah</th>
+                        <th scope="col">Terima</th>
+
+                        <th scope="col">Telur utuh</th>
+                        <th scope="col">Telur bentes</th>
+
+                        <th scope="col">Telur utuh</th>
+                        <th scope="col">Telur bentes</th>
+
+                        <th scope="col">%</th>
+                        <th scope="col">gr/butir</th>
+
+                        <th scope="col">Jumlah (kg)</th>
+                        <th scope="col">Jenis pakan</th>
+
+                        
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template v-if="dataPencatatan.responseData">
+                        <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index" class="text-center">
+                            <td>null</td>
+                            <td>{{ item.jumlah_mati }}</td>
+                            <td>{{ item.jumlah_afkir }}</td>
+                            <td>{{ item.jumlah_pindah }}</td>
+                            <td>{{ item.jumlah_terima }}</td>
+
+                            <td>{{ item.telur_utuh }}</td>
+                            <td>{{ item.telur_bentes }}</td>
+
+                            <td>{{ item.berat_utuh }}</td>
+                            <td>{{ item.berat_bentes }}</td>
+
+                            <td>24.2%</td>
+                            <td>58gr</td>
+
+                            <td>{{ item.id_jenis_pakan }}</td>
+                            <td>{{ item.id_jenis_pakan }}</td>
+
+                            <td>{{ item.id_treatment }}</td>
+                            <td>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <mask id="mask0_142_372" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1" y="1" width="18" height="18">
+                                    <path d="M2.91699 17.5H17.917" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M4.58398 11.1333V14.1667H7.63273L16.2507 5.545L13.2069 2.5L4.58398 11.1333Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
+                                </mask>
+                                <g mask="url(#mask0_142_372)">
+                                    <path d="M0 0H20V20H0V0Z" fill="#0FA958"/>
+                                </g>
+                                </svg>
+                            </td>
+                            <td>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="23" viewBox="0 0 28 23" fill="none">
+                                <path d="M11.8381 1.91675C17.2868 1.91675 21.7036 6.20721 21.7036 11.5001C21.7036 16.793 17.2868 21.0834 11.8381 21.0834C6.38943 21.0834 1.97266 16.793 1.97266 11.5001C1.97266 6.20721 6.38943 1.91675 11.8381 1.91675ZM11.8381 3.83341C9.74494 3.83341 7.73748 4.64115 6.25737 6.07893C4.77727 7.51671 3.94575 9.46675 3.94575 11.5001C3.94575 13.5334 4.77727 15.4835 6.25737 16.9212C7.73748 18.359 9.74494 19.1667 11.8381 19.1667C13.9313 19.1667 15.9388 18.359 17.4189 16.9212C18.899 15.4835 19.7305 13.5334 19.7305 11.5001C19.7305 9.46675 18.899 7.51671 17.4189 6.07893C15.9388 4.64115 13.9313 3.83341 11.8381 3.83341ZM11.8381 5.75008C12.0798 5.75011 12.313 5.83629 12.4936 5.99227C12.6741 6.14824 12.7895 6.36317 12.8178 6.59629L12.8247 6.70841V11.1033L15.4953 13.6975C15.6722 13.87 15.7749 14.1014 15.7826 14.3448C15.7902 14.5882 15.7022 14.8252 15.5364 15.0078C15.3707 15.1905 15.1396 15.305 14.89 15.328C14.6405 15.3511 14.3913 15.2811 14.193 15.1322L14.1003 15.0526L11.1406 12.1776C10.9873 12.0286 10.8888 11.8345 10.8605 11.6256L10.8516 11.5001V6.70841C10.8516 6.45425 10.9555 6.21049 11.1405 6.03077C11.3255 5.85105 11.5765 5.75008 11.8381 5.75008Z" fill="#D4780C"/>
+                                </svg>
+                            </td>
+                        </tr>
+                        </template>
+                        <template v-else>
+                            <tr>
+                                <td colspan="15" class="text-center">Data tidak ditemukan</td>
+                            </tr>
+                        </template>
+                    </tbody>
+                    </table>
+                </div>
+                <!-- akhir table -->
+                </div>
+                <div class="modal-footer">
+                
                 </div>
             </div>
         </div>
@@ -781,8 +913,6 @@
             });
     }
 
-    
-
     async function getIdPencatatan(params) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
@@ -952,3 +1082,10 @@
     }
    
 </script>
+
+<style scoped>
+table thead {
+    background-color: #F2F2F2;
+    color: #000000;
+}
+</style>
