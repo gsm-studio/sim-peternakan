@@ -704,7 +704,7 @@
     import * as yup from 'yup';
     import { kandangStore, strainStore, pakanStore, treatmentStore, pencatatanStore } from '@/stores';
     import axios from 'axios'
-    import {useRoute} from 'vue-router'
+    import { useRoute } from 'vue-router'
     import moment from 'moment'
     import Swal from 'sweetalert2'
 
@@ -975,6 +975,7 @@
             })
             .catch(error => {
                 console.error(error);
+                alert('error', 'Data pencatatan gagal ditambahkan');
                 apiError.value = error.response.data.message;
             });
     }

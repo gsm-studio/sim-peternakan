@@ -279,26 +279,26 @@
                     </thead>
                     <tbody>
                         <template v-if="dataPencatatan.responseData">
-                        <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index" class="text-center">
+                        <tr class="text-center">
                             <td>null</td>
-                            <td>{{ item.jumlah_mati }}</td>
-                            <td>{{ item.jumlah_afkir }}</td>
-                            <td>{{ item.jumlah_pindah }}</td>
-                            <td>{{ item.jumlah_terima }}</td>
+                            <td>{{ detailPencatatan.jumlah_mati }}</td>
+                            <td>{{ detailPencatatan.jumlah_afkir }}</td>
+                            <td>{{ detailPencatatan.jumlah_pindah }}</td>
+                            <td>{{ detailPencatatan.jumlah_terima }}</td>
 
-                            <td>{{ item.telur_utuh }}</td>
-                            <td>{{ item.telur_bentes }}</td>
+                            <td>{{ detailPencatatan.telur_utuh }}</td>
+                            <td>{{ detailPencatatan.telur_bentes }}</td>
 
-                            <td>{{ item.berat_utuh }}</td>
-                            <td>{{ item.berat_bentes }}</td>
+                            <td>{{ detailPencatatan.berat_utuh }}</td>
+                            <td>{{ detailPencatatan.berat_bentes }}</td>
 
-                            <td>24.2%</td>
-                            <td>58gr</td>
+                            <td>0</td>
+                            <td>0</td>
 
-                            <td>{{ item.id_jenis_pakan }}</td>
-                            <td>{{ item.id_jenis_pakan }}</td>
+                            <td>{{ detailPencatatan.id_jenis_pakan }}</td>
+                            <td>{{ detailPencatatan.id_jenis_pakan }}</td>
 
-                            <td>{{ item.id_treatment }}</td>
+                            <td>{{ detailPencatatan.id_treatment }}</td>
                             <td>
                                 <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#second-modal">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -313,13 +313,13 @@
                                 </a>
                             </td>
                             <td class="status-warning">
-                                <span v-if="item.status == 'submitted'">
+                                <span v-if="detailPencatatan.status == 'submitted'">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
                                         <path d="M11.8381 2.41663C17.2868 2.41663 21.7036 6.70708 21.7036 12C21.7036 17.2928 17.2868 21.5833 11.8381 21.5833C6.38943 21.5833 1.97266 17.2928 1.97266 12C1.97266 6.70708 6.38943 2.41663 11.8381 2.41663ZM11.8381 4.33329C9.74494 4.33329 7.73748 5.14103 6.25737 6.57881C4.77727 8.01659 3.94575 9.96663 3.94575 12C3.94575 14.0333 4.77727 15.9833 6.25737 17.4211C7.73748 18.8589 9.74494 19.6666 11.8381 19.6666C13.9313 19.6666 15.9388 18.8589 17.4189 17.4211C18.899 15.9833 19.7305 14.0333 19.7305 12C19.7305 9.96663 18.899 8.01659 17.4189 6.57881C15.9388 5.14103 13.9313 4.33329 11.8381 4.33329ZM11.8381 6.24996C12.0798 6.24999 12.313 6.33617 12.4936 6.49214C12.6741 6.64812 12.7895 6.86305 12.8178 7.09617L12.8247 7.20829V11.6032L15.4953 14.1974C15.6722 14.3699 15.7749 14.6013 15.7826 14.8447C15.7902 15.088 15.7022 15.3251 15.5364 15.5077C15.3707 15.6904 15.1396 15.8048 14.89 15.8279C14.6405 15.851 14.3913 15.781 14.193 15.632L14.1003 15.5525L11.1406 12.6775C10.9873 12.5284 10.8888 12.3344 10.8605 12.1255L10.8516 12V7.20829C10.8516 6.95413 10.9555 6.71037 11.1405 6.53065C11.3255 6.35093 11.5765 6.24996 11.8381 6.24996Z" fill="#D4780C"/>
                                     </svg>
                                 
                                 </span>
-                                <span v-else-if="item.status == 'accepted'">
+                                <span v-else-if="detailPencatatan.status == 'accepted'">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
                                     <g clip-path="url(#clip0_209_1058)">
                                     <path d="M24 10L21.56 7.22004L21.9 3.54004L18.29 2.72004L16.4 -0.459961L13 1.00004L9.6 -0.459961L7.71 2.72004L4.1 3.53004L4.44 7.21004L2 10L4.44 12.78L4.1 16.47L7.71 17.29L9.6 20.47L13 19L16.4 20.46L18.29 17.28L21.9 16.46L21.56 12.78L24 10ZM11 15L7 11L8.41 9.59004L11 12.17L17.59 5.58004L19 7.00004L11 15Z" fill="#0FA958"/>
@@ -391,7 +391,238 @@
                    
                 </div>
                 <div class="modal-body">
-                    This is the body of my second modal.
+                    <Form
+                        @submit="nextStep"
+                        :validation-schema="currentSchema"
+                        keep-values
+                        v-slot="{ handleSubmit, values }"
+                        >
+                        <template v-if="currentStep === 0"> 
+                            <div class="mb-4 d-flex justify-content-between">
+                                <button class="btn btn-success">{{ dateSubmitPencatatan }}</button>
+                                <h6 class="modal-title" id="exampleModalLabel">Populasi Ayam : {{ totalPopulasi }} ekor</h6>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nama_kandang" class="form-label">Nama Kandang</label>
+                                <Field id="nama_kandang" as="select" name="nama_kandang" class="form-control text-center" readonly>
+                                    <option :value="detailPencatatan.id_kandang" :selected="true">{{ detailPencatatan.nama_kandang }}</option>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="nama_kandang" />
+                            </div>
+                            <!-- {{ values }} -->
+                            <Field v-model="detailPencatatan.id_anak_kandang" name="id_anak_kandang" class="form-control text-center" type="hidden"/>
+                            <div class="mb-3">
+                                <label for="nama_mandor" class="form-label">Nama Mandor</label>
+                                <Field id="nama_mandor" as="select" name="nama_mandor" class="form-control text-center" readonly>
+                                    <option :value="detailPencatatan.id_mandor" :selected="true">{{ detailPencatatan.nama_mandor }}</option>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="nama_mandor" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="strain_ayam" class="form-label">Strain Ayam</label>
+                                <Field id="strain_ayam" @change="getIdStrain($event)" as="select" name="strain_ayam" class="form-control text-center">
+                                    <template v-if="dataStrain.responseData">
+                                        <option value="" disabled>Pilih Strain Ayam</option>
+                                        <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                    </template>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="strain_ayam" />
+                            </div>
+                        </template>
+
+                        <template v-if="currentStep === 1">
+                            <div class="row mb-3 p-2 bg-light rounded">
+                                <div class="col-md-4">
+                                    <p>ID Kandang : {{ values.id_kandang }}</p>
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                        <path d="M4.90517 13.8423C5.57808 13.3578 6.29217 12.9749 7.04742 12.6936C7.80214 12.4118 8.61967 12.2708 9.5 12.2708C10.3798 12.2708 11.1973 12.4118 11.9526 12.6936C12.7073 12.9749 13.4214 13.3575 14.0948 13.8415C14.6173 13.3011 15.0377 12.6624 15.356 11.9257C15.6742 11.1878 15.8333 10.3793 15.8333 9.5C15.8333 7.74514 15.2166 6.25074 13.9832 5.01679C12.7498 3.78285 11.2554 3.16614 9.5 3.16667C7.74514 3.16667 6.25074 3.78338 5.01679 5.01679C3.78285 6.25021 3.16614 7.74461 3.16667 9.5C3.16667 10.3798 3.32579 11.1881 3.64404 11.9249C3.96229 12.6622 4.38267 13.3013 4.90517 13.8423ZM9.5 9.89583C8.83342 9.89583 8.27081 9.66678 7.81217 9.20867C7.35406 8.75003 7.125 8.18742 7.125 7.52083C7.125 6.85425 7.35406 6.29164 7.81217 5.833C8.27081 5.37489 8.83342 5.14583 9.5 5.14583C10.1666 5.14583 10.7292 5.37489 11.1878 5.833C11.6459 6.29164 11.875 6.85425 11.875 7.52083C11.875 8.18742 11.6459 8.75003 11.1878 9.20867C10.7292 9.66678 10.1666 9.89583 9.5 9.89583ZM9.5 16.625C8.50619 16.625 7.57599 16.44 6.70938 16.07C5.84276 15.7006 5.08857 15.195 4.44679 14.5532C3.80554 13.9114 3.29993 13.1572 2.92996 12.2906C2.55999 11.424 2.375 10.4938 2.375 9.5C2.375 8.50619 2.55999 7.57599 2.92996 6.70938C3.2994 5.84276 3.80501 5.08857 4.44679 4.44679C5.08857 3.80554 5.84276 3.29993 6.70938 2.92996C7.57599 2.55999 8.50619 2.375 9.5 2.375C10.4938 2.375 11.424 2.55999 12.2906 2.92996C13.1572 3.2994 13.9114 3.80501 14.5532 4.44679C15.1945 5.08857 15.7001 5.84276 16.07 6.70938C16.44 7.57599 16.625 8.50619 16.625 9.5C16.625 10.4938 16.44 11.424 16.07 12.2906C15.7006 13.1572 15.195 13.9114 14.5532 14.5532C13.9114 15.1945 13.1572 15.7001 12.2906 16.07C11.424 16.44 10.4938 16.625 9.5 16.625Z" fill="#0FA958"/>
+                                        </svg>
+                                        Anak Kandang : {{ detailPencatatan.nama_anak_kandang }}
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="bg-grey-rossa rounded p-2 mb-2">{{ formatTanggal() }}</div>
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                        <path d="M4.90517 13.8423C5.57808 13.3578 6.29217 12.9749 7.04742 12.6936C7.80214 12.4118 8.61967 12.2708 9.5 12.2708C10.3798 12.2708 11.1973 12.4118 11.9526 12.6936C12.7073 12.9749 13.4214 13.3575 14.0948 13.8415C14.6173 13.3011 15.0377 12.6624 15.356 11.9257C15.6742 11.1878 15.8333 10.3793 15.8333 9.5C15.8333 7.74514 15.2166 6.25074 13.9832 5.01679C12.7498 3.78285 11.2554 3.16614 9.5 3.16667C7.74514 3.16667 6.25074 3.78338 5.01679 5.01679C3.78285 6.25021 3.16614 7.74461 3.16667 9.5C3.16667 10.3798 3.32579 11.1881 3.64404 11.9249C3.96229 12.6622 4.38267 13.3013 4.90517 13.8423ZM9.5 9.89583C8.83342 9.89583 8.27081 9.66678 7.81217 9.20867C7.35406 8.75003 7.125 8.18742 7.125 7.52083C7.125 6.85425 7.35406 6.29164 7.81217 5.833C8.27081 5.37489 8.83342 5.14583 9.5 5.14583C10.1666 5.14583 10.7292 5.37489 11.1878 5.833C11.6459 6.29164 11.875 6.85425 11.875 7.52083C11.875 8.18742 11.6459 8.75003 11.1878 9.20867C10.7292 9.66678 10.1666 9.89583 9.5 9.89583ZM9.5 16.625C8.50619 16.625 7.57599 16.44 6.70938 16.07C5.84276 15.7006 5.08857 15.195 4.44679 14.5532C3.80554 13.9114 3.29993 13.1572 2.92996 12.2906C2.55999 11.424 2.375 10.4938 2.375 9.5C2.375 8.50619 2.55999 7.57599 2.92996 6.70938C3.2994 5.84276 3.80501 5.08857 4.44679 4.44679C5.08857 3.80554 5.84276 3.29993 6.70938 2.92996C7.57599 2.55999 8.50619 2.375 9.5 2.375C10.4938 2.375 11.424 2.55999 12.2906 2.92996C13.1572 3.2994 13.9114 3.80501 14.5532 4.44679C15.1945 5.08857 15.7001 5.84276 16.07 6.70938C16.44 7.57599 16.625 8.50619 16.625 9.5C16.625 10.4938 16.44 11.424 16.07 12.2906C15.7006 13.1572 15.195 13.9114 14.5532 14.5532C13.9114 15.1945 13.1572 15.7001 12.2906 16.07C11.424 16.44 10.4938 16.625 9.5 16.625Z" fill="#0FA958"/>
+                                        </svg>
+                                        Nama Mandor : {{ detailPencatatan.nama_mandor }}
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><span class="color-text-rossa">Populasi Ayam:</span> {{ populasi_ayam }} ekor</p>
+                                    <p><span class="color-text-rossa">Strain:</span> {{ detailPencatatan.nama_strain }}</p>
+                                </div>
+                            </div>
+                            <h6 class="mb-3">Ayam</h6>
+
+                            <div class="mb-3">
+                                <Field name="mati" class="form-control text-center" type="number" placeholder="Mati" />
+                                <ErrorMessage class="text-danger" name="mati" />
+                            </div>
+
+                            <div class="mb-3">
+                                <Field name="afkir" class="form-control text-center" type="number" placeholder="Afkir" />
+                                <ErrorMessage class="text-danger" name="afkir" />
+                            </div>
+
+                            <div class="mb-3">
+                                <Field name="jumlah_pindah" class="form-control text-center" type="number" placeholder="Jumlah Pindah" />
+                                <ErrorMessage class="text-danger" name="jumlah_pindah" />
+                            </div>
+                            <div class="mb-3">
+                                <Field @change="getKandangPengirim($event)" as="select" name="id_kandang_pengirim" class="form-control text-center">
+                                    <template v-if="dataKandang.responseData">
+                                        <option value="" disabled>Pilih Nama Kandang Pengirim</option>
+                                        <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                    </template>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="id_kandang_pengirim" />
+                            </div>
+                            <div class="mb-3">
+                                <Field name="jumlah_terima" class="form-control text-center" type="number" placeholder="Jumlah Terima" />
+                                <ErrorMessage class="text-danger" name="jumlah_terima" />
+                            </div>
+                            <div class="mb-3">
+                                <Field @change="getKandangPenerima($event)" as="select" name="id_kandang_tujuan" class="form-control text-center">
+                                    <template v-if="dataKandang.responseData">
+                                        <option value="" disabled>Pilih Nama Kandang Penerima</option>
+                                        <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                    </template>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="id_kandang_tujuan" />
+                            </div>
+                        </template>
+
+                        <template v-if="currentStep === 2">
+                            <div class="row mb-3 p-2 bg-light rounded">
+                                <div class="col-md-4">
+                                    <p>ID Kandang : {{ values.id_kandang }} </p>
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                        <path d="M4.90517 13.8423C5.57808 13.3578 6.29217 12.9749 7.04742 12.6936C7.80214 12.4118 8.61967 12.2708 9.5 12.2708C10.3798 12.2708 11.1973 12.4118 11.9526 12.6936C12.7073 12.9749 13.4214 13.3575 14.0948 13.8415C14.6173 13.3011 15.0377 12.6624 15.356 11.9257C15.6742 11.1878 15.8333 10.3793 15.8333 9.5C15.8333 7.74514 15.2166 6.25074 13.9832 5.01679C12.7498 3.78285 11.2554 3.16614 9.5 3.16667C7.74514 3.16667 6.25074 3.78338 5.01679 5.01679C3.78285 6.25021 3.16614 7.74461 3.16667 9.5C3.16667 10.3798 3.32579 11.1881 3.64404 11.9249C3.96229 12.6622 4.38267 13.3013 4.90517 13.8423ZM9.5 9.89583C8.83342 9.89583 8.27081 9.66678 7.81217 9.20867C7.35406 8.75003 7.125 8.18742 7.125 7.52083C7.125 6.85425 7.35406 6.29164 7.81217 5.833C8.27081 5.37489 8.83342 5.14583 9.5 5.14583C10.1666 5.14583 10.7292 5.37489 11.1878 5.833C11.6459 6.29164 11.875 6.85425 11.875 7.52083C11.875 8.18742 11.6459 8.75003 11.1878 9.20867C10.7292 9.66678 10.1666 9.89583 9.5 9.89583ZM9.5 16.625C8.50619 16.625 7.57599 16.44 6.70938 16.07C5.84276 15.7006 5.08857 15.195 4.44679 14.5532C3.80554 13.9114 3.29993 13.1572 2.92996 12.2906C2.55999 11.424 2.375 10.4938 2.375 9.5C2.375 8.50619 2.55999 7.57599 2.92996 6.70938C3.2994 5.84276 3.80501 5.08857 4.44679 4.44679C5.08857 3.80554 5.84276 3.29993 6.70938 2.92996C7.57599 2.55999 8.50619 2.375 9.5 2.375C10.4938 2.375 11.424 2.55999 12.2906 2.92996C13.1572 3.2994 13.9114 3.80501 14.5532 4.44679C15.1945 5.08857 15.7001 5.84276 16.07 6.70938C16.44 7.57599 16.625 8.50619 16.625 9.5C16.625 10.4938 16.44 11.424 16.07 12.2906C15.7006 13.1572 15.195 13.9114 14.5532 14.5532C13.9114 15.1945 13.1572 15.7001 12.2906 16.07C11.424 16.44 10.4938 16.625 9.5 16.625Z" fill="#0FA958"/>
+                                        </svg>
+                                        Anak Kandang : {{ detailPencatatan.nama_anak_kandang }}
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="bg-grey-rossa rounded p-2">{{ formatTanggal() }}</div>
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                        <path d="M4.90517 13.8423C5.57808 13.3578 6.29217 12.9749 7.04742 12.6936C7.80214 12.4118 8.61967 12.2708 9.5 12.2708C10.3798 12.2708 11.1973 12.4118 11.9526 12.6936C12.7073 12.9749 13.4214 13.3575 14.0948 13.8415C14.6173 13.3011 15.0377 12.6624 15.356 11.9257C15.6742 11.1878 15.8333 10.3793 15.8333 9.5C15.8333 7.74514 15.2166 6.25074 13.9832 5.01679C12.7498 3.78285 11.2554 3.16614 9.5 3.16667C7.74514 3.16667 6.25074 3.78338 5.01679 5.01679C3.78285 6.25021 3.16614 7.74461 3.16667 9.5C3.16667 10.3798 3.32579 11.1881 3.64404 11.9249C3.96229 12.6622 4.38267 13.3013 4.90517 13.8423ZM9.5 9.89583C8.83342 9.89583 8.27081 9.66678 7.81217 9.20867C7.35406 8.75003 7.125 8.18742 7.125 7.52083C7.125 6.85425 7.35406 6.29164 7.81217 5.833C8.27081 5.37489 8.83342 5.14583 9.5 5.14583C10.1666 5.14583 10.7292 5.37489 11.1878 5.833C11.6459 6.29164 11.875 6.85425 11.875 7.52083C11.875 8.18742 11.6459 8.75003 11.1878 9.20867C10.7292 9.66678 10.1666 9.89583 9.5 9.89583ZM9.5 16.625C8.50619 16.625 7.57599 16.44 6.70938 16.07C5.84276 15.7006 5.08857 15.195 4.44679 14.5532C3.80554 13.9114 3.29993 13.1572 2.92996 12.2906C2.55999 11.424 2.375 10.4938 2.375 9.5C2.375 8.50619 2.55999 7.57599 2.92996 6.70938C3.2994 5.84276 3.80501 5.08857 4.44679 4.44679C5.08857 3.80554 5.84276 3.29993 6.70938 2.92996C7.57599 2.55999 8.50619 2.375 9.5 2.375C10.4938 2.375 11.424 2.55999 12.2906 2.92996C13.1572 3.2994 13.9114 3.80501 14.5532 4.44679C15.1945 5.08857 15.7001 5.84276 16.07 6.70938C16.44 7.57599 16.625 8.50619 16.625 9.5C16.625 10.4938 16.44 11.424 16.07 12.2906C15.7006 13.1572 15.195 13.9114 14.5532 14.5532C13.9114 15.1945 13.1572 15.7001 12.2906 16.07C11.424 16.44 10.4938 16.625 9.5 16.625Z" fill="#0FA958"/>
+                                        </svg>
+                                        Mandor : {{ detailPencatatan.nama_mandor }}
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><span class="color-text-rossa">Populasi Ayam:</span> {{ populasi_ayam }} ekor</p>
+                                    <p><span class="color-text-rossa">Strain:</span> {{ detailPencatatan.nama_strain }}</p>
+                                </div>
+                            </div>
+                            <h6 class="mb-3">Ayam</h6>
+                            <div class="row mb-3 p-2 bg-light rounded">
+                                <div class="col-md-4">
+                                    <p>Mati : {{ values.mati }} </p>
+                                    <p>Afkir : {{ values.afkir }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Jumlah Pindah : {{ values.jumlah_pindah }}</p>
+                                    <p>Jumlah Terima : {{ values.jumlah_terima }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Kandang Pengirim : {{ namaKandangPengirim }}</p>
+                                    <p>Kandang Penerima : {{ namaKandangPenerima }}</p>
+                                </div>
+                            </div>
+                            <h6 class="mb-3">Produksi telur</h6>
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.telur_butuh" name="jml_telur_butuh" class="form-control text-center" type="number" placeholder="Jumlah Telur Utuh" />
+                                <ErrorMessage class="text-danger" name="jml_telur_butuh" />
+                            </div>
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.telur_bentes" name="jml_telur_bentes" class="form-control text-center" type="number" placeholder="Jumlah Telur Bentes" />
+                                <ErrorMessage class="text-danger" name="jml_telur_bentes" />
+                            </div>
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.berat_utuh" name="berat_telur_butuh" class="form-control text-center" type="number" placeholder="Berat Telur Utuh" />
+                                <ErrorMessage class="text-danger" name="berat_telur_butuh" />
+                            </div>
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.berat_bentes" name="berat_telur_bentes" class="form-control text-center" type="number" placeholder="Berat Telur Bentes" />
+                                <ErrorMessage class="text-danger" name="berat_telur_bentes" />
+                            </div>
+                        </template>
+
+                        <template v-if="currentStep === 3">
+                            <h6 class="mb-3">Ayam</h6>
+                            <div class="row mb-3 p-2 bg-light rounded">
+                                <div class="col-md-4">
+                                    <p>Mati : {{ values.mati }} </p>
+                                    <p>Afkir : {{ values.afkir }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Jumlah Pindah : {{ values.jumlah_pindah }}</p>
+                                    <p>Jumlah Terima : {{ values.jumlah_terima }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Kandang Pengirim : {{ namaKandangPengirim }}</p>
+                                    <p>Kandang Penerima : {{ namaKandangPenerima }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3 p-2 bg-light rounded">
+                                <div class="col-md-4">
+                                    <p>Jumlah Telur Utuh : {{ values.jml_telur_butuh }}</p>
+                                    <P>Berat Telur Utuh : {{ values.berat_telur_butuh }}</P>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Jumlah Telur Bentes : {{ values.jml_telur_bentes }}</p>
+                                    <p>Berat Telur Bentes : {{ values.berat_telur_bentes }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.jml_telur_butuh) + parseInt(values.jml_telur_bentes) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.berat_telur_butuh) + parseInt(values.berat_telur_bentes) }}</p>
+                                </div>
+                            </div>
+                            <h6 class="mb-3">Pakan & Treatment Ayam</h6>
+                        
+                            <div class="mb-3">
+                                <Field as="select" name="jenis_pakan" class="form-control text-center">
+                                    <template v-if="dataPakan.responseData">
+                                        <option value="" disabled>Pilih Nama Pakan</option>
+                                        <option v-for="item in dataPakan.responseData.data.items" :key="item.id" :value="item.id" :selected="item.id == detailPencatatan.id_jenis_pakan">{{ item.nama }}</option>
+                                    </template>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="jenis_pakan" />
+                            </div>
+                            <div class="mb-3">
+                                <Field as="select" name="jenis_treatment" class="form-control text-center">
+                                    <template v-if="dataTreatment.responseData">
+                                        <option value="" disabled>Pilih Nama Treatment</option>
+                                        <option v-for="item in dataTreatment.responseData.data.items" :key="item.id" :value="item.id" :selected="item.id == detailPencatatan.id_treatment">{{ item.nama }}</option>
+                                    </template>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="jenis_treatment" />
+                            </div>
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.catatan" as="textarea" name="catatan" class="form-control text-center" placeholder="Catatan" />
+                                <ErrorMessage class="text-danger" name="catatan" />
+                            </div>
+                        </template>
+
+                        <div class="text-end">
+                            <p>{{ currentStep+1 }} / 4</p>
+                            <button class="btn btn-success bg-button-rossa" v-if="currentStep !== 0" type="button" @click="prevStep">
+                            Previous
+                            </button>
+
+                            <button class="ms-3 btn btn-success bg-button-rossa" v-if="currentStep !== 3" type="submit">Next</button>
+
+                            <button class="ms-3 btn btn-success bg-button-rossa" v-if="currentStep === 3" type="submit">Finish</button>
+                        </div>
+                    
+                    </Form>
+                
                 </div>
                 <div class="modal-footer">
                     
@@ -405,14 +636,21 @@
 
 <script setup>
     import HeaderItem from '../components/HeaderItem.vue'
-    import { pencatatanStore } from '@/stores';
+    import { pencatatanStore, strainStore, pakanStore, treatmentStore, kandangStore } from '@/stores';
     import { defineStore, storeToRefs } from 'pinia'
     import { onMounted, reactive, ref, computed } from 'vue';
-    import axios from 'axios'
+    import { Field, ErrorMessage, Form } from 'vee-validate';
+    import * as yup from 'yup';
+    import axios from 'axios';
+    import Swal from 'sweetalert2';
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
     const dataPencatatan  = reactive(pencatatanStore());
+    const dataStrain = reactive(strainStore());
+    const dataPakan = reactive(pakanStore());
+    const dataTreatment = reactive(treatmentStore());
+    const dataKandang = reactive(kandangStore());
 
     const detailPencatatan = reactive({
         id: '',
@@ -437,16 +675,97 @@
         tanggal_submit: '',
         nama_anak_kandang: '',
         nama_mandor: '',
+        nama_kandang: '',
+        nama_strain: '',
+        nama_kandang_pengirim: '',
+        nama_kandang_penerima: '',
     });
     let search = ref("");
     
     const currentPage = ref(1);
     const pageSize = ref(10);
     const totalItems = dataPencatatan.responseData ? dataPencatatan.responseData.data.total_record : 0;
-
     const onClickHandler = (page) => {
         getPencatatan(page);
     };
+
+    const schemas = [
+        yup.object({
+            id_anak_kandang: yup.number().required(),
+            nama_kandang: yup.number().required(),
+            nama_mandor: yup.string().required(),
+            strain_ayam: yup.number().required(),
+        }),
+        yup.object({
+            mati: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            afkir: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            jumlah_pindah: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            jumlah_terima: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            id_kandang_pengirim: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            id_kandang_penerima: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+        }),
+        yup.object({
+            jml_telur_butuh: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            jml_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            berat_telur_butuh: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            berat_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+        }),
+        yup.object({
+            jenis_pakan: yup.number(),
+            jenis_treatment: yup.number(),
+            catatan: yup.string(),
+        }),
+    ];
+
+    const currentStep = ref(0);
+
+    const currentSchema = computed(() => {
+        return schemas[currentStep.value];
+    });
+
+    function nextStep(values) {
+    if (currentStep.value === 3) {
+        onUpdateSubmit(values);
+        console.log('Done: ', JSON.stringify(values, null, 2));
+        return;
+    }
+
+    currentStep.value++;
+    }
+
+    function prevStep() {
+    if (currentStep.value <= 0) {
+        return;
+    }
+
+    currentStep.value--;
+    }
+
+    const namaKandangPengirim = ref(null);
+    function getKandangPengirim(event) {
+        const selectedId = event.target.value;
+        const items = dataKandang.responseData.data.items;
+        for (const item of items) {
+            if (item.id == selectedId) {
+                namaKandangPengirim.value = item.nama;
+                console.log(namaKandangPengirim.value)
+            }
+        }
+        
+    }
+
+    const namaKandangPenerima = ref(null);
+    function getKandangPenerima(event) {
+        const selectedId = event.target.value;
+        const items = dataKandang.responseData.data.items;
+        for (const item of items) {
+            if (item.id == selectedId) {
+                namaKandangPenerima.value = item.nama;
+                console.log(namaKandangPenerima.value)
+            }
+        }
+        
+    }
 
     function clearSearch() {
         search.value = '';
@@ -464,6 +783,117 @@
         closeElements.forEach((closeElement) => {
             closeElement.click();
         });
+    }
+
+    function alert(icon, title) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: icon,
+          title: title
+        });
+    }
+
+    async function getKandang() {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        // console.log(JSON.parse(token).token);
+        axios.get(baseUrl + '/kandang', {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataKandang.setResponseData(response.data);
+                console.log(dataKandang.responseData.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    async function onUpdateSubmit(values) {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        const { nama_kandang, id_anak_kandang, nama_mandor, strain_ayam, mati, afkir, jumlah_pindah, id_kandang_pengirim, jumlah_terima, id_kandang_tujuan, jml_telur_butuh, jml_telur_bentes, berat_telur_butuh, berat_telur_bentes, jenis_pakan, jenis_treatment, catatan } = values;
+        console.log(values);
+        return axios.put(baseUrl + '/pencatatan/' + detailPencatatan.id, {
+            id_kandang: nama_kandang,
+            id_mandor: nama_mandor,
+            id_anak_kandang: id_anak_kandang,
+            id_strain_ayam: strain_ayam,
+            jumlah_mati: mati,
+            jumlah_afkir: afkir,
+            jumlah_pindah: jumlah_pindah,
+            id_kandang_tujuan: id_kandang_tujuan,
+            jumlah_terima: jumlah_terima,
+            id_kandang_pengirim: id_kandang_pengirim,
+            telur_butuh: jml_telur_butuh,
+            telur_bentes: jml_telur_bentes,
+            berat_utuh: berat_telur_butuh,
+            berat_bentes: berat_telur_bentes,
+            id_treatment: jenis_treatment,
+            id_jenis_pakan: jenis_pakan,
+            catatan: catatan,
+        }, {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                console.log(response);
+                alert('success', 'Data pencatatan berhasil diubah');
+                getPencatatan(1);
+                closeModal();
+            })
+            .catch(error => {
+                alert('error', 'Data gagal diubah')
+                console.error(error);
+            });
+    }
+
+    async function getTreatment() {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/tugas', {
+            params: {
+                is_treatment: true,
+            },
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataTreatment.setResponseData(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    async function getPakan() {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/jenis_pakan', {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataPakan.setResponseData(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 
     async function getPencatatan(page_number) {
@@ -518,6 +948,10 @@
                 detailPencatatan.tanggal_submit = response.data.data.tanggal_submit;
                 detailPencatatan.nama_anak_kandang = response.data.data.nama_anak_kandang;
                 detailPencatatan.nama_mandor = response.data.data.nama_mandor;
+                detailPencatatan.nama_kandang = response.data.data.kandang.nama;
+                detailPencatatan.nama_strain = response.data.data.strain_ayam.nama;   
+                detailPencatatan.nama_kandang_pengirim = response.data.data.kandang_pengirim.nama;
+                detailPencatatan.nama_kandang_penerima = response.data.data.kandang_tujuan.nama;     
                 // console.log("Detail Pencatatan : ", detailPencatatan);
                 console.log("Detail Pencatatan : ", response);
             })
@@ -557,10 +991,12 @@
         })
             .then(response => {
                 console.log(response);
+                alert('success', 'Data berhasil dihapus');
                 getPencatatan(1);
                 getIdPencatatan(id);
             })
             .catch(error => {
+                alert('error', 'Data gagal dihapus')
                 console.error(error);
             });
     }
@@ -577,10 +1013,12 @@
         })
             .then(response => {
                 console.log(response);
+                alert('success', 'Data berhasil disetujui');
                 getPencatatan(1);
                 getIdPencatatan(id);
             })
             .catch(error => {
+                alert('error', 'Data gagal disetujui')
                 console.error(error);
             });
     }
@@ -597,17 +1035,19 @@
         })
             .then(response => {
                 console.log(response);
+                alert('success', 'Data berhasil ditolak');
                 getPencatatan(1);
                 getIdPencatatan(id);
             })
             .catch(error => {
+                alert('error', 'Data gagal ditolak')
                 console.error(error);
             });
     }
 
     onMounted(() => {
         getPencatatan(1);
-
+        getKandang();
         // Mengambil elemen button (icon SVG) dan popover
         // const buttons = document.querySelectorAll('.btnPersetujuan');
         // const popover = document.getElementById('myPopover');

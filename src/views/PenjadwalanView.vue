@@ -76,8 +76,8 @@
                         <template v-if="dataPenjadwalan.responseData">
                         <tr v-for="item in dataPenjadwalan.responseData.data.items" :key="item.id">
                             <td>{{ item.id }}</td>
-                            <td>{{ item.id_tugas }}</td>
-                            <td>{{ item.id_kandang }}</td>
+                            <td>{{ getNamaTugas(item.id_tugas) }}</td>
+                            <td>{{ getNamaKandang(item.id_kandang) }}</td>
                             <td>{{ item.waktu_pelaksanaan }}</td>
                             <td>{{ item.deskripsi }}</td>
                             <td>
@@ -165,8 +165,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Nama Tugas : {{ detailPenjadwalan.id_tugas }}</p>
-                    <p>Nama Kandang : {{ detailPenjadwalan.id_kandang }}</p>
+                    <p>Nama Tugas : {{ getNamaTugas(detailPenjadwalan.id_tugas) }}</p>
+                    <p>Nama Kandang : {{ getNamaKandang(detailPenjadwalan.id_kandang) }}</p>
                     <p>Waktu Pelaksanaan : {{ detailPenjadwalan.waktu_pelaksanaan }}</p>
                     <p>Deskripsi : {{ detailPenjadwalan.deskripsi }}</p>
                 </div>
@@ -225,6 +225,7 @@
     import axios from 'axios'
     import { Form, Field } from 'vee-validate';
     import * as Yup from 'yup';
+    import Swal from 'sweetalert2';
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
@@ -238,6 +239,9 @@
     const dataPenjadwalan  = reactive(penjadwalanStore());
     const dataKandang = reactive(kandangStore());
     const dataTugas = reactive(tugasStore());
+
+    const namaTugas = ref('');
+    const namaKandang = ref('');
 
     const detailPenjadwalan = reactive({
         id: '',
@@ -261,6 +265,7 @@
         getKandang()
         getPenjadwalan()
         getTugas()
+        getNamaTugas(2)
     });
 
     function clearSearch() {
@@ -271,6 +276,24 @@
     function searchItem() {
         console.log(search.value);
         searchPenjadwalan(search.value);
+    }
+
+    function alert(icon, title) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: icon,
+          title: title
+        });
     }
 
     function closeModal() {
@@ -303,6 +326,40 @@
             .catch(error => {
                 console.error(error);
             });
+    }
+
+    function getNamaTugas(id) {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/tugas/' + id, {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                namaTugas.value = response.data.data.nama;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        return namaTugas.value;
+    }
+
+    function getNamaKandang(id) {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/kandang/' + id, {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                namaKandang.value = response.data.data.nama;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        return namaKandang.value;
     }
 
     async function getKandang() {
@@ -364,11 +421,13 @@
             .then(response => {
                 console.log(response);
                 getPenjadwalan();
+                alert('success', 'Data berhasil ditambahkan');
                 closeModal();
             })
             .catch(error => {
                 console.error(error);
-                setErrors({ apiError: error });
+                alert('error', 'Data gagal ditambahkan');
+                setErrors({ apiError: error.response.data.message });
             });
         
     }
@@ -391,10 +450,12 @@
             .then(response => {
                 console.log(response);
                 getPenjadwalan();
+                alert('success', 'Data berhasil diubah');
                 closeModal();
             })
             .catch(error => {
                 console.error(error);
+                alert('error', 'Data gagal diubah');
                 setErrors({ apiError: error.response.data.message });
             });
         
@@ -432,8 +493,10 @@
             .then(response => {
                 console.log(response);
                 getPenjadwalan();
+                alert('success', 'Data berhasil dihapus');
             })
             .catch(error => {
+                alert('error', 'Data gagal dihapus');
                 console.error(error);
             });
     }
