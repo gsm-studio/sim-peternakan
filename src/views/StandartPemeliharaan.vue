@@ -9,7 +9,7 @@
                 <h4 class="mb-3">Master Data <span class="text-secondary">> Standart Pemeliharaan</span></h4>
                 <div class="mt-4 mb-4 d-flex">
                     <span>
-                        <a @click="getStrain()" class="add text-secondary" href="javascript:void(0)" data-toggle="modal" data-target="#createModal">
+                        <a @click="getStrain()" class="add text-secondary" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#createModal">
                             <svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12" fill="none">
                                 <path d="M0 6L13 6" stroke="#A3AAA6" stroke-width="2"/>
                                 <path d="M6 0V12" stroke="#A3AAA6" stroke-width="2"/>
@@ -17,15 +17,15 @@
                             Tambah Data
                         </a>
                     </span>
-                    <span class="ms-3">
+                    <!-- <span class="ms-3">
                         <button class="btn btn-success bg-status-success">
                             Usia 18-30
                             <svg xmlns="http://www.w3.org/2000/svg" width="9" height="6" viewBox="0 0 9 6" fill="none">
                                 <path d="M1 1L4 5L8 1" stroke="white"/>
                             </svg>
                         </button>
-                    </span>
-                <div class="ms-3">
+                    </span> -->
+                <!-- <div class="ms-3">
                     <span class="btnPopOver color-text-rossa">
                         Pindah Kandang
                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
@@ -44,27 +44,27 @@
                                 </ul>
                         </div>
                     </div>
-                </div>
-                <div class="ms-3">
-                <span id="btnStrain" class="color-text-rossa">
-                    Strain: Hisex
-                    <svg xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
-                        <path d="M1 1L5 7L9.5 1" stroke="#0FA958"/>
-                        </svg>
-                </span>
-                <div id="myPopoverStrain" class="popover-content p-0">
-                    <div>
-                        <ul class="list-group">
-                            <li class="list-group-item">Hyline</li>
-                            <li class="list-group-item">Isa Brown</li>
-                            <li class="list-group-item">Lohmann Brown
-                            </li>
-                            <li class="list-group-item">Novogen</li>
-                            
-                            </ul>
+                </div> -->
+                <!-- <div class="ms-3">
+                    <span id="btnStrain" class="color-text-rossa">
+                        Strain: Hisex
+                        <svg xmlns="http://www.w3.org/2000/svg" width="10" height="8" viewBox="0 0 10 8" fill="none">
+                            <path d="M1 1L5 7L9.5 1" stroke="#0FA958"/>
+                            </svg>
+                    </span>
+                    <div id="myPopoverStrain" class="popover-content p-0">
+                        <div>
+                            <ul class="list-group">
+                                <li class="list-group-item">Hyline</li>
+                                <li class="list-group-item">Isa Brown</li>
+                                <li class="list-group-item">Lohmann Brown
+                                </li>
+                                <li class="list-group-item">Novogen</li>
+                                
+                                </ul>
+                        </div>
                     </div>
-                </div>
-                </div>
+                </div> -->
                 </div>
                 <div class="d-flex justify-content-between">
                     <!-- Button trigger modal -->
@@ -80,9 +80,7 @@
                         <div class="modal-content p-3">
                             <div class="modal-header">
                             <h5 class="modal-title" id="exampleModalLabel">Populasi Ayam : 3000 ekor</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <form action="">
@@ -237,7 +235,6 @@
                         </div>
                         <div class="modal-footer">
                         
-                        
                         </div>
                     </div>
                     </div>
@@ -324,9 +321,7 @@
             <div class="modal-content p-3">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Tambah Standart Pemeliharaan</h5>
-                    <button type="button" id="closeModal" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
@@ -436,6 +431,7 @@
     import axios from 'axios'
     import { Form, Field } from 'vee-validate';
     import * as Yup from 'yup';
+    import Swal from 'sweetalert2';
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
@@ -481,6 +477,24 @@
         // getRole()
     });
 
+    function alert(icon, title) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: icon,
+          title: title
+        });
+    }
+
     function clearSearch() {
         search.value = '';
         getStandart(1);
@@ -492,7 +506,7 @@
     }
 
     function closeModal() {
-        const closeElements = document.querySelectorAll('.close');
+        const closeElements = document.querySelectorAll('.btn-close');
 
         closeElements.forEach((closeElement) => {
             closeElement.click();
@@ -562,11 +576,13 @@
             .then(response => {
                 console.log(response);
                 getStandart(1);
+                alert('success', 'Data berhasil ditambahkan');
                 closeModal();
             })
             .catch(error => {
                 console.error(error);
-                setErrors({ apiError: error });
+                alert('error', 'Data gagal ditambahkan');
+                setErrors({ apiError: error.response.data.message });
             });
         
     }
@@ -593,11 +609,13 @@
         })
             .then(response => {
                 console.log(response);
+                alert('success', 'Data berhasil diubah');
                 getStandart(1);
                 closeModal();
             })
             .catch(error => {
                 console.error(error);
+                alert('error', 'Data gagal diubah');
                 setErrors({ apiError: error.response.data.message });
             });
         
@@ -669,43 +687,43 @@
 
 
     onMounted(() => {
-        // Mengambil elemen button (icon SVG) dan popover
-        const buttons = document.querySelectorAll('.btnPopOver');
-        const popover = document.getElementById('myPopover');
+    //     // Mengambil elemen button (icon SVG) dan popover
+    //     const buttons = document.querySelectorAll('.btnPopOver');
+    //     const popover = document.getElementById('myPopover');
 
-        const btnStrain = document.getElementById('btnStrain');
-        const popoverStrain = document.getElementById('myPopoverStrain');
+    //     const btnStrain = document.getElementById('btnStrain');
+    //     const popoverStrain = document.getElementById('myPopoverStrain');
 
-        // Menampilkan atau menyembunyikan popover saat button diklik
-        buttons.forEach(button => {
-            button.addEventListener('click', function(event) {
-                if (popover.style.display === 'block') {
-                    popover.style.display = 'none';
-                } else {
-                    popover.style.display = 'block';
-                }
-                event.stopPropagation(); // Mencegah event bubbling
-            });
-        });
+    //     // Menampilkan atau menyembunyikan popover saat button diklik
+    //     buttons.forEach(button => {
+    //         button.addEventListener('click', function(event) {
+    //             if (popover.style.display === 'block') {
+    //                 popover.style.display = 'none';
+    //             } else {
+    //                 popover.style.display = 'block';
+    //             }
+    //             event.stopPropagation(); // Mencegah event bubbling
+    //         });
+    //     });
 
-        btnStrain.addEventListener('click', function(event) {
-                if (popoverStrain.style.display === 'block') {
-                popoverStrain.style.display = 'none';
-                } else {
-                popoverStrain.style.display = 'block';
-                }
-                event.stopPropagation(); // Mencegah event bubbling
-            });
+    //     btnStrain.addEventListener('click', function(event) {
+    //             if (popoverStrain.style.display === 'block') {
+    //             popoverStrain.style.display = 'none';
+    //             } else {
+    //             popoverStrain.style.display = 'block';
+    //             }
+    //             event.stopPropagation(); // Mencegah event bubbling
+    //         });
 
-        // Menutup popover saat klik di luar popover
-        document.addEventListener('click', function(event) {
-            if (!popover.contains(event.target)) {
-                popover.style.display = 'none';
-            }
-            if (!popoverStrain.contains(event.target)) {
-                popoverStrain.style.display = 'none';
-            }
-        });
+    //     // Menutup popover saat klik di luar popover
+    //     document.addEventListener('click', function(event) {
+    //         if (!popover.contains(event.target)) {
+    //             popover.style.display = 'none';
+    //         }
+    //         if (!popoverStrain.contains(event.target)) {
+    //             popoverStrain.style.display = 'none';
+    //         }
+    //     });
     });
     
     

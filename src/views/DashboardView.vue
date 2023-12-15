@@ -18,18 +18,19 @@
                           <span class="color-text-rossa ms-3">Filter</span>
                         </div>
                         <h5 class="card-title mb-0">52 gr/butir</h5>
-                        <small>
+                        <!-- <small>
                           <svg class="icon color-text-rossa">
                             <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
                           </svg> 2,4 % vs last week
-                        </small>
+                        </small> -->
                         <div class="small text-medium-emphasis mt-2">from 1-9 November, 2023</div>
                       </div>
                       <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                        
-                        <button class="btn bg-success bg-button-rossa" type="button">
+                        <router-link to="/pelaporan">
+                          <button class="btn bg-success bg-button-rossa" type="button">
                             View report
-                        </button>
+                          </button>
+                        </router-link>
                       </div>
                     </div>
                     <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
@@ -70,11 +71,11 @@
                           <span class="color-text-rossa ms-3">Semua kandang</span>
                         </div>
                         <h5 class="card-title mb-0">52 gr/butir</h5>
-                        <small>
+                        <!-- <small>
                           <svg class="icon color-text-rossa">
                             <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
                           </svg> 2,4 % vs last week
-                        </small>
+                        </small> -->
                         <div class="small text-medium-emphasis mt-2">from 1-9 November, 2023</div>
                       </div>
                       
@@ -142,7 +143,9 @@
                   <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
                       <h5>Kandang</h5>
-                      <button class="btn btn-success bg-button-rossa">Lihat jadwal</button>
+                      <router-link to="/penjadwalan">
+                        <button class="btn btn-success bg-button-rossa">Lihat jadwal</button>
+                      </router-link>
                     </div>
                     <div class="table-responsive">
                       <table class="table border mb-0">
@@ -152,98 +155,21 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                            <td class="text-center">
-                              Kandang 1A
-                            </td>
-                            <td>
-                              <svg class="icon me-2">
-                                <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use>
-                              </svg>
-                              Rosa
-                            </td>
-                            <td class="text-center">
-                              20/12/2023
-                            </td>
-                            <td>
-                              Vaksin ND
-                            </td>
-                            <td class="text-center">
-                              <img class="img-fluid" src="@/assets/img/worker-outline.png" alt="">
-                            </td>
-                            <td>
-                              <img class="img-fluid" src="@/assets/img/symbols-note.png" alt="">
-                            </td>
-                          </tr>
-                          <tr>
-                            <td class="text-center">
-                              Kandang 1A
-                            </td>
-                            <td>
-                              <svg class="icon me-2">
-                                <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use>
-                              </svg>
-                              Rosa
-                            </td>
-                            <td class="text-center">
-                              20/12/2023
-                            </td>
-                            <td>
-                              Vaksin ND
-                            </td>
-                            <td class="text-center">
-                              <img class="img-fluid" src="@/assets/img/worker-outline.png" alt="">
-                            </td>
-                            <td>
-                              <img class="img-fluid" src="@/assets/img/symbols-note.png" alt="">
-                            </td>
-                          </tr>
-                          <tr>
-                            <td class="text-center">
-                              Kandang 1A
-                            </td>
-                            <td>
-                              <svg class="icon me-2">
-                                <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use>
-                              </svg>
-                              Rosa
-                            </td>
-                            <td class="text-center">
-                              20/12/2023
-                            </td>
-                            <td>
-                              Vaksin ND
-                            </td>
-                            <td class="text-center">
-                              <img class="img-fluid" src="@/assets/img/worker-outline.png" alt="">
-                            </td>
-                            <td>
-                              <img class="img-fluid" src="@/assets/img/symbols-note.png" alt="">
-                            </td>
-                          </tr>
-                          <tr>
-                            <td class="text-center">
-                              Kandang 1A
-                            </td>
-                            <td>
-                              <svg class="icon me-2">
-                                <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use>
-                              </svg>
-                              Rosa
-                            </td>
-                            <td class="text-center">
-                              20/12/2023
-                            </td>
-                            <td>
-                              Vaksin ND
-                            </td>
-                            <td class="text-center">
-                              <img class="img-fluid" src="@/assets/img/worker-outline.png" alt="">
-                            </td>
-                            <td>
-                              <img class="img-fluid" src="@/assets/img/symbols-note.png" alt="">
-                            </td>
-                          </tr>
+                          <template v-if="dataPenjadwalan.responseData">
+                            <tr v-for="item in dataPenjadwalan.responseData.data.items" :key="item.id">
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.id_tugas }}</td>
+                                <td>{{ item.id_kandang }}</td>
+                                <td>{{ item.waktu_pelaksanaan }}</td>
+                                <td>{{ item.deskripsi }}</td>
+                                
+                            </tr>
+                         </template>
+                          <template v-else>
+                            <tr>
+                                <td colspan="7" class="text-center">No Data Available</td>
+                            </tr>
+                          </template>
                         </tbody>
                       </table>
                     </div>
@@ -260,11 +186,11 @@
                         <h5 class="card-title mb-0">16,900 kg</h5>
                         <h5 class="card-title mb-0">106.4 gram/ekor</h5>
                       </div>
-                      <small>
+                      <!-- <small>
                         <svg class="icon color-text-rossa">
                           <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
                         </svg> 2,4 % vs last week
-                      </small>
+                      </small> -->
                     </div>
                     <div>
                       <svg xmlns="http://www.w3.org/2000/svg" width="108" height="108" viewBox="0 0 108 108" fill="none">
@@ -294,16 +220,50 @@
 </template>
 
 <script setup>
-import HeaderItem from '@/components/HeaderItem.vue'
-import { CChart } from '@coreui/vue-chartjs'
-import { storeToRefs } from 'pinia';
-import { useAuthStore, useUsersStore } from '@/stores';
+  import HeaderItem from '@/components/HeaderItem.vue'
+  import { CChart } from '@coreui/vue-chartjs'
+  import { storeToRefs } from 'pinia';
+  import { useAuthStore, useUsersStore } from '@/stores';
+  import { penjadwalanStore } from '@/stores';
+  import { onMounted, reactive, ref } from 'vue'
+  import axios from 'axios'
+  import Swal from 'sweetalert2'
 
-// const authStore = useAuthStore();
-// const { user: authUser } = storeToRefs(authStore);
+  const baseUrl = `${import.meta.env.VITE_API_URL}`;
+  // const authStore = useAuthStore();
+  // const { user: authUser } = storeToRefs(authStore);
 
-// const usersStore = useUsersStore();
-// const { users } = storeToRefs(usersStore);
+  // const usersStore = useUsersStore();
+  // const { users } = storeToRefs(usersStore);
 
-// usersStore.getAll();
+  // usersStore.getAll();
+  const dataPenjadwalan  = reactive(penjadwalanStore());
+
+  onMounted(() => {
+        getPenjadwalan()
+  });
+
+  async function getPenjadwalan() {
+      const user = localStorage.getItem('user');
+      const token = JSON.parse(user);
+      // console.log(JSON.parse(token).token);
+      axios.get(baseUrl + '/penjadwalan', {
+          params: {
+              page_number: 1, 
+              page_size: 10, 
+          },
+          
+          headers: {
+              Authorization: `Bearer ${token.token}`,
+          },
+      })
+          .then(response => {
+              dataPenjadwalan.setResponseData(response.data);
+              console.log(dataPenjadwalan.responseData.data);
+          })
+          .catch(error => {
+              console.error(error);
+          });
+  }
+  
 </script>

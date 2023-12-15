@@ -17,15 +17,17 @@
                                     "></use>
                                     </svg>
                                 </div>
-                                <h5 class="color-text-rossa d-inline">{{ detailKandang.nama }}</h5>
-                                <img src="@/assets/img/vector-1.png" alt="">
+                                <h5 class="color-text-rossa d-inline ms-2">{{ detailKandang.nama }}</h5>
+                                <!-- <img src="@/assets/img/vector-1.png" alt=""> -->
                             </div>
                             <div class="col d-grid gap-2 d-md-block">
-                                <small class="color-text-rossa">{{ formatTanggal() }}</small>
+                                <small class="color-text-rossa">{{ dateSubmitPencatatan }}</small>
                                 <!-- <button class="btn btn-secondary ms-3" type="button">Hisex</button> -->
                             </div>
                             <div class="col d-grid gap-2 d-md-block">
-                                <button class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Pending</button>
+                                <button v-if="status == 'submitted'" class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Pending</button>
+                                <button v-else-if="status == 'accepted'" class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Terima</button>
+                                <button v-else class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Tolak</button>
                                 <button @click="getKandang()" class="btn btn-success ms-3" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     Input 
                                     <svg class="icon">
@@ -54,7 +56,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
                                     <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
                                     </svg>
-                                <h5 class="card-title mb-0 text-secondary">58 gr/butir</h5>
+                                <h5 class="card-title mb-0 text-secondary">{{ (parseInt(totalBeratTelurUtuh) + parseInt(totalBeratTelurBentes)) / (parseInt(totalTelurUtuh) + parseInt(totalTelurBentes)) }} gr/butir</h5>
                                 </div>
                                 <small class="color-text-rossa">
                                 (20,1 %)
@@ -113,11 +115,11 @@
                             <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
                             </div>
                             <h5 class="card-title mb-0">{{ totalPopulasi }} ekor</h5>
-                            <small>
+                            <!-- <small>
                             <svg class="icon color-text-rossa">
                                 <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
                             </svg> 2,4 % vs last week
-                            </small>
+                            </small> -->
                             
                         </div>
                         <div class="d-flex align-items-center">
@@ -204,18 +206,18 @@
                                     </div>
                                     
                                 </div>
-                                <small>
+                                <!-- <small>
                                     <svg class="icon color-text-rossa">
                                     <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
                                     </svg> 2,4 % vs last week
-                                </small>
+                                </small> -->
                                 
                             </div>
                             <div class="col-md-6 d-flex align-items-end">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" fill="none">
                                     <circle cx="90" cy="90" r="90" fill="#0FA958" fill-opacity="0.6"/>
                                     <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">100 % 
-                                        Omega</text>
+                                        {{ detailPakan.nama ? detailPakan.nama : 'Tidak Ada' }}</text>
                                 </svg>
                             </div>
                             <div class="col-md-6">
@@ -261,16 +263,15 @@
                         
                         <svg xmlns="http://www.w3.org/2000/svg" width="146" height="145" viewBox="0 0 146 145" fill="none">
                             <circle cx="73.1484" cy="72.5" r="72.5" fill="#6AD0B8"/>
-                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">Egg Mass 11.7</text>
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">Egg Mass {{ detailStandart.egg_mass }}</text>
                             </svg>
                             <svg xmlns="http://www.w3.org/2000/svg" width="118" height="117" viewBox="0 0 118 117" fill="none">
                             <circle cx="59.1484" cy="58.5" r="58.5" fill="#D8608B" fill-opacity="0.7"/>
-                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">FC 7.4</text>
+                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">FC {{ detailStandart.nilai_fc }}</text>
                             </svg>
                             <svg xmlns="http://www.w3.org/2000/svg" width="136" height="135" viewBox="0 0 136 135" fill="none">
                             <circle cx="68.1484" cy="67.5" r="67.5" fill="#8660D8" fill-opacity="0.7"/>
-                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">Standart 
-                                FC 7.6</text>
+                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">FI {{ detailStandart.nilai_fi }}</text>
                             </svg>
                         </div>
                     </div>
@@ -297,26 +298,28 @@
                         >
                         <template v-if="currentStep === 0"> 
                             <div class="mb-4 d-flex justify-content-between">
-                                <button class="btn btn-success">{{ formatTanggal() }}</button>
+                                <button class="btn btn-success">{{ dateSubmitPencatatan }}</button>
                                 <h6 class="modal-title" id="exampleModalLabel">Populasi Ayam : {{ totalPopulasi }} ekor</h6>
                             </div>
                             <div class="mb-3">
-                                <Field @change="getIdKandang($event)" as="select" name="nama_anak_kandang" class="form-control text-center">
-                                    <template v-if="dataKandang.responseData">
-                                        <option value="" disabled>Pilih Nama Kandang</option>
-                                        <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
-                                    </template>
+                                <label for="nama_kandang" class="form-label">Nama Kandang</label>
+                                <Field id="nama_kandang" as="select" name="nama_kandang" class="form-control text-center" readonly>
+                                    <option :value="detailKandang.id" :selected="true">{{ detailKandang.nama }}</option>
                                 </Field>
-                                <ErrorMessage class="text-danger" name="nama_anak_kandang" />
+                                <ErrorMessage class="text-danger" name="nama_kandang" />
                             </div>
                             <!-- {{ values }} -->
                             <Field v-model="detailKandang.id_anak_kandang" name="id_anak_kandang" class="form-control text-center" type="hidden"/>
                             <div class="mb-3">
-                                <Field v-model="detailKandang.nama_mandor" name="nama_mandor" class="form-control text-center" type="text" placeholder="Nama mandor" readonly/>
+                                <label for="nama_mandor" class="form-label">Nama Mandor</label>
+                                <Field id="nama_mandor" as="select" name="nama_mandor" class="form-control text-center" readonly>
+                                    <option :value="detailKandang.id_mandor" :selected="true">{{ detailKandang.nama_mandor }}</option>
+                                </Field>
                                 <ErrorMessage class="text-danger" name="nama_mandor" />
                             </div>
                             <div class="mb-3">
-                                <Field @change="getIdStrain($event)" as="select" name="strain_ayam" class="form-control text-center">
+                                <label for="strain_ayam" class="form-label">Strain Ayam</label>
+                                <Field id="strain_ayam" @change="getIdStrain($event)" as="select" name="strain_ayam" class="form-control text-center">
                                     <template v-if="dataStrain.responseData">
                                         <option value="" disabled>Pilih Strain Ayam</option>
                                         <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
@@ -347,24 +350,24 @@
                                     </p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span class="color-text-rossa">Populasi Ayam:</span> 3000 ekor</p>
+                                    <p><span class="color-text-rossa">Populasi Ayam:</span> {{ populasi_ayam }} ekor</p>
                                     <p><span class="color-text-rossa">Strain:</span> {{ detailStrain.nama }}</p>
                                 </div>
                             </div>
                             <h6 class="mb-3">Ayam</h6>
 
                             <div class="mb-3">
-                                <Field name="mati" class="form-control text-center" type="text" placeholder="Mati" />
+                                <Field name="mati" class="form-control text-center" type="number" placeholder="Mati" />
                                 <ErrorMessage class="text-danger" name="mati" />
                             </div>
 
                             <div class="mb-3">
-                                <Field name="afkir" class="form-control text-center" type="text" placeholder="Afkir" />
+                                <Field name="afkir" class="form-control text-center" type="number" placeholder="Afkir" />
                                 <ErrorMessage class="text-danger" name="afkir" />
                             </div>
 
                             <div class="mb-3">
-                                <Field name="jumlah_pindah" class="form-control text-center" type="text" placeholder="Jumlah Pindah" />
+                                <Field name="jumlah_pindah" class="form-control text-center" type="number" placeholder="Jumlah Pindah" />
                                 <ErrorMessage class="text-danger" name="jumlah_pindah" />
                             </div>
                             <div class="mb-3">
@@ -377,7 +380,7 @@
                                 <ErrorMessage class="text-danger" name="id_kandang_pengirim" />
                             </div>
                             <div class="mb-3">
-                                <Field name="jumlah_terima" class="form-control text-center" type="text" placeholder="Jumlah Terima" />
+                                <Field name="jumlah_terima" class="form-control text-center" type="number" placeholder="Jumlah Terima" />
                                 <ErrorMessage class="text-danger" name="jumlah_terima" />
                             </div>
                             <div class="mb-3">
@@ -412,7 +415,7 @@
                                     </p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span class="color-text-rossa">Populasi Ayam:</span> 3000 ekor</p>
+                                    <p><span class="color-text-rossa">Populasi Ayam:</span> {{ populasi_ayam }} ekor</p>
                                     <p><span class="color-text-rossa">Strain:</span> {{ detailStrain.nama }}</p>
                                 </div>
                             </div>
@@ -433,19 +436,19 @@
                             </div>
                             <h6 class="mb-3">Produksi telur</h6>
                             <div class="mb-3">
-                                <Field name="jml_telur_butuh" class="form-control text-center" type="text" placeholder="Jumlah Telur Utuh" />
+                                <Field name="jml_telur_butuh" class="form-control text-center" type="number" placeholder="Jumlah Telur Utuh" />
                                 <ErrorMessage class="text-danger" name="jml_telur_butuh" />
                             </div>
                             <div class="mb-3">
-                                <Field name="jml_telur_bentes" class="form-control text-center" type="text" placeholder="Jumlah Telur Bentes" />
+                                <Field name="jml_telur_bentes" class="form-control text-center" type="number" placeholder="Jumlah Telur Bentes" />
                                 <ErrorMessage class="text-danger" name="jml_telur_bentes" />
                             </div>
                             <div class="mb-3">
-                                <Field name="berat_telur_butuh" class="form-control text-center" type="text" placeholder="Berat Telur Utuh" />
+                                <Field name="berat_telur_butuh" class="form-control text-center" type="number" placeholder="Berat Telur Utuh" />
                                 <ErrorMessage class="text-danger" name="berat_telur_butuh" />
                             </div>
                             <div class="mb-3">
-                                <Field name="berat_telur_bentes" class="form-control text-center" type="text" placeholder="Berat Telur Bentes" />
+                                <Field name="berat_telur_bentes" class="form-control text-center" type="number" placeholder="Berat Telur Bentes" />
                                 <ErrorMessage class="text-danger" name="berat_telur_bentes" />
                             </div>
                         </template>
@@ -486,7 +489,7 @@
                                 <Field as="select" name="jenis_pakan" class="form-control text-center">
                                     <template v-if="dataPakan.responseData">
                                         <option value="" disabled>Pilih Nama Pakan</option>
-                                        <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                        <option v-for="item in dataPakan.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                                     </template>
                                 </Field>
                                 <ErrorMessage class="text-danger" name="jenis_pakan" />
@@ -542,7 +545,7 @@
                     </div>
                     <div class="mb-4">
                     <p>
-                        <span class="color-text-rossa">Populasi ayam: <span class="text-secondary">300</span></span>
+                        <span class="color-text-rossa">Populasi ayam: <span class="text-secondary">{{ populasi_ayam }}</span></span>
                         <span class="ms-4 color-text-rossa">FC: <span class="text-secondary">7,4</span></span>
                         <span class="ms-4 color-text-rossa">Standart FC: <span class="text-secondary">7,6</span></span>
                         <span class="ms-4 color-text-rossa">Egg mass: <span class="text-secondary">11,7</span></span>
@@ -578,7 +581,7 @@
                         <th colspan="2" scope="col">Standart Produksi</th>
                         <th colspan="2" scope="col">Pakan</th>
                         <th rowspan="2" scope="col">Treatment</th>
-                        <th rowspan="2" scope="col">Edit</th>
+                        <!-- <th rowspan="2" scope="col">Edit</th> -->
                         <th rowspan="2" scope="col">Status</th>
                         </tr>
                         <tr>
@@ -626,7 +629,7 @@
                             <td>{{ item.id_jenis_pakan }}</td>
 
                             <td>{{ item.id_treatment }}</td>
-                            <td>
+                            <!-- <td>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <mask id="mask0_142_372" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1" y="1" width="18" height="18">
                                     <path d="M2.91699 17.5H17.917" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -636,11 +639,41 @@
                                     <path d="M0 0H20V20H0V0Z" fill="#0FA958"/>
                                 </g>
                                 </svg>
-                            </td>
-                            <td>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="23" viewBox="0 0 28 23" fill="none">
-                                <path d="M11.8381 1.91675C17.2868 1.91675 21.7036 6.20721 21.7036 11.5001C21.7036 16.793 17.2868 21.0834 11.8381 21.0834C6.38943 21.0834 1.97266 16.793 1.97266 11.5001C1.97266 6.20721 6.38943 1.91675 11.8381 1.91675ZM11.8381 3.83341C9.74494 3.83341 7.73748 4.64115 6.25737 6.07893C4.77727 7.51671 3.94575 9.46675 3.94575 11.5001C3.94575 13.5334 4.77727 15.4835 6.25737 16.9212C7.73748 18.359 9.74494 19.1667 11.8381 19.1667C13.9313 19.1667 15.9388 18.359 17.4189 16.9212C18.899 15.4835 19.7305 13.5334 19.7305 11.5001C19.7305 9.46675 18.899 7.51671 17.4189 6.07893C15.9388 4.64115 13.9313 3.83341 11.8381 3.83341ZM11.8381 5.75008C12.0798 5.75011 12.313 5.83629 12.4936 5.99227C12.6741 6.14824 12.7895 6.36317 12.8178 6.59629L12.8247 6.70841V11.1033L15.4953 13.6975C15.6722 13.87 15.7749 14.1014 15.7826 14.3448C15.7902 14.5882 15.7022 14.8252 15.5364 15.0078C15.3707 15.1905 15.1396 15.305 14.89 15.328C14.6405 15.3511 14.3913 15.2811 14.193 15.1322L14.1003 15.0526L11.1406 12.1776C10.9873 12.0286 10.8888 11.8345 10.8605 11.6256L10.8516 11.5001V6.70841C10.8516 6.45425 10.9555 6.21049 11.1405 6.03077C11.3255 5.85105 11.5765 5.75008 11.8381 5.75008Z" fill="#D4780C"/>
-                                </svg>
+                            </td> -->
+                            <td class="status-warning">
+                                <span v-if="item.status == 'submitted'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
+                                        <path d="M11.8381 2.41663C17.2868 2.41663 21.7036 6.70708 21.7036 12C21.7036 17.2928 17.2868 21.5833 11.8381 21.5833C6.38943 21.5833 1.97266 17.2928 1.97266 12C1.97266 6.70708 6.38943 2.41663 11.8381 2.41663ZM11.8381 4.33329C9.74494 4.33329 7.73748 5.14103 6.25737 6.57881C4.77727 8.01659 3.94575 9.96663 3.94575 12C3.94575 14.0333 4.77727 15.9833 6.25737 17.4211C7.73748 18.8589 9.74494 19.6666 11.8381 19.6666C13.9313 19.6666 15.9388 18.8589 17.4189 17.4211C18.899 15.9833 19.7305 14.0333 19.7305 12C19.7305 9.96663 18.899 8.01659 17.4189 6.57881C15.9388 5.14103 13.9313 4.33329 11.8381 4.33329ZM11.8381 6.24996C12.0798 6.24999 12.313 6.33617 12.4936 6.49214C12.6741 6.64812 12.7895 6.86305 12.8178 7.09617L12.8247 7.20829V11.6032L15.4953 14.1974C15.6722 14.3699 15.7749 14.6013 15.7826 14.8447C15.7902 15.088 15.7022 15.3251 15.5364 15.5077C15.3707 15.6904 15.1396 15.8048 14.89 15.8279C14.6405 15.851 14.3913 15.781 14.193 15.632L14.1003 15.5525L11.1406 12.6775C10.9873 12.5284 10.8888 12.3344 10.8605 12.1255L10.8516 12V7.20829C10.8516 6.95413 10.9555 6.71037 11.1405 6.53065C11.3255 6.35093 11.5765 6.24996 11.8381 6.24996Z" fill="#D4780C"/>
+                                    </svg>
+                                    Menunggu persetujuan
+                                </span>
+                                <span v-else-if="item.status == 'accepted'">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
+                                    <g clip-path="url(#clip0_209_1058)">
+                                    <path d="M24 10L21.56 7.22004L21.9 3.54004L18.29 2.72004L16.4 -0.459961L13 1.00004L9.6 -0.459961L7.71 2.72004L4.1 3.53004L4.44 7.21004L2 10L4.44 12.78L4.1 16.47L7.71 17.29L9.6 20.47L13 19L16.4 20.46L18.29 17.28L21.9 16.46L21.56 12.78L24 10ZM11 15L7 11L8.41 9.59004L11 12.17L17.59 5.58004L19 7.00004L11 15Z" fill="#0FA958"/>
+                                    </g>
+                                    <defs>
+                                    <clipPath id="clip0_209_1058">
+                                        <rect width="28" height="24" fill="white"/>
+                                    </clipPath>
+                                    </defs>
+                                    </svg>
+                                    Disetujui
+                                </span>
+                                <span v-else>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
+                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.5 9.75C17.5 14.5826 13.5826 18.5 8.75 18.5C3.91738 18.5 0 14.5826 0 9.75C0 4.91738 3.91738 1 8.75 1C13.5826 1 17.5 4.91738 17.5 9.75ZM5.34713 13.1529C5.26511 13.0708 5.21903 12.9596 5.21903 12.8436C5.21903 12.7276 5.26511 12.6163 5.34713 12.5343L8.13138 9.75L5.34713 6.96575C5.26743 6.88324 5.22333 6.77272 5.22433 6.65801C5.22533 6.5433 5.27134 6.43357 5.35245 6.35245C5.43357 6.27134 5.5433 6.22533 5.65801 6.22433C5.77272 6.22333 5.88324 6.26743 5.96575 6.34713L8.75 9.13138L11.5343 6.34713C11.6168 6.26743 11.7273 6.22333 11.842 6.22433C11.9567 6.22533 12.0664 6.27134 12.1475 6.35245C12.2287 6.43357 12.2747 6.5433 12.2757 6.65801C12.2767 6.77272 12.2326 6.88324 12.1529 6.96575L9.36862 9.75L12.1529 12.5343C12.2326 12.6168 12.2767 12.7273 12.2757 12.842C12.2747 12.9567 12.2287 13.0664 12.1475 13.1475C12.0664 13.2287 11.9567 13.2747 11.842 13.2757C11.7273 13.2767 11.6168 13.2326 11.5343 13.1529L8.75 10.3686L5.96575 13.1529C5.88371 13.2349 5.77245 13.281 5.65644 13.281C5.54043 13.281 5.42917 13.2349 5.34713 13.1529Z" fill="#F31422"/>
+                                    </svg>
+                                    Ditolak
+                                </span>
+                              
+                                <div id="myPopover" class="popover-content">
+                                    <div>
+                                        <p class="status-warning">Menunggu persetujuan</p>
+                                        <button class="btn btn-success w-100 mb-2">Setuju</button> <br>
+                                        <button class="btn btn-danger w-100">Tolak</button>
+                                    </div>
+                                </div>
                             </td>
                         </tr>
                         </template>
@@ -666,13 +699,14 @@
 <script setup>
     import HeaderItem from '../components/HeaderItem.vue'
     import { CChart } from '@coreui/vue-chartjs'
-    import { onMounted, ref, computed, reactive } from 'vue'
+    import { onMounted, ref, computed, reactive, watch } from 'vue'
     import { Field, ErrorMessage, Form } from 'vee-validate';
     import * as yup from 'yup';
     import { kandangStore, strainStore, pakanStore, treatmentStore, pencatatanStore } from '@/stores';
     import axios from 'axios'
-    import { storeToRefs } from 'pinia';
     import {useRoute} from 'vue-router'
+    import moment from 'moment'
+    import Swal from 'sweetalert2'
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
     const route = useRoute();
@@ -727,7 +761,26 @@
         id_jenis_pakan: '',
         catatan: '',
         populasi_ayam: '',
+        tanggal_submit: '',
+    });
 
+    const detailStandart = reactive({
+        id_strain_ayam: '',
+        nama_strain_ayam: '',
+        umur: '',
+        nilai_hd: '',
+        nilai_bb: '',
+        nilai_bt: '',
+        nilai_fi: '',
+        nilai_fc: '',
+        egg_mass: '',
+        deskripsi: '',
+    });
+
+    const detailPakan = reactive({
+        id: '',
+        nama: '',
+        deskripsi: '',
     });
 
     const totalTelurUtuh = ref(0);
@@ -739,6 +792,14 @@
     const totalPindah = ref(0);
     const totalTerima = ref(0);
     const totalPopulasi = ref(0);
+    const status = ref(null);
+    const date = ref(0);
+    const dateSubmitPencatatan = ref(0);
+
+    watch(() => detailPencatatan.tanggal_submit, (newValue, oldValue) => {
+        date.value = new Date(newValue);
+        dateSubmitPencatatan.value = moment(date).format("DD MMMM YYYY");
+    });
     
     const detailStrain = reactive({
         id: '',
@@ -747,38 +808,38 @@
     });
 
     onMounted(() => {
+        
+        console.log(detailPencatatan.tanggal_submit);
         getIdKandang(route.params.id);
         getPencatatan(route.params.id);
         getIdPencatatan(route.params.id);
         // console.log("List Pencatatan : ", dataPencatatan.responseData.data.items);
         console.log("Telur Utuh : ", totalTelurUtuh);
 
-       
     })
 
     const schemas = [
         yup.object({
             id_anak_kandang: yup.number().required(),
-            nama_anak_kandang: yup.number().required(),
+            nama_kandang: yup.number().required(),
             nama_mandor: yup.string().required(),
             strain_ayam: yup.number().required(),
         }),
         yup.object({
-            mati: yup.number(),
-            afkir: yup.number(),
-            jumlah_pindah: yup.number(),
-            jumlah_terima: yup.number(),
-            id_kandang_pengirim: yup.number(),
-            id_kandang_penerima: yup.number(),
+            mati: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            afkir: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            jumlah_pindah: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            jumlah_terima: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            id_kandang_pengirim: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            id_kandang_penerima: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
         }),
         yup.object({
-            jml_telur_butuh: yup.number(),
-            jml_telur_bentes: yup.number(),
-            berat_telur_butuh: yup.number(),
-            berat_telur_bentes: yup.number(),
+            jml_telur_butuh: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            jml_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            berat_telur_butuh: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            berat_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
         }),
         yup.object({
-            jumlah_pakan: yup.number(),
             jenis_pakan: yup.number(),
             jenis_treatment: yup.number(),
             catatan: yup.string(),
@@ -810,10 +871,28 @@
     }
 
     function closeModal() {
-        const closeElements = document.querySelectorAll('.close');
+        const closeElements = document.querySelectorAll('.btn-close');
 
         closeElements.forEach((closeElement) => {
             closeElement.click();
+        });
+    }
+
+    function alert(icon, title) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: icon,
+          title: title
         });
     }
 
@@ -845,46 +924,31 @@
 
     async function getTotal() {
         if(dataPencatatan.responseData) {
-            totalTelurUtuh.value = dataPencatatan.responseData.data.items.reduce((total, data) => {
-                return total + data.telur_utuh;
-            }, 0);
-            totalTelurBentes.value = dataPencatatan.responseData.data.items.reduce((total, data) => {
-                return total + data.telur_bentes;
-            }, 0);
-            totalBeratTelurUtuh.value = dataPencatatan.responseData.data.items.reduce((total, data) => {
-                return total + data.berat_utuh;
-            }, 0);
-            totalBeratTelurBentes.value = dataPencatatan.responseData.data.items.reduce((total, data) => {
-                return total + data.berat_bentes;
-            }, 0); 
-            totalMati.value = dataPencatatan.responseData.data.items.reduce((total, data) => {
-                return total + data.jumlah_mati;
-            }, 0); 
-            totalAfkir.value = dataPencatatan.responseData.data.items.reduce((total, data) => {
-                return total + data.jumlah_afkir;
-            }, 0);
-            totalPindah.value = dataPencatatan.responseData.data.items.reduce((total, data) => {
-                return total + data.jumlah_pindah;
-            }, 0);
-            totalTerima.value = dataPencatatan.responseData.data.items.reduce((total, data) => {
-                return total + data.jumlah_terima;
-            }, 0);
-            totalPopulasi.value = dataPencatatan.responseData.data.items.reduce((total, data) => {
-                return total + data.jumlah_terima;
-            }, 0);
+            if (dataPencatatan.responseData.data.items.length > 0) {
+                totalTelurUtuh.value = dataPencatatan.responseData.data.items[0].telur_utuh || 0;
+                totalTelurBentes.value = dataPencatatan.responseData.data.items[0].telur_bentes || 0;
+                totalBeratTelurUtuh.value = dataPencatatan.responseData.data.items[0].berat_utuh || 0;
+                totalBeratTelurBentes.value = dataPencatatan.responseData.data.items[0].berat_bentes || 0;
+                totalMati.value = dataPencatatan.responseData.data.items[0].jumlah_mati || 0;
+                totalAfkir.value = dataPencatatan.responseData.data.items[0].jumlah_afkir || 0;
+                totalPindah.value = dataPencatatan.responseData.data.items[0].jumlah_pindah || 0;
+                totalTerima.value = dataPencatatan.responseData.data.items[0].jumlah_terima || 0;
+                totalPopulasi.value = dataPencatatan.responseData.data.total_populasi || 0;
+                status.value = dataPencatatan.responseData.data.items[0].status || 0;
+            }
         }
     }
 
     async function onSubmit(values) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama_anak_kandang, id_anak_kandang, nama_mandor, strin_ayam, mati, afkir, jumlah_pindah, id_kandang_pengirim, jumlah_terima, id_kandang_tujuan, jml_telur_butuh, jml_telur_bentes, berat_telur_butuh, berat_telur_bentes, jenis_pakan, jenis_treatment, catatan } = values;
+        const { nama_kandang, id_anak_kandang, nama_mandor, strain_ayam, mati, afkir, jumlah_pindah, id_kandang_pengirim, jumlah_terima, id_kandang_tujuan, jml_telur_butuh, jml_telur_bentes, berat_telur_butuh, berat_telur_bentes, jenis_pakan, jenis_treatment, catatan } = values;
         console.log(values);
         return axios.post(baseUrl + '/pencatatan', {
-            id_kandang: nama_anak_kandang,
+            id_kandang: nama_kandang,
             id_mandor: nama_mandor,
             id_anak_kandang: id_anak_kandang,
-            id_strain_ayam: strin_ayam,
+            id_strain_ayam: strain_ayam,
             jumlah_mati: mati,
             jumlah_afkir: afkir,
             jumlah_pindah: jumlah_pindah,
@@ -904,12 +968,14 @@
             },
         })
             .then(response => {
+                getPencatatan(route.params.id);
+                alert('success', 'Data pencatatan berhasil ditambahkan');
                 closeModal();
                 console.log(response);
             })
             .catch(error => {
                 console.error(error);
-                apiError.value = error;
+                apiError.value = error.response.data.message;
             });
     }
 
@@ -940,6 +1006,9 @@
                 detailPencatatan.id_treatment = response.data.data.id_treatment;
                 detailPencatatan.id_jenis_pakan = response.data.data.id_jenis_pakan;
                 detailPencatatan.catatan = response.data.data.catatan;
+                detailPencatatan.tanggal_submit = response.data.data.tanggal_submit;
+                getIdStandart(detailPencatatan.id_strain_ayam);
+                getIdPakan(detailPencatatan.id_jenis_pakan);
                 // console.log("Detail Pencatatan : ", detailPencatatan);
                 console.log("Detail Pencatatan : ", response);
             })
@@ -1048,6 +1117,36 @@
                 console.error(error);
             });
     }
+    
+    async function getIdStandart(id_strain_ayam) {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/standar_pemeliharaan', {
+            params: {
+                id_strain_ayam: id_strain_ayam,
+            },
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                console.log("Standart Pemeliharaan : ", response.data.data.items[0].id);
+                detailStandart.id = response.data.data.items[0].id;
+                detailStandart.id_strain_ayam = response.data.data.items[0].id_strain_ayam;
+                detailStandart.umur = response.data.data.items[0].umur;
+                detailStandart.nilai_hd = response.data.data.items[0].nilai_hd;
+                detailStandart.nilai_bb = response.data.data.items[0].nilai_bb;
+                detailStandart.nilai_bt = response.data.data.items[0].nilai_bt;
+                detailStandart.nilai_fi = response.data.data.items[0].nilai_fi;
+                detailStandart.nilai_fc = response.data.data.items[0].nilai_fc;
+                detailStandart.egg_mass = response.data.data.items[0].egg_mass;
+                detailStandart.deskripsi = response.data.data.items[0].deskripsi;
+               
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
 
     async function getPakan() {
         const user = localStorage.getItem('user');
@@ -1065,10 +1164,31 @@
             });
     }
 
+    async function getIdPakan(id_jenis_pakan) {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/jenis_pakan/' + id_jenis_pakan, {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                detailPakan.id = response.data.data.id;
+                detailPakan.nama = response.data.data.nama;
+                detailPakan.deskripsi = response.data.data.deskripsi;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
     async function getTreatment() {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/tugas', {
+            params: {
+                is_treatment: true,
+            },
             headers: {
                 Authorization: `Bearer ${token.token}`,
             },

@@ -22,6 +22,13 @@ import VueAwesomePaginate from "vue-awesome-paginate";
 
 import "vue-awesome-paginate/dist/style.css";
 
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
+import VueRangedatePicker from 'vue-rangedate-picker';
+import VueDatepickerUi from 'vue-datepicker-ui'
+import 'vue-datepicker-ui/lib/vuedatepickerui.css';
+
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -36,9 +43,10 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
-
+app.use(VueSweetalert2)
 app.use(VueAwesomePaginate);
-app.component('paginate', Paginate)
-
+app.component('vue-rangedate-picker', VueRangedatePicker);
+app.component('paginate', Paginate);
+app.component('Datepicker', VueDatepickerUi)
 
 app.mount('#app')

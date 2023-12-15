@@ -39,7 +39,7 @@
                         <button type="button" class="btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
                         Select
                         </button>
-                        <button type="button" class="btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
+                        <button type="button" class="ms-3 btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
                         Filter
                         </button>
                     </div>

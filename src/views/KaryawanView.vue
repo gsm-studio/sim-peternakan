@@ -12,7 +12,7 @@
                 
                 
                 <span class="ms-3">
-                    <a @click="getRole()" class="add text-secondary" href="#" data-toggle="modal" data-target="#createModal">
+                    <a @click="getRole()" class="add text-secondary" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#createModal">
                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12" fill="none">
                             <path d="M0 6L13 6" stroke="#A3AAA6" stroke-width="2"/>
                             <path d="M6 0V12" stroke="#A3AAA6" stroke-width="2"/>
@@ -21,12 +21,12 @@
                     </a>
                    
                 </span>
-                <span class="ms-3">
+                <!-- <span class="ms-3">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                     <path d="M7 21C6.45 21 5.979 20.804 5.587 20.412C5.195 20.02 4.99933 19.5493 5 19V6H4V4H9V3H15V4H20V6H19V19C19 19.55 18.804 20.021 18.412 20.413C18.02 20.805 17.5493 21.0007 17 21H7ZM9 17H11V8H9V17ZM13 17H15V8H13V17Z" fill="#A3AAA6"/>
                     </svg>
                     Hapus
-                </span>
+                </span> -->
                 </div>
                 <div class="d-flex justify-content-between">
                     <div> 
@@ -55,130 +55,6 @@
                         </a>
                     </div>
                 </div>
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-fullscreen">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel"></h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                        <div class="bg-light p-4">
-                            <div class="title mb-5">
-                            <h5 class="d-inline">ID kandang</h5>
-                            <div class="p-2 ms-3 bg-button-rossa d-inline rounded">09 November 2023</div>
-                            </div>
-                            <div class="mb-4">
-                            <p>
-                                <span class="color-text-rossa">Populasi ayam: <span class="text-secondary">300</span></span>
-                                <span class="ms-4 color-text-rossa">FC: <span class="text-secondary">7,4</span></span>
-                                <span class="ms-4 color-text-rossa">Standart FC: <span class="text-secondary">7,6</span></span>
-                                <span class="ms-4 color-text-rossa">Egg mass: <span class="text-secondary">11,7</span></span>
-                                <span class="ms-4 color-text-rossa">Strain: <span class="text-secondary">11,7</span></span>
-                            </p>
-
-                            </div>
-                            <div>
-                            <span class="ms-0">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="23" height="21" viewBox="0 0 23 21" fill="none">
-                                <ellipse cx="11.5" cy="10.5" rx="11.5" ry="10.5" fill="#D9D9D9"/>
-                                </svg>
-                                Anak kandang
-                            </span>
-                            <span class="ms-4">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="23" height="21" viewBox="0 0 23 21" fill="none">
-                                <ellipse cx="11.5" cy="10.5" rx="11.5" ry="10.5" fill="#D9D9D9"/>
-                                </svg>
-                                Mandor
-                            </span>
-                            </div>
-                        </div>
-                        <!-- table -->
-                        <div class="table-responsive mt-5">
-                            <table class="table pelaporan table-bordered">
-                            <thead>
-                                <tr>
-                                
-                                <th scope="col">Usia</th>
-                                <th colspan="4" scope="col">Populasi</th>
-                                <th colspan="2" scope="col">Produksi Telur</th>
-                                <th colspan="2" scope="col">Berat Telur</th>
-                                <th colspan="2" scope="col">Standart Produksi</th>
-                                <th colspan="2" scope="col">Pakan</th>
-                                <th rowspan="2" scope="col">Treatment</th>
-                                <th rowspan="2" scope="col">Edit</th>
-                                <th rowspan="2" scope="col">Status</th>
-                                </tr>
-                                <tr>
-                                
-                                <th scope="col">Mgg</th>
-                                <th scope="col">Mati</th>
-                                <th scope="col">Afkir</th>
-                                <th scope="col">Pindah</th>
-                                <th scope="col">Terima</th>
-    
-                                <th scope="col">Telur utuh</th>
-                                <th scope="col">Telur bentes</th>
-    
-                                <th scope="col">Telur utuh</th>
-                                <th scope="col">Telur bentes</th>
-    
-                                <th scope="col">%</th>
-                                <th scope="col">gr/butir</th>
-
-                                <th scope="col">Jumlah (kg)</th>
-                                <th scope="col">Jenis pakan</th>
-
-                                
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr class="text-center">
-                                <td>14</td>
-                                <td>1</td>
-                                <td>-</td>
-                                <td>400</td>
-                                <td>-</td>
-                                <td>7000</td>
-                                <td>34</td>
-                                <td>406.0</td>
-                                <td>2.0</td>
-                                <td>24.2%</td>
-                                <td>58gr</td>
-                                <td>300 Kg</td>
-                                <td>Omega</td>
-                                <td>Vaksinasi ND-IB</td>
-                                <td>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                    <mask id="mask0_142_372" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1" y="1" width="18" height="18">
-                                        <path d="M2.91699 17.5H17.917" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                        <path d="M4.58398 11.1333V14.1667H7.63273L16.2507 5.545L13.2069 2.5L4.58398 11.1333Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
-                                    </mask>
-                                    <g mask="url(#mask0_142_372)">
-                                        <path d="M0 0H20V20H0V0Z" fill="#0FA958"/>
-                                    </g>
-                                    </svg>
-                                </td>
-                                <td>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="23" viewBox="0 0 28 23" fill="none">
-                                    <path d="M11.8381 1.91675C17.2868 1.91675 21.7036 6.20721 21.7036 11.5001C21.7036 16.793 17.2868 21.0834 11.8381 21.0834C6.38943 21.0834 1.97266 16.793 1.97266 11.5001C1.97266 6.20721 6.38943 1.91675 11.8381 1.91675ZM11.8381 3.83341C9.74494 3.83341 7.73748 4.64115 6.25737 6.07893C4.77727 7.51671 3.94575 9.46675 3.94575 11.5001C3.94575 13.5334 4.77727 15.4835 6.25737 16.9212C7.73748 18.359 9.74494 19.1667 11.8381 19.1667C13.9313 19.1667 15.9388 18.359 17.4189 16.9212C18.899 15.4835 19.7305 13.5334 19.7305 11.5001C19.7305 9.46675 18.899 7.51671 17.4189 6.07893C15.9388 4.64115 13.9313 3.83341 11.8381 3.83341ZM11.8381 5.75008C12.0798 5.75011 12.313 5.83629 12.4936 5.99227C12.6741 6.14824 12.7895 6.36317 12.8178 6.59629L12.8247 6.70841V11.1033L15.4953 13.6975C15.6722 13.87 15.7749 14.1014 15.7826 14.3448C15.7902 14.5882 15.7022 14.8252 15.5364 15.0078C15.3707 15.1905 15.1396 15.305 14.89 15.328C14.6405 15.3511 14.3913 15.2811 14.193 15.1322L14.1003 15.0526L11.1406 12.1776C10.9873 12.0286 10.8888 11.8345 10.8605 11.6256L10.8516 11.5001V6.70841C10.8516 6.45425 10.9555 6.21049 11.1405 6.03077C11.3255 5.85105 11.5765 5.75008 11.8381 5.75008Z" fill="#D4780C"/>
-                                    </svg>
-                                </td>
-                                </tr>
-                                
-                            </tbody>
-                            </table>
-                        </div>
-                        <!-- akhir table -->
-                        </div>
-                        <div class="modal-footer">
-                        
-                        
-                        </div>
-                    </div>
-                    </div>
-                </div>
                 <div class="table-responsive mt-3">
                     <table class="table pelaporan table-bordered">
                         <thead>
@@ -193,7 +69,7 @@
                         </thead>
                         <tbody>
                             <template v-if="dataKaryawan.responseData">
-                                <tr v-for="(item, index) in dataKaryawan.responseData.data.items" :key="index" class="row-validasi text-center" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+                                <tr v-for="(item, index) in dataKaryawan.responseData.data.items" :key="index" class="row-validasi text-center">
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.nama }}</td>
                                     <td>{{ item.alamat }}</td>
@@ -282,9 +158,7 @@
             <div class="modal-content p-3">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Tambah Karyawan</h5>
-                    <button type="button" id="closeModal" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
@@ -386,6 +260,7 @@
     import axios from 'axios'
     import { Form, Field } from 'vee-validate';
     import * as Yup from 'yup';
+    import Swal from 'sweetalert2';
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
@@ -435,6 +310,24 @@
         // getRole()
     });
 
+    function alert(icon, title) {
+        const Toast = Swal.mixin({
+          toast: true,
+          position: "bottom-end",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: icon,
+          title: title
+        });
+    }
+
     function clearSearch() {
         search.value = '';
         getKaryawan(1);
@@ -446,7 +339,7 @@
     }
 
     function closeModal() {
-        const closeElements = document.querySelectorAll('.close');
+        const closeElements = document.querySelectorAll('.btn-close');
 
         closeElements.forEach((closeElement) => {
             closeElement.click();
@@ -520,11 +413,13 @@
             .then(response => {
                 console.log(response);
                 getKaryawan(1);
+                alert('success', 'Data berhasil ditambahkan');
                 closeModal();
             })
             .catch(error => {
                 console.error(error);
-                setErrors({ apiError: error });
+                alert('error', 'Data gagal ditambahkan');
+                setErrors({ apiError: error.response.data.message });
             });
         
     }
@@ -549,10 +444,12 @@
             .then(response => {
                 console.log(response);
                 getKaryawan(1);
+                alert('success', 'Data berhasil diubah');
                 closeModal();
             })
             .catch(error => {
                 console.error(error);
+                alert('error', 'Data gagal diubah');
                 setErrors({ apiError: error.response.data.message });
             });
         

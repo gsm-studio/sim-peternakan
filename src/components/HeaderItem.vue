@@ -1,13 +1,16 @@
 <script setup>
-    import { onMounted } from 'vue';
+    import { onMounted, ref } from 'vue';
     import axios from 'axios';
     import { useAuthStore } from '@/stores';
     
     const authStore = useAuthStore();
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
+    const namaUser = ref(authStore.user.data.nama);
+
     onMounted(() => {
       getKaryawan();
+      console.log("Data User : ", authStore.user.data.nama)
     })
 
     async function getKaryawan() {
@@ -65,7 +68,7 @@
             <li class="nav-item dropdown">
                 <a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                 <div class="avatar avatar-md"><img class="avatar-img" src="@/assets/img/user-circle.png" alt="user@email.com"></div>
-                <span class="me-2">Rossa Lia</span>
+                <span class="me-2">{{ namaUser }}</span>
                 </a>
                 <div class="dropdown-menu dropdown-menu-end pt-0">
                     <a class="dropdown-item" href="#" @click="authStore.logout()">
