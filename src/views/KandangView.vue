@@ -122,7 +122,7 @@
             <h5 class="modal-title" id="exampleModalLabel">Tambah Kandang</h5>
             <button @click="closeModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <Form id="form" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+            <Form class="form" id="form" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
                 <div class="modal-body">
                 
                     <Field class="form-control text-center mb-3" type="text" name="nama" placeholder="Nama" :class="{ 'is-invalid': errors.nama }" />
@@ -185,22 +185,22 @@
                 <div class="modal-body">
                     <Form @submit="onSubmitUpdate" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
                         <Field class="form-control text-center mb-3" type="text" name="nama" placeholder="Nama" v-model="detailKandang.nama" :class="{ 'is-invalid': errors.nama }" />
-                        <Field class="form-control text-center mb-3" name="id_mandor" :class="{ 'is-invalid': errors.id_mandor }" as="select">
+                        <Field v-model="detailKandang.id_mandor" class="form-control text-center mb-3" name="id_mandor" :class="{ 'is-invalid': errors.id_mandor }" as="select">
                             <template v-if="dataKaryawan.responseData">
                                 <option value="" disabled>Pilih Nama Mandor</option>
-                                <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id" :selected="item.id && detailKandang.id_mandor">{{ item.nama }}</option>
+                                <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
                         <!-- {{ detailKandang  }} -->
-                        <Field class="form-control text-center mb-3" name="id_anak_kandang" :class="{ 'is-invalid': errors.id_anak_kandang }" as="select">
+                        <Field v-model="detailKandang.id_anak_kandang" class="form-control text-center mb-3" name="id_anak_kandang" :class="{ 'is-invalid': errors.id_anak_kandang }" as="select">
                             <!-- {{ detailKandang }} -->
                             <template v-if="dataKaryawan.responseData">
                                 <option value="" disabled>Pilih Nama Anak Kandang</option>
                                 <option value="" selected>Anjing</option>
-                                <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id" :selected="item.id && detailKandang.id_anak_kandang">{{ item.nama }}</option>
+                                <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
-                        <Field class="form-control text-center mb-3" type="number" name="total_populasi" placeholder="Populasi Total" v-model="detailKandang.populasi_total" :class="{ 'is-invalid': errors.total_populasi }" />
+                        <Field class="form-control text-center mb-3" type="number" name="populasi_total" placeholder="Populasi Total" v-model="detailKandang.populasi_total" :class="{ 'is-invalid': errors.populasi_total }" />
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
                                 Submit
@@ -383,13 +383,13 @@
     async function onSubmitUpdate(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama, id_mandor, id_anak_kandang, total_populasi } = values;
+        const { nama, id_mandor, id_anak_kandang, populasi_total } = values;
         console.log(values);
         return axios.put(baseUrl + '/kandang/' + detailKandang.id, {
             nama: nama,
             id_mandor: id_mandor,
             id_anak_kandang: id_anak_kandang,
-            total_populasi: total_populasi,
+            populasi_total: populasi_total,
         }, {
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -449,7 +449,7 @@
             })
             .catch(error => {
                 console.error(error);
-                alert('error', 'Data gagal dihapus')
+                alert('error', error.response.data.message);
             });
     }
 

@@ -291,6 +291,7 @@
                 </div>
                 <div class="modal-body">
                     <Form
+                        class="form"
                         @submit="nextStep"
                         :validation-schema="currentSchema"
                         keep-values
@@ -298,13 +299,13 @@
                         >
                         <template v-if="currentStep === 0"> 
                             <div class="mb-4 d-flex justify-content-between">
-                                <button class="btn btn-success">{{ dateSubmitPencatatan }}</button>
+                                <button class="btn btn-success">{{ formatTanggal() }}</button>
                                 <h6 class="modal-title" id="exampleModalLabel">Populasi Ayam : {{ totalPopulasi }} ekor</h6>
                             </div>
                             <div class="mb-3">
                                 <label for="nama_kandang" class="form-label">Nama Kandang</label>
-                                <Field id="nama_kandang" as="select" name="nama_kandang" class="form-control text-center" readonly>
-                                    <option :value="detailKandang.id" :selected="true">{{ detailKandang.nama }}</option>
+                                <Field v-model="detailKandang.id" id="nama_kandang" as="select" name="nama_kandang" class="form-control text-center" readonly>
+                                    <option :value="detailKandang.id">{{ detailKandang.nama }}</option>
                                 </Field>
                                 <ErrorMessage class="text-danger" name="nama_kandang" />
                             </div>
@@ -312,8 +313,8 @@
                             <Field v-model="detailKandang.id_anak_kandang" name="id_anak_kandang" class="form-control text-center" type="hidden"/>
                             <div class="mb-3">
                                 <label for="nama_mandor" class="form-label">Nama Mandor</label>
-                                <Field id="nama_mandor" as="select" name="nama_mandor" class="form-control text-center" readonly>
-                                    <option :value="detailKandang.id_mandor" :selected="true">{{ detailKandang.nama_mandor }}</option>
+                                <Field v-model="detailKandang.id_mandor" id="nama_mandor" as="select" name="nama_mandor" class="form-control text-center" readonly>
+                                    <option :value="detailKandang.id_mandor">{{ detailKandang.nama_mandor }}</option>
                                 </Field>
                                 <ErrorMessage class="text-danger" name="nama_mandor" />
                             </div>
@@ -545,7 +546,7 @@
                     </div>
                     <div class="mb-4">
                     <p>
-                        <span class="color-text-rossa">Populasi ayam: <span class="text-secondary">{{ populasi_ayam }}</span></span>
+                        <span class="color-text-rossa">Populasi ayam: <span class="text-secondary">{{ detailPencatatan.populasi_ayam }}</span></span>
                         <span class="ms-4 color-text-rossa">FC: <span class="text-secondary">7,4</span></span>
                         <span class="ms-4 color-text-rossa">Standart FC: <span class="text-secondary">7,6</span></span>
                         <span class="ms-4 color-text-rossa">Egg mass: <span class="text-secondary">11,7</span></span>
@@ -622,8 +623,8 @@
                             <td>{{ item.berat_utuh }}</td>
                             <td>{{ item.berat_bentes }}</td>
 
-                            <td>24.2%</td>
-                            <td>58gr</td>
+                            <td>0%</td>
+                            <td>0gr</td>
 
                             <td>{{ item.id_jenis_pakan }}</td>
                             <td>{{ item.id_jenis_pakan }}</td>
@@ -812,7 +813,7 @@
         console.log(detailPencatatan.tanggal_submit);
         getIdKandang(route.params.id);
         getPencatatan(route.params.id);
-        getIdPencatatan(route.params.id);
+     
         // console.log("List Pencatatan : ", dataPencatatan.responseData.data.items);
         console.log("Telur Utuh : ", totalTelurUtuh);
 
@@ -876,6 +877,11 @@
         closeElements.forEach((closeElement) => {
             closeElement.click();
         });
+
+        const form = document.querySelectorAll('.form');
+        form.forEach((formElement) => {
+            formElement.reset();
+        });
     }
 
     function alert(icon, title) {
@@ -935,6 +941,7 @@
                 totalTerima.value = dataPencatatan.responseData.data.items[0].jumlah_terima || 0;
                 totalPopulasi.value = dataPencatatan.responseData.data.total_populasi || 0;
                 status.value = dataPencatatan.responseData.data.items[0].status || 0;
+                getIdPencatatan(dataPencatatan.responseData.data.items[0].id);
             }
         }
     }
@@ -1131,7 +1138,7 @@
             },
         })
             .then(response => {
-                console.log("Standart Pemeliharaan : ", response.data.data.items[0].id);
+                console.log("Standart Pemeliharaan : ", response);
                 detailStandart.id = response.data.data.items[0].id;
                 detailStandart.id_strain_ayam = response.data.data.items[0].id_strain_ayam;
                 detailStandart.umur = response.data.data.items[0].umur;

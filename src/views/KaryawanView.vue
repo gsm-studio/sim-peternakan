@@ -69,7 +69,7 @@
                         </thead>
                         <tbody>
                             <template v-if="dataKaryawan.responseData">
-                                <tr v-for="(item, index) in dataKaryawan.responseData.data.items" :key="index" class="row-validasi text-center">
+                                <tr v-for="(item, index) in dataKaryawan.responseData.data.items" :key="index" class="text-center">
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.nama }}</td>
                                     <td>{{ item.alamat }}</td>
@@ -95,8 +95,8 @@
                                             </svg>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
-                                            <a data-toggle="modal" data-target="#detailModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
-                                            <a data-toggle="modal" data-target="#editModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                            <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
+                                            <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
                                             <a @click="deleteKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
                                         </div>
                                     </td>
@@ -161,7 +161,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+                    <Form class="form" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
                         <Field class="form-control text-center mb-3" type="text" name="nama" placeholder="Nama" :class="{ 'is-invalid': errors.nama }" />
                         <Field class="form-control text-center mb-3" type="email" name="email" placeholder="Email" :class="{ 'is-invalid': errors.email }"/>
                         <Field class="form-control text-center mb-3" type="password" name="password" placeholder="Password" :class="{ 'is-invalid': errors.password }"/>
@@ -194,9 +194,7 @@
             <div class="modal-content p-3">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Detail Karyawan</h5>
-                    <button type="button" id="closeModal" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Nama : {{ detailKaryawan.nama }}</p>
@@ -216,9 +214,7 @@
             <div class="modal-content p-3">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Karyawan</h5>
-                    <button type="button" id="closeModal" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <Form @submit="onSubmitUpdate" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
@@ -227,10 +223,10 @@
                         <Field class="form-control text-center mb-3" type="password" name="password" placeholder="Password" v-model="detailKaryawan.password" :class="{ 'is-invalid': errors.password }"/>
                         <Field class="form-control text-center mb-3" type="text" name="nomor_telepon" placeholder="Nomot Telepon" v-model="detailKaryawan.nomor_telepon" :class="{ 'is-invalid': errors.nomor_telepon }"/>
                         <Field class="form-control text-center mb-3" type="text" name="alamat" placeholder="Alamat" v-model="detailKaryawan.alamat" :class="{ 'is-invalid': errors.alamat }"/>
-                        <Field class="form-control text-center mb-3" name="role_ids" as="select" :class="{ 'is-invalid': errors.role_ids }">
+                        <Field v-model="detailKaryawan.role_ids" class="form-control text-center mb-3" name="role_ids" as="select" :class="{ 'is-invalid': errors.role_ids }">
                             <option value="">Pilih Role</option>
                             <template v-if="dataRole.responseData">
-                                <option v-for="item in dataRole.responseData.data.items" :key="item.id" :value="item.id" :selected="item.id && detailKaryawan.id">{{ item.nama }}</option>
+                                <option v-for="item in dataRole.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
                         <div class="text-end">
@@ -343,6 +339,11 @@
 
         closeElements.forEach((closeElement) => {
             closeElement.click();
+        });
+
+        const form = document.querySelectorAll('.form');
+        form.forEach((formElement) => {
+            formElement.reset();
         });
     }
 
@@ -469,6 +470,7 @@
                 detailKaryawan.alamat = response.data.data.alamat;
                 detailKaryawan.email = response.data.data.email;
                 detailKaryawan.nomor_telepon = response.data.data.nomor_telepon;
+
                 // console.log(detailKaryawan.nama);
             })
             .catch(error => {
@@ -486,10 +488,12 @@
         })
             .then(response => {
                 console.log(response);
+                alert('success', 'Data berhasil dihapus');
                 getKaryawan(1);
             })
             .catch(error => {
                 console.error(error);
+                alert('error', error.response.data.message);
             });
     }
 

@@ -151,11 +151,11 @@
                   </svg>
                   Manajemen User</a>
                   <ul class="nav-group-items">
-                      <li class="nav-item">
+                      <!-- <li class="nav-item">
                         <router-link to="/data-user" class="nav-link" target="_top">
                           Data User
                         </router-link>
-                      </li>
+                      </li> -->
                       <li class="nav-item">
                         <router-link to="/history-user" class="nav-link" target="_top">
                           History User

@@ -69,37 +69,11 @@
                 <div class="d-flex justify-content-between">
                     <!-- Button trigger modal -->
                     <div> 
-                        <button type="button" class="btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
+                        <button type="button" class="btn btn-success bg-button-rossa">
                         Filter
                         </button>
                     </div>
-                    
-                    <!-- Modal -->
-                    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                        <div class="modal-dialog">
-                        <div class="modal-content p-3">
-                            <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Populasi Ayam : 3000 ekor</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="">
-                                    <input class="form-control text-center mb-3" type="date" placeholder="Pilih jadwal">
-                                    <input class="form-control text-center mb-3" type="text" placeholder="ID Kandang">
-                                    <input class="form-control text-center mb-3" type="text" placeholder="Nama anak kandang">
-                                    <input class="form-control text-center mb-3" type="text" placeholder="Pelaksana">
-                                    <input class="form-control text-center mb-3" type="text" placeholder="Penanggung jawab">
-                                    <input class="form-control text-center mb-3" type="text" placeholder="Pekerjaan/tugas">
-                                    <input class="form-control text-center mb-3" type="text" placeholder="Tuliskan catatan">
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                            <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-                            <button type="button" class="btn btn-success bg-button-rossa">Atur jadwal</button>
-                            </div>
-                        </div>
-                        </div>
-                    </div>
+        
                     <div class="d-flex">
                         <div class="input-group search-table me-3">
                             <span class="input-group-text" id="basic-addon1">
@@ -257,8 +231,8 @@
                     </thead>
                     <tbody>
                         <template v-if="dataStandart.responseData">
-                            <tr class="row-validasi text-center" v-for="(item, index) in dataStandart.responseData.data.items" :key="index">
-                                <td>{{ item.id_strain_ayam }}</td>
+                            <tr class="text-center" v-for="(item, index) in dataStandart.responseData.data.items" :key="index">
+                                <td>{{ getNamaStrain(item.id_strain_ayam) }}</td>
                                 <td>{{ item.umur }}</td>
                                 <td>{{ item.nilai_hd }}</td>
                                 <td>{{ item.nilai_bb }}</td>
@@ -286,8 +260,8 @@
                                         </svg>
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end">
-                                        <a data-toggle="modal" data-target="#detailModal" @click="getIdStandart(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
-                                        <a data-toggle="modal" data-target="#editModal" @click="getIdStandart(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                        <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdStandart(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
+                                        <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdStandart(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
                                         <a @click="deleteStandart(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
                                     </div>
                                 </td>
@@ -338,7 +312,7 @@
                         <Field class="form-control text-center mb-3" type="text" name="nilai_fi" placeholder="Nilai FI" :class="{ 'is-invalid': errors.nilai_fi }"/>
                         <Field class="form-control text-center mb-3" type="text" name="nilai_fc" placeholder="Nilai FC" :class="{ 'is-invalid': errors.nilai_fc }"/>
                         <Field class="form-control text-center mb-3" type="text" name="egg_mass" placeholder="Egg Mass" :class="{ 'is-invalid': errors.egg_mass }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }"/>
+                        <Field as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }"/>
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
                                 Submit
@@ -360,9 +334,7 @@
             <div class="modal-content p-3">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Detail Standart Pemeliharaan</h5>
-                    <button type="button" id="closeModal" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <p>Nama Strain Ayam : {{ detailStandart.nama_strain_ayam }}</p>
@@ -386,16 +358,14 @@
             <div class="modal-content p-3">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Edit Standart Pemeliharaan</h5>
-                    <button type="button" id="closeModal" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <Form @submit="onSubmitUpdate" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
-                        <Field class="form-control text-center mb-3" name="id_strain_ayam" as="select" :class="{ 'is-invalid': errors.id_strain_ayam }"> 
+                        <Field v-model="detailStandart.id_strain_ayam" class="form-control text-center mb-3" name="id_strain_ayam" as="select" :class="{ 'is-invalid': errors.id_strain_ayam }"> 
                             <option value="">Pilih Strain Ayam</option>
                             <template v-if="dataStrain.responseData">
-                                <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id" :selected="item.id && detailStandart.id_strain_ayam">{{ item.nama }}</option>
+                                <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
                         <Field class="form-control text-center mb-3" type="text" name="umur" placeholder="Umur" :class="{ 'is-invalid': errors.umur }" v-model="detailStandart.umur" />
@@ -405,7 +375,7 @@
                         <Field class="form-control text-center mb-3" type="text" name="nilai_fi" placeholder="Nilai FI" :class="{ 'is-invalid': errors.nilai_fi }" v-model="detailStandart.nilai_fi" />
                         <Field class="form-control text-center mb-3" type="text" name="nilai_fc" placeholder="Nilai FC" :class="{ 'is-invalid': errors.nilai_fc }" v-model="detailStandart.nilai_fc" />
                         <Field class="form-control text-center mb-3" type="text" name="egg_mass" placeholder="Egg Mass" :class="{ 'is-invalid': errors.egg_mass }" v-model="detailStandart.egg_mass" />
-                        <Field class="form-control text-center mb-3" type="text" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }" v-model="detailStandart.deskripsi" />
+                        <Field as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }" v-model="detailStandart.deskripsi" />
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
                                 Submit
@@ -472,6 +442,8 @@
         getStandart(page);
     };
 
+    const namaStrain = ref('');
+
     onMounted(() => {
         getStandart(1)
         // getRole()
@@ -511,6 +483,23 @@
         closeElements.forEach((closeElement) => {
             closeElement.click();
         });
+    }
+
+    function getNamaStrain(id) {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/strain_ayam/' + id, {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                namaStrain.value = response.data.data.nama;
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        return namaStrain.value;
     }
 
     async function getStandart(page_number) {
@@ -658,9 +647,11 @@
         })
             .then(response => {
                 console.log(response);
+                alert('success', 'Data berhasil dihapus');
                 getStandart(1);
             })
             .catch(error => {
+                alert('error', error.response.data.message);
                 console.error(error);
             });
     }

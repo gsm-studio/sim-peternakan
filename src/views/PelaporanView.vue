@@ -28,7 +28,7 @@
                         </svg></p> -->
                         <p>
                             <select v-model="idKandang" @change="getPencatatan(1, $event.target.value, null, null)" class="form-select form-select-sm ms-3" aria-label=".form-select-sm example">
-                                <option value="-1" selected> 
+                                <option value="0" selected> 
                                     Semua kandang 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
                                     <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
@@ -49,13 +49,13 @@
                         <button type="button" class="btn btn-success bg-button-rossa">Download laporan</button>
                     </div>
                 </div> 
-                <div class="d-flex">
+                <!-- <div class="d-flex">
                     <p class="color-text-rossa">Sisa populasi ayam: <span class="text-secondary">300</span></p>
                     <p class="color-text-rossa ms-4">FC: <span class="text-secondary">7,4</span></p>
                     <p class="color-text-rossa ms-4">Standart FC: <span class="text-secondary">7,6</span></p>
                     <p class="color-text-rossa ms-4">Egg mass: <span class="text-secondary">11,7</span></p>
-                </div>
-                <div class="table-responsive mt-5">
+                </div> -->
+                <div class="table-responsive mt-3">
                     <table class="table pelaporan table-bordered">
                     <thead>
                         <tr>
@@ -101,8 +101,8 @@
                             <td>{{ item.berat_utuh }}</td>
                             <td>{{ item.berat_bentes }}</td>
 
-                            <td>24.2%</td>
-                            <td>58gr</td>
+                            <td>0</td>
+                            <td>0</td>
                         
                             <!-- <td>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -158,7 +158,7 @@
 
     const dataPencatatan = reactive(pencatatanStore());
     const dataKandang = reactive(kandangStore());
-    const idKandang = ref(null);
+    const idKandang = ref(0);
 
     const currentPage = ref(1);
     const pageSize = ref(10);
@@ -207,7 +207,7 @@
     });
 
     async function getPencatatan(page, id_kandang = idKandang.value, startDate = rangeDate.start, endDate = rangeDate.end) {
-        if (id_kandang == -1) {
+        if (id_kandang == 0) {
             id_kandang = null;
         }
         const user = localStorage.getItem('user');

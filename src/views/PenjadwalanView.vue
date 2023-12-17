@@ -78,7 +78,7 @@
                             <td>{{ item.id }}</td>
                             <td>{{ getNamaTugas(item.id_tugas) }}</td>
                             <td>{{ getNamaKandang(item.id_kandang) }}</td>
-                            <td>{{ item.waktu_pelaksanaan }}</td>
+                            <td>{{ formatTanggal(item.waktu_pelaksanaan) }}</td>
                             <td>{{ item.deskripsi }}</td>
                             <td>
                                 <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -167,7 +167,7 @@
                 <div class="modal-body">
                     <p>Nama Tugas : {{ getNamaTugas(detailPenjadwalan.id_tugas) }}</p>
                     <p>Nama Kandang : {{ getNamaKandang(detailPenjadwalan.id_kandang) }}</p>
-                    <p>Waktu Pelaksanaan : {{ detailPenjadwalan.waktu_pelaksanaan }}</p>
+                    <p>Waktu Pelaksanaan : {{ formatTanggal(detailPenjadwalan.waktu_pelaksanaan) }}</p>
                     <p>Deskripsi : {{ detailPenjadwalan.deskripsi }}</p>
                 </div>
                 <div class="modal-footer">
@@ -186,19 +186,19 @@
                 </div>
                 <div class="modal-body">
                     <Form @submit="onSubmitUpdate" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
-                        <Field class="form-control text-center mb-3" name="id_tugas" :class="{ 'is-invalid': errors.id_tugas }" as="select">
+                        <Field v-model="detailPenjadwalan.id_tugas" class="form-control text-center mb-3" name="id_tugas" :class="{ 'is-invalid': errors.id_tugas }" as="select">
                             <template v-if="dataTugas.responseData">
                                 <option value="" disabled>Pilih Nama Tugas</option>
-                                <option v-for="item in dataTugas.responseData.data.items" :key="item.id" :value="item.id" :selected="item.id && detailPenjadwalan.id_tugas">{{ item.nama }}</option>
+                                <option v-for="item in dataTugas.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
-                        <Field class="form-control text-center mb-3" name="id_kandang" :class="{ 'is-invalid': errors.id_kandang }" as="select">
+                        <Field v-model="detailPenjadwalan.id_kandang" class="form-control text-center mb-3" name="id_kandang" :class="{ 'is-invalid': errors.id_kandang }" as="select">
                             <template v-if="dataKandang.responseData">
                                 <option value="" disabled>Pilih Nama Kandang</option>
-                                <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id" :selected="item.id && detailPenjadwalan.id_kandang">{{ item.nama }}</option>
+                                <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
-                        <Field class="form-control text-center mb-3" type="date" name="waktu_pelaksanaan" placeholder="Waktu Pelaksanaan" v-model="detailPenjadwalan.waktu_pelaksanaan" :class="{ 'is-invalid': errors.waktu_pelaksanaan }" />
+                        <Field class="form-control text-center mb-3" type="date" name="waktu_pelaksanaan" placeholder="Waktu Pelaksanaan" v-model="formatTanggalEdit" :class="{ 'is-invalid': errors.waktu_pelaksanaan }" />
                         <Field as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Waktu Pelaksanaan" v-model="detailPenjadwalan.deskripsi" :class="{ 'is-invalid': errors.deskripsi }" />
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
@@ -221,11 +221,12 @@
 <script setup>
     import HeaderItem from '../components/HeaderItem.vue'
     import { penjadwalanStore, kandangStore, tugasStore } from '@/stores';
-    import { onMounted, reactive, ref } from 'vue'
+    import { onMounted, reactive, ref, watch } from 'vue'
     import axios from 'axios'
     import { Form, Field } from 'vee-validate';
     import * as Yup from 'yup';
     import Swal from 'sweetalert2';
+    import moment from 'moment';
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
@@ -242,6 +243,7 @@
 
     const namaTugas = ref('');
     const namaKandang = ref('');
+    const formatTanggalEdit = ref('');
 
     const detailPenjadwalan = reactive({
         id: '',
@@ -260,6 +262,14 @@
     const onClickHandler = (page) => {
         getPenjadwalan(page);
     };
+
+    const formatTanggal = (tanggal) => {
+        return moment(tanggal).format('DD MMMM YYYY');
+    }
+
+    watch(() => detailPenjadwalan.waktu_pelaksanaan, () => {
+        formatTanggalEdit.value = moment(detailPenjadwalan.waktu_pelaksanaan).format('YYYY-MM-DD');
+    });
 
     onMounted(() => {
         getKandang()
@@ -496,7 +506,7 @@
                 alert('success', 'Data berhasil dihapus');
             })
             .catch(error => {
-                alert('error', 'Data gagal dihapus');
+                alert('error', error.response.data.message);
                 console.error(error);
             });
     }
