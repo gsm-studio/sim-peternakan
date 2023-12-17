@@ -60,6 +60,7 @@
                     <thead>
                         <tr>
                             <th rowspan="2" scope="col">ID Kandang</th>
+                            <th rowspan="2" scope="col">Tanggal</th>
                             <th scope="col">Usia</th>
                             <th colspan="4" scope="col">Populasi</th>
                             <th colspan="2" scope="col">Produksi Telur</th>
@@ -89,6 +90,7 @@
                         <template v-if="dataPencatatan.responseData">
                         <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index" class="text-center">
                             <td>{{ item.id_kandang }}</td>
+                            <td>{{ formatTanggalSubmit(item.tanggal_submit) }}</td>
                             <td>null</td>
                             <td>{{ item.jumlah_mati }}</td>
                             <td>{{ item.jumlah_afkir }}</td>
@@ -177,6 +179,10 @@
     const onClickHandler = (page) => {
         getPencatatan(page);
     };
+    const formatTanggalSubmit = (tanggal) => {
+        return moment(tanggal).format('YYYY-MM-DD');
+    }
+
 
     let search = ref("");
 

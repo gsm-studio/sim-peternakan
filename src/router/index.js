@@ -12,6 +12,8 @@ import StandartPemeliharaan from '../views/StandartPemeliharaan.vue'
 import DataUserView from '../views/DataUserView.vue'
 import HistoryUserView from '../views/HistoryUserView.vue'
 import LoginView from '../views/LoginView.vue'
+import JenisPakanView from '../views/JenisPakanView.vue'
+import StrainAyamView from '../views/StrainAyamView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -73,6 +75,16 @@ const router = createRouter({
       path: '/history-user',
       name: 'history-user',
       component: HistoryUserView
+    },
+    {
+      path: '/jenis-pakan',
+      name: 'jenis-pakan',
+      component: JenisPakanView
+    },
+    {
+      path: '/strain-ayam',
+      name: 'strain-ayam',
+      component: StrainAyamView
     },
   ]
 })

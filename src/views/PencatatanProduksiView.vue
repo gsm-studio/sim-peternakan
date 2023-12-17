@@ -574,16 +574,16 @@
                     <table class="table pelaporan table-bordered">
                     <thead>
                         <tr>
-                        
-                        <th scope="col">Usia</th>
-                        <th colspan="4" scope="col">Populasi</th>
-                        <th colspan="2" scope="col">Produksi Telur</th>
-                        <th colspan="2" scope="col">Berat Telur</th>
-                        <th colspan="2" scope="col">Standart Produksi</th>
-                        <th colspan="2" scope="col">Pakan</th>
-                        <th rowspan="2" scope="col">Treatment</th>
-                        <!-- <th rowspan="2" scope="col">Edit</th> -->
-                        <th rowspan="2" scope="col">Status</th>
+                            <th rowspan="2" scope="col">Tanggal</th>
+                            <th scope="col">Usia</th>
+                            <th colspan="4" scope="col">Populasi</th>
+                            <th colspan="2" scope="col">Produksi Telur</th>
+                            <th colspan="2" scope="col">Berat Telur</th>
+                            <th colspan="2" scope="col">Standart Produksi</th>
+                            <th colspan="2" scope="col">Pakan</th>
+                            <th rowspan="2" scope="col">Treatment</th>
+                            <!-- <th rowspan="2" scope="col">Edit</th> -->
+                            <th rowspan="2" scope="col">Status</th>
                         </tr>
                         <tr>
                         
@@ -611,6 +611,7 @@
                     <tbody>
                         <template v-if="dataPencatatan.responseData">
                         <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index" class="text-center">
+                            <td>{{ formatTanggalSubmit(item.tanggal_submit) }}</td>
                             <td>null</td>
                             <td>{{ item.jumlah_mati }}</td>
                             <td>{{ item.jumlah_afkir }}</td>
@@ -852,6 +853,9 @@
     const currentSchema = computed(() => {
         return schemas[currentStep.value];
     });
+    const formatTanggalSubmit = (tanggal) => {
+        return moment(tanggal).format('YYYY-MM-DD');
+    }
 
     function nextStep(values) {
     if (currentStep.value === 3) {
