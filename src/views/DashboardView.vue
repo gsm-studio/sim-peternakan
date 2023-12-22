@@ -158,9 +158,9 @@
                           <template v-if="dataPenjadwalan.responseData">
                             <tr v-for="item in dataPenjadwalan.responseData.data.items" :key="item.id">
                                 <td>{{ item.id }}</td>
-                                <td>{{ item.id_tugas }}</td>
-                                <td>{{ item.id_kandang }}</td>
-                                <td>{{ item.waktu_pelaksanaan }}</td>
+                                <td>{{ item.tugas.nama }}</td>
+                                <td>{{ item.kandang.nama }}</td>
+                                <td>{{ formatTanggal(item.waktu_pelaksanaan) }}</td>
                                 <td>{{ item.deskripsi }}</td>
                                 
                             </tr>
@@ -228,6 +228,7 @@
   import { onMounted, reactive, ref } from 'vue'
   import axios from 'axios'
   import Swal from 'sweetalert2'
+  import moment from 'moment'
 
   const baseUrl = `${import.meta.env.VITE_API_URL}`;
   // const authStore = useAuthStore();
@@ -238,6 +239,9 @@
 
   // usersStore.getAll();
   const dataPenjadwalan  = reactive(penjadwalanStore());
+  const formatTanggal = (tanggal) => {
+        return moment(tanggal).format('DD-MM-YYYY');
+    }
 
   onMounted(() => {
         getPenjadwalan()

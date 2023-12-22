@@ -9,3 +9,5 @@ export * from './treatment.store';
 export * from './pencatatan.store';
 export * from './penjadwalan.store';
 export * from './tugas.store';
+export * from './pelaporan.store';
+export * from './history.store';

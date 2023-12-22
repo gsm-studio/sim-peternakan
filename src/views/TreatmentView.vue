@@ -6,18 +6,18 @@
             <div class="card mb-4 ps-2 pt-2">
             <div class="row">
                 <div class="col-lg-12 p-4">
-                <h4 class="mb-3">Master Data <span class="text-secondary">> Karyawan</span></h4>
+                <h4 class="mb-3">Master Data <span class="text-secondary">> Treatment</span></h4>
                 <p class="w-50">Lorem ipsum dolor sit amet consectetur. Elementum donec gravida mauris ipsum rhoncus nec tempor venenatis tellus.</p>
                 <div class="mt-4 mb-4">
                 
                 
                 <span class="ms-3">
-                    <a @click="getRole()" class="add text-secondary" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#createModal">
+                    <a class="add text-secondary" href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#createModal">
                         <svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12" fill="none">
                             <path d="M0 6L13 6" stroke="#A3AAA6" stroke-width="2"/>
                             <path d="M6 0V12" stroke="#A3AAA6" stroke-width="2"/>
                         </svg>
-                        Tambah Karyawan
+                        Tambah Treatment
                     </a>
                    
                 </span>
@@ -60,33 +60,20 @@
                         <thead>
                             <tr>
                             <th scope="col">No</th>
-                            <th scope="col">Nama karyawan</th>
-                            <th scope="col">Alamat</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Nomor Telepon</th>
+                            <th scope="col">Nama Treatment</th>
+                            <th scope="col">Treatment</th>
+                            <th scope="col">Deskripsi</th>
                             <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <template v-if="dataKaryawan.responseData">
-                                <tr v-for="(item, index) in dataKaryawan.responseData.data.items" :key="index" class="text-center">
+                            <template v-if="dataTreatment.responseData">
+                                <tr v-for="(item, index) in dataTreatment.responseData.data.items" :key="index" class="text-center">
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.nama }}</td>
-                                    <td>{{ item.alamat }}</td>
-                                    <td>{{ item.email }}</td>
+                                    <td>{{ item.is_treatment ? "Ya" : "Tidak" }}</td>
+                                    <td>{{ item.deskripsi }}</td>
                                     <td>
-                                        {{ item.nomor_telepon  }}
-                                    </td>
-                                    <!-- <td>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none">
-                                            <path d="M2.57398 18C2.11398 18 1.72998 17.846 1.42198 17.538C1.11332 17.2293 0.958984 16.845 0.958984 16.385V1.615C0.958984 1.155 1.11332 0.771 1.42198 0.463C1.72998 0.154333 2.11398 0 2.57398 0H10.459L14.959 4.5V16.385C14.959 16.845 14.805 17.229 14.497 17.537C14.1883 17.8457 13.804 18 13.344 18H2.57398ZM9.95898 5H13.959L9.95898 1V5Z" fill="#0FA958"/>
-                                            </svg>
-                                    </td> -->
-                                    <!-- <td>
-                                        09  November 2023
-                                    </td> -->
-                                    <td>
-                                        
                                         <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
                                             <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
@@ -95,9 +82,9 @@
                                             </svg>
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
-                                            <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
-                                            <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
-                                            <a @click="deleteKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                                            <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdTreatment(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
+                                            <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdTreatment(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                            <a @click="deleteTreatment(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -113,31 +100,7 @@
                         </tbody> -->
                     </table>
                 </div>
-                <!-- <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-end align-items-center">
-                    <li class="me-3">
-                        Row per page: 
-                    </li>
-                    <li class="me-3">
-                        <a href="#" type="button" class="border p-2 rounded">10 <svg xmlns="http://www.w3.org/2000/svg" width="6" height="4" viewBox="0 0 6 4" fill="none">
-                        <path d="M0.705 0.289978L3 2.58498L5.295 0.289978L6 0.999978L3 3.99998L0 0.999978L0.705 0.289978Z" fill="black"/>
-                        </svg></a>
-                    </li>
-                    <li class="me-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M12.8415 13.8167L9.02484 10L12.8415 6.175L11.6665 5L6.6665 10L11.6665 15L12.8415 13.8167Z" fill="black"/>
-                        </svg>
-                    </li>
-                    <li class="me-3">
-                        Page 1
-                    </li>
-                    <li class="me-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M7.1582 13.8167L10.9749 10L7.1582 6.175L8.3332 5L13.3332 10L8.3332 15L7.1582 13.8167Z" fill="black"/>
-                        </svg>
-                    </li>
-                    </ul>
-                </nav> -->
+               
                     <div class="d-flex justify-content-end">
                         <vue-awesome-paginate
                             :total-items="totalItems"
@@ -157,22 +120,19 @@
         <div class="modal-dialog">
             <div class="modal-content p-3">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Tambah Karyawan</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Tambah Strain Ayam</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <Form class="form" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
                         <Field class="form-control text-center mb-3" type="text" name="nama" placeholder="Nama" :class="{ 'is-invalid': errors.nama }" />
-                        <Field class="form-control text-center mb-3" type="email" name="email" placeholder="Email" :class="{ 'is-invalid': errors.email }"/>
-                        <Field class="form-control text-center mb-3" type="password" name="password" placeholder="Password" :class="{ 'is-invalid': errors.password }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="nomor_telepon" placeholder="Nomot Telepon" :class="{ 'is-invalid': errors.nomor_telepon }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="alamat" placeholder="Alamat" :class="{ 'is-invalid': errors.alamat }"/>
-                        <Field class="form-control text-center mb-3" name="role_ids" as="select" :class="{ 'is-invalid': errors.role_ids }"> 
-                            <option value="">Pilih Role</option>
-                            <template v-if="dataRole.responseData">
-                                <option v-for="item in dataRole.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
-                            </template>
-                        </Field> 
+                        <Field as="select" v-model="is_treatment" class="form-control text-center mb-3" name="is_treatment" :class="{ 'is-invalid': errors.is_treatment }">
+                            <option value="-1">--- Pilih Is Treatment ---</option>
+                            <option value="true">Ya</option>
+                            <option value="false">Tidak</option>
+                        </Field>
+                        <Field as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }"/>
+                       
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
                                 Submit
@@ -193,15 +153,13 @@
         <div class="modal-dialog">
             <div class="modal-content p-3">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Detail Karyawan</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Detail Treatment</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Nama : {{ detailKaryawan.nama }}</p>
-                    <p>Alamat : {{ detailKaryawan.alamat }}</p>
-                    <p>Email : {{ detailKaryawan.email }}</p>
-                    <p>Nomor Telepon : {{ detailKaryawan.nomor_telepon }}</p>
-                    <p>Role : {{ detailKaryawan.role_name }}</p>
+                    <p>Nama : {{ detailTreatment.nama }}</p>
+                    <p>Is Treatment : {{ detailTreatment.is_treatment ? "Ya" : "Tidak" }}</p>
+                    <p>Deskripsi : {{ detailTreatment.deskripsi }}</p>
                 </div>
                 <div class="modal-footer">
                 <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
@@ -214,22 +172,18 @@
         <div class="modal-dialog">
             <div class="modal-content p-3">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit Karyawan</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Edit Treatment</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <Form @submit="onSubmitUpdate" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
-                        <Field class="form-control text-center mb-3" type="text" name="nama" placeholder="Nama" v-model="detailKaryawan.nama" :class="{ 'is-invalid': errors.nama }" />
-                        <Field class="form-control text-center mb-3" type="email" name="email" placeholder="Email" v-model="detailKaryawan.email" :class="{ 'is-invalid': errors.email }"/>
-                        <Field class="form-control text-center mb-3" type="password" name="password" placeholder="Password" v-model="detailKaryawan.password" :class="{ 'is-invalid': errors.password }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="nomor_telepon" placeholder="Nomot Telepon" v-model="detailKaryawan.nomor_telepon" :class="{ 'is-invalid': errors.nomor_telepon }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="alamat" placeholder="Alamat" v-model="detailKaryawan.alamat" :class="{ 'is-invalid': errors.alamat }"/>
-                        <Field v-model="detailKaryawan.role_ids" class="form-control text-center mb-3" name="role_ids" as="select" :class="{ 'is-invalid': errors.role_ids }">
-                            <option value="">Pilih Role</option>
-                            <template v-if="dataRole.responseData">
-                                <option v-for="item in dataRole.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
-                            </template>
-                        </Field> 
+                        <Field v-model="detailTreatment.nama" class="form-control text-center mb-3" type="text" name="nama" placeholder="Nama" :class="{ 'is-invalid': errors.nama }" />
+                        <Field as="select" v-model="detailTreatment.is_treatment" class="form-control text-center mb-3" name="is_treatment" :class="{ 'is-invalid': errors.is_treatment }">
+                            <option>--- Pilih Is Treatment ---</option>
+                            <option value="true">Ya</option>
+                            <option value="false">Tidak</option>
+                        </Field>
+                        <Field v-model="detailTreatment.deskripsi" as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }"/>
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
                                 Submit
@@ -249,11 +203,11 @@
 </template>
 
 <script setup>
-    import HeaderItem from '../components/HeaderItem.vue';
-    import { karyawanStore } from '@/stores';
-    import { defineStore, storeToRefs } from 'pinia';
-    import { onMounted, reactive, ref, computed } from 'vue';
-    import axios from 'axios';
+    import HeaderItem from '../components/HeaderItem.vue'
+    import { treatmentStore } from '@/stores';
+    import { defineStore, storeToRefs } from 'pinia'
+    import { onMounted, reactive, ref } from 'vue';
+    import axios from 'axios'
     import { Form, Field } from 'vee-validate';
     import * as Yup from 'yup';
     import Swal from 'sweetalert2';
@@ -262,49 +216,28 @@
 
     const schema = Yup.object().shape({
         nama: Yup.string().required('Nama is required'),
-        email: Yup.string().required('Email is required'),
-        password: Yup.string().required('Password is required'),
-        nomor_telepon: Yup.string().required('Nomor Telepon is required'),
-        role_ids: Yup.string().required('Role is required'),
+        is_treatment: Yup.string().required('Is Treatment is required'),
+        deskripsi: Yup.string(),
     });
 
-    const roleStore = defineStore('roleStore', {
-        state: () => ({
-            responseData: null,
-        }),
-        actions: {
-            setResponseData(data) {
-                this.responseData = data;
-            },
-        },
-    });
-
-    const dataKaryawan  = reactive(karyawanStore());
-    const dataRole = roleStore();
-    const detailKaryawan = reactive({
+    const dataTreatment  = reactive(treatmentStore());
+    const detailTreatment = reactive({
         id: '',
+        is_treatment: '',
         nama: '',
-        alamat: '',
-        email: '',
-        nomor_telepon: '',
-        role_name: '',
+        deskripsi: '',
     });
     let search = ref("");
-    
+    const is_treatment = ref(-1);
     const currentPage = ref(1);
     const pageSize = ref(10);
-    const totalItems = dataKaryawan.responseData ? dataKaryawan.responseData.data.total_record : 0;
-
+    const totalItems = dataTreatment.responseData ? dataTreatment.responseData.data.total_record : 0;
     const onClickHandler = (page) => {
-        getKaryawan(page);
+        getTreatment(page);
     };
 
-    // const { karyawanList } = storeToRefs(dataKaryawan);
-    // const { roleList } = storeToRefs(dataRole);
-
     onMounted(() => {
-        getKaryawan(1)
-        // getRole()
+        getTreatment(1)
     });
 
     function alert(icon, title) {
@@ -327,12 +260,12 @@
 
     function clearSearch() {
         search.value = '';
-        getKaryawan(1);
+        getTreatment(1);
     }
 
     function searchItem() {
         console.log(search.value);
-        searchKaryawan(search.value);
+        searchTreatment(search.value);
     }
 
     function closeModal() {
@@ -348,11 +281,10 @@
         });
     }
 
-    async function getKaryawan(page_number) {
-        getRole();
+    async function getTreatment(page_number) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        axios.get(baseUrl + '/karyawan', {
+        axios.get(baseUrl + '/tugas', {
             params: {
                 page_number: page_number, 
                 page_size: pageSize.value, 
@@ -363,32 +295,8 @@
             },
         })
             .then(response => {
-                dataKaryawan.setResponseData(response.data);
-                console.log(dataKaryawan);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-
-    async function getRole() {
-            
-        const user = localStorage.getItem('user');
-        const token = JSON.parse(user);
-       
-        axios.get(baseUrl + '/role', {
-            params: {
-                page_number: 1, 
-                page_size: 10,
-            },
-        
-            headers: {
-                Authorization: `Bearer ${token.token}`,
-            },
-        })
-            .then(response => {
-                dataRole.setResponseData(response.data);
-                console.log(dataRole);
+                dataTreatment.setResponseData(response.data);
+                console.log(dataTreatment.responseData);
             })
             .catch(error => {
                 console.error(error);
@@ -398,15 +306,12 @@
     async function onSubmit(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama, email, password, nomor_telepon, alamat, role_ids } = values;
+        const { nama, is_treatment, deskripsi } = values;
         console.log(values);
-        return axios.post(baseUrl + '/karyawan', {
+        return axios.post(baseUrl + '/tugas', {
             nama: nama,
-            email: email,
-            password: password,
-            nomor_telepon: nomor_telepon,
-            alamat: alamat,
-            role_ids: role_ids,
+            is_treatment: is_treatment,
+            deskripsi: deskripsi,
         }, {
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -414,7 +319,7 @@
         })
             .then(response => {
                 console.log(response);
-                getKaryawan(1);
+                getTreatment(1);
                 alert('success', 'Data berhasil ditambahkan');
                 closeModal();
             })
@@ -429,15 +334,12 @@
     async function onSubmitUpdate(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama, email, password, nomor_telepon, alamat, role_ids } = values;
+        const { nama, is_treatment, deskripsi } = values;
         console.log(values);
-        return axios.put(baseUrl + '/karyawan/' + detailKaryawan.id, {
+        return axios.put(baseUrl + '/tugas/' + detailTreatment.id, {
             nama: nama,
-            email: email,
-            password: password,
-            nomor_telepon: nomor_telepon,
-            alamat: alamat,
-            role_ids: role_ids,
+            is_treatment: is_treatment,
+            deskripsi: deskripsi,
         }, {
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -445,7 +347,7 @@
         })
             .then(response => {
                 console.log(response);
-                getKaryawan(1);
+                getTreatment(1);
                 alert('success', 'Data berhasil diubah');
                 closeModal();
             })
@@ -457,32 +359,29 @@
         
     }
 
-    async function getIdKaryawan(id) {
+    async function getIdTreatment(id) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        axios.get(baseUrl + '/karyawan/' + id, {
+        axios.get(baseUrl + '/tugas/' + id, {
             headers: {
                 Authorization: `Bearer ${token.token}`,
             },
         })
             .then(response => {
-                detailKaryawan.id = response.data.data.id;
-                detailKaryawan.nama = response.data.data.nama;
-                detailKaryawan.alamat = response.data.data.alamat;
-                detailKaryawan.email = response.data.data.email;
-                detailKaryawan.nomor_telepon = response.data.data.nomor_telepon;
-                detailKaryawan.role_name = response.data.data.user_roles[0].role.nama;
-                // console.log(detailKaryawan.nama);
+                detailTreatment.id = response.data.data.id;
+                detailTreatment.is_treatment = response.data.data.is_treatment;
+                detailTreatment.nama = response.data.data.nama;
+                detailTreatment.deskripsi = response.data.data.deskripsi;
             })
             .catch(error => {
                 console.error(error);
             });
     }
 
-    async function deleteKaryawan(id) {
+    async function deleteTreatment(id) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        axios.delete(baseUrl + '/karyawan/' + id, {
+        axios.delete(baseUrl + '/tugas/' + id, {
             headers: {
                 Authorization: `Bearer ${token.token}`,
             },
@@ -490,7 +389,7 @@
             .then(response => {
                 console.log(response);
                 alert('success', 'Data berhasil dihapus');
-                getKaryawan(1);
+                getTreatment(1);
             })
             .catch(error => {
                 console.error(error);
@@ -498,10 +397,10 @@
             });
     }
 
-    async function searchKaryawan(keyword) {
+    async function searchTreatment(keyword) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        return axios.get(baseUrl + '/karyawan', {
+        return axios.get(baseUrl + '/tugas', {
             headers: {
                 Authorization: `Bearer ${token.token}`,
             },
@@ -510,15 +409,18 @@
             },
         })
             .then(response => {
-                
-                dataKaryawan.setResponseData(response.data);
-                console.log(dataKaryawan.responseData);
+                dataTreatment.setResponseData(response.data);
+                console.log(dataTreatment.responseData);
             })
             .catch(error => {
                 console.error(error);
             });
     }
 
+    
+    onMounted(() => {
+
+    });
 
    
 </script>

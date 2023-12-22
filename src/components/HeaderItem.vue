@@ -7,6 +7,7 @@
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
     const namaUser = ref(authStore.user.data.nama);
+    const roleUser = ref(authStore.user.data.roles[0].nama);
 
     onMounted(() => {
       getKaryawan();
@@ -67,17 +68,21 @@
             <ul class="header-nav ms-3">
             <li class="nav-item dropdown">
                 <a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                <div class="avatar avatar-md"><img class="avatar-img" src="@/assets/img/user-circle.png" alt="user@email.com"></div>
-                <span class="me-2">{{ namaUser }}</span>
+                    <div class="avatar avatar-md"><img class="avatar-img" src="@/assets/img/user-circle.png" alt="user@email.com"></div>
+                    <span class="me-2">{{ namaUser }}</span>
                 </a>
-                <div class="dropdown-menu dropdown-menu-end pt-0">
-                    <a class="dropdown-item" href="#" @click="authStore.logout()">
-                    <svg class="icon me-2">
-                        <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
-                    </svg>
-                    
-                    Keluar
+                <div class="dropdown-menu dropdown-menu-end pt-2">
+                    <a class="dropdown-item" href="javascript:void(0)">
+                        <i class="bi bi-person-fill-exclamation me-1"></i> 
+                        {{ roleUser }}
                     </a>
+                    <a class="dropdown-item" href="javascript:void(0)" @click="authStore.logout()">
+                        <svg class="icon me-2">
+                            <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-account-logout"></use>
+                        </svg>
+                        Keluar
+                    </a>
+                   
                 </div>
             </li>
             </ul>

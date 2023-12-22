@@ -40,9 +40,9 @@
                 <div class="d-flex justify-content-between">
                     <!-- Button trigger modal -->
                     <div> 
-                        <button type="button" class="btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
+                        <!-- <button type="button" class="btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
                         Select
-                        </button>
+                        </button> -->
                         <button type="button" class="btn btn-success bg-button-rossa ms-3" data-toggle="modal" data-target="#exampleModal">
                         Filter
                         </button>
@@ -66,19 +66,13 @@
                        
                     </div>
                 </div>
-                    <!-- Modal -->
-                <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
-                    <div class="modal-dialog modal-fullscreen">
-                       
-                    </div>
-                </div>
                 <div class="table-responsive mt-3">
                     <table class="table pelaporan table-bordered">
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <!-- <th>No</th> -->
                             <th scope="col">ID Kandang</th>
-                            <!-- <th scope="col">Nama Kandang</th> -->
+                            <th scope="col">Nama Kandang</th>
                             <th scope="col">Anak Kandang</th>
                             <th scope="col">Nama Mandor</th>
                             <th scope="col">Status Laporan</th>
@@ -90,9 +84,9 @@
                     <tbody>
                         <template v-if="dataPencatatan.responseData">
                         <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index">
-                            <td>{{ item.id }}</td>
+                            <!-- <td>{{ item.id }}</td> -->
                             <td>{{ item.id_kandang }}</td>
-                            <!-- <td>{{ getNamaKandang(item.id_kandang) }}</td> -->
+                            <td>{{ item.kandang.nama }}</td>
                             <td>{{ item.nama_anak_kandang }}</td>
                             <td>{{ item.nama_mandor }}</td>
                             <td class="status-warning">
@@ -139,7 +133,7 @@
                                 </a>
                             </td>
                             <td>
-                               {{ formatTanggalSubmit(item_submit) }}
+                               {{ formatTanggalSubmit(item.tanggal_submit) }}
                             </td>
                         </tr>
                         </template>
@@ -203,7 +197,7 @@
         </div>
    -->
 
-    <div class="modal fade" id="first-modal" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal fade" id="first-modal" data-bs-backdrop="static">
         <div class="modal-dialog modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
@@ -219,9 +213,9 @@
                     <div class="mb-4">
                     <p>
                         <span class="color-text-rossa">Populasi ayam: <span class="text-secondary">{{ detailPencatatan.populasi_ayam }}</span></span>
-                        <span class="ms-4 color-text-rossa">FC: <span class="text-secondary">7,4</span></span>
-                        <span class="ms-4 color-text-rossa">Standart FC: <span class="text-secondary">7,6</span></span>
-                        <span class="ms-4 color-text-rossa">Egg mass: <span class="text-secondary">11,7</span></span>
+                        <span class="ms-4 color-text-rossa">FC: <span class="text-secondary">{{ detailStandart.nilai_fc }}</span></span>
+                        <span class="ms-4 color-text-rossa">FI: <span class="text-secondary">{{ detailStandart.nilai_fi }}</span></span>
+                        <span class="ms-4 color-text-rossa">Egg mass: <span class="text-secondary">{{ detailStandart.egg_mass }}</span></span>
                         <span class="ms-4 color-text-rossa">Strain: <span class="text-secondary">{{ detailStrain.nama }}</span></span>
                     </p>
 
@@ -247,11 +241,11 @@
                     <thead>
                         <tr>
                         
-                            <th scope="col">Usia</th>
+                            <th colspan="2" scope="col">Usia</th>
                             <th colspan="4" scope="col">Populasi</th>
                             <th colspan="2" scope="col">Produksi Telur</th>
                             <th colspan="2" scope="col">Berat Telur</th>
-                            <th colspan="2" scope="col">Standart Produksi</th>
+                       
                             <th colspan="2" scope="col">Pakan</th>
                             <th rowspan="2" scope="col">Treatment</th>
                             <th rowspan="2" scope="col">Edit</th>
@@ -259,7 +253,9 @@
                         </tr>
                         <tr>
                         
+                        <th scope="col">Hari</th>
                         <th scope="col">Mgg</th>
+
                         <th scope="col">Mati</th>
                         <th scope="col">Afkir</th>
                         <th scope="col">Pindah</th>
@@ -271,19 +267,17 @@
                         <th scope="col">Telur utuh</th>
                         <th scope="col">Telur bentes</th>
 
-                        <th scope="col">%</th>
-                        <th scope="col">gr/butir</th>
-
                         <th scope="col">Jumlah (kg)</th>
                         <th scope="col">Jenis pakan</th>
 
-                        
                         </tr>
                     </thead>
                     <tbody>
                         <template v-if="dataPencatatan.responseData">
                         <tr class="text-center">
-                            <td>null</td>
+                            <td>{{ detailPencatatan.usia_hari }}</td>
+                            <td>{{ detailPencatatan.usia_mgg }}</td>
+
                             <td>{{ detailPencatatan.jumlah_mati }}</td>
                             <td>{{ detailPencatatan.jumlah_afkir }}</td>
                             <td>{{ detailPencatatan.jumlah_pindah }}</td>
@@ -295,13 +289,10 @@
                             <td>{{ detailPencatatan.berat_utuh }}</td>
                             <td>{{ detailPencatatan.berat_bentes }}</td>
 
-                            <td>0</td>
-                            <td>0</td>
+                            <td>{{ detailPencatatan.berat_pakan }}</td>
+                            <td>{{ detailPencatatan.nama_jenis_pakan }}</td>
 
-                            <td>{{ detailPencatatan.id_jenis_pakan }}</td>
-                            <td>{{ detailPencatatan.id_jenis_pakan }}</td>
-
-                            <td>{{ detailPencatatan.id_treatment }}</td>
+                            <td>{{ detailPencatatan.nama_treatment }}</td>
                             <td>
                                 <a @click="clickSecondModal()" href="javascript:void(0)" class="btn-second-modal within-first-modal">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
@@ -386,7 +377,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="second-modal" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="second-modal" data-bs-backdrop="static">
         <div class="modal-dialog modal-lg shadow-lg">
             <div class="modal-content">
                 <div class="modal-header">
@@ -424,13 +415,20 @@
                                 <ErrorMessage class="text-danger" name="nama_mandor" />
                             </div>
                             <div class="mb-3">
+                                <label for="usia_hari" class="form-label">Usia Hari</label>
+                                <Field v-model="detailPencatatan.usia_hari" id="usia_hari" name="usia_hari" class="form-control text-center" type="number" />
+                                <ErrorMessage class="text-danger" name="usia_hari" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="usia_mgg" class="form-label">Usia Minggu</label>
+                                <Field v-model="detailPencatatan.usia_mgg" id="usia_mgg" name="usia_mgg" class="form-control text-center" type="number" />
+                                <ErrorMessage class="text-danger" name="usia_mgg" />
+                            </div>
+                            <div class="mb-3">
                                 <label for="strain_ayam" class="form-label">Strain Ayam</label>
-                                <Field v-model="detailPencatatan.id_strain_ayam" id="strain_ayam" @change="getIdStrain(event.target.value)" as="select" name="strain_ayam" class="form-control text-center">
+                                <Field v-model="detailPencatatan.id_strain_ayam" id="strain_ayam" as="select" name="strain_ayam" class="form-control text-center">
                                     <template v-if="dataStrain.responseData">
-                                        <option value="" disabled>Pilih Strain Ayam</option>
-                                        <!-- <option v-if="item.id == detailPencatatan.id_strain_ayam" selected>{{ item.nama }}</option> -->
-
-                                        <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                        <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id" disabled>{{ item.nama }}</option>
                                     </template>
                                 </Field>
                                 <ErrorMessage class="text-danger" name="strain_ayam" />
@@ -612,6 +610,10 @@
                                 <ErrorMessage class="text-danger" name="jenis_treatment" />
                             </div>
                             <div class="mb-3">
+                                <Field v-model="detailPencatatan.berat_pakan" name="berat_pakan" class="form-control text-center" type="number" placeholder="Berat Pakan" />
+                                <ErrorMessage class="text-danger" name="berat_pakan" />
+                            </div>
+                            <div class="mb-3">
                                 <Field type="text" name="catatan" class="form-control text-center" placeholder="Catatan" />
                                 <ErrorMessage class="text-danger" name="catatan" />
                             </div>
@@ -639,7 +641,6 @@
         </div>
     </div>
     
-
 </template>
 
 <script setup>
@@ -689,11 +690,29 @@
         nama_kandang_pengirim: '',
         nama_kandang_penerima: '',
         status: '',
+        usia_hari: '',
+        usia_mgg: '',
+        berat_pakan: '',
+        nama_jenis_pakan: '',   
+        nama_treatment: '',
     });
 
     const detailStrain = reactive({
         id: '',
         nama: '',
+        deskripsi: '',
+    });
+
+    const detailStandart = reactive({
+        id_strain_ayam: '',
+        nama_strain_ayam: '',
+        umur: '',
+        nilai_hd: '',
+        nilai_bb: '',
+        nilai_bt: '',
+        nilai_fi: '',
+        nilai_fc: '',
+        egg_mass: '',
         deskripsi: '',
     });
 
@@ -718,25 +737,28 @@
             id_anak_kandang: yup.number().required(),
             nama_kandang: yup.number().required(),
             nama_mandor: yup.string().required(),
+            usia_hari: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+            usia_mgg: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
             strain_ayam: yup.number().required(),
         }),
         yup.object({
-            mati: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            afkir: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            jumlah_pindah: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            jumlah_terima: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            id_kandang_pengirim: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            id_kandang_penerima: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            mati: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+            afkir: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+            jumlah_pindah: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+            jumlah_terima: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+            id_kandang_pengirim: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+            id_kandang_penerima: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
         }),
         yup.object({
             jml_telur_butuh: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            jml_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            berat_telur_butuh: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            berat_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            jml_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+            berat_telur_butuh: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+            berat_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
         }),
         yup.object({
             jenis_pakan: yup.number(),
             jenis_treatment: yup.number(),
+            berat_pakan: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
             catatan: yup.string().nullable(),
         }),
     ];
@@ -794,7 +816,7 @@
     }
 
     const formatTanggalSubmit = (tanggal) => {
-        return moment(tanggal).format('YYYY-MM-DD');
+        return moment(tanggal).format('DD-MM-YYYY');
     }
 
     // watch(() => detailPencatatan.tanggal_submit, () => {
@@ -903,8 +925,49 @@
                 detailStrain.id = response.data.data.id;
                 detailStrain.nama = response.data.data.nama;
                 detailStrain.deskripsi = response.data.data.deskripsi;
+                getIdStandart(detailStrain.id);
             })
             .catch(error => {
+                console.error(error);
+            });
+    }
+
+    async function getIdStandart(id_strain_ayam) {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/standar_pemeliharaan', {
+            params: {
+                id_strain_ayam: id_strain_ayam,
+            },
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                console.log("Standart Pemeliharaan : ", response);
+                detailStandart.id = response.data.data.items[0].id;
+                detailStandart.id_strain_ayam = response.data.data.items[0].id_strain_ayam;
+                detailStandart.umur = response.data.data.items[0].umur;
+                detailStandart.nilai_hd = response.data.data.items[0].nilai_hd;
+                detailStandart.nilai_bb = response.data.data.items[0].nilai_bb;
+                detailStandart.nilai_bt = response.data.data.items[0].nilai_bt;
+                detailStandart.nilai_fi = response.data.data.items[0].nilai_fi;
+                detailStandart.nilai_fc = response.data.data.items[0].nilai_fc;
+                detailStandart.egg_mass = response.data.data.items[0].egg_mass;
+                detailStandart.deskripsi = response.data.data.items[0].deskripsi;
+               
+            })
+            .catch(error => {
+                detailStandart.id = '';
+                detailStandart.id_strain_ayam = '';
+                detailStandart.umur = '';
+                detailStandart.nilai_hd = '';
+                detailStandart.nilai_bb = '';
+                detailStandart.nilai_bt = '';
+                detailStandart.nilai_fi = '';
+                detailStandart.nilai_fc = '';
+                detailStandart.egg_mass = '';
+                detailStandart.deskripsi = '';
                 console.error(error);
             });
     }
@@ -1071,6 +1134,11 @@
                 } else {
                     detailPencatatan.nama_kandang_penerima = '-';
                 }    
+                detailPencatatan.usia_hari = response.data.data.usia_hari;
+                detailPencatatan.usia_mgg = response.data.data.usia_mgg;
+                detailPencatatan.berat_pakan = response.data.data.berat_pakan;
+                detailPencatatan.nama_jenis_pakan = response.data.data.jenis_pakan ? response.data.data.jenis_pakan.nama : '-';
+                detailPencatatan.nama_treatment = response.data.data.treatment ? response.data.data.treatment.nama : '-';
                 getIdStrain(detailPencatatan.id_strain_ayam);
                 // console.log("Detail Pencatatan : ", detailPencatatan);
                 console.log("Detail Pencatatan : ", response);

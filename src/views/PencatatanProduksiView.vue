@@ -319,11 +319,20 @@
                                 <ErrorMessage class="text-danger" name="nama_mandor" />
                             </div>
                             <div class="mb-3">
+                                <label for="usia_hari" class="form-label">Usia Hari</label>
+                                <Field name="usia_hari" class="form-control text-center" type="number" placeholder="Usia Hari" />
+                                <ErrorMessage class="text-danger" name="usia_hari" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="usia_mgg" class="form-label">Usia Minggu</label>
+                                <Field name="usia_mgg" class="form-control text-center" type="number" placeholder="Usia Minggu" />
+                                <ErrorMessage class="text-danger" name="usia_mgg" />
+                            </div>
+                            <div class="mb-3">
                                 <label for="strain_ayam" class="form-label">Strain Ayam</label>
-                                <Field id="strain_ayam" @change="getIdStrain($event)" as="select" name="strain_ayam" class="form-control text-center">
+                                <Field v-model="detailKandang.id_strain_ayam" id="strain_ayam" as="select" name="strain_ayam" class="form-control text-center">
                                     <template v-if="dataStrain.responseData">
-                                        <option value="" disabled>Pilih Strain Ayam</option>
-                                        <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                        <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id" disabled>{{ item.nama }}</option>
                                     </template>
                                 </Field>
                                 <ErrorMessage class="text-danger" name="strain_ayam" />
@@ -351,7 +360,7 @@
                                     </p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span class="color-text-rossa">Populasi Ayam:</span> {{ populasi_ayam }} ekor</p>
+                                    <p><span class="color-text-rossa">Populasi Ayam:</span> {{ totalPopulasi }} ekor</p>
                                     <p><span class="color-text-rossa">Strain:</span> {{ detailStrain.nama }}</p>
                                 </div>
                             </div>
@@ -437,16 +446,16 @@
                             </div>
                             <h6 class="mb-3">Produksi telur</h6>
                             <div class="mb-3">
-                                <Field name="jml_telur_butuh" class="form-control text-center" type="number" placeholder="Jumlah Telur Utuh" />
-                                <ErrorMessage class="text-danger" name="jml_telur_butuh" />
+                                <Field name="jml_telur_utuh" class="form-control text-center" type="number" placeholder="Jumlah Telur Utuh" />
+                                <ErrorMessage class="text-danger" name="jml_telur_utuh" />
                             </div>
                             <div class="mb-3">
                                 <Field name="jml_telur_bentes" class="form-control text-center" type="number" placeholder="Jumlah Telur Bentes" />
                                 <ErrorMessage class="text-danger" name="jml_telur_bentes" />
                             </div>
                             <div class="mb-3">
-                                <Field name="berat_telur_butuh" class="form-control text-center" type="number" placeholder="Berat Telur Utuh" />
-                                <ErrorMessage class="text-danger" name="berat_telur_butuh" />
+                                <Field name="berat_telur_utuh" class="form-control text-center" type="number" placeholder="Berat Telur Utuh" />
+                                <ErrorMessage class="text-danger" name="berat_telur_utuh" />
                             </div>
                             <div class="mb-3">
                                 <Field name="berat_telur_bentes" class="form-control text-center" type="number" placeholder="Berat Telur Bentes" />
@@ -472,16 +481,16 @@
                             </div>
                             <div class="row mb-3 p-2 bg-light rounded">
                                 <div class="col-md-4">
-                                    <p>Jumlah Telur Utuh : {{ values.jml_telur_butuh }}</p>
-                                    <P>Berat Telur Utuh : {{ values.berat_telur_butuh }}</P>
+                                    <p>Jumlah Telur Utuh : {{ values.jml_telur_utuh }}</p>
+                                    <P>Berat Telur Utuh : {{ values.berat_telur_utuh }}</P>
                                 </div>
                                 <div class="col-md-4">
                                     <p>Jumlah Telur Bentes : {{ values.jml_telur_bentes }}</p>
                                     <p>Berat Telur Bentes : {{ values.berat_telur_bentes }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.jml_telur_butuh) + parseInt(values.jml_telur_bentes) }}</p>
-                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.berat_telur_butuh) + parseInt(values.berat_telur_bentes) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.jml_telur_utuh) + parseInt(values.jml_telur_bentes) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.berat_telur_utuh) + parseInt(values.berat_telur_bentes) }}</p>
                                 </div>
                             </div>
                             <h6 class="mb-3">Pakan & Treatment Ayam</h6>
@@ -503,6 +512,10 @@
                                     </template>
                                 </Field>
                                 <ErrorMessage class="text-danger" name="jenis_treatment" />
+                            </div>
+                            <div class="mb-3">
+                                <Field name="berat_pakan" class="form-control text-center" type="number" placeholder="Berat Pakan" />
+                                <ErrorMessage class="text-danger" name="berat_pakan" />
                             </div>
                             <div class="mb-3">
                                 <Field as="textarea" name="catatan" class="form-control text-center" placeholder="Catatan" />
@@ -547,10 +560,10 @@
                     <div class="mb-4">
                     <p>
                         <span class="color-text-rossa">Populasi ayam: <span class="text-secondary">{{ detailPencatatan.populasi_ayam }}</span></span>
-                        <span class="ms-4 color-text-rossa">FC: <span class="text-secondary">7,4</span></span>
-                        <span class="ms-4 color-text-rossa">Standart FC: <span class="text-secondary">7,6</span></span>
-                        <span class="ms-4 color-text-rossa">Egg mass: <span class="text-secondary">11,7</span></span>
-                        <span class="ms-4 color-text-rossa">Strain: <span class="text-secondary">11,7</span></span>
+                        <span class="ms-4 color-text-rossa">FC: <span class="text-secondary">{{ detailStandart.nilai_fc }}</span></span>
+                        <span class="ms-4 color-text-rossa">FI: <span class="text-secondary">{{ detailStandart.nilai_fi }}</span></span>
+                        <span class="ms-4 color-text-rossa">Egg mass: <span class="text-secondary">{{ detailStandart.egg_mass }}</span></span>
+                        <span class="ms-4 color-text-rossa">Strain: <span class="text-secondary">{{ detailStrain.nama }}</span></span>
                     </p>
 
                     </div>
@@ -574,36 +587,34 @@
                     <table class="table pelaporan table-bordered">
                     <thead>
                         <tr>
-                            <th rowspan="2" scope="col">Tanggal</th>
-                            <th scope="col">Usia</th>
+                            <th rowspan="2" scope="col">Tanggal Submit</th>
+                            <th rowspan="2" scope="col">Tanggal Validasi</th>
+                            <th colspan="2" scope="col">Usia</th>
                             <th colspan="4" scope="col">Populasi</th>
                             <th colspan="2" scope="col">Produksi Telur</th>
                             <th colspan="2" scope="col">Berat Telur</th>
-                            <th colspan="2" scope="col">Standart Produksi</th>
+                         
                             <th colspan="2" scope="col">Pakan</th>
                             <th rowspan="2" scope="col">Treatment</th>
                             <!-- <th rowspan="2" scope="col">Edit</th> -->
                             <th rowspan="2" scope="col">Status</th>
                         </tr>
                         <tr>
-                        
-                        <th scope="col">Mgg</th>
-                        <th scope="col">Mati</th>
-                        <th scope="col">Afkir</th>
-                        <th scope="col">Pindah</th>
-                        <th scope="col">Terima</th>
+                            <th scope="col">Hari</th>
+                            <th scope="col">Mgg</th>
+                            <th scope="col">Mati</th>
+                            <th scope="col">Afkir</th>
+                            <th scope="col">Pindah</th>
+                            <th scope="col">Terima</th>
 
-                        <th scope="col">Telur utuh</th>
-                        <th scope="col">Telur bentes</th>
+                            <th scope="col">Telur utuh</th>
+                            <th scope="col">Telur bentes</th>
 
-                        <th scope="col">Telur utuh</th>
-                        <th scope="col">Telur bentes</th>
+                            <th scope="col">Telur utuh</th>
+                            <th scope="col">Telur bentes</th>
 
-                        <th scope="col">%</th>
-                        <th scope="col">gr/butir</th>
-
-                        <th scope="col">Jumlah (kg)</th>
-                        <th scope="col">Jenis pakan</th>
+                            <th scope="col">Jumlah (kg)</th>
+                            <th scope="col">Jenis pakan</th>
 
                         
                         </tr>
@@ -612,7 +623,9 @@
                         <template v-if="dataPencatatan.responseData">
                         <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index" class="text-center">
                             <td>{{ formatTanggalSubmit(item.tanggal_submit) }}</td>
-                            <td>null</td>
+                            <td>{{ formatTanggalSubmit(item.tanggal_validasi) }}</td>
+                            <td>{{ item.usia_hari }}</td>
+                            <td>{{ item.usia_mgg }}</td>
                             <td>{{ item.jumlah_mati }}</td>
                             <td>{{ item.jumlah_afkir }}</td>
                             <td>{{ item.jumlah_pindah }}</td>
@@ -624,13 +637,10 @@
                             <td>{{ item.berat_utuh }}</td>
                             <td>{{ item.berat_bentes }}</td>
 
-                            <td>0%</td>
-                            <td>0gr</td>
+                            <td>{{ item.berat_pakan }}</td>
+                            <td>{{ item.jenis_pakan ? item.jenis_pakan.nama : '-' }}</td>
 
-                            <td>{{ item.id_jenis_pakan }}</td>
-                            <td>{{ item.id_jenis_pakan }}</td>
-
-                            <td>{{ item.id_treatment }}</td>
+                            <td>{{ item.treatment ? item.treatment.nama : '-' }}</td>
                             <!-- <td>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <mask id="mask0_142_372" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1" y="1" width="18" height="18">
@@ -741,6 +751,7 @@
         id_anak_kandang: '',
         nama_mandor: '',
         nama_anak_kandang: '',
+        id_strain_ayam: '',
     });
 
     const detailPencatatan = reactive({
@@ -755,7 +766,7 @@
         id_kandang_tujuan: '',
         jumlah_terima: '',
         id_kandang_pengirim: '',
-        telur_butuh: '',
+        telur_utuh: '',
         telur_bentes: '',
         berat_utuh: '',
         berat_bentes: '',
@@ -825,6 +836,8 @@
             id_anak_kandang: yup.number().required(),
             nama_kandang: yup.number().required(),
             nama_mandor: yup.string().required(),
+            usia_hari: yup.number().required(),
+            usia_mgg: yup.number().required(),
             strain_ayam: yup.number().required(),
         }),
         yup.object({
@@ -832,18 +845,19 @@
             afkir: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
             jumlah_pindah: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
             jumlah_terima: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            id_kandang_pengirim: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            id_kandang_penerima: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            id_kandang_pengirim: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+            id_kandang_penerima: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
         }),
         yup.object({
-            jml_telur_butuh: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            jml_telur_utuh: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
             jml_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            berat_telur_butuh: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            berat_telur_utuh: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
             berat_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
         }),
         yup.object({
             jenis_pakan: yup.number(),
             jenis_treatment: yup.number(),
+            berat_pakan: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
             catatan: yup.string(),
         }),
     ];
@@ -953,12 +967,14 @@
     async function onSubmit(values) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama_kandang, id_anak_kandang, nama_mandor, strain_ayam, mati, afkir, jumlah_pindah, id_kandang_pengirim, jumlah_terima, id_kandang_tujuan, jml_telur_butuh, jml_telur_bentes, berat_telur_butuh, berat_telur_bentes, jenis_pakan, jenis_treatment, catatan } = values;
+        const { nama_kandang, id_anak_kandang, usia_hari, usia_mgg, nama_mandor, strain_ayam, mati, afkir, jumlah_pindah, id_kandang_pengirim, jumlah_terima, id_kandang_tujuan, jml_telur_utuh, jml_telur_bentes, berat_telur_utuh, berat_telur_bentes, jenis_pakan, jenis_treatment, berat_pakan, catatan } = values;
         console.log(values);
         return axios.post(baseUrl + '/pencatatan', {
             id_kandang: nama_kandang,
             id_mandor: nama_mandor,
             id_anak_kandang: id_anak_kandang,
+            usia_hari: usia_hari,
+            usia_mgg: usia_mgg,
             id_strain_ayam: strain_ayam,
             jumlah_mati: mati,
             jumlah_afkir: afkir,
@@ -966,12 +982,13 @@
             id_kandang_tujuan: id_kandang_tujuan,
             jumlah_terima: jumlah_terima,
             id_kandang_pengirim: id_kandang_pengirim,
-            telur_butuh: jml_telur_butuh,
+            telur_utuh: jml_telur_utuh,
             telur_bentes: jml_telur_bentes,
-            berat_utuh: berat_telur_butuh,
+            berat_utuh: berat_telur_utuh,
             berat_bentes: berat_telur_bentes,
             id_treatment: jenis_treatment,
             id_jenis_pakan: jenis_pakan,
+            berat_pakan: berat_pakan,
             catatan: catatan,
         }, {
             headers: {
@@ -1011,7 +1028,7 @@
                 detailPencatatan.id_kandang_tujuan = response.data.data.id_kandang_tujuan;
                 detailPencatatan.jumlah_terima = response.data.data.jumlah_terima;
                 detailPencatatan.id_kandang_pengirim = response.data.data.id_kandang_pengirim;
-                detailPencatatan.telur_butuh = response.data.data.telur_butuh;
+                detailPencatatan.telur_utuh = response.data.data.telur_utuh;
                 detailPencatatan.telur_bentes = response.data.data.telur_bentes;
                 detailPencatatan.berat_utuh = response.data.data.berat_utuh;
                 detailPencatatan.berat_bentes = response.data.data.berat_bentes;
@@ -1019,7 +1036,7 @@
                 detailPencatatan.id_jenis_pakan = response.data.data.id_jenis_pakan;
                 detailPencatatan.catatan = response.data.data.catatan;
                 detailPencatatan.tanggal_submit = response.data.data.tanggal_submit;
-                getIdStandart(detailPencatatan.id_strain_ayam);
+              
                 getIdPakan(detailPencatatan.id_jenis_pakan);
                 // console.log("Detail Pencatatan : ", detailPencatatan);
                 console.log("Detail Pencatatan : ", response);
@@ -1034,6 +1051,7 @@
         const token = JSON.parse(user);
         axios.get(baseUrl + '/pencatatan', {
             params: {
+                column_sorting: "tanggal_submit desc",
                 id_kandang: id_kandang,
             },
             headers: {
@@ -1088,6 +1106,8 @@
                 detailKandang.id_anak_kandang = response.data.data.id_anak_kandang;
                 detailKandang.nama_mandor = response.data.data.nama_mandor;
                 detailKandang.nama_anak_kandang = response.data.data.nama_anak_kandang;
+                detailKandang.id_strain_ayam = response.data.data.id_strain_ayam;
+                getIdStrain(detailKandang.id_strain_ayam);
                 console.log(detailKandang);
             })
             .catch(error => {
@@ -1112,23 +1132,27 @@
             });
     }
 
-    async function getIdStrain(event) {
+    async function getIdStrain(id) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        axios.get(baseUrl + '/strain_ayam/' + event.target.value, {
+        axios.get(baseUrl + '/strain_ayam/' + id, {
             headers: {
                 Authorization: `Bearer ${token.token}`,
             },
         })
             .then(response => {
+                console.log("Strain Ayam : ", response);
                 detailStrain.id = response.data.data.id;
                 detailStrain.nama = response.data.data.nama;
                 detailStrain.deskripsi = response.data.data.deskripsi;
+                getIdStandart(detailStrain.id);
             })
             .catch(error => {
                 console.error(error);
             });
     }
+
+
     
     async function getIdStandart(id_strain_ayam) {
         const user = localStorage.getItem('user');

@@ -9,11 +9,11 @@ import ValidasiDataView from '../views/ValidasiDataView.vue'
 import KandangView from '../views/KandangView.vue'
 import KaryawanView from '../views/KaryawanView.vue'
 import StandartPemeliharaan from '../views/StandartPemeliharaan.vue'
-import DataUserView from '../views/DataUserView.vue'
 import HistoryUserView from '../views/HistoryUserView.vue'
 import LoginView from '../views/LoginView.vue'
 import JenisPakanView from '../views/JenisPakanView.vue'
 import StrainAyamView from '../views/StrainAyamView.vue'
+import TreatmentView from '../views/TreatmentView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -67,11 +67,6 @@ const router = createRouter({
       component: StandartPemeliharaan
     },
     {
-      path: '/data-user',
-      name: 'data-user',
-      component: DataUserView
-    },
-    {
       path: '/history-user',
       name: 'history-user',
       component: HistoryUserView
@@ -85,6 +80,11 @@ const router = createRouter({
       path: '/strain-ayam',
       name: 'strain-ayam',
       component: StrainAyamView
+    },
+    {
+      path: '/treatment',
+      name: 'treatment',
+      component: TreatmentView
     },
   ]
 })

@@ -30,9 +30,9 @@
                 </div>
                 <div class="d-flex justify-content-between">
                     <div> 
-                        <button type="button" class="btn btn-success bg-button-rossa">
+                        <!-- <button type="button" class="btn btn-success bg-button-rossa">
                         Select
-                        </button>
+                        </button> -->
                         <button type="button" class="btn btn-success bg-button-rossa ms-2">
                         Filter
                         </button>

@@ -15,6 +15,7 @@ import '@/assets/vendors/@coreui/chartjs/js/coreui-chartjs.js'
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import "bootstrap-icons/font/bootstrap-icons.css"
 
 import Paginate from 'vuejs-paginate';
 

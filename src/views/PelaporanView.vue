@@ -27,7 +27,7 @@
                         <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
                         </svg></p> -->
                         <p>
-                            <select v-model="idKandang" @change="getPencatatan(1, $event.target.value, null, null)" class="form-select form-select-sm ms-3" aria-label=".form-select-sm example">
+                            <select v-model="idKandang" @change="getPelaporan($event.target.value, rangeDate.start, rangeDate.end)" class="form-select form-select-sm ms-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua kandang 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -59,53 +59,103 @@
                     <table class="table pelaporan table-bordered">
                     <thead>
                         <tr>
-                            <th rowspan="2" scope="col">ID Kandang</th>
                             <th rowspan="2" scope="col">Tanggal</th>
+                            <th rowspan="2" scope="col">Kandang</th>
+                           
                             <th scope="col">Usia</th>
                             <th colspan="4" scope="col">Populasi</th>
-                            <th colspan="2" scope="col">Produksi Telur</th>
-                            <th colspan="2" scope="col">Berat Telur</th>
+
+                            <th rowspan="2" scope="col">Total Populasi</th>
+
+                            <th colspan="5" scope="col">Produksi Telur</th>
+
+                            <th colspan="3" scope="col">Berat Telur</th>
+
                             <th colspan="2" scope="col">Standart Produksi</th>
+
+                            <th colspan="3" scope="col">Pakan</th>
+
+                            <th rowspan="2" scope="col">Standar gr/ekor</th>
+
+                            <th rowspan="2" scope="col">FC</th>
+
+                            <th rowspan="2" scope="col">Standar FC</th>
+
+                            <th rowspan="2" scope="col">Egg Mass</th>
+
+                            <th rowspan="2" scope="col">Strain</th>
+
+                            <th rowspan="2" scope="col">Treatment</th>
                         </tr>
                         <tr>
                         
-                        <th scope="col">Mgg</th>
+                            <th scope="col">Mgg</th>
 
-                        <th scope="col">Mati</th>
-                        <th scope="col">Afkir</th>
-                        <th scope="col">Pindah</th>
-                        <th scope="col">Terima</th>
+                            <th scope="col">Mati</th>
+                            <th scope="col">Afkir</th>
+                            <th scope="col">Pindah</th>
+                            <th scope="col">Terima</th>
 
-                        <th scope="col">Telur utuh</th>
-                        <th scope="col">Telur bentes</th>
+                            <th scope="col">Telur utuh</th>
+                            <th scope="col">Telur bentes</th>
+                            <th scope="col">Total Telur</th>
+                            <th scope="col">%</th>
+                            <th scope="col">gr/butir</th>
 
-                        <th scope="col">Berat Telur utuh</th>
-                        <th scope="col">Berat Telur bentes</th>
+                            <th scope="col">Berat Telur utuh</th>
+                            <th scope="col">Berat Telur bentes</th>
+                            <th scope="col">Total</th>
+                        
+                            <th scope="col">%</th>
+                            <th scope="col">gr/butir</th>
 
-                        <th scope="col">%</th>
-                        <th scope="col">gr/butir</th>
+                            <th scope="col">gr/ekor</th>
+                            <th scope="col">KG</th>
+                            <th scope="col">Jenis</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-if="dataPencatatan.responseData">
-                        <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index" class="text-center">
-                            <td>{{ item.id_kandang }}</td>
+                        <template v-if="dataPelaporan.responseData">
+                        <tr v-for="(item, index) in dataPelaporan.responseData.data.items" :key="index" class="text-center">
                             <td>{{ formatTanggalSubmit(item.tanggal_submit) }}</td>
-                            <td>null</td>
+                            <td>{{ item.nama_kandang }}</td>
+                            <td>{{ item.usia_mgg }}</td>
+                            
                             <td>{{ item.jumlah_mati }}</td>
                             <td>{{ item.jumlah_afkir }}</td>
                             <td>{{ item.jumlah_pindah }}</td>
                             <td>{{ item.jumlah_terima }}</td>
 
+                            <td>{{ item.populasi_total }}</td>
+
                             <td>{{ item.telur_utuh }}</td>
                             <td>{{ item.telur_bentes }}</td>
+                            <td>{{ item.total_telur }}</td>
+                            <td>{{ item.percentase_telur }}</td>
+                            <td>{{ item.berat_telur_gr }}</td>
 
-                            <td>{{ item.berat_utuh }}</td>
-                            <td>{{ item.berat_bentes }}</td>
+                            <td>{{ item.berat_telur_utuh_kg }}</td>
+                            <td>{{ item.berat_telur_bentes_kg }}</td>
+                            <td>{{ item.berat_telur_kg }}</td>
 
-                            <td>0</td>
-                            <td>0</td>
-                        
+                            <td>{{ item.std_egg_mass }}</td>
+                            <td>{{ item.std_berat_telur }}</td>
+
+                            <td>{{ item.berat_pakan_per_ekor_gram }}</td>
+                            <td>{{ item.berat_pakan }}</td>
+                            <td>{{ item.nama_jenis_pakan }}</td>
+
+                            <td>{{ item.std_gr_perekor }}</td>
+
+                            <td>{{ item.fc }}</td>
+
+                            <td>{{ item.std_fc }}</td>
+
+                            <td>{{ item.egg_mass }}</td>
+
+                            <td>{{ item.nama_strain_ayam }}</td>
+
+                            <td>{{ item.nama_treatment }}</td>
                             <!-- <td>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                                 <mask id="mask0_142_372" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1" y="1" width="18" height="18">
@@ -129,13 +179,7 @@
                     </table>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <vue-awesome-paginate
-                        :total-items="totalItems"
-                        :items-per-page="pageSize"
-                        :max-pages-shown="3"
-                        v-model="currentPage"
-                        :on-click="onClickHandler"
-                    />
+                   
                 </div>
                 </div>
             </div>
@@ -152,7 +196,7 @@
 <script setup>
     import HeaderItem from '@/components/HeaderItem.vue';
     import { reactive, onMounted, ref, watch } from 'vue';
-    import { pencatatanStore, kandangStore } from '@/stores';
+    import { pencatatanStore, kandangStore, pelaporanStore } from '@/stores';
     import axios from 'axios'
     import moment from 'moment';
 
@@ -160,46 +204,28 @@
 
     const dataPencatatan = reactive(pencatatanStore());
     const dataKandang = reactive(kandangStore());
+    const dataPelaporan = reactive(pelaporanStore());
     const idKandang = ref(0);
-
-    const currentPage = ref(1);
-    const pageSize = ref(10);
-    const totalItems = dataPencatatan.responseData ? dataPencatatan.responseData.data.total_record : 0;
-
-    const searchDate = ref(null);
-
     const date = ref(0);
     const rangeDate = reactive({
         start: null,
         end: null,
     });
-    const formatDate = ref({ day: '2-digit', month: 'long', year: 'numeric' });
-    const selectedDate = ref([]);
+    const selectedDate = ref([
+        new Date(2022, 1, 1),
+        new Date()
+    ]);
 
-    const onClickHandler = (page) => {
-        getPencatatan(page);
-    };
     const formatTanggalSubmit = (tanggal) => {
         return moment(tanggal).format('YYYY-MM-DD');
     }
 
-
-    let search = ref("");
-
     onMounted(() => {
-        getPencatatan(1);
+        rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
+        rangeDate.end = moment(selectedDate.value[1]).format("YYYY-MM-DD");
+        getPelaporan(null, rangeDate.start, rangeDate.end);
         getKandang();
     });
-
-    function clearSearch() {
-        search.value = '';
-        getPencatatan(1);
-    }
-
-    function searchItem() {
-        console.log(search.value);
-        searchPencatatan(search.value);
-    }
 
     function inputDate() {
        console.log("Input Data : ", selectedDate);
@@ -209,7 +235,7 @@
         date.value = new Date(newValue[0]);
         rangeDate.start = moment(newValue[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(newValue[1]).format("YYYY-MM-DD");
-        getPencatatan(1, idKandang.value, rangeDate.start, rangeDate.end);
+        getPelaporan(idKandang.value, rangeDate.start, rangeDate.end);
     });
 
     async function getPencatatan(page, id_kandang = idKandang.value, startDate = rangeDate.start, endDate = rangeDate.end) {
@@ -239,26 +265,6 @@
             });
     }
 
-    async function searchPencatatan(keyword) {
-        const user = localStorage.getItem('user');
-        const token = JSON.parse(user);
-        return axios.get(baseUrl + '/pencatatan', {
-            headers: {
-                Authorization: `Bearer ${token.token}`,
-            },
-            params: {
-                search_value: keyword.toLowerCase(),
-            },
-        })
-            .then(response => {
-                dataPencatatan.setResponseData(response.data);
-                console.log(dataPencatatan.responseData);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    }
-
 
     async function getKandang() {
         
@@ -273,6 +279,31 @@
             .then(response => {
                 dataKandang.setResponseData(response.data);
                 console.log(dataKandang.responseData.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    async function getPelaporan(id_kandang, startDate, endDate) {
+        if (id_kandang == 0) {
+            id_kandang = null;
+        }
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/laporan', {
+            params: {
+                id_kandang: id_kandang,
+                start_date: startDate,
+                end_date: endDate,
+            },
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataPelaporan.setResponseData(response.data);
+                console.log(dataPelaporan.responseData.data);
             })
             .catch(error => {
                 console.error(error);

@@ -31,9 +31,9 @@
                 <div class="d-flex justify-content-between">
                     <!-- Button trigger modal -->
                     <div> 
-                        <button type="button" class="btn btn-success bg-button-rossa">
+                        <!-- <button type="button" class="btn btn-success bg-button-rossa">
                         Select
-                        </button>
+                        </button> -->
                         <button type="button" class="btn btn-success bg-button-rossa ms-2">
                         Filter
                         </button>
@@ -70,7 +70,7 @@
                     </thead>
                     <tbody>
                         <template v-if="dataKandang.responseData">
-                            <tr v-for="item in dataKandang.responseData.data.items" :key="item.id" class="row-validasi text-center">
+                            <tr v-for="item in dataKandang.responseData.data.items" :key="item.id" class="text-center">
                                 <td>{{ item.id }}</td>
                                 <td>{{ item.nama }}</td>
                                 <td>{{ item.nama_anak_kandang }}</td>
@@ -139,6 +139,14 @@
                         </template>
                     </Field> 
                     <Field class="form-control text-center mb-3" type="number" name="populasi_total" placeholder="Populasi Total" :class="{ 'is-invalid': errors.populasi_total }" />
+                    <Field id="id_strain_ayam" as="select" name="id_strain_ayam" class="form-control text-center mb-3">
+                        <template v-if="dataStrain.responseData">
+                            <option value="" disabled>Pilih Strain Ayam</option>
+                            <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                        </template>
+                    </Field>
+                    <Field class="form-control text-center mb-3" type="date" name="tanggal_chickin" placeholder="Tanggal Chickin" :class="{ 'is-invalid': errors.tanggal_chickin }" />
+                    <Field as="textarea" class="form-control text-center mb-3" name="alamat" placeholder="Alamat" :class="{ 'is-invalid': errors.alamat }" />
                 </div>
                 <div class="modal-footer">
                     <div class="text-end">
@@ -167,6 +175,8 @@
                     <p>Nama Mandor : {{ detailKandang.nama_mandor }}</p>
                     <p>Nama Anak Kandang : {{ detailKandang.nama_anak_kandang }}</p>
                     <p>Populasi Total : {{ detailKandang.populasi_total }}</p>
+                    <p>Tanggal Chick in : {{ formatTanggal(detailKandang.tanggal_chickin) }}</p>
+                    <p>Strain Ayam : {{ detailKandang.strain_ayam }}</p>
                 </div>
                 <div class="modal-footer">
                 <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
@@ -201,6 +211,14 @@
                             </template>
                         </Field> 
                         <Field class="form-control text-center mb-3" type="number" name="populasi_total" placeholder="Populasi Total" v-model="detailKandang.populasi_total" :class="{ 'is-invalid': errors.populasi_total }" />
+                        <Field v-model="detailKandang.id_strain_ayam" id="id_strain_ayam" as="select" name="id_strain_ayam" class="form-control text-center mb-3">
+                            <template v-if="dataStrain.responseData">
+                                <option value="" disabled>Pilih Strain Ayam</option>
+                                <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                            </template>
+                        </Field>
+                        <Field v-model="tanggal_chickin_edit" class="form-control text-center mb-3" type="date" name="tanggal_chickin" placeholder="Tanggal Chickin" :class="{ 'is-invalid': errors.tanggal_chickin }" />
+                        <Field v-model="detailKandang.alamat" as="textarea" class="form-control text-center mb-3" name="alamat" placeholder="Alamat" :class="{ 'is-invalid': errors.alamat }" />
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
                                 Submit
@@ -221,13 +239,14 @@
 
 <script setup>
     import HeaderItem from '../components/HeaderItem.vue';
-    import { karyawanStore, kandangStore } from '@/stores';
-    import { onMounted, reactive, ref } from 'vue'
+    import { karyawanStore, kandangStore, strainStore } from '@/stores';
+    import { onMounted, reactive, ref, watch } from 'vue'
     import { defineStore } from 'pinia'
     import axios from 'axios'
     import { Form, Field } from 'vee-validate';
     import * as Yup from 'yup';
     import Swal from 'sweetalert2';
+    import moment from 'moment';
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
@@ -235,11 +254,16 @@
         nama: Yup.string().required('Nama is required'),
         id_mandor: Yup.string().required('Nama mandor is required'),
         id_anak_kandang: Yup.string().required('Nama anak kandang is required'),
-        populasi_total: Yup.number()
+        populasi_total: Yup.number(),
+        tanggal_chickin: Yup.date(),
+        id_strain_ayam: Yup.number().required('Strain ayam is required'),
+        alamat: Yup.string().required('Alamat is required'),
+
     });
 
     const dataKaryawan  = reactive(karyawanStore());
     const dataKandang  = reactive(kandangStore());
+    const dataStrain  = reactive(strainStore());
     const detailKandang = reactive({
         id: '',
         nama: '',
@@ -249,6 +273,9 @@
         nama_mandor: '',
         nama_anak_kandang: '',
         populasi_total: 0,
+        tanggal_chickin: '',
+        id_strain_ayam: '',
+        strain_ayam: '',
     });
     let search = ref("");
 
@@ -260,6 +287,13 @@
         getKandang(page);
         
     };
+    const formatTanggal = (tanggal) => {
+        return moment(tanggal).format('DD-MM-YYYY');
+    }
+    const tanggal_chickin_edit = ref('');
+    const formatTanggal2 = (tanggal) => {
+        return moment(tanggal).format('YYYY-MM-DD');
+    }
 
     function alert(icon, title) {
         const Toast = Swal.mixin({
@@ -335,6 +369,7 @@
 
 
     async function getKaryawan() {
+        getStrain();
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/karyawan', {
@@ -351,16 +386,37 @@
             });
     }
 
+    async function getStrain() {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        
+        axios.get(baseUrl + '/strain_ayam', {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataStrain.setResponseData(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+
     async function onSubmit(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama, id_mandor, id_anak_kandang, populasi_total } = values;
+        const { nama, id_mandor, id_anak_kandang, populasi_total, id_strain_ayam, tanggal_chickin, alamat } = values;
         console.log(values);
         return axios.post(baseUrl + '/kandang', {
             nama: nama,
             id_mandor: id_mandor,
             id_anak_kandang: id_anak_kandang,
             populasi_total: populasi_total,
+            id_strain_ayam: id_strain_ayam,
+            tanggal_chickin: tanggal_chickin,
+            alamat: alamat,
         }, {
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -383,13 +439,16 @@
     async function onSubmitUpdate(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama, id_mandor, id_anak_kandang, populasi_total } = values;
+        const { nama, id_mandor, id_anak_kandang, populasi_total, id_strain_ayam, tanggal_chickin, alamat } = values;
         console.log(values);
         return axios.put(baseUrl + '/kandang/' + detailKandang.id, {
             nama: nama,
             id_mandor: id_mandor,
             id_anak_kandang: id_anak_kandang,
             populasi_total: populasi_total,
+            id_strain_ayam: id_strain_ayam,
+            tanggal_chickin: tanggal_chickin,
+            alamat: alamat,
         }, {
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -427,6 +486,10 @@
                 detailKandang.nama_mandor = response.data.data.nama_mandor;
                 detailKandang.nama_anak_kandang = response.data.data.nama_anak_kandang;
                 detailKandang.populasi_total = response.data.data.populasi_total;
+                detailKandang.tanggal_chickin = response.data.data.tanggal_chickin;
+                detailKandang.strain_ayam = response.data.data.strain_ayam.nama;
+                detailKandang.id_strain_ayam = response.data.data.strain_ayam.id;
+                tanggal_chickin_edit.value = formatTanggal2(response.data.data.tanggal_chickin);
                 console.log(detailKandang);
             })
             .catch(error => {
