@@ -46,7 +46,7 @@
                          </p>
                     </div>
                     <div class="d-inline">
-                        <button type="button" class="btn btn-success bg-button-rossa">Download laporan</button>
+                        <button @click="printLaporan()" type="button" class="btn btn-success bg-button-rossa">Download laporan</button>
                     </div>
                 </div> 
                 <!-- <div class="d-flex">
@@ -56,7 +56,7 @@
                     <p class="color-text-rossa ms-4">Egg mass: <span class="text-secondary">11,7</span></p>
                 </div> -->
                 <div class="table-responsive mt-3">
-                    <table class="table pelaporan table-bordered">
+                    <table id="element-to-convert" class="table pelaporan table-bordered">
                     <thead>
                         <tr>
                             <th rowspan="2" scope="col">Tanggal</th>
@@ -178,17 +178,12 @@
                     </tbody>
                     </table>
                 </div>
-                <div class="d-flex justify-content-end">
-                   
-                </div>
+                    <div style="display: none;">
+                        <h1>fjdkfjdkfjdkjfkdjfkdjf</h1>
+                    </div>
                 </div>
             </div>
             </div>
-            
-            
-            <!-- /.row-->
-        
-            <!-- /.row-->
         </div>
     </div>
 </template>
@@ -199,6 +194,7 @@
     import { pencatatanStore, kandangStore, pelaporanStore } from '@/stores';
     import axios from 'axios'
     import moment from 'moment';
+    import jsPDF from "jspdf";
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
@@ -219,6 +215,8 @@
     const formatTanggalSubmit = (tanggal) => {
         return moment(tanggal).format('YYYY-MM-DD');
     }
+    const doc = new jsPDF("l", "px", [595, 2000]); 
+
 
     onMounted(() => {
         rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
@@ -226,6 +224,112 @@
         getPelaporan(null, rangeDate.start, rangeDate.end);
         getKandang();
     });
+
+    const generateData = function() {
+        const dataKandang = dataPelaporan.responseData.data.items;
+        const result = [];
+        dataKandang.forEach((item) => {
+            result.push({
+                tanggal_submit: formatTanggalSubmit(item.tanggal_submit),
+                nama_kandang: item.nama_kandang,
+                usia_mgg: item.usia_mgg ? item.usia_mgg : '-',
+                jumlah_mati: item.jumlah_mati ? item.jumlah_mati : '-',
+                jumlah_afkir: item.jumlah_afkir ? item.jumlah_afkir : '-',
+                jumlah_pindah: item.jumlah_pindah ? item.jumlah_pindah : '-',
+                jumlah_terima: item.jumlah_terima ? item.jumlah_terima : '-',
+                populasi_total: item.populasi_total ? item.populasi_total : '-',
+                telur_utuh: item.telur_utuh ? item.telur_utuh : '-',
+                telur_bentes: item.telur_bentes ? item.telur_bentes : '-',
+                total_telur: item.total_telur ? item.total_telur : '-',
+                percentase_telur: item.percentase_telur ? item.percentase_telur : '-',
+                berat_telur_gr: item.berat_telur_gr ? item.berat_telur_gr : '-',
+                berat_telur_utuh_kg: item.berat_telur_utuh_kg ? item.berat_telur_utuh_kg : '-',
+                berat_telur_bentes_kg: item.berat_telur_bentes_kg ? item.berat_telur_bentes_kg : '-',
+                berat_telur_kg: item.berat_telur_kg ? item.berat_telur_kg : '-',
+                std_egg_mass: item.std_egg_mass ? item.std_egg_mass : '-',
+                std_berat_telur: item.std_berat_telur ? item.std_berat_telur : '-',
+                berat_pakan_per_ekor_gram: item.berat_pakan_per_ekor_gram ? item.berat_pakan_per_ekor_gram : '-',
+                berat_pakan: item.berat_pakan ? item.berat_pakan : '-',
+                nama_jenis_pakan: item.nama_jenis_pakan ? item.nama_jenis_pakan : '-',
+                std_gr_perekor: item.std_gr_perekor ? item.std_gr_perekor : '-',
+                fc: item.fc ? item.fc : '-',
+                std_fc: item.std_fc ? item.std_fc : '-',
+                egg_mass: item.egg_mass ? item.egg_mass : '-',
+                nama_strain_ayam: item.nama_strain_ayam ? item.nama_strain_ayam : '-',
+                nama_treatment: item.nama_treatment ? item.nama_treatment : '-',
+
+            });
+        });
+        return result;
+    };
+
+    function createHeaders(keys) {
+        var result = [];
+        for (var i = 0; i < keys.length; i += 1) {
+            result.push({
+            id: keys[i],
+            name: keys[i],
+            prompt: keys[i],
+            width: 65,
+            align: "center",
+            padding: 0
+            });
+        }
+        return result;
+    }
+
+    const headers = createHeaders([
+        "tanggal_submit",
+        "nama_kandang",
+        "usia_mgg",
+        "jumlah_mati",
+        "jumlah_afkir",
+        "jumlah_pindah",
+        "jumlah_terima",
+        "populasi_total",
+        "telur_utuh",
+        "telur_bentes",
+        "total_telur",
+        "percentase_telur",
+        "berat_telur_gr",
+        "berat_telur_utuh_kg",
+        "berat_telur_bentes_kg",
+        "berat_telur_kg",
+        "std_egg_mass",
+        "std_berat_telur",
+        "berat_pakan_per_ekor_gram",
+        "berat_pakan",
+        "nama_jenis_pakan",
+        "std_gr_perekor",
+        "fc",
+        "std_fc",
+        "egg_mass",
+        "nama_strain_ayam",
+        "nama_treatment",
+        
+    ]);
+
+    function printLaporan() {
+        const namaKandang = ref('');
+        if (idKandang.value == 0) {
+            namaKandang.value = 'Semua Kandang';
+        } else {
+            namaKandang.value = dataKandang.responseData.data.items.find(item => item.id == idKandang.value).nama;
+        }
+        doc.setFontSize(24);
+        doc.text(`Nama Kandang: ${namaKandang.value}`, 10, 30)
+        doc.text(`Tanggal: ${rangeDate.start} - ${rangeDate.end}`, 10, 60)
+        // doc.html(document.getElementById('element-to-convert'), {
+        //     callback: function (doc) {
+        //         doc.save("a4.pdf")
+        //     },
+        //     x: 10,
+        //     y: 10,
+        // });
+        doc.table(10, 90, generateData(), headers, { autoSize: true });
+        doc.save("laporan.pdf")
+
+    }
 
     function inputDate() {
        console.log("Input Data : ", selectedDate);
