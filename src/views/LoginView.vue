@@ -16,13 +16,13 @@
                     <div class="mb-4">
                       <Field name="username" type="text" placeholder="Email atau nomor telepon" class="form-control" :class="{ 'is-invalid': errors.username }" />
                       <div class="invalid-feedback">{{errors.username}}</div>
-                      <small class="form-text color-text-rossa">Lupa email?</small>
+                      <!-- <small class="form-text color-text-rossa">Lupa email?</small> -->
                     </div>
                     <div class="mb-4">
                       <Field name="password" placeholder="Password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" />
                       <div class="invalid-feedback">{{errors.password}}</div>
                       <small class="form-text color-text-rossa">Lupa password?</small> <br>
-                      <small class="form-text color-text-rossa">Belum pernah daftar? <span>Sign in</span></small>
+                      <!-- <small class="form-text color-text-rossa">Belum pernah daftar? <span>Sign in</span></small> -->
                     </div>
                     <div class="row">
                       <div class="col-12 text-end">

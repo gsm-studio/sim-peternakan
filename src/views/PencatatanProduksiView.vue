@@ -79,20 +79,22 @@
                             
                             </div>
                         </div>
+                        <template v-if="dataPencatatan.responseData">
                         <CChart
                             type="bar"
                             :data="{
-                                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                                labels: ['Telur Utuh', 'Telur Bentes', 'Berat Utuh', 'Berat Bentes'],
                                 datasets: [
-                                {
-                                    label: 'GitHub Commits',
-                                    backgroundColor: '#f87979',
-                                    data: [40, 20, 12, 39, 10, 40, 39, 80, 40],
-                                },
+                                    {
+                                        label: 'Total',
+                                        backgroundColor: '#5CA882',
+                                        data: [dataPencatatan.responseData.data.items[0].telur_utuh ?? 0, dataPencatatan.responseData.data.items[0].telur_bentes ?? 0, dataPencatatan.responseData.data.items[0].berat_utuh ?? 0, dataPencatatan.responseData.data.items[0].berat_bentes ?? 0]
+                                    },
                                 ],
                             }"
                             labels="months"
                         />
+                        </template>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <span> 
@@ -145,31 +147,28 @@
                             <div class="small color-text-rossa">{{ totalTerima }}</div>
                         </div>
                         </div>
-                        <CChart
-                            type="line"
-                            :wrapper="false"
-                            :data="{
-                                labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                                datasets: [
-                                {
-                                    label: 'My First dataset',
-                                    backgroundColor: 'rgba(220, 220, 220, 0.2)',
-                                    borderColor: 'rgba(220, 220, 220, 1)',
-                                    pointBackgroundColor: 'rgba(220, 220, 220, 1)',
-                                    pointBorderColor: '#fff',
-                                    data: [40, 20, 12, 39, 10, 40, 39]
-                                },
-                                {
-                                    label: 'My Second dataset',
-                                    backgroundColor: 'rgba(151, 187, 205, 0.2)',
-                                    borderColor: 'rgba(151, 187, 205, 1)',
-                                    pointBackgroundColor: 'rgba(151, 187, 205, 1)',
-                                    pointBorderColor: '#fff',
-                                    data: [50, 12, 28, 29, 7, 25, 12]
-                                }
-                                ]
-                            }"
-                        />
+                        <div>
+                            <template v-if="dataPencatatan.responseData">
+                            <CChart
+                                type="line"
+                                :wrapper="false"
+                                :data="{
+                                    labels: ['Mati', 'Afkir', 'Pindah', 'Terima'],
+                                    datasets: [
+                                    {
+                                        label: 'Total',
+                                        backgroundColor: 'rgba(220, 220, 220, 0.2)',
+                                        borderColor: 'rgba(220, 220, 220, 1)',
+                                        pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+                                        pointBorderColor: '#e55353',
+                                        data: [dataPencatatan.responseData.data.items[0].jumlah_mati ?? 0, dataPencatatan.responseData.data.items[0].jumlah_afkir ?? 0, dataPencatatan.responseData.data.items[0].jumlah_pindah ?? 0, dataPencatatan.responseData.data.items[0].jumlah_terima ?? 0]
+                                    },
+                                
+                                    ]
+                                }"
+                             />
+                            </template>
+                        </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <span> 
