@@ -77,8 +77,8 @@
                         <template v-if="dataPenjadwalan.responseData">
                         <tr v-for="item in dataPenjadwalan.responseData.data.items" :key="item.id">
                             <td>{{ item.id }}</td>
-                            <td>{{ getNamaTugas(item.id_tugas) }}</td>
-                            <td>{{ getNamaKandang(item.id_kandang) }}</td>
+                            <td>{{ item.tugas.nama }}</td>
+                            <td>{{ item.kandang.nama }}</td>
                             <td>{{ formatTanggal(item.waktu_pelaksanaan) }}</td>
                             <td>{{ item.deskripsi }}</td>
                             <td>
@@ -168,8 +168,8 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Nama Tugas : {{ getNamaTugas(detailPenjadwalan.id_tugas) }}</p>
-                    <p>Nama Kandang : {{ getNamaKandang(detailPenjadwalan.id_kandang) }}</p>
+                    <p>Nama Tugas : {{ detailPenjadwalan.nama_tugas }}</p>
+                    <p>Nama Kandang : {{ detailPenjadwalan.nama_kandang }}</p>
                     <p>Waktu Pelaksanaan : {{ formatTanggal(detailPenjadwalan.waktu_pelaksanaan) }}</p>
                     <p>Deskripsi : {{ detailPenjadwalan.deskripsi }}</p>
                 </div>
@@ -259,6 +259,8 @@
         id_kandang: '',
         waktu_pelaksanaan: '',
         deskripsi: '',
+        nama_tugas: '',
+        nama_kandang: '',
     });
 
     let search = ref("");
@@ -493,6 +495,8 @@
                 detailPenjadwalan.id_kandang = response.data.data.id_kandang;
                 detailPenjadwalan.waktu_pelaksanaan = response.data.data.waktu_pelaksanaan;
                 detailPenjadwalan.deskripsi = response.data.data.deskripsi;
+                detailPenjadwalan.nama_tugas = response.data.data.tugas.nama;
+                detailPenjadwalan.nama_kandang = response.data.data.kandang.nama;
                 console.log(detailPenjadwalan);
             })
             .catch(error => {

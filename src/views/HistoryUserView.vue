@@ -142,7 +142,7 @@
         })
             .then(response => {
                 dataHistory.setResponseData(response.data);
-                console.log(dataHistory);
+                console.log(response);
             })
             .catch(error => {
                 console.error(error);
