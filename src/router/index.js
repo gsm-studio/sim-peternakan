@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '@/stores';
+import { ref } from 'vue';
 
 import DashboardView from '../views/DashboardView.vue'
 import PencatatanProduksiView from '../views/PencatatanProduksiView.vue'
@@ -94,11 +95,26 @@ router.beforeEach(async (to) => {
   const publicPages = ['/login'];
   const authRequired = !publicPages.includes(to.path);
   const auth = useAuthStore();
+  const role = auth.user ? auth.user.data.roles[0].nama : null;
+  const superadmin = ref('Administrator12');
+  const adminKandang = ref('Admin Kandang');
+  const adminKantor = ref('Admin Kantor');
+  const getPathUrl = ref(to.path);
 
   if (authRequired && !auth.user) {
       auth.returnUrl = to.fullPath;
       return '/login';
   }
+
+  if (role == adminKantor.value && getPathUrl.value == '/validasi-data') {
+    return '/';
+  }
+
+  if (role == adminKandang.value && getPathUrl.value == '/validasi-data' || role == adminKandang.value && getPathUrl.value == '/kandang' || role == adminKandang.value && getPathUrl.value == '/karyawan' || role == adminKandang.value && getPathUrl.value == '/standar-pemeliharaan' || role == adminKandang.value && getPathUrl.value == '/history-user' || role == adminKandang.value && getPathUrl.value == '/jenis-pakan' || role == adminKandang.value && getPathUrl.value == '/strain-ayam' || role == adminKandang.value && getPathUrl.value == '/treatment') {
+    return '/';
+  }
+  
+
 });
 
 export default router
