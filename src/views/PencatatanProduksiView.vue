@@ -56,11 +56,11 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
                                     <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
                                     </svg>
-                                <h5 class="card-title mb-0 text-secondary">{{ (parseInt(totalBeratTelurUtuh) + parseInt(totalBeratTelurBentes)) / (parseInt(totalTelurUtuh) + parseInt(totalTelurBentes)) }} gr/butir</h5>
+                                <h5 class="card-title mb-0 text-secondary">{{ ((parseInt(totalBeratTelurUtuh) + parseInt(totalBeratTelurBentes)) / (parseInt(totalTelurUtuh) + parseInt(totalTelurBentes))).toFixed(2) }} gr/butir</h5>
                                 </div>
-                                <small class="color-text-rossa">
+                                <!-- <small class="color-text-rossa">
                                 (20,1 %)
-                                </small>
+                                </small> -->
                                 <div class="row mt-3">
                                 <div class="col text-center">
                                     <p>Telur utuh</p>
@@ -79,7 +79,7 @@
                             
                             </div>
                         </div>
-                        <template v-if="dataPencatatan.responseData">
+                        <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
                         <CChart
                             type="bar"
                             :data="{
@@ -148,7 +148,7 @@
                         </div>
                         </div>
                         <div>
-                            <template v-if="dataPencatatan.responseData">
+                            <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
                             <CChart
                                 type="line"
                                 :wrapper="false"
@@ -193,15 +193,15 @@
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col">
-                                        <h5 class="card-title mb-0">3000 kg</h5>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
+                                        <h5 class="card-title mb-0">{{ detailPencatatan.berat_pakan }} kg</h5>
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
                                             <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
                                         </svg>
-                                        <h5 class="card-title mb-0 text-secondary">85.7 gram/ekor</h5>
+                                        <h5 class="card-title mb-0 text-secondary">85.7 gram/ekor</h5> -->
                                     </div>
                                     <div class="col">
-                                        <h5 class="card-title mb-0">Standar pakan</h5>
-                                        <h5 class="card-title mb-0 text-secondary">90.2 gr/ekor</h5>
+                                        <!-- <h5 class="card-title mb-0">Standar pakan</h5> -->
+                                        <!-- <h5 class="card-title mb-0 text-secondary">90.2 gr/ekor</h5> -->
                                     </div>
                                     
                                 </div>
@@ -220,7 +220,7 @@
                                 </svg>
                             </div>
                             <div class="col-md-6">
-                                <CChart
+                                <!-- <CChart
                                     type="line"
                                     :wrapper="false"
                                     :data="{
@@ -244,7 +244,7 @@
                                         }
                                         ]
                                     }"
-                                />
+                                /> -->
                             </div>
                         </div>
                     </div>
@@ -774,6 +774,7 @@
         catatan: '',
         populasi_ayam: '',
         tanggal_submit: '',
+        berat_pakan: 0,
     });
 
     const detailStandart = reactive({
@@ -1035,6 +1036,7 @@
                 detailPencatatan.id_jenis_pakan = response.data.data.id_jenis_pakan;
                 detailPencatatan.catatan = response.data.data.catatan;
                 detailPencatatan.tanggal_submit = response.data.data.tanggal_submit;
+                detailPencatatan.berat_pakan = response.data.data.berat_pakan ? response.data.data.berat_pakan : 0;
               
                 getIdPakan(detailPencatatan.id_jenis_pakan);
                 // console.log("Detail Pencatatan : ", detailPencatatan);
@@ -1060,7 +1062,7 @@
             .then(response => {
                 dataPencatatan.setResponseData(response.data);
                 detailPencatatan.populasi_ayam = dataPencatatan.responseData.data.total_populasi;
-                // console.log("List Pencatatan : ", dataPencatatan.responseData.data.total_populasi);
+                console.log("List Pencatatan : ", dataPencatatan.responseData);
                 getTotal();
             })
             .catch(error => {

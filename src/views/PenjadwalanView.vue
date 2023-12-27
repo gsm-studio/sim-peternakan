@@ -9,10 +9,11 @@
                 <h4 class="mb-5">Penjadwalan</h4>
                 <div class="d-flex justify-content-between">
                     <!-- Button trigger modal -->
-                    <button type="button" class="btn btn-success bg-button-rossa" data-bs-toggle="modal" data-bs-target="#createModal">
-                        Atur Jadwal
-                    </button>
-                    
+                    <template v-if="role == adminKantor || role == superadmin">
+                        <button type="button" class="btn btn-success bg-button-rossa" data-bs-toggle="modal" data-bs-target="#createModal">
+                            Atur Jadwal
+                        </button>
+                    </template>
                     <!-- Modal -->
                     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -90,8 +91,10 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
                                     <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdPenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
-                                    <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdPenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
-                                    <a @click="deletePenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                                    <template v-if="role == adminKantor || role == superadmin">
+                                        <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdPenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                        <a @click="deletePenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                                    </template>
                                 </div>
                             </td>
                         </tr>
@@ -229,6 +232,11 @@
     import moment from 'moment';
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
+    const user = localStorage.getItem('user');
+    const role = JSON.parse(user) ? JSON.parse(user).data.roles[0].nama : '';
+    const superadmin = ref('Administrator12');
+    const adminKandang = ref('Admin Kandang');
+    const adminKantor = ref('Admin Kantor');
 
     const schema = Yup.object().shape({
         id_tugas: Yup.string().required('Tugas is required'),

@@ -46,7 +46,9 @@
                          </p>
                     </div>
                     <div class="d-inline">
-                        <button @click="printLaporan()" type="button" class="btn btn-success bg-button-rossa">Download laporan</button>
+                        <template v-if="role == adminKantor || role == superadmin">
+                            <button @click="printLaporan()" type="button" class="btn btn-success bg-button-rossa">Download laporan</button>
+                        </template>
                     </div>
                 </div> 
                 <!-- <div class="d-flex">
@@ -245,6 +247,11 @@
     import jsPDF from "jspdf";
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
+    const user = localStorage.getItem('user');
+    const role = JSON.parse(user) ? JSON.parse(user).data.roles[0].nama : '';
+    const superadmin = ref('Administrator12');
+    const adminKandang = ref('Admin Kandang');
+    const adminKantor = ref('Admin Kantor');
 
     const dataPencatatan = reactive(pencatatanStore());
     const dataKandang = reactive(kandangStore());
@@ -520,6 +527,8 @@
                 console.error(error);
             });
     }
+
+
 
    
 </script>

@@ -236,3 +236,10 @@
     </ul>
   </div>
 </template>
+
+<style scoped>
+  .nav-group-items a.router-link-active {
+    background-color: #57c87d !important;
+    color: #FFF !important;
+  }
+</style>
