@@ -69,9 +69,28 @@
                 <div class="d-flex justify-content-between">
                     <!-- Button trigger modal -->
                     <div> 
-                        <button type="button" class="btn btn-success bg-button-rossa">
+                        <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="ms-3 btn btn-success bg-button-rossa">
                         Filter
                         </button>
+                        <div class="dropdown-menu dropdown-menu-start p-3 shadow">
+                            <select v-model="idStrain" @change="getStandart(currentPage, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <option value="0" selected> 
+                                Semua Strain Ayam 
+                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                </svg>
+                            </option>
+                            <template v-if="dataStrain.responseData">
+                                <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">
+                                    {{ item.nama }}
+                                </option>
+                            </template>
+                            <template v-else>
+                                <option>Belum ada strain ayam</option>
+                            </template>
+                            </select> 
+                            
+                        </div>
                     </div>
         
                     <div class="d-flex">
@@ -302,7 +321,7 @@
 
     const currentPage = ref(1);
     const pageSize = ref(10);
-    const totalItems = dataStandart.responseData ? dataStandart.responseData.data.total_record : 0;
+    const totalItems = ref(0);
 
     const schema = Yup.object().shape({
         id_strain_ayam: Yup.string().required('Strain ayam is required'),
@@ -317,14 +336,15 @@
     });
 
     const onClickHandler = (page) => {
-        getStandart(page);
+        getStandart(page, idStrain.value);
     };
 
     const namaStrain = ref('');
+    const idStrain = ref(0);
 
     onMounted(() => {
-        getStandart(1)
-        // getRole()
+        getStandart(1, null);
+        getStrain();
     });
 
     function alert(icon, title) {
@@ -347,7 +367,7 @@
 
     function clearSearch() {
         search.value = '';
-        getStandart(1);
+        getStandart(1, null);
     }
 
     function searchItem() {
@@ -380,11 +400,15 @@
         return namaStrain.value;
     }
 
-    async function getStandart(page_number) {
+    async function getStandart(page_number, id_strain_ayam = null) {
+        if(id_strain_ayam == 0) {
+            id_strain_ayam = null;
+        }
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/standar_pemeliharaan', {
             params: {
+                id_strain_ayam: id_strain_ayam,
                 page_number: page_number, 
                 page_size: pageSize.value, 
             },
@@ -395,6 +419,7 @@
         })
             .then(response => {
                 dataStandart.setResponseData(response.data);
+                totalItems.value = dataStandart.responseData ? dataStandart.responseData.data.total_record : 0;
                 console.log(dataStandart);
             })
             .catch(error => {
@@ -442,7 +467,7 @@
         })
             .then(response => {
                 console.log(response);
-                getStandart(1);
+                getStandart(1, idStrain.value);
                 alert('success', 'Data berhasil ditambahkan');
                 closeModal();
             })
@@ -477,7 +502,7 @@
             .then(response => {
                 console.log(response);
                 alert('success', 'Data berhasil diubah');
-                getStandart(1);
+                getStandart(1, idStrain.value);
                 closeModal();
             })
             .catch(error => {
@@ -526,7 +551,7 @@
             .then(response => {
                 console.log(response);
                 alert('success', 'Data berhasil dihapus');
-                getStandart(1);
+                getStandart(1, idStrain.value);
             })
             .catch(error => {
                 alert('error', error.response.data.message);

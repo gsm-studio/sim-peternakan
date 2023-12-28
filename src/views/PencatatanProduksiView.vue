@@ -79,7 +79,7 @@
                             
                             </div>
                         </div>
-                        <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
+                        <!-- <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
                         <CChart
                             type="bar"
                             :data="{
@@ -94,7 +94,21 @@
                             }"
                             labels="months"
                         />
-                        </template>
+                        </template> -->
+                        <CChart
+                            type="bar"
+                            :data="{
+                                labels: ['01', '02', '03', '04', '05', '06'],
+                                datasets: [
+                                    {
+                                        label: 'Hari',
+                                        backgroundColor: '#5CA882',
+                                        data: ['300', '400', '500', '600', '400', '200']
+                                    },
+                                ],
+                            }"
+                            labels="months"
+                        />
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <span> 
@@ -148,7 +162,7 @@
                         </div>
                         </div>
                         <div>
-                            <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
+                            <!-- <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
                             <CChart
                                 type="line"
                                 :wrapper="false"
@@ -167,7 +181,25 @@
                                     ]
                                 }"
                              />
-                            </template>
+                            </template> -->
+                            <CChart
+                                type="line"
+                                :wrapper="false"
+                                :data="{
+                                    labels: ['01', '02', '03', '04', '05', '06'],
+                                    datasets: [
+                                    {
+                                        label: 'Hari',
+                                        backgroundColor: 'rgba(220, 220, 220, 0.2)',
+                                        borderColor: 'rgba(220, 220, 220, 1)',
+                                        pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+                                        pointBorderColor: '#e55353',
+                                        data: ['300', '400', '500', '600', '400', '200']
+                                    },
+                                
+                                    ]
+                                }"
+                             />
                         </div>
                     </div>
                     <div class="card-footer d-flex justify-content-between">
@@ -871,6 +903,7 @@
     const formatTanggalSubmit = (tanggal) => {
         return moment(tanggal).format('YYYY-MM-DD');
     }
+    
 
     function nextStep(values) {
     if (currentStep.value === 3) {
@@ -1246,5 +1279,15 @@
 table thead {
     background-color: #F2F2F2;
     color: #000000;
+}
+
+table thead tr:nth-child(1) th {
+    background-color: #D2EADD;
+}
+table thead tr:nth-child(2) th {
+    background-color: rgba(225, 244, 234, 1);
+}
+table tbody tr:nth-child(1) td {
+    background-color: rgba(15, 169, 88, 0.3);
 }
 </style>

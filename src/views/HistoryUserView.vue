@@ -25,9 +25,28 @@
                         <!-- <button type="button" class="btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
                         Select
                         </button> -->
-                        <button type="button" class="ms-3 btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
+                        <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="ms-3 btn btn-success bg-button-rossa">
                         Filter
                         </button>
+                        <div class="dropdown-menu dropdown-menu-start p-3 shadow">
+                            <select v-model="idKaryawan" @change="getHistory(currentPage, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <option value="0" selected> 
+                                Semua Karyawan 
+                                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                </svg>
+                            </option>
+                            <template v-if="dataKaryawan.responseData">
+                                <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                    {{ item.nama }}
+                                </option>
+                            </template>
+                            <template v-else>
+                                <option>Belum ada karyawan</option>
+                            </template>
+                            </select> 
+                            
+                        </div>
                     </div>
                     
             
@@ -93,7 +112,7 @@
 <script setup>
     import HeaderItem from '../components/HeaderItem.vue'
     import { onMounted, ref, reactive } from 'vue';
-    import { historyStore } from '@/stores';
+    import { historyStore, karyawanStore } from '@/stores';
     import axios from 'axios';
     import * as Yup from 'yup';
     import moment from 'moment';
@@ -101,12 +120,13 @@
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
     const dataHistory = reactive(historyStore());
+    const dataKaryawan = reactive(karyawanStore());
     const currentPage = ref(1);
     const pageSize = ref(10);
-    const totalItems = dataHistory.responseData ? dataHistory.responseData.data.total_record : 0;
-
+    const totalItems = ref(0);
+    const idKaryawan = ref(0);
     const onClickHandler = (page) => {
-        getHistory(page);
+        getHistory(page, idKaryawan.value);
     };
     const formatTanggal = (tanggal) => {
         return moment(tanggal).format('DD-MM-YYYY');
@@ -114,12 +134,14 @@
     let search = ref("");
 
     onMounted(() => {
-      getHistory(currentPage.value);
+        getHistory(currentPage.value, null);
+        getKaryawan();
+        
     });
 
     function clearSearch() {
         search.value = '';
-        getHistory(1);
+        getHistory(1, idKaryawan.value);
     }
 
     function searchItem() {
@@ -128,11 +150,15 @@
     }
 
 
-    async function getHistory(page_number) {
+    async function getHistory(page_number, id_karyawan = null) {
+        if(id_karyawan == 0) {
+            id_karyawan = null;
+        }
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/user_histories', {
             params: {
+                id_karyawan: id_karyawan,
                 page_number: page_number, 
                 page_size: pageSize.value, 
             },
@@ -142,6 +168,7 @@
         })
             .then(response => {
                 dataHistory.setResponseData(response.data);
+                totalItems.value = dataHistory.responseData ? dataHistory.responseData.data.total_record : 0;
                 console.log(response);
             })
             .catch(error => {
@@ -163,6 +190,23 @@
             .then(response => {
                 dataHistory.setResponseData(response.data);
                 console.log(dataHistory.responseData);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    async function getKaryawan() {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/karyawan', {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataKaryawan.setResponseData(response.data);
+                console.log(dataKaryawan);
             })
             .catch(error => {
                 console.error(error);

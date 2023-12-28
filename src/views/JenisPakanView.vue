@@ -33,9 +33,9 @@
                         <!-- <button type="button" class="btn btn-success bg-button-rossa">
                         Select
                         </button> -->
-                        <button type="button" class="btn btn-success bg-button-rossa ms-2">
+                        <!-- <button type="button" class="btn btn-success bg-button-rossa ms-2">
                         Filter
-                        </button>
+                        </button> -->
                     </div>
                     
                    

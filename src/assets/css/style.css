@@ -288,6 +288,18 @@ header .input-group.search span {
   vertical-align: middle;
 }
 
+.table thead th {
+  color: rgba(84, 134, 107, 1) !important;
+}
+
+.table td, .table th {
+  color: rgba(29, 25, 43, 1) !important;
+}
+
+.table tbody tr:nth-child(1) td {
+  background-color: rgba(226, 248, 236, 1);
+}
+
 /* .table.pelaporan thead tr:first-child {
   background-color: #D2EADD;
   color: #54866B;

@@ -14,26 +14,21 @@
                     <div class="d-flex justify-content-between mt-4">
                       <div>
                         <div class="small text-medium-emphasis mb-2">
-                          Egg Mass Average 
+                          {{ namaFilter }}
                           <a data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="color-text-rossa ms-3">Filter</a>
                           <div class="dropdown-menu dropdown-menu-start p-3">
-                              <select v-model="idKandang" @change="getPelaporan($event.target.value, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                              <select v-model="filter" @change="getFilter($event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
-                                    Semua kandang 
+                                    Pilih Filter 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
                                     <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
                                     </svg>
                                 </option>
-                                <template v-if="dataKandang.responseData">
-                                    <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">
-                                        {{ item.id }} - {{ item.nama }}
-                                    </option>
-                                </template>
-                                <template v-else>
-                                    <option>Belum ada kandang</option>
-                                </template>
+                                <option value="avg">Avg. % persentase produksi</option>
+                                <option value="fc">FC</option>
+                                <option value="egg_mass">Egg mass</option>
                               </select> 
-                              <Datepicker
+                              <!-- <Datepicker
                                   :date-format="{
                                       day: '2-digit',
                                       month: '2-digit',
@@ -42,11 +37,11 @@
                                   range
                                   v-model="selectedDate"
                                   lang="en"
-                              />
+                              /> -->
                           </div>
                         </div>
                        
-                        <h5 class="card-title mb-0">{{ detailPelaporan.avg_egg_mass }} gr/butir</h5>
+                        <h5 class="card-title mb-0">{{ dataGrafikBatangHari1 }} gr/butir</h5>
                         <!-- <small>
                           <svg class="icon color-text-rossa">
                             <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
@@ -65,8 +60,8 @@
                         </router-link>
                       </div>
                     </div>
-                    <div class="c-chart-wrapper" style="height:300px;margin-top:40px;">
-                      <CChart
+                    <div class="c-chart-wrapper" style="margin-top:40px;">
+                      <!-- <CChart
                           type="bar"
                           :data="{
                             labels: ['Telur Utuh', 'Telur Bentes'],
@@ -90,6 +85,20 @@
                                 label: 'Rata-rata Berat (kg)',
                                 backgroundColor: '#D9D9D9',
                                 data: [detailPelaporan.avg_berat_telur_utuh_kg, detailPelaporan.avg_berat_telur_bentes_kg],
+                              },
+                            ],
+                          }"
+                          labels="Diagram Batang"
+                        /> -->
+                        <CChart
+                          type="bar"
+                          :data="{
+                            labels: ['01', '02', '03', '04', '05', '06', '07'],
+                            datasets: [
+                              {
+                                label: 'Hari',
+                                backgroundColor: '#5CA882',
+                                data: [dataGrafikBatangHari1, dataGrafikBatangHari2, dataGrafikBatangHari3, dataGrafikBatangHari4, dataGrafikBatangHari5, dataGrafikBatangHari6, dataGrafikBatangHari7],
                               },
                             ],
                           }"
@@ -149,7 +158,7 @@
                       </div>
                     </div>
                     <div>
-                      <CChart
+                      <!-- <CChart
                           type="line"
                           :wrapper="false"
                           :data="{
@@ -171,6 +180,24 @@
                                 pointBorderColor: '#dc3545',
                                 data: [detailPelaporan.avg_jumlah_mati, 0, 0, 0, detailPelaporan.avg_populasi_total]
                               }
+                            ]
+                          }"
+                        /> -->
+                        <CChart
+                          type="line"
+                          :wrapper="false"
+                          :data="{
+                            labels: ['01', '02', '03', '04', '05', '06', '07'],
+                            datasets: [
+                              {
+                                label: 'Mati',
+                                backgroundColor: 'rgba(220, 220, 220, 0.2)',
+                                borderColor: 'rgba(220, 220, 220, 1)',
+                                pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+                                pointBorderColor: '#dc3545',
+                                data: [dataGrafikGarisHari1, dataGrafikGarisHari2, dataGrafikGarisHari3, dataGrafikGarisHari4, dataGrafikGarisHari5, dataGrafikGarisHari6, dataGrafikGarisHari7]
+                              },
+                             
                             ]
                           }"
                         />
@@ -233,7 +260,7 @@
                         Pakan 
                         <span class="color-text-rossa ms-3">{{ namaKandang }}</span>
                       </div>
-                      <div class="d-flex justify-content-around mb-3">
+                      <div class="pakan d-flex justify-content-around mb-3">
                         <h5 class="card-title mb-0">{{ detailPelaporan.avg_berat_pakan }} kg</h5>
                         <h5 class="card-title mb-0">{{ detailPelaporan.avg_berat_pakan_per_ekor_gram }} gram/ekor</h5>
                       </div>
@@ -298,8 +325,11 @@
     }
   const namaKandang = ref('Semua kandang');
   const getListNamaPakan = ref([]);
+  const today = new Date();
+  const sixDaysAgo = new Date(); 
+  sixDaysAgo.setDate(sixDaysAgo.getDate() - 6);
   const selectedDate = ref([
-        new Date(2022, 1, 1),
+        sixDaysAgo,
         new Date()
   ]);
   const rangeDate = reactive({
@@ -337,29 +367,207 @@
   });
   const filteredPakan = ref([]);
   const uniquePakan = ref([]);
+  const filter = ref('avg');
+  const dataGrafikBatangHari1 = ref(0);
+  const dataGrafikBatangHari2 = ref(0);
+  const dataGrafikBatangHari3 = ref(0);
+  const dataGrafikBatangHari4 = ref(0);
+  const dataGrafikBatangHari5 = ref(0);
+  const dataGrafikBatangHari6 = ref(0);
+  const dataGrafikBatangHari7 = ref(0);
+  const dataGrafikGarisHari1 = ref(0);
+  const dataGrafikGarisHari2 = ref(0);
+  const dataGrafikGarisHari3 = ref(0);
+  const dataGrafikGarisHari4 = ref(0);
+  const dataGrafikGarisHari5 = ref(0);
+  const dataGrafikGarisHari6 = ref(0);
+  const dataGrafikGarisHari7 = ref(0);
+  const namaFilter = ref('');
+  let hari1 = [];
+  let hari2 = [];
+  let hari3 = [];
+  let hari4 = [];
+  let hari5 = [];
+  let hari6 = [];
+  let hari7 = [];
 
   onMounted(() => {
-      formatRangeDate.start = moment(selectedDate.value[0]).format("DD MMMM YYYY");
-      formatRangeDate.end = moment(selectedDate.value[1]).format("DD MMMM YYYY");
-      rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
-      rangeDate.end = moment(selectedDate.value[1]).format("YYYY-MM-DD");
-      getPelaporan(null, rangeDate.start, rangeDate.end);
-      getPenjadwalan()
-      getKandang()
-      getPakan()
-     
+    console.log("Tanggal 6 hari yang lalu:", sixDaysAgo);
+    formatRangeDate.start = moment(selectedDate.value[0]).format("DD MMMM YYYY");
+    formatRangeDate.end = moment(selectedDate.value[1]).format("DD MMMM YYYY");
+    rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
+    rangeDate.end = moment(selectedDate.value[1]).format("YYYY-MM-DD");
+    getPelaporan(null, rangeDate.start, rangeDate.end);
+    getPenjadwalan()
+    getKandang()
+    getPakan()
+    
     
   });
 
-  function inputDate() {
-       console.log("Input Data : ", selectedDate);
-  }
   watch(selectedDate, (newValue, oldValue) => {
         date.value = new Date(newValue[0]);
         rangeDate.start = moment(newValue[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(newValue[1]).format("YYYY-MM-DD");
         getPelaporan(idKandang.value, rangeDate.start, rangeDate.end);
     });
+
+  function getDataGrafikGaris() {
+        if(hari1.length > 0) {
+            dataGrafikGarisHari1.value = hari1[0].sumall_jumlah_mati;
+
+        } else {
+            dataGrafikGarisHari1.value = 0;
+        }
+        if(hari2.length > 0) {
+            dataGrafikGarisHari2.value = hari2[0].sumall_jumlah_mati;
+        } else {
+            dataGrafikGarisHari2.value = 0;
+        }
+        if(hari3.length > 0) {
+            dataGrafikGarisHari3.value = hari3[0].sumall_jumlah_mati;
+        } else {
+            dataGrafikGarisHari3.value = 0;
+        }
+        if(hari4.length > 0) {
+            dataGrafikGarisHari4.value = hari4[0].sumall_jumlah_mati;
+        } else {
+            dataGrafikGarisHari4.value = 0;
+        }
+        if(hari5.length > 0) {
+            dataGrafikGarisHari5.value = hari5[0].sumall_jumlah_mati;
+        } else {
+            dataGrafikGarisHari5.value = 0;
+        }
+        if(hari6.length > 0) {
+            dataGrafikGarisHari6.value = hari6[0].sumall_jumlah_mati;
+        } else {
+            dataGrafikGarisHari6.value = 0;
+        }
+        if(hari7.length > 0) {
+            dataGrafikGarisHari7.value = hari7[0].sumall_jumlah_mati;
+        } else {
+            dataGrafikGarisHari7.value = 0;
+        }
+  }
+
+  function getFilter(value) {
+        if (value === 'avg') {
+          namaFilter.value = 'Avg. % persentase produksi';
+         
+           if(hari1.length > 0) {
+                dataGrafikBatangHari1.value = hari1[0].percentase_telur;
+           } else {
+                dataGrafikBatangHari1.value = 0;
+           }
+           if(hari2.length > 0) {
+                dataGrafikBatangHari2.value = hari2[0].percentase_telur;
+                console.log("Hari 2:", dataGrafikBatangHari2.value);
+           } else {
+                dataGrafikBatangHari2.value = 0;
+           }
+           if(hari3.length > 0) {
+                dataGrafikBatangHari3.value = hari3[0].percentase_telur;
+           } else {
+                dataGrafikBatangHari3.value = 0;
+           }
+           if(hari4.length > 0) {
+                dataGrafikBatangHari4.value = hari4[0].percentase_telur;
+           } else {
+                dataGrafikBatangHari4.value = 0;
+           }
+           if(hari5.length > 0) {
+                dataGrafikBatangHari5.value = hari5[0].percentase_telur;
+           } else {
+                dataGrafikBatangHari5.value = 0;
+           }
+           if(hari6.length > 0) {
+                dataGrafikBatangHari6.value = hari6[0].percentase_telur;
+           } else {
+                dataGrafikBatangHari6.value = 0;
+           }
+           if(hari7.length > 0) {
+                dataGrafikBatangHari7.value = hari7[0].percentase_telur;
+           } else {
+                dataGrafikBatangHari7.value = 0;
+           }
+          
+        } else if (value === 'fc') {
+          namaFilter.value = 'Avg FC';
+          if(hari1.length > 0) {
+                dataGrafikBatangHari1.value = hari1[0].avg_fc;
+           } else {
+                dataGrafikBatangHari1.value = 0;
+           }
+           if(hari2.length > 0) {
+                dataGrafikBatangHari2.value = hari2[0].avg_fc;
+           } else {
+                dataGrafikBatangHari2.value = 0;
+           }
+           if(hari3.length > 0) {
+                dataGrafikBatangHari3.value = hari3[0].avg_fc;
+           } else {
+                dataGrafikBatangHari3.value = 0;
+           }
+           if(hari4.length > 0) {
+                dataGrafikBatangHari4.value = hari4[0].avg_fc;
+           } else {
+                dataGrafikBatangHari4.value = 0;
+           }
+           if(hari5.length > 0) {
+                dataGrafikBatangHari5.value = hari5[0].avg_fc;
+           } else {
+                dataGrafikBatangHari5.value = 0;
+           }
+           if(hari6.length > 0) {
+                dataGrafikBatangHari6.value = hari6[0].avg_fc;
+           } else {
+                dataGrafikBatangHari6.value = 0;
+           }
+           if(hari7.length > 0) {
+                dataGrafikBatangHari7.value = hari7[0].avg_fc;
+           } else {
+                dataGrafikBatangHari7.value = 0;
+           }
+        } else if (value === 'egg_mass') {
+          namaFilter.value = 'Avg Egg Mass';
+          if(hari1.length > 0) {
+                dataGrafikBatangHari1.value = hari1[0].avg_egg_mass;
+           } else {
+                dataGrafikBatangHari1.value = 0;
+           }
+           if(hari2.length > 0) {
+                dataGrafikBatangHari2.value = hari2[0].avg_egg_mass;
+           } else {
+                dataGrafikBatangHari2.value = 0;
+           }
+           if(hari3.length > 0) {
+                dataGrafikBatangHari3.value = hari3[0].avg_egg_mass;
+           } else {
+                dataGrafikBatangHari3.value = 0;
+           }
+           if(hari4.length > 0) {
+                dataGrafikBatangHari4.value = hari4[0].avg_egg_mass;
+           } else {
+                dataGrafikBatangHari4.value = 0;
+           }
+           if(hari5.length > 0) {
+                dataGrafikBatangHari5.value = hari5[0].avg_egg_mass;
+           } else {
+                dataGrafikBatangHari5.value = 0;
+           }
+           if(hari6.length > 0) {
+                dataGrafikBatangHari6.value = hari6[0].avg_egg_mass;
+           } else {
+                dataGrafikBatangHari6.value = 0;
+           }
+           if(hari7.length > 0) {
+                dataGrafikBatangHari7.value = hari7[0].avg_egg_mass;
+           } else {
+                dataGrafikBatangHari7.value = 0;
+           }
+        }
+  }
 
   async function getPenjadwalan() {
       const user = localStorage.getItem('user');
@@ -402,6 +610,30 @@
         })
             .then(response => {
                 dataPelaporan.setResponseData(response.data);
+                const items = dataPelaporan.responseData.data.items;
+               
+                items.forEach(item => {
+                    const tanggalSubmit = new Date(item.tanggal_submit);
+                    const diffTime = Math.abs(today - tanggalSubmit);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    if (diffDays === 1) hari1.push(item);
+                    else if (diffDays === 2) hari2.push(item);
+                    else if (diffDays === 3) hari3.push(item);
+                    else if (diffDays === 4) hari4.push(item);
+                    else if (diffDays === 5) hari5.push(item);
+                    else if (diffDays === 6) hari6.push(item);
+                    else if (diffDays === 7) hari7.push(item);
+                });
+                getFilter(filter.value);
+                getDataGrafikGaris();
+                console.log("Data Hari 1:", hari1);
+                console.log("Data Hari 2:", hari2);
+                console.log("Data Hari 3:", hari3);
+                console.log("Data Hari 4:", hari4);
+                console.log("Data Hari 5:", hari5);
+                console.log("Data Hari 6:", hari6);
+
                 if(dataPelaporan.responseData.data.items.length > 0) {
                     detailPelaporan.avg_egg_mass = parseFloat(dataPelaporan.responseData.data.items[0].avg_egg_mass).toFixed(2);
                     detailPelaporan.sumall_populasi_total = dataPelaporan.responseData.data.items[0].sumall_populasi_total;
@@ -443,7 +675,7 @@
                 } 
                 filteredPakan.value = dataPelaporan.responseData.data.items.filter(item => item.nama_jenis_pakan !== null && item.nama_jenis_pakan !== undefined);
                 uniquePakan.value = [...new Set(filteredPakan.value.map(item => item.nama_jenis_pakan))];
-                console.log("Pelaporan : ", dataPelaporan.responseData.data.items);
+                console.log("Pelaporan : ", response);
             })
             .catch(error => {
                 console.error(error);
@@ -503,3 +735,18 @@
     }
   
 </script>
+
+<style scoped>
+  .c-chart-wrapper {
+      height: auto !important;
+  }
+ .pakan .card-title {
+      border-right: 1px solid black; 
+      padding-right: 10px; 
+      margin-right: 10px; 
+  }
+  .pakan .card-title:last-child {
+      border-right: none; 
+      margin-right: 0; 
+  }
+</style>

@@ -477,7 +477,7 @@
                                 <ErrorMessage class="text-danger" name="jumlah_pindah" />
                             </div>
                             <div class="mb-3">
-                                <Field v-model="detailPencatatan.id_kandang_pengirim" @change="getKandangPengirim(event.target.value)" as="select" name="id_kandang_pengirim" class="form-control text-center">
+                                <Field v-model="detailPencatatan.id_kandang_pengirim" @change="getKandangPengirim($event.target.value)" as="select" name="id_kandang_pengirim" class="form-control text-center">
                                     <template v-if="dataKandang.responseData">
                                         <option value="" disabled>Pilih Nama Kandang Pengirim</option>
                                         <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
@@ -490,7 +490,7 @@
                                 <ErrorMessage class="text-danger" name="jumlah_terima" />
                             </div>
                             <div class="mb-3">
-                                <Field v-model="detailPencatatan.id_kandang_tujuan" @change="getKandangPenerima(event.target.value)" as="select" name="id_kandang_tujuan" class="form-control text-center">
+                                <Field v-model="detailPencatatan.id_kandang_tujuan" @change="getKandangPenerima($event.target.value)" as="select" name="id_kandang_tujuan" class="form-control text-center">
                                     <template v-if="dataKandang.responseData">
                                         <option value="" disabled>Pilih Nama Kandang Penerima</option>
                                         <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>

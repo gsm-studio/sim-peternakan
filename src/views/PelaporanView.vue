@@ -61,63 +61,63 @@
                     <table id="element-to-convert" class="table pelaporan table-bordered">
                     <thead>
                         <tr>
-                            <th rowspan="2" scope="col">Tanggal</th>
-                            <th rowspan="2" scope="col">Kandang</th>
+                            <th class="row-atas-bg" rowspan="2" scope="col">Tanggal</th>
+                            <th class="row-atas-bg" rowspan="2" scope="col">Kandang</th>
                            
-                            <th scope="col">Usia</th>
-                            <th colspan="4" scope="col">Populasi</th>
+                            <th class="row-atas-bg" scope="col">Usia</th>
+                            <th class="row-atas-bg" colspan="4" scope="col">Populasi</th>
 
-                            <th rowspan="2" scope="col">Total Populasi</th>
+                            <th class="row-atas-bg" rowspan="2" scope="col">Total Populasi</th>
 
-                            <th colspan="5" scope="col">Produksi Telur</th>
+                            <th class="row-atas-bg" colspan="5" scope="col">Produksi Telur</th>
 
-                            <th colspan="3" scope="col">Berat Telur</th>
+                            <th class="row-atas-bg" colspan="3" scope="col">Berat Telur</th>
 
-                            <th colspan="2" scope="col">Standart Produksi</th>
+                            <th class="row-atas-bg" colspan="2" scope="col">Standart Produksi</th>
 
-                            <th colspan="3" scope="col">Pakan</th>
+                            <th class="row-atas-bg" colspan="3" scope="col">Pakan</th>
 
-                            <th rowspan="2" scope="col">Standar gr/ekor</th>
+                            <th class="row-atas-bg" rowspan="2" scope="col">Standar gr/ekor</th>
 
-                            <th rowspan="2" scope="col">FC</th>
+                            <th class="row-atas-bg" rowspan="2" scope="col">FC</th>
 
-                            <th rowspan="2" scope="col">Standar FC</th>
+                            <th class="row-atas-bg" rowspan="2" scope="col">Standar FC</th>
 
-                            <th rowspan="2" scope="col">Egg Mass</th>
+                            <th class="row-atas-bg" rowspan="2" scope="col">Egg Mass</th>
 
-                            <th rowspan="2" scope="col">Strain</th>
+                            <th class="row-atas-bg" rowspan="2" scope="col">Strain</th>
 
-                            <th rowspan="2" scope="col">Treatment</th>
+                            <th class="row-atas-bg" rowspan="2" scope="col">Treatment</th>
                         </tr>
                         <tr>
                         
-                            <th scope="col">Mgg</th>
+                            <th class="row-bawah-bg" scope="col">Mgg</th>
 
-                            <th scope="col">Mati</th>
-                            <th scope="col">Afkir</th>
-                            <th scope="col">Pindah</th>
-                            <th scope="col">Terima</th>
+                            <th class="row-bawah-bg" scope="col">Mati</th>
+                            <th class="row-bawah-bg" scope="col">Afkir</th>
+                            <th class="row-bawah-bg" scope="col">Pindah</th>
+                            <th class="row-bawah-bg" scope="col">Terima</th>
 
-                            <th scope="col">Telur utuh</th>
-                            <th scope="col">Telur bentes</th>
-                            <th scope="col">Total Telur</th>
-                            <th scope="col">%</th>
-                            <th scope="col">gr/butir</th>
+                            <th class="row-bawah-bg" scope="col">Telur utuh</th>
+                            <th class="row-bawah-bg" scope="col">Telur bentes</th>
+                            <th class="row-bawah-bg" scope="col">Total Telur</th>
+                            <th class="row-bawah-bg" scope="col">%</th>
+                            <th class="row-bawah-bg" scope="col">gr/butir</th>
 
-                            <th scope="col">Berat Telur utuh</th>
-                            <th scope="col">Berat Telur bentes</th>
-                            <th scope="col">Total</th>
+                            <th class="row-bawah-bg" scope="col">Berat Telur utuh</th>
+                            <th class="row-bawah-bg" scope="col">Berat Telur bentes</th>
+                            <th class="row-bawah-bg" scope="col">Total</th>
                         
-                            <th scope="col">%</th>
-                            <th scope="col">gr/butir</th>
+                            <th class="row-bawah-bg" scope="col">%</th>
+                            <th class="row-bawah-bg" scope="col">gr/butir</th>
 
-                            <th scope="col">gr/ekor</th>
-                            <th scope="col">KG</th>
-                            <th scope="col">Jenis</th>
+                            <th class="row-bawah-bg" scope="col">gr/ekor</th>
+                            <th class="row-bawah-bg" scope="col">KG</th>
+                            <th class="row-bawah-bg" scope="col">Jenis</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-if="dataPelaporan.responseData">
+                        <template v-if="dataPelaporan.responseData && dataPelaporan.responseData.data.items.length > 0">
                         <tr v-for="(item, index) in dataPelaporan.responseData.data.items" :key="index" class="text-center">
                             <td>{{ formatTanggalSubmit(item.tanggal_submit) }}</td>
                             <td>{{ item.nama_kandang }}</td>
@@ -262,9 +262,13 @@
         start: null,
         end: null,
     });
+    const today = new Date();
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+
     const selectedDate = ref([
         new Date(2022, 1, 1),
-        new Date()
+        tomorrow,
     ]);
 
     const formatTanggalSubmit = (tanggal) => {
@@ -521,7 +525,7 @@
         })
             .then(response => {
                 dataPelaporan.setResponseData(response.data);
-                console.log(dataPelaporan.responseData.data);
+                console.log(response);
             })
             .catch(error => {
                 console.error(error);
@@ -532,3 +536,15 @@
 
    
 </script>
+
+<style scoped>
+    .row-atas-bg {
+        background-color: #D2EADD;
+    }
+    .row-bawah-bg {
+        background-color: #E1F4EA;
+    }
+    tbody tr:first-child td {
+        background-color: rgba(15, 169, 88, 0.3);
+    }
+</style>
