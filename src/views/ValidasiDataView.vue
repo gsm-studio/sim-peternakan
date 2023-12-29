@@ -471,32 +471,43 @@
                                 <Field v-model="detailPencatatan.jumlah_afkir" name="afkir" class="form-control text-center" type="number" placeholder="Afkir" />
                                 <ErrorMessage class="text-danger" name="afkir" />
                             </div>
-
-                            <div class="mb-3">
-                                <Field v-model="detailPencatatan.jumlah_pindah" name="jumlah_pindah" class="form-control text-center" type="number" placeholder="Jumlah Pindah" />
-                                <ErrorMessage class="text-danger" name="jumlah_pindah" />
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                    <Field v-model="detailPencatatan.jumlah_pindah" name="jumlah_pindah" class="form-control text-center" type="number" placeholder="Jumlah Pindah" />
+                                    <ErrorMessage class="text-danger" name="jumlah_pindah" />
+                                </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <Field v-model="detailPencatatan.id_kandang_tujuan" @change="getKandangPenerima($event.target.value)" as="select" name="id_kandang_tujuan" class="form-control text-center">
+                                            <template v-if="dataKandang.responseData">
+                                                <option value="" disabled>Pilih Nama Kandang Penerima</option>
+                                                <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                            </template>
+                                        </Field>
+                                        <ErrorMessage class="text-danger" name="id_kandang_tujuan" />
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <Field v-model="detailPencatatan.id_kandang_pengirim" @change="getKandangPengirim($event.target.value)" as="select" name="id_kandang_pengirim" class="form-control text-center">
-                                    <template v-if="dataKandang.responseData">
-                                        <option value="" disabled>Pilih Nama Kandang Pengirim</option>
-                                        <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
-                                    </template>
-                                </Field>
-                                <ErrorMessage class="text-danger" name="id_kandang_pengirim" />
-                            </div>
-                            <div class="mb-3">
-                                <Field v-model="detailPencatatan.jumlah_terima" name="jumlah_terima" class="form-control text-center" type="number" placeholder="Jumlah Terima" />
-                                <ErrorMessage class="text-danger" name="jumlah_terima" />
-                            </div>
-                            <div class="mb-3">
-                                <Field v-model="detailPencatatan.id_kandang_tujuan" @change="getKandangPenerima($event.target.value)" as="select" name="id_kandang_tujuan" class="form-control text-center">
-                                    <template v-if="dataKandang.responseData">
-                                        <option value="" disabled>Pilih Nama Kandang Penerima</option>
-                                        <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
-                                    </template>
-                                </Field>
-                                <ErrorMessage class="text-danger" name="id_kandang_tujuan" />
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <Field v-model="detailPencatatan.jumlah_terima" name="jumlah_terima" class="form-control text-center" type="number" placeholder="Jumlah Terima" />
+                                        <ErrorMessage class="text-danger" name="jumlah_terima" />
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <Field v-model="detailPencatatan.id_kandang_pengirim" @change="getKandangPengirim($event.target.value)" as="select" name="id_kandang_pengirim" class="form-control text-center">
+                                            <template v-if="dataKandang.responseData">
+                                                <option value="" disabled>Pilih Nama Kandang Pengirim</option>
+                                                <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                            </template>
+                                        </Field>
+                                        <ErrorMessage class="text-danger" name="id_kandang_pengirim" />
+                                    </div>
+                                </div>
                             </div>
                         </template>
 
@@ -770,21 +781,21 @@
     const namaKandang = ref(null);
 
     function nextStep(values) {
-    if (currentStep.value === 3) {
-        onUpdateSubmit(values);
-        console.log('Done: ', JSON.stringify(values, null, 2));
-        return;
-    }
+        if (currentStep.value === 3) {
+            onUpdateSubmit(values);
+            console.log('Done: ', JSON.stringify(values, null, 2));
+            return;
+        }
 
-    currentStep.value++;
+        currentStep.value++;
     }
 
     function prevStep() {
-    if (currentStep.value <= 0) {
-        return;
-    }
+        if (currentStep.value <= 0) {
+            return;
+        }
 
-    currentStep.value--;
+        currentStep.value--;
     }
 
     let within_first_modal = false;

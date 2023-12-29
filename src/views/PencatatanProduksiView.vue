@@ -34,6 +34,12 @@
                                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
                                     </svg>
                                 </button>
+                                <button @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-success ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
+                                    Edit 
+                                    <svg class="icon">
+                                        <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-pen"></use>
+                                    </svg>
+                                </button>
                             </div>
                         </div>
                     <hr>
@@ -98,12 +104,12 @@
                         <CChart
                             type="bar"
                             :data="{
-                                labels: ['01', '02', '03', '04', '05', '06'],
+                                labels: ['01', '02', '03', '04', '05', '06', '07'],
                                 datasets: [
                                     {
-                                        label: 'Hari',
+                                        label: 'Telur Utuh',
                                         backgroundColor: '#5CA882',
-                                        data: ['300', '400', '500', '600', '400', '200']
+                                        data: [dataGrafikTelurHari1, dataGrafikTelurHari2, dataGrafikTelurHari3, dataGrafikTelurHari4, dataGrafikTelurHari5, dataGrafikTelurHari6]
                                     },
                                 ],
                             }"
@@ -186,15 +192,15 @@
                                 type="line"
                                 :wrapper="false"
                                 :data="{
-                                    labels: ['01', '02', '03', '04', '05', '06'],
+                                    labels: ['01', '02', '03', '04', '05', '06', '07'],
                                     datasets: [
                                     {
-                                        label: 'Hari',
+                                        label: 'Mati',
                                         backgroundColor: 'rgba(220, 220, 220, 0.2)',
                                         borderColor: 'rgba(220, 220, 220, 1)',
                                         pointBackgroundColor: 'rgba(220, 220, 220, 1)',
                                         pointBorderColor: '#e55353',
-                                        data: ['300', '400', '500', '600', '400', '200']
+                                        data: [dataGrafikPopulasiHari1, dataGrafikPopulasiHari2, dataGrafikPopulasiHari3, dataGrafikPopulasiHari4, dataGrafikPopulasiHari5, dataGrafikPopulasiHari6, dataGrafikPopulasiHari7]
                                     },
                                 
                                     ]
@@ -285,7 +291,7 @@
                     <div class="mt-4">
                         <div>
                         <div class="small text-medium-emphasis mb-2">
-                            Ration 
+                            Ratio
                             <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
                         </div>
                         
@@ -406,32 +412,44 @@
                                 <Field name="afkir" class="form-control text-center" type="number" placeholder="Afkir" />
                                 <ErrorMessage class="text-danger" name="afkir" />
                             </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <Field name="jumlah_pindah" class="form-control text-center" type="number" placeholder="Jumlah Pindah" />
+                                        <ErrorMessage class="text-danger" name="jumlah_pindah" />
+                                    </div>
 
-                            <div class="mb-3">
-                                <Field name="jumlah_pindah" class="form-control text-center" type="number" placeholder="Jumlah Pindah" />
-                                <ErrorMessage class="text-danger" name="jumlah_pindah" />
+                                </div> 
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <Field @change="getKandangPenerima($event)" as="select" name="id_kandang_tujuan" class="form-control text-center">
+                                            <template v-if="dataKandang.responseData">
+                                                <option value="" disabled>Pilih Nama Kandang Penerima</option>
+                                                <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                            </template>
+                                        </Field>
+                                        <ErrorMessage class="text-danger" name="id_kandang_tujuan" />
+                                    </div>
+                                </div> 
                             </div>
-                            <div class="mb-3">
-                                <Field v-model="idKandang" @change="getKandangPengirim($event)" as="select" name="id_kandang_pengirim" class="form-control text-center">
-                                    <template v-if="dataKandang.responseData">
-                                        <option value="" disabled>Pilih Nama Kandang Pengirim</option>
-                                        <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id" disabled>{{ item.nama }}</option>
-                                    </template>
-                                </Field>
-                                <ErrorMessage class="text-danger" name="id_kandang_pengirim" />
-                            </div>
-                            <div class="mb-3">
-                                <Field name="jumlah_terima" class="form-control text-center" type="number" placeholder="Jumlah Terima" />
-                                <ErrorMessage class="text-danger" name="jumlah_terima" />
-                            </div>
-                            <div class="mb-3">
-                                <Field @change="getKandangPenerima($event)" as="select" name="id_kandang_tujuan" class="form-control text-center">
-                                    <template v-if="dataKandang.responseData">
-                                        <option value="" disabled>Pilih Nama Kandang Penerima</option>
-                                        <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
-                                    </template>
-                                </Field>
-                                <ErrorMessage class="text-danger" name="id_kandang_tujuan" />
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <Field name="jumlah_terima" class="form-control text-center" type="number" placeholder="Jumlah Terima" />
+                                        <ErrorMessage class="text-danger" name="jumlah_terima" />
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <Field @change="getKandangPengirim($event)" as="select" name="id_kandang_pengirim" class="form-control text-center">
+                                            <template v-if="dataKandang.responseData">
+                                                <option value="" disabled>Pilih Nama Kandang Pengirim</option>
+                                                <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                            </template>
+                                        </Field>
+                                        <ErrorMessage class="text-danger" name="id_kandang_pengirim" />
+                                    </div>
+                                </div>
                             </div>
                         </template>
 
@@ -736,6 +754,281 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="editModal" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg shadow-lg rounded">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <Form
+                        @submit="nextStepEdit"
+                        :validation-schema="currentSchema"
+                        keep-values
+                        v-slot="{ handleSubmit, values }"
+                        >
+                        <template v-if="currentStep === 0"> 
+                            <!-- <label for="recipient-name" class="col-form-label">Recipient:</label>
+                            <input type="text" class="form-control" id="recipient-name"> -->
+                            <div class="mb-4 d-flex justify-content-between">
+                                <button class="btn btn-success">{{ dateSubmitPencatatan }}</button>
+                                <h6 class="modal-title" id="exampleModalLabel">Populasi Ayam : {{ detailPencatatan.populasi_ayam }} ekor</h6>
+                            </div>
+                            <div class="mb-3">
+                                <label for="nama_kandang" class="form-label">Nama Kandang</label>
+                                <Field v-model="detailPencatatan.id_kandang" id="nama_kandang" as="select" name="nama_kandang" class="form-control text-center">
+                                    <option :value="detailPencatatan.id_kandang">{{ detailPencatatan.nama_kandang }}</option>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="nama_kandang" />
+                            </div>
+                            <!-- {{ values }} -->
+                            <Field v-model="detailPencatatan.id_anak_kandang" name="id_anak_kandang" class="form-control text-center" type="hidden"/>
+                            <div class="mb-3">
+                                <label for="nama_mandor" class="form-label">Nama Mandor</label>
+                                <Field v-model="detailPencatatan.id_mandor" id="nama_mandor" as="select" name="nama_mandor" class="form-control text-center">
+                                    <option :value="detailPencatatan.id_mandor">{{ detailPencatatan.nama_mandor }}</option>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="nama_mandor" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="usia_hari" class="form-label">Usia Hari</label>
+                                <Field v-model="detailPencatatan.usia_hari" id="usia_hari" name="usia_hari" class="form-control text-center" type="number" />
+                                <ErrorMessage class="text-danger" name="usia_hari" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="usia_mgg" class="form-label">Usia Minggu</label>
+                                <Field v-model="detailPencatatan.usia_mgg" id="usia_mgg" name="usia_mgg" class="form-control text-center" type="number" />
+                                <ErrorMessage class="text-danger" name="usia_mgg" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="strain_ayam" class="form-label">Strain Ayam</label>
+                                <Field v-model="detailPencatatan.id_strain_ayam" id="strain_ayam" as="select" name="strain_ayam" class="form-control text-center">
+                                    <template v-if="dataStrain.responseData">
+                                        <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id" disabled>{{ item.nama }}</option>
+                                    </template>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="strain_ayam" />
+                            </div>
+                        </template>
+
+                        <template v-if="currentStep === 1">
+                            <div class="row mb-3 p-2 bg-light rounded">
+                                <div class="col-md-4">
+                                    <p>ID Kandang : {{ detailPencatatan.id_kandang }} / {{ detailPencatatan.nama_kandang }}</p>
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                        <path d="M4.90517 13.8423C5.57808 13.3578 6.29217 12.9749 7.04742 12.6936C7.80214 12.4118 8.61967 12.2708 9.5 12.2708C10.3798 12.2708 11.1973 12.4118 11.9526 12.6936C12.7073 12.9749 13.4214 13.3575 14.0948 13.8415C14.6173 13.3011 15.0377 12.6624 15.356 11.9257C15.6742 11.1878 15.8333 10.3793 15.8333 9.5C15.8333 7.74514 15.2166 6.25074 13.9832 5.01679C12.7498 3.78285 11.2554 3.16614 9.5 3.16667C7.74514 3.16667 6.25074 3.78338 5.01679 5.01679C3.78285 6.25021 3.16614 7.74461 3.16667 9.5C3.16667 10.3798 3.32579 11.1881 3.64404 11.9249C3.96229 12.6622 4.38267 13.3013 4.90517 13.8423ZM9.5 9.89583C8.83342 9.89583 8.27081 9.66678 7.81217 9.20867C7.35406 8.75003 7.125 8.18742 7.125 7.52083C7.125 6.85425 7.35406 6.29164 7.81217 5.833C8.27081 5.37489 8.83342 5.14583 9.5 5.14583C10.1666 5.14583 10.7292 5.37489 11.1878 5.833C11.6459 6.29164 11.875 6.85425 11.875 7.52083C11.875 8.18742 11.6459 8.75003 11.1878 9.20867C10.7292 9.66678 10.1666 9.89583 9.5 9.89583ZM9.5 16.625C8.50619 16.625 7.57599 16.44 6.70938 16.07C5.84276 15.7006 5.08857 15.195 4.44679 14.5532C3.80554 13.9114 3.29993 13.1572 2.92996 12.2906C2.55999 11.424 2.375 10.4938 2.375 9.5C2.375 8.50619 2.55999 7.57599 2.92996 6.70938C3.2994 5.84276 3.80501 5.08857 4.44679 4.44679C5.08857 3.80554 5.84276 3.29993 6.70938 2.92996C7.57599 2.55999 8.50619 2.375 9.5 2.375C10.4938 2.375 11.424 2.55999 12.2906 2.92996C13.1572 3.2994 13.9114 3.80501 14.5532 4.44679C15.1945 5.08857 15.7001 5.84276 16.07 6.70938C16.44 7.57599 16.625 8.50619 16.625 9.5C16.625 10.4938 16.44 11.424 16.07 12.2906C15.7006 13.1572 15.195 13.9114 14.5532 14.5532C13.9114 15.1945 13.1572 15.7001 12.2906 16.07C11.424 16.44 10.4938 16.625 9.5 16.625Z" fill="#0FA958"/>
+                                        </svg>
+                                        Anak Kandang : {{ detailPencatatan.nama_anak_kandang }}
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="bg-grey-rossa rounded p-2 mb-2">{{ dateSubmitPencatatan }}</div>
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                        <path d="M4.90517 13.8423C5.57808 13.3578 6.29217 12.9749 7.04742 12.6936C7.80214 12.4118 8.61967 12.2708 9.5 12.2708C10.3798 12.2708 11.1973 12.4118 11.9526 12.6936C12.7073 12.9749 13.4214 13.3575 14.0948 13.8415C14.6173 13.3011 15.0377 12.6624 15.356 11.9257C15.6742 11.1878 15.8333 10.3793 15.8333 9.5C15.8333 7.74514 15.2166 6.25074 13.9832 5.01679C12.7498 3.78285 11.2554 3.16614 9.5 3.16667C7.74514 3.16667 6.25074 3.78338 5.01679 5.01679C3.78285 6.25021 3.16614 7.74461 3.16667 9.5C3.16667 10.3798 3.32579 11.1881 3.64404 11.9249C3.96229 12.6622 4.38267 13.3013 4.90517 13.8423ZM9.5 9.89583C8.83342 9.89583 8.27081 9.66678 7.81217 9.20867C7.35406 8.75003 7.125 8.18742 7.125 7.52083C7.125 6.85425 7.35406 6.29164 7.81217 5.833C8.27081 5.37489 8.83342 5.14583 9.5 5.14583C10.1666 5.14583 10.7292 5.37489 11.1878 5.833C11.6459 6.29164 11.875 6.85425 11.875 7.52083C11.875 8.18742 11.6459 8.75003 11.1878 9.20867C10.7292 9.66678 10.1666 9.89583 9.5 9.89583ZM9.5 16.625C8.50619 16.625 7.57599 16.44 6.70938 16.07C5.84276 15.7006 5.08857 15.195 4.44679 14.5532C3.80554 13.9114 3.29993 13.1572 2.92996 12.2906C2.55999 11.424 2.375 10.4938 2.375 9.5C2.375 8.50619 2.55999 7.57599 2.92996 6.70938C3.2994 5.84276 3.80501 5.08857 4.44679 4.44679C5.08857 3.80554 5.84276 3.29993 6.70938 2.92996C7.57599 2.55999 8.50619 2.375 9.5 2.375C10.4938 2.375 11.424 2.55999 12.2906 2.92996C13.1572 3.2994 13.9114 3.80501 14.5532 4.44679C15.1945 5.08857 15.7001 5.84276 16.07 6.70938C16.44 7.57599 16.625 8.50619 16.625 9.5C16.625 10.4938 16.44 11.424 16.07 12.2906C15.7006 13.1572 15.195 13.9114 14.5532 14.5532C13.9114 15.1945 13.1572 15.7001 12.2906 16.07C11.424 16.44 10.4938 16.625 9.5 16.625Z" fill="#0FA958"/>
+                                        </svg>
+                                        Nama Mandor : {{ detailPencatatan.nama_mandor }}
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><span class="color-text-rossa">Populasi Ayam:</span> {{ detailPencatatan.populasi_ayam }} ekor</p>
+                                    <p><span class="color-text-rossa">Strain:</span> {{ detailPencatatan.nama_strain }}</p>
+                                </div>
+                            </div>
+                            <h6 class="mb-3">Ayam</h6>
+
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.jumlah_mati" name="mati" class="form-control text-center" type="number" placeholder="Mati" />
+                                <ErrorMessage class="text-danger" name="mati" />
+                            </div>
+
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.jumlah_afkir" name="afkir" class="form-control text-center" type="number" placeholder="Afkir" />
+                                <ErrorMessage class="text-danger" name="afkir" />
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <Field name="jumlah_pindah" class="form-control text-center" type="number" placeholder="Jumlah Pindah" />
+                                        <ErrorMessage class="text-danger" name="jumlah_pindah" />
+                                    </div>
+
+                                </div> 
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <Field @change="getKandangPenerima($event)" as="select" name="id_kandang_tujuan" class="form-control text-center">
+                                            <template v-if="dataKandang.responseData">
+                                                <option value="" disabled>Pilih Nama Kandang Penerima</option>
+                                                <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                            </template>
+                                        </Field>
+                                        <ErrorMessage class="text-danger" name="id_kandang_tujuan" />
+                                    </div>
+                                </div> 
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <Field name="jumlah_terima" class="form-control text-center" type="number" placeholder="Jumlah Terima" />
+                                        <ErrorMessage class="text-danger" name="jumlah_terima" />
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3">
+                                        <Field @change="getKandangPengirim($event)" as="select" name="id_kandang_pengirim" class="form-control text-center">
+                                            <template v-if="dataKandang.responseData">
+                                                <option value="" disabled>Pilih Nama Kandang Pengirim</option>
+                                                <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                            </template>
+                                        </Field>
+                                        <ErrorMessage class="text-danger" name="id_kandang_pengirim" />
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template v-if="currentStep === 2">
+                            <div class="row mb-3 p-2 bg-light rounded">
+                                <div class="col-md-4">
+                                    <p>ID Kandang : {{ detailPencatatan.id_kandang }} / {{ detailPencatatan.nama_kandang }}</p>
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                        <path d="M4.90517 13.8423C5.57808 13.3578 6.29217 12.9749 7.04742 12.6936C7.80214 12.4118 8.61967 12.2708 9.5 12.2708C10.3798 12.2708 11.1973 12.4118 11.9526 12.6936C12.7073 12.9749 13.4214 13.3575 14.0948 13.8415C14.6173 13.3011 15.0377 12.6624 15.356 11.9257C15.6742 11.1878 15.8333 10.3793 15.8333 9.5C15.8333 7.74514 15.2166 6.25074 13.9832 5.01679C12.7498 3.78285 11.2554 3.16614 9.5 3.16667C7.74514 3.16667 6.25074 3.78338 5.01679 5.01679C3.78285 6.25021 3.16614 7.74461 3.16667 9.5C3.16667 10.3798 3.32579 11.1881 3.64404 11.9249C3.96229 12.6622 4.38267 13.3013 4.90517 13.8423ZM9.5 9.89583C8.83342 9.89583 8.27081 9.66678 7.81217 9.20867C7.35406 8.75003 7.125 8.18742 7.125 7.52083C7.125 6.85425 7.35406 6.29164 7.81217 5.833C8.27081 5.37489 8.83342 5.14583 9.5 5.14583C10.1666 5.14583 10.7292 5.37489 11.1878 5.833C11.6459 6.29164 11.875 6.85425 11.875 7.52083C11.875 8.18742 11.6459 8.75003 11.1878 9.20867C10.7292 9.66678 10.1666 9.89583 9.5 9.89583ZM9.5 16.625C8.50619 16.625 7.57599 16.44 6.70938 16.07C5.84276 15.7006 5.08857 15.195 4.44679 14.5532C3.80554 13.9114 3.29993 13.1572 2.92996 12.2906C2.55999 11.424 2.375 10.4938 2.375 9.5C2.375 8.50619 2.55999 7.57599 2.92996 6.70938C3.2994 5.84276 3.80501 5.08857 4.44679 4.44679C5.08857 3.80554 5.84276 3.29993 6.70938 2.92996C7.57599 2.55999 8.50619 2.375 9.5 2.375C10.4938 2.375 11.424 2.55999 12.2906 2.92996C13.1572 3.2994 13.9114 3.80501 14.5532 4.44679C15.1945 5.08857 15.7001 5.84276 16.07 6.70938C16.44 7.57599 16.625 8.50619 16.625 9.5C16.625 10.4938 16.44 11.424 16.07 12.2906C15.7006 13.1572 15.195 13.9114 14.5532 14.5532C13.9114 15.1945 13.1572 15.7001 12.2906 16.07C11.424 16.44 10.4938 16.625 9.5 16.625Z" fill="#0FA958"/>
+                                        </svg>
+                                        Anak Kandang : {{ detailPencatatan.nama_anak_kandang }}
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="bg-grey-rossa rounded p-2">{{ dateSubmitPencatatan }}</div>
+                                    <p>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                        <path d="M4.90517 13.8423C5.57808 13.3578 6.29217 12.9749 7.04742 12.6936C7.80214 12.4118 8.61967 12.2708 9.5 12.2708C10.3798 12.2708 11.1973 12.4118 11.9526 12.6936C12.7073 12.9749 13.4214 13.3575 14.0948 13.8415C14.6173 13.3011 15.0377 12.6624 15.356 11.9257C15.6742 11.1878 15.8333 10.3793 15.8333 9.5C15.8333 7.74514 15.2166 6.25074 13.9832 5.01679C12.7498 3.78285 11.2554 3.16614 9.5 3.16667C7.74514 3.16667 6.25074 3.78338 5.01679 5.01679C3.78285 6.25021 3.16614 7.74461 3.16667 9.5C3.16667 10.3798 3.32579 11.1881 3.64404 11.9249C3.96229 12.6622 4.38267 13.3013 4.90517 13.8423ZM9.5 9.89583C8.83342 9.89583 8.27081 9.66678 7.81217 9.20867C7.35406 8.75003 7.125 8.18742 7.125 7.52083C7.125 6.85425 7.35406 6.29164 7.81217 5.833C8.27081 5.37489 8.83342 5.14583 9.5 5.14583C10.1666 5.14583 10.7292 5.37489 11.1878 5.833C11.6459 6.29164 11.875 6.85425 11.875 7.52083C11.875 8.18742 11.6459 8.75003 11.1878 9.20867C10.7292 9.66678 10.1666 9.89583 9.5 9.89583ZM9.5 16.625C8.50619 16.625 7.57599 16.44 6.70938 16.07C5.84276 15.7006 5.08857 15.195 4.44679 14.5532C3.80554 13.9114 3.29993 13.1572 2.92996 12.2906C2.55999 11.424 2.375 10.4938 2.375 9.5C2.375 8.50619 2.55999 7.57599 2.92996 6.70938C3.2994 5.84276 3.80501 5.08857 4.44679 4.44679C5.08857 3.80554 5.84276 3.29993 6.70938 2.92996C7.57599 2.55999 8.50619 2.375 9.5 2.375C10.4938 2.375 11.424 2.55999 12.2906 2.92996C13.1572 3.2994 13.9114 3.80501 14.5532 4.44679C15.1945 5.08857 15.7001 5.84276 16.07 6.70938C16.44 7.57599 16.625 8.50619 16.625 9.5C16.625 10.4938 16.44 11.424 16.07 12.2906C15.7006 13.1572 15.195 13.9114 14.5532 14.5532C13.9114 15.1945 13.1572 15.7001 12.2906 16.07C11.424 16.44 10.4938 16.625 9.5 16.625Z" fill="#0FA958"/>
+                                        </svg>
+                                        Mandor : {{ detailPencatatan.nama_mandor }}
+                                    </p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><span class="color-text-rossa">Populasi Ayam:</span> {{ detailPencatatan.populasi_ayam }} ekor</p>
+                                    <p><span class="color-text-rossa">Strain:</span> {{ detailPencatatan.nama_strain }}</p>
+                                </div>
+                            </div>
+                            <h6 class="mb-3">Ayam</h6>
+                            <div class="row mb-3 p-2 bg-light rounded">
+                                <div class="col-md-4">
+                                    <p>Mati : {{ values.mati }} </p>
+                                    <p>Afkir : {{ values.afkir }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Jumlah Pindah : {{ values.jumlah_pindah }}</p>
+                                    <p>Jumlah Terima : {{ values.jumlah_terima }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Kandang Pengirim : {{ namaKandangPengirim }}</p>
+                                    <p>Kandang Penerima : {{ namaKandangPenerima }}</p>
+                                </div>
+                            </div>
+                            <h6 class="mb-3">Produksi telur</h6>
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.telur_utuh" name="jml_telur_utuh" class="form-control text-center" type="number" placeholder="Jumlah Telur Utuh" />
+                                <ErrorMessage class="text-danger" name="jml_telur_utuh" />
+                            </div>
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.telur_bentes" name="jml_telur_bentes" class="form-control text-center" type="number" placeholder="Jumlah Telur Bentes" />
+                                <ErrorMessage class="text-danger" name="jml_telur_bentes" />
+                            </div>
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.berat_utuh" name="berat_telur_utuh" class="form-control text-center" type="number" placeholder="Berat Telur Utuh" />
+                                <ErrorMessage class="text-danger" name="berat_telur_utuh" />
+                            </div>
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.berat_bentes" name="berat_telur_bentes" class="form-control text-center" type="number" placeholder="Berat Telur Bentes" />
+                                <ErrorMessage class="text-danger" name="berat_telur_bentes" />
+                            </div>
+                        </template>
+
+                        <template v-if="currentStep === 3">
+                            <h6 class="mb-3">Ayam</h6>
+                            <div class="row mb-3 p-2 bg-light rounded">
+                                <div class="col-md-4">
+                                    <p>Mati : {{ values.mati }} </p>
+                                    <p>Afkir : {{ values.afkir }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Jumlah Pindah : {{ values.jumlah_pindah }}</p>
+                                    <p>Jumlah Terima : {{ values.jumlah_terima }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Kandang Pengirim : {{ namaKandangPengirim }}</p>
+                                    <p>Kandang Penerima : {{ namaKandangPenerima }}</p>
+                                </div>
+                            </div>
+                            <div class="row mb-3 p-2 bg-light rounded">
+                                <div class="col-md-4">
+                                    <p>Jumlah Telur Utuh : {{ values.jml_telur_utuh }}</p>
+                                    <P>Berat Telur Utuh : {{ values.berat_telur_utuh }}</P>
+                                </div>
+                                <div class="col-md-4">
+                                    <p>Jumlah Telur Bentes : {{ values.jml_telur_bentes }}</p>
+                                    <p>Berat Telur Bentes : {{ values.berat_telur_bentes }}</p>
+                                </div>
+                                <div class="col-md-4">
+                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.jml_telur_utuh) + parseInt(values.jml_telur_bentes) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.berat_telur_utuh) + parseInt(values.berat_telur_bentes) }}</p>
+                                </div>
+                            </div>
+                            <h6 class="mb-3">Pakan & Treatment Ayam</h6>
+                            
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.id_jenis_pakan" as="select" name="jenis_pakan" class="form-control text-center">
+                                    <template v-if="dataPakan.responseData">
+                                        <option value="" disabled>Pilih Nama Pakan</option>
+                                        <option v-for="item in dataPakan.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                    </template>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="jenis_pakan" />
+                            </div>
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.id_treatment" as="select" name="jenis_treatment" class="form-control text-center">
+                                    <template v-if="dataTreatment.responseData">
+                                        <option value="" disabled>Pilih Nama Treatment</option>
+                                        <option v-for="item in dataTreatment.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                    </template>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="jenis_treatment" />
+                            </div>
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.berat_pakan" name="berat_pakan" class="form-control text-center" type="number" placeholder="Berat Pakan" />
+                                <ErrorMessage class="text-danger" name="berat_pakan" />
+                            </div>
+                            <div class="mb-3">
+                                <Field v-model="detailPencatatan.catatan" type="text" name="catatan" class="form-control text-center" placeholder="Catatan" />
+                                <ErrorMessage class="text-danger" name="catatan" />
+                            </div>
+                           
+                        </template>
+
+                        <div class="text-end">
+                            <p>{{ currentStep+1 }} / 4</p>
+                            <button class="btn btn-success bg-button-rossa" v-if="currentStep !== 0" type="button" @click="prevStep">
+                            Previous
+                            </button>
+
+                            <button type="submit" class="ms-3 btn btn-success bg-button-rossa" v-if="currentStep !== 3">Next</button>
+
+                            <button type="submit" class="ms-3 btn btn-success bg-button-rossa" v-if="currentStep === 3">Finish</button>
+                        </div>
+                    
+                    </Form>
+                
+                </div>
+                <!-- <div class="modal-footer">
+                    
+                </div> -->
+            </div>
+        </div>
+    </div>
   
 </template>
 
@@ -806,7 +1099,18 @@
         catatan: '',
         populasi_ayam: '',
         tanggal_submit: '',
-        berat_pakan: 0,
+        nama_anak_kandang: '',
+        nama_mandor: '',
+        nama_kandang: '',
+        nama_strain: '',
+        nama_kandang_pengirim: '',
+        nama_kandang_penerima: '',
+        status: '',
+        usia_hari: '',
+        usia_mgg: '',
+        berat_pakan: '',
+        nama_jenis_pakan: '',   
+        nama_treatment: '',
     });
 
     const detailStandart = reactive({
@@ -841,7 +1145,7 @@
     const date = ref(0);
     const dateSubmitPencatatan = ref(0);
     const idKandang = ref(null);
-
+    const today = new Date();
     watch(() => detailPencatatan.tanggal_submit, (newValue, oldValue) => {
         date.value = new Date(newValue);
         dateSubmitPencatatan.value = moment(date).format("DD MMMM YYYY");
@@ -903,24 +1207,131 @@
     const formatTanggalSubmit = (tanggal) => {
         return moment(tanggal).format('YYYY-MM-DD');
     }
-    
+    let hari1 = [];
+    let hari2 = [];
+    let hari3 = [];
+    let hari4 = [];
+    let hari5 = [];
+    let hari6 = [];
+    let hari7 = [];
+    const dataGrafikTelurHari1 = ref(0);
+    const dataGrafikTelurHari2 = ref(0);
+    const dataGrafikTelurHari3 = ref(0);
+    const dataGrafikTelurHari4 = ref(0);
+    const dataGrafikTelurHari5 = ref(0);
+    const dataGrafikTelurHari6 = ref(0);
+    const dataGrafikTelurHari7 = ref(0);
+    const dataGrafikPopulasiHari1 = ref(0);
+    const dataGrafikPopulasiHari2 = ref(0);
+    const dataGrafikPopulasiHari3 = ref(0);
+    const dataGrafikPopulasiHari4 = ref(0);
+    const dataGrafikPopulasiHari5 = ref(0);
+    const dataGrafikPopulasiHari6 = ref(0);
+    const dataGrafikPopulasiHari7 = ref(0);
+
+    function getdataGrafikTelur() {
+        if(hari1.length > 0) {
+            dataGrafikTelurHari1.value = hari1[0].telur_utuh;
+           } else {
+            dataGrafikTelurHari1.value = 0;
+        }
+        if(hari2.length > 0) {
+            dataGrafikTelurHari2.value = hari2[0].telur_utuh;
+           } else {
+            dataGrafikTelurHari2.value = 0;
+        }
+        if(hari3.length > 0) {
+            dataGrafikTelurHari3.value = hari3[0].telur_utuh;
+           } else {
+            dataGrafikTelurHari3.value = 0;
+        }
+        if(hari4.length > 0) {
+            dataGrafikTelurHari4.value = hari4[0].telur_utuh;
+           } else {
+            dataGrafikTelurHari4.value = 0;
+        }
+        if(hari5.length > 0) {
+            dataGrafikTelurHari5.value = hari5[0].telur_utuh;
+           } else {
+            dataGrafikTelurHari5.value = 0;
+        }
+        if(hari6.length > 0) {
+            dataGrafikTelurHari6.value = hari6[0].telur_utuh;
+           } else {
+            dataGrafikTelurHari6.value = 0;
+        }
+        if(hari7.length > 0) {
+            dataGrafikTelurHari7.value = hari7[0].telur_utuh;
+           } else {
+            dataGrafikTelurHari7.value = 0;
+        }
+        
+    }
+
+    function getdataGrafikPopulasi() {
+        if(hari1.length > 0) {
+            dataGrafikPopulasiHari1.value = hari1[0].jumlah_mati;
+           } else {
+            dataGrafikPopulasiHari1.value = 0;
+        }
+        if(hari2.length > 0) {
+            dataGrafikPopulasiHari2.value = hari2[0].jumlah_mati;
+           } else {
+            dataGrafikPopulasiHari2.value = 0;
+        }
+        if(hari3.length > 0) {
+            dataGrafikPopulasiHari3.value = hari3[0].jumlah_mati;
+           } else {
+            dataGrafikPopulasiHari3.value = 0;
+        }
+        if(hari4.length > 0) {
+            dataGrafikPopulasiHari4.value = hari4[0].jumlah_mati;
+           } else {
+            dataGrafikPopulasiHari4.value = 0;
+        }
+        if(hari5.length > 0) {
+            dataGrafikPopulasiHari5.value = hari5[0].jumlah_mati;
+           } else {
+            dataGrafikPopulasiHari5.value = 0;
+        }
+        if(hari6.length > 0) {
+            dataGrafikPopulasiHari6.value = hari6[0].jumlah_mati;
+           } else {
+            dataGrafikPopulasiHari6.value = 0;
+        }
+        if(hari7.length > 0) {
+            dataGrafikPopulasiHari7.value = hari7[0].jumlah_mati;
+           } else {
+            dataGrafikPopulasiHari7.value = 0;
+        }
+        
+    }
 
     function nextStep(values) {
-    if (currentStep.value === 3) {
-        onSubmit(values);
-        console.log('Done: ', JSON.stringify(values, null, 2));
-        return;
+        if (currentStep.value === 3) {
+            onSubmit(values);
+            console.log('Done: ', JSON.stringify(values, null, 2));
+            return;
+        }
+        currentStep.value++;
     }
-
-    currentStep.value++;
+    
+    function nextStepEdit(values) {
+        if (currentStep.value === 3) {
+            onUpdateSubmit(values);
+            console.log('Done: ', JSON.stringify(values, null, 2));
+            return;
+        }
+        currentStep.value++;
     }
+   
 
     function prevStep() {
-    if (currentStep.value <= 0) {
-        return;
-    }
+        if (currentStep.value <= 0) {
+            return;
+        }
 
-    currentStep.value--;
+        currentStep.value--;
     }
 
     function closeModal() {
@@ -1042,7 +1453,53 @@
             });
     }
 
+    async function onUpdateSubmit(values) {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        const { usia_hari, usia_mgg, nama_kandang, id_anak_kandang, nama_mandor, strain_ayam, mati, afkir, jumlah_pindah, id_kandang_pengirim, jumlah_terima, id_kandang_tujuan, jml_telur_utuh, jml_telur_bentes, berat_telur_utuh, berat_telur_bentes, jenis_pakan, jenis_treatment, berat_pakan, catatan } = values;
+        console.log(values);
+        return axios.put(baseUrl + '/pencatatan/' + detailPencatatan.id, {
+            usia_hari: usia_hari,
+            usia_mgg: usia_mgg,
+            id_kandang: nama_kandang,
+            id_mandor: nama_mandor,
+            id_anak_kandang: id_anak_kandang,
+            id_strain_ayam: strain_ayam,
+            jumlah_mati: mati,
+            jumlah_afkir: afkir,
+            jumlah_pindah: jumlah_pindah,
+            id_kandang_tujuan: id_kandang_tujuan,
+            jumlah_terima: jumlah_terima,
+            id_kandang_pengirim: id_kandang_pengirim,
+            telur_utuh: jml_telur_utuh,
+            telur_bentes: jml_telur_bentes,
+            berat_utuh: berat_telur_utuh,
+            berat_bentes: berat_telur_bentes,
+            id_treatment: jenis_treatment,
+            id_jenis_pakan: jenis_pakan,
+            berat_pakan: berat_pakan,
+            catatan: catatan,
+        }, {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                console.log(response);
+                alert('success', 'Data pencatatan berhasil diubah');
+                getPencatatan(1);
+                closeModal();
+            })
+            .catch(error => {
+                alert('error', 'Data gagal diubah')
+                console.error(error);
+            });
+    }
+
     async function getIdPencatatan(params) {
+        getStrain();
+        getPakan();
+        getTreatment();
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/pencatatan/' + params, {
@@ -1069,8 +1526,30 @@
                 detailPencatatan.id_treatment = response.data.data.id_treatment;
                 detailPencatatan.id_jenis_pakan = response.data.data.id_jenis_pakan;
                 detailPencatatan.catatan = response.data.data.catatan;
+                detailPencatatan.populasi_ayam = response.data.data.kandang.populasi_total;
                 detailPencatatan.tanggal_submit = response.data.data.tanggal_submit;
-                detailPencatatan.berat_pakan = response.data.data.berat_pakan ? response.data.data.berat_pakan : 0;
+                detailPencatatan.nama_anak_kandang = response.data.data.nama_anak_kandang;
+                detailPencatatan.nama_mandor = response.data.data.nama_mandor;
+                detailPencatatan.nama_kandang = response.data.data.kandang.nama;
+                detailPencatatan.nama_strain = response.data.data.strain_ayam.nama; 
+                detailPencatatan.status = response.data.data.status;
+                if(response.data.data.id_kandang_pengirim != null) {
+                    detailPencatatan.nama_kandang_pengirim = response.data.data.kandang_pengirim.nama;
+                } else {
+                    detailPencatatan.nama_kandang_pengirim = '-';
+                }  
+                if(response.data.data.id_kandang_tujuan != null) {
+                    detailPencatatan.nama_kandang_penerima = response.data.data.kandang_tujuan.nama;
+                } else {
+                    detailPencatatan.nama_kandang_penerima = '-';
+                }    
+                detailPencatatan.usia_hari = response.data.data.usia_hari;
+                detailPencatatan.usia_mgg = response.data.data.usia_mgg;
+                detailPencatatan.berat_pakan = response.data.data.berat_pakan;
+                detailPencatatan.nama_jenis_pakan = response.data.data.jenis_pakan ? response.data.data.jenis_pakan.nama : '-';
+                detailPencatatan.nama_treatment = response.data.data.treatment ? response.data.data.treatment.nama : '-';
+                detailPencatatan.telur_utuh = response.data.data.telur_utuh;
+                
               
                 getIdPakan(detailPencatatan.id_jenis_pakan);
                 // console.log("Detail Pencatatan : ", detailPencatatan);
@@ -1095,6 +1574,29 @@
         })
             .then(response => {
                 dataPencatatan.setResponseData(response.data);
+                const items = dataPencatatan.responseData.data.items;
+               
+                items.forEach(item => {
+                    const tanggalSubmit = new Date(item.tanggal_submit);
+                    const diffTime = Math.abs(today - tanggalSubmit);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    if (diffDays === 1) hari1.push(item);
+                    else if (diffDays === 2) hari2.push(item);
+                    else if (diffDays === 3) hari3.push(item);
+                    else if (diffDays === 4) hari4.push(item);
+                    else if (diffDays === 5) hari5.push(item);
+                    else if (diffDays === 6) hari6.push(item);
+                    else if (diffDays === 7) hari7.push(item);
+                });
+                getdataGrafikTelur();
+                getdataGrafikPopulasi();
+                console.log("Data Hari 1:", hari1);
+                console.log("Data Hari 2:", hari2);
+                console.log("Data Hari 3:", hari3);
+                console.log("Data Hari 4:", hari4);
+                console.log("Data Hari 5:", hari5);
+                console.log("Data Hari 6:", hari6);
                 detailPencatatan.populasi_ayam = dataPencatatan.responseData.data.total_populasi;
                 console.log("List Pencatatan : ", dataPencatatan.responseData);
                 getTotal();
@@ -1209,9 +1711,9 @@
                 detailStandart.nilai_hd = response.data.data.items[0].nilai_hd;
                 detailStandart.nilai_bb = response.data.data.items[0].nilai_bb;
                 detailStandart.nilai_bt = response.data.data.items[0].nilai_bt;
-                detailStandart.nilai_fi = response.data.data.items[0].nilai_fi;
-                detailStandart.nilai_fc = response.data.data.items[0].nilai_fc;
-                detailStandart.egg_mass = response.data.data.items[0].egg_mass;
+                detailStandart.nilai_fi = response.data.data.items[0].nilai_fi ?? 0;
+                detailStandart.nilai_fc = response.data.data.items[0].nilai_fc ?? 0;
+                detailStandart.egg_mass = response.data.data.items[0].egg_mass ?? 0;
                 detailStandart.deskripsi = response.data.data.items[0].deskripsi;
                
             })

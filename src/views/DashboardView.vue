@@ -96,7 +96,7 @@
                             labels: ['01', '02', '03', '04', '05', '06', '07'],
                             datasets: [
                               {
-                                label: 'Hari',
+                                label: 'Total',
                                 backgroundColor: '#5CA882',
                                 data: [dataGrafikBatangHari1, dataGrafikBatangHari2, dataGrafikBatangHari3, dataGrafikBatangHari4, dataGrafikBatangHari5, dataGrafikBatangHari6, dataGrafikBatangHari7],
                               },
