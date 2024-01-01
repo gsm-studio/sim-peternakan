@@ -43,9 +43,75 @@
                         <!-- <button type="button" class="btn btn-success bg-button-rossa" data-toggle="modal" data-target="#exampleModal">
                         Select
                         </button> -->
-                        <button type="button" class="btn btn-success bg-button-rossa ms-3" data-toggle="modal" data-target="#exampleModal">
+                        <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="ms-3 btn btn-success bg-button-rossa">
                         Filter
                         </button>
+                        <div class="dropdown-menu dropdown-menu-start p-3 shadow">
+                            <select v-model="id_mandor" @change="getPencatatan(currentPage, $event.target.value, id_kandang, id_anak_Kandang, id_strain_ayam)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <option value="0" selected> 
+                                    Semua Mandor 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                    <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                    </svg>
+                                </option>
+                                <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                    <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                        {{ item.nama }}
+                                    </option>
+                                </template>
+                                <template v-else>
+                                    <option>Belum ada karyawan</option>
+                                </template>
+                            </select> 
+                            <select v-model="id_kandang" @change="getPencatatan(currentPage, id_mandor, $event.target.value, id_anak_Kandang, id_strain_ayam)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <option value="0" selected> 
+                                    Semua Kandang 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                    <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                    </svg>
+                                </option>
+                                <template v-if="dataKandang.responseData && dataKandang.responseData.data.items.length > 0">
+                                    <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">
+                                        {{ item.nama }}
+                                    </option>
+                                </template>
+                                <template v-else>
+                                    <option>Belum ada Kandang</option>
+                                </template>
+                            </select> 
+                            <select v-model="id_anak_kandang" @change="getPencatatan(currentPage, id_mandor, id_kandang, $event.target.value, id_strain_ayam)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <option value="0" selected> 
+                                    Semua Anak Kandang 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                    <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                    </svg>
+                                </option>
+                                <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                    <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                        {{ item.nama }}
+                                    </option>
+                                </template>
+                                <template v-else>
+                                    <option>Belum ada Anak Kandang</option>
+                                </template>
+                            </select> 
+                            <select v-model="id_strain_ayam" @change="getPencatatan(currentPage, id_mandor, id_kandang, id_anak_kandang, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <option value="0" selected> 
+                                    Semua Strain Ayam 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                    <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                    </svg>
+                                </option>
+                                <template v-if="dataStrain.responseData && dataStrain.responseData.data.items.length > 0">
+                                    <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">
+                                        {{ item.nama }}
+                                    </option>
+                                </template>
+                                <template v-else>
+                                    <option>Belum ada Strain Ayam</option>
+                                </template>
+                            </select>
+                        </div>
                     </div>
                     
                  
@@ -82,7 +148,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-if="dataPencatatan.responseData">
+                        <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
                         <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index">
                             <!-- <td>{{ item.id }}</td> -->
                             <td>{{ item.id_kandang }}</td>
@@ -656,7 +722,7 @@
 
 <script setup>
     import HeaderItem from '../components/HeaderItem.vue'
-    import { pencatatanStore, strainStore, pakanStore, treatmentStore, kandangStore } from '@/stores';
+    import { pencatatanStore, strainStore, pakanStore, treatmentStore, kandangStore, karyawanStore } from '@/stores';
     import { defineStore, storeToRefs } from 'pinia'
     import { onMounted, reactive, ref, computed, watch } from 'vue';
     import { Field, ErrorMessage, Form } from 'vee-validate';
@@ -672,6 +738,7 @@
     const dataPakan = reactive(pakanStore());
     const dataTreatment = reactive(treatmentStore());
     const dataKandang = reactive(kandangStore());
+    const dataKaryawan = reactive(karyawanStore());
 
     const detailPencatatan = reactive({
         id: '',
@@ -779,7 +846,10 @@
         return schemas[currentStep.value];
     });
     const namaKandang = ref(null);
-
+    const id_kandang = ref(0);
+    const id_mandor = ref(0);
+    const id_anak_kandang = ref(0);
+    const id_strain_ayam = ref(0);
     function nextStep(values) {
         if (currentStep.value === 3) {
             onUpdateSubmit(values);
@@ -854,6 +924,10 @@
 
     function clearSearch() {
         search.value = '';
+        id_kandang.value = 0;
+        id_mandor.value = 0;
+        id_anak_kandang.value = 0;
+        id_strain_ayam.value = 0;
         getPencatatan(1);
     }
 
@@ -908,6 +982,28 @@
             within_first_modal = false;
         }
         
+    }
+
+    async function getKaryawan(page_number) {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/karyawan', {
+            params: {
+                page_number: page_number, 
+                page_size: pageSize.value, 
+            },
+           
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataKaryawan.setResponseData(response.data);
+                console.log(dataKaryawan);
+            })
+            .catch(error => {
+                console.error(error);
+            });
     }
 
     async function getStrain() {
@@ -1082,11 +1178,27 @@
             });
     }
 
-    async function getPencatatan(page_number) {
+    async function getPencatatan(page_number, id_mandor = null, id_kandang = null, id_anak_kandang = null, id_strain_ayam = null, ) {
+        if(id_mandor == 0) {
+            id_mandor = null;
+        }
+        if(id_kandang == 0) {
+            id_kandang = null;
+        }
+        if(id_anak_kandang == 0) {
+            id_anak_kandang = null;
+        }
+        if(id_strain_ayam == 0) {
+            id_strain_ayam = null;
+        }
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/pencatatan', {
             params: {
+                id_mandor: id_mandor,
+                id_kandang: id_kandang,
+                id_anak_kandang: id_anak_kandang,
+                id_strain_ayam: id_strain_ayam,
                 column_sorting: 'tanggal_submit desc',
                 page_number: page_number, 
                 page_size: pageSize.value, 
@@ -1255,6 +1367,8 @@
     onMounted(() => {
         getPencatatan(1);
         getKandang();
+        getKaryawan();
+        getStrain();
         // Mengambil elemen button (icon SVG) dan popover
         // const buttons = document.querySelectorAll('.btnPersetujuan');
         // const popover = document.getElementById('myPopover');
@@ -1279,10 +1393,6 @@
         // });
 
         $(document).ready(function() {
-            
-
-           
-
             // $('.btn-toggle-fade').on('click', function() {
             // if ($('.modal').hasClass('fade')) {
             //     $('.modal').removeClass('fade');
@@ -1293,7 +1403,6 @@
             // }
             // });
         });
-
             
     });
 

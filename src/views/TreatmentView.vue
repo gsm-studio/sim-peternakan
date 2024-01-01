@@ -33,9 +33,19 @@
                         <!-- <button type="button" class="btn btn-success bg-button-rossa">
                         Select
                         </button> -->
-                        <button type="button" class="btn btn-success bg-button-rossa ms-2">
+                        <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="ms-3 btn btn-success bg-button-rossa">
                         Filter
                         </button>
+                        <div class="dropdown-menu dropdown-menu-start p-3 shadow">
+                            <select v-model="isTreatment" @change="getTreatment(currentPage, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <option value="0" selected> 
+                                    Pilih Is Treatment 
+                                </option>
+                                <option value="true">Ya</option>
+                                <option value="false">Tidak</option>
+                            </select> 
+                            
+                        </div>
                     </div>
                     
                    
@@ -67,7 +77,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <template v-if="dataTreatment.responseData">
+                            <template v-if="dataTreatment.responseData && dataTreatment.responseData.data.items.length > 0">
                                 <tr v-for="(item, index) in dataTreatment.responseData.data.items" :key="index" class="text-center">
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.nama }}</td>
@@ -235,6 +245,7 @@
     const onClickHandler = (page) => {
         getTreatment(page);
     };
+    const isTreatment = ref(0);
 
     onMounted(() => {
         getTreatment(1)
@@ -260,6 +271,7 @@
 
     function clearSearch() {
         search.value = '';
+        isTreatment.value = 0;
         getTreatment(1);
     }
 
@@ -281,11 +293,15 @@
         });
     }
 
-    async function getTreatment(page_number) {
+    async function getTreatment(page_number, is_treatment = null) {
+        if(is_treatment == 0) {
+            is_treatment = null;
+        }
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/tugas', {
             params: {
+                is_treatment: is_treatment,
                 page_number: page_number, 
                 page_size: pageSize.value, 
             },

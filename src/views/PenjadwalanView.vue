@@ -74,7 +74,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-if="dataPenjadwalan.responseData">
+                        <template v-if="dataPenjadwalan.responseData && dataPenjadwalan.responseData.data.items.length > 0">
                         <tr v-for="item in dataPenjadwalan.responseData.data.items" :key="item.id">
                             <td>{{ item.id }}</td>
                             <td>{{ item.tugas.nama }}</td>

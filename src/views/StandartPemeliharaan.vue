@@ -127,7 +127,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-if="dataStandart.responseData">
+                        <template v-if="dataStandart.responseData && dataStandart.responseData.data.items.length > 0">
                             <tr class="text-center" v-for="(item, index) in dataStandart.responseData.data.items" :key="index">
                                 <td>{{ item.strain_ayam.nama }}</td>
                                 <td>{{ item.umur }}</td>

@@ -34,7 +34,7 @@
                                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
                                     </svg>
                                 </button>
-                                <button @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-success ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
+                                <button @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-secondary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
                                     Edit 
                                     <svg class="icon">
                                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-pen"></use>
@@ -221,25 +221,26 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-8">
+                    <div class="col-lg-7">
                     <div class="card-body">
                         <div class="row">
                             <div>
-                                <div class="small text-medium-emphasis mb-2">
-                                    Pakan  
-                                    <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
-                                </div>
+                               
                                 <div class="row mb-3">
-                                    <div class="col">
+                                    <div class="col border-end">
+                                        <div class="small text-medium-emphasis mb-2">
+                                            Pakan  
+                                            <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
+                                        </div>
                                         <h5 class="card-title mb-0">{{ detailPencatatan.berat_pakan }} kg</h5>
                                         <!-- <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
                                             <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
                                         </svg>
                                         <h5 class="card-title mb-0 text-secondary">85.7 gram/ekor</h5> -->
                                     </div>
-                                    <div class="col">
-                                        <!-- <h5 class="card-title mb-0">Standar pakan</h5> -->
-                                        <!-- <h5 class="card-title mb-0 text-secondary">90.2 gr/ekor</h5> -->
+                                    <div class="col border-start">
+                                        <h5 class="card-title mb-0">Standar pakan</h5>
+                                        <h5 class="card-title mb-0 text-secondary">90.2 gr/ekor</h5>
                                     </div>
                                     
                                 </div>
@@ -250,44 +251,37 @@
                                 </small> -->
                                 
                             </div>
-                            <div class="col-md-6 d-flex align-items-end">
+                            <div class="col-md-4 d-flex align-items-end">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" fill="none">
                                     <circle cx="90" cy="90" r="90" fill="#0FA958" fill-opacity="0.6"/>
-                                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">100 % 
+                                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="20px">100 % 
                                         {{ detailPakan.nama ? detailPakan.nama : 'Tidak Ada' }}</text>
                                 </svg>
                             </div>
-                            <div class="col-md-6">
-                                <!-- <CChart
+                            <div class="col-md-8">
+                               
+                                <CChart
                                     type="line"
                                     :wrapper="false"
                                     :data="{
-                                        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                                        labels: ['01', '02', '03', '04', '05', '06', '07'],
                                         datasets: [
                                         {
-                                            label: 'My First dataset',
+                                            label: 'Hari',
                                             backgroundColor: 'rgba(220, 220, 220, 0.2)',
                                             borderColor: 'rgba(220, 220, 220, 1)',
                                             pointBackgroundColor: 'rgba(220, 220, 220, 1)',
-                                            pointBorderColor: '#fff',
-                                            data: [40, 20, 12, 39, 10, 40, 39]
-                                        },
-                                        {
-                                            label: 'My Second dataset',
-                                            backgroundColor: 'rgba(151, 187, 205, 0.2)',
-                                            borderColor: 'rgba(151, 187, 205, 1)',
-                                            pointBackgroundColor: 'rgba(151, 187, 205, 1)',
-                                            pointBorderColor: '#fff',
-                                            data: [50, 12, 28, 29, 7, 25, 12]
+                                            pointBorderColor: '#e55353',
+                                            data: [dataGrafikPopulasiHari1, dataGrafikPopulasiHari2, dataGrafikPopulasiHari3, dataGrafikPopulasiHari4, dataGrafikPopulasiHari5, dataGrafikPopulasiHari6, dataGrafikPopulasiHari7]
                                         }
                                         ]
                                     }"
-                                /> -->
+                                />
                             </div>
                         </div>
                     </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-5">
                     <div class="mt-4">
                         <div>
                         <div class="small text-medium-emphasis mb-2">
@@ -337,7 +331,9 @@
                         <template v-if="currentStep === 0"> 
                             <div class="mb-4 d-flex justify-content-between">
                                 <button class="btn btn-success">{{ formatTanggal() }}</button>
-                                <h6 class="modal-title" id="exampleModalLabel">Populasi Ayam : {{ totalPopulasi }} ekor</h6>
+                                <h6 class="modal-title">Latest Usia Mgg : {{ latest_usia_mgg }}</h6>
+                                <h6 class="modal-title">Latest Usia Hari : {{ latest_usia_hari }}</h6>
+                                <h6 class="modal-title">Populasi Ayam : {{ totalPopulasi }} ekor</h6>
                             </div>
                             <div class="mb-3">
                                 <label for="nama_kandang" class="form-label">Nama Kandang</label>
@@ -614,7 +610,10 @@
                         <span class="ms-4 color-text-rossa">Egg mass: <span class="text-secondary">{{ detailStandart.egg_mass }}</span></span>
                         <span class="ms-4 color-text-rossa">Strain: <span class="text-secondary">{{ detailStrain.nama }}</span></span>
                     </p>
-
+                    <p>
+                        <span class="color-text-rossa">Latest Usia Mgg: <span class="text-secondary">{{ latest_usia_mgg }}</span></span>
+                        <span class="ms-4 color-text-rossa">Latest Usia Hari: <span class="text-secondary">{{ latest_usia_hari }}</span></span>
+                    </p>
                     </div>
                     <div>
                     <span class="ms-0">
@@ -772,6 +771,8 @@
                             <input type="text" class="form-control" id="recipient-name"> -->
                             <div class="mb-4 d-flex justify-content-between">
                                 <button class="btn btn-success">{{ dateSubmitPencatatan }}</button>
+                                <h6 class="modal-title">Latest Usia Mgg : {{ latest_usia_mgg }}</h6>
+                                <h6 class="modal-title">Latest Usia Hari : {{ latest_usia_hari }}</h6>
                                 <h6 class="modal-title" id="exampleModalLabel">Populasi Ayam : {{ detailPencatatan.populasi_ayam }} ekor</h6>
                             </div>
                             <div class="mb-3">
@@ -1038,7 +1039,7 @@
     import { onMounted, ref, computed, reactive, watch } from 'vue'
     import { Field, ErrorMessage, Form } from 'vee-validate';
     import * as yup from 'yup';
-    import { kandangStore, strainStore, pakanStore, treatmentStore, pencatatanStore } from '@/stores';
+    import { kandangStore, strainStore, pakanStore, treatmentStore, pencatatanStore, standartStore } from '@/stores';
     import axios from 'axios'
     import { useRoute } from 'vue-router'
     import moment from 'moment'
@@ -1066,6 +1067,7 @@
     const dataPakan = reactive(pakanStore());
     const dataTreatment = reactive(treatmentStore());
     const dataPencatatan = reactive(pencatatanStore());
+    const dataStandart = reactive(standartStore());
 
     const detailKandang = reactive({
         id: '',
@@ -1146,6 +1148,8 @@
     const dateSubmitPencatatan = ref(0);
     const idKandang = ref(null);
     const today = new Date();
+    const latest_usia_mgg = ref(0);
+    const latest_usia_hari = ref(0);
     watch(() => detailPencatatan.tanggal_submit, (newValue, oldValue) => {
         date.value = new Date(newValue);
         dateSubmitPencatatan.value = moment(date).format("DD MMMM YYYY");
@@ -1214,6 +1218,13 @@
     let hari5 = [];
     let hari6 = [];
     let hari7 = [];
+    let standartHari1 = [];
+    let standartHari2 = [];
+    let standartHari3 = [];
+    let standartHari4 = [];
+    let standartHari5 = [];
+    let standartHari6 = [];
+    let standartHari7 = [];
     const dataGrafikTelurHari1 = ref(0);
     const dataGrafikTelurHari2 = ref(0);
     const dataGrafikTelurHari3 = ref(0);
@@ -1228,6 +1239,58 @@
     const dataGrafikPopulasiHari5 = ref(0);
     const dataGrafikPopulasiHari6 = ref(0);
     const dataGrafikPopulasiHari7 = ref(0);
+    const dataGrafikStandartHari1 = ref(0);
+    const dataGrafikStandartHari2 = ref(0);
+    const dataGrafikStandartHari3 = ref(0);
+    const dataGrafikStandartHari4 = ref(0);
+    const dataGrafikStandartHari5 = ref(0);
+    const dataGrafikStandartHari6 = ref(0);
+    const dataGrafikStandartHari7 = ref(0);
+
+    function getDataGrafikStandart() {
+        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari1.value);
+        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari2.value);
+        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari3.value);
+        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari4.value);
+        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari5.value);
+        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari6.value);
+        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari7.value);
+        if(standartHari1.length > 0) {
+            dataGrafikStandartHari1.value = standartHari1[0].nilai_hd;
+           } else {
+            dataGrafikStandartHari1.value = 0;
+        }
+        if(standartHari2.length > 0) {
+            dataGrafikStandartHari2.value = standartHari2[0].nilai_hd;
+           } else {
+            dataGrafikStandartHari2.value = 0;
+        }
+        if(standartHari3.length > 0) {
+            dataGrafikStandartHari3.value = standartHari3[0].nilai_hd;
+           } else {
+            dataGrafikStandartHari3.value = 0;
+        }
+        if(standartHari4.length > 0) {
+            dataGrafikStandartHari4.value = standartHari4[0].nilai_hd;
+           } else {
+            dataGrafikStandartHari4.value = 0;
+        }
+        if(standartHari5.length > 0) {
+            dataGrafikStandartHari5.value = standartHari5[0].nilai_hd;
+           } else {
+            dataGrafikStandartHari5.value = 0;
+        }
+        if(standartHari6.length > 0) {
+            dataGrafikStandartHari6.value = standartHari6[0].nilai_hd;
+           } else {
+            dataGrafikStandartHari6.value = 0;
+        }
+        if(standartHari7.length > 0) {
+            dataGrafikStandartHari7.value = standartHari7[0].nilai_hd;
+           } else {
+            dataGrafikStandartHari7.value = 0;
+        }
+    }
 
     function getdataGrafikTelur() {
         if(hari1.length > 0) {
@@ -1549,8 +1612,7 @@
                 detailPencatatan.nama_jenis_pakan = response.data.data.jenis_pakan ? response.data.data.jenis_pakan.nama : '-';
                 detailPencatatan.nama_treatment = response.data.data.treatment ? response.data.data.treatment.nama : '-';
                 detailPencatatan.telur_utuh = response.data.data.telur_utuh;
-                
-              
+                getIdStandart(response.data.data.strain_ayam.id);
                 getIdPakan(detailPencatatan.id_jenis_pakan);
                 // console.log("Detail Pencatatan : ", detailPencatatan);
                 console.log("Detail Pencatatan : ", response);
@@ -1591,6 +1653,8 @@
                 });
                 getdataGrafikTelur();
                 getdataGrafikPopulasi();
+                latest_usia_mgg.value = dataPencatatan.responseData.data.latest_usia_mgg;
+                latest_usia_hari.value = dataPencatatan.responseData.data.latest_usia_hari;
                 console.log("Data Hari 1:", hari1);
                 console.log("Data Hari 2:", hari2);
                 console.log("Data Hari 3:", hari3);
@@ -1605,6 +1669,7 @@
                 console.error(error);
             });
     }
+ 
 
     async function getKandang() {
         getStrain();
@@ -1705,6 +1770,7 @@
         })
             .then(response => {
                 console.log("Standart Pemeliharaan : ", response);
+                dataStandart.setResponseData(response.data);
                 detailStandart.id = response.data.data.items[0].id;
                 detailStandart.id_strain_ayam = response.data.data.items[0].id_strain_ayam;
                 detailStandart.umur = response.data.data.items[0].umur;
@@ -1715,7 +1781,22 @@
                 detailStandart.nilai_fc = response.data.data.items[0].nilai_fc ?? 0;
                 detailStandart.egg_mass = response.data.data.items[0].egg_mass ?? 0;
                 detailStandart.deskripsi = response.data.data.items[0].deskripsi;
-               
+
+                const items = dataStandart.responseData.data.items;
+                items.forEach(item => {
+                    const tanggalSubmit = new Date(item.created_at);
+                    const diffTime = Math.abs(today - tanggalSubmit);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    if (diffDays === 1) standartHari1.push(item);
+                    else if (diffDays === 2) standartHari2.push(item);
+                    else if (diffDays === 3) standartHari3.push(item);
+                    else if (diffDays === 4) standartHari4.push(item);
+                    else if (diffDays === 5) standartHari5.push(item);
+                    else if (diffDays === 6) standartHari6.push(item);
+                    else if (diffDays === 7) standartHari7.push(item);
+                });
+                getDataGrafikStandart();
             })
             .catch(error => {
                 console.error(error);

@@ -233,7 +233,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <template v-if="dataPenjadwalan.responseData">
+                          <template v-if="dataPenjadwalan.responseData && dataPenjadwalan.responseData.data.items.length > 0">
                             <tr v-for="item in dataPenjadwalan.responseData.data.items" :key="item.id">
                                 <td>{{ item.id }}</td>
                                 <td>{{ item.tugas.nama }}</td>
@@ -327,7 +327,7 @@
   const getListNamaPakan = ref([]);
   const today = new Date();
   const sixDaysAgo = new Date(); 
-  sixDaysAgo.setDate(sixDaysAgo.getDate() - 6);
+  sixDaysAgo.setDate(sixDaysAgo.getDate() - 7);
   const selectedDate = ref([
         sixDaysAgo,
         new Date()

@@ -34,9 +34,43 @@
                         <!-- <button type="button" class="btn btn-success bg-button-rossa">
                         Select
                         </button> -->
-                        <button type="button" class="btn btn-success bg-button-rossa ms-2">
+                        <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="ms-3 btn btn-success bg-button-rossa">
                         Filter
                         </button>
+                        <div class="dropdown-menu dropdown-menu-start p-3 shadow">
+                            <select v-model="id_mandor" @change="getKandang($event.target.value, id_anak_kandang)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <option value="0" selected> 
+                                    Semua Mandor 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                    <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                    </svg>
+                                </option>
+                                <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                    <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                        {{ item.nama }}
+                                    </option>
+                                </template>
+                                <template v-else>
+                                    <option>Belum ada karyawan</option>
+                                </template>
+                            </select> 
+                            <select v-model="id_anak_kandang" @change="getKandang(id_mandor, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <option value="0" selected> 
+                                    Semua Anak Kandang 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                    <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                    </svg>
+                                </option>
+                                <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                    <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                        {{ item.nama }}
+                                    </option>
+                                </template>
+                                <template v-else>
+                                    <option>Belum ada karyawan</option>
+                                </template>
+                            </select> 
+                        </div>
                     </div>
                     
                     <div class="d-flex">
@@ -69,7 +103,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-if="dataKandang.responseData">
+                        <template v-if="dataKandang.responseData && dataKandang.responseData.data.items.length > 0">
                             <tr v-for="item in dataKandang.responseData.data.items" :key="item.id" class="text-center">
                                 <td>{{ item.id }}</td>
                                 <td>{{ item.nama }}</td>
@@ -282,9 +316,10 @@
     const currentPage = ref(1);
     const pageSize = ref(10);
     const totalItems = dataKandang.responseData ? dataKandang.responseData.data.total_record : 0;
-
+    const id_mandor = ref(0);
+    const id_anak_kandang = ref(0);
     const onClickHandler = (page) => {
-        getKandang(page);
+        getKandang();
         
     };
     const formatTanggal = (tanggal) => {
@@ -315,12 +350,13 @@
 
     onMounted(() => {
         getKandang()
-       
     });
 
     function clearSearch() {
         search.value = '';
-        getKandang(1);
+        id_mandor.value = 0;
+        id_anak_kandang.value = 0;
+        getKandang(null, null);
     }
 
     function searchItem() {
@@ -343,13 +379,20 @@
         
     }
 
-    async function getKandang() {
-        
+    async function getKandang(id_mandor, id_anak_kandang) {
+        if (id_mandor == 0) {
+            id_mandor = null;
+        }
+        if (id_anak_kandang == 0) {
+            id_anak_kandang = null;
+        }
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         // console.log(JSON.parse(token).token);
         axios.get(baseUrl + '/kandang', {
             params: {
+                id_mandor: id_mandor,
+                id_anak_kandang: id_anak_kandang,
                 page_number: currentPage.value, 
                 page_size: pageSize.value, 
             },
