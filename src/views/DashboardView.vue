@@ -93,17 +93,18 @@
                         <CChart
                           type="bar"
                           :data="{
-                            labels: ['01', '02', '03', '04', '05', '06', '07'],
+                            labels: namaLabels,
                             datasets: [
                               {
                                 label: 'Total',
                                 backgroundColor: '#5CA882',
-                                data: [dataGrafikBatangHari1, dataGrafikBatangHari2, dataGrafikBatangHari3, dataGrafikBatangHari4, dataGrafikBatangHari5, dataGrafikBatangHari6, dataGrafikBatangHari7],
+                                data: dataGrafikBatang,
                               },
                             ],
                           }"
                           labels="Diagram Batang"
                         />
+                        
                     </div>
                   </div>
                   <div class="card-footer d-flex justify-content-between">
@@ -187,7 +188,7 @@
                           type="line"
                           :wrapper="false"
                           :data="{
-                            labels: ['01', '02', '03', '04', '05', '06', '07'],
+                            labels: namaLabels,
                             datasets: [
                               {
                                 label: 'Mati',
@@ -195,12 +196,13 @@
                                 borderColor: 'rgba(220, 220, 220, 1)',
                                 pointBackgroundColor: 'rgba(220, 220, 220, 1)',
                                 pointBorderColor: '#dc3545',
-                                data: [dataGrafikGarisHari1, dataGrafikGarisHari2, dataGrafikGarisHari3, dataGrafikGarisHari4, dataGrafikGarisHari5, dataGrafikGarisHari6, dataGrafikGarisHari7]
+                                data: totalJumlahMati
                               },
                              
                             ]
                           }"
                         />
+                        
                     </div>
                     
                   </div>
@@ -327,7 +329,7 @@
   const getListNamaPakan = ref([]);
   const today = new Date();
   const sixDaysAgo = new Date(); 
-  sixDaysAgo.setDate(sixDaysAgo.getDate() - 7);
+  sixDaysAgo.setDate(sixDaysAgo.getDate() - 6);
   const selectedDate = ref([
         sixDaysAgo,
         new Date()
@@ -365,9 +367,16 @@
       avg_jumlah_mati: null,
       avg_populasi_total: null,
   });
+  const getOnlyDate = (tanggal) => {
+      return moment(tanggal).format('DD');
+  }
+  const labels = ref([]);
+  const namaLabels = ref([]);
+  const totalJumlahMati = ref([]);
   const filteredPakan = ref([]);
   const uniquePakan = ref([]);
   const filter = ref('avg');
+  const dataGrafikBatang = ref([]);
   const dataGrafikBatangHari1 = ref(0);
   const dataGrafikBatangHari2 = ref(0);
   const dataGrafikBatangHari3 = ref(0);
@@ -401,7 +410,13 @@
     getPenjadwalan()
     getKandang()
     getPakan()
-    
+    // Buat label untuk 7 hari terakhir
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        labels.value.push(date.toDateString()); // Tambahkan label tanggal
+        namaLabels.value.push(getOnlyDate(date));
+    }
     
   });
 
@@ -454,119 +469,195 @@
   function getFilter(value) {
         if (value === 'avg') {
           namaFilter.value = 'Avg. % persentase produksi';
-         
-           if(hari1.length > 0) {
-                dataGrafikBatangHari1.value = hari1[0].percentase_telur;
-           } else {
-                dataGrafikBatangHari1.value = 0;
-           }
-           if(hari2.length > 0) {
-                dataGrafikBatangHari2.value = hari2[0].percentase_telur;
-                console.log("Hari 2:", dataGrafikBatangHari2.value);
-           } else {
-                dataGrafikBatangHari2.value = 0;
-           }
-           if(hari3.length > 0) {
-                dataGrafikBatangHari3.value = hari3[0].percentase_telur;
-           } else {
-                dataGrafikBatangHari3.value = 0;
-           }
-           if(hari4.length > 0) {
-                dataGrafikBatangHari4.value = hari4[0].percentase_telur;
-           } else {
-                dataGrafikBatangHari4.value = 0;
-           }
-           if(hari5.length > 0) {
-                dataGrafikBatangHari5.value = hari5[0].percentase_telur;
-           } else {
-                dataGrafikBatangHari5.value = 0;
-           }
-           if(hari6.length > 0) {
-                dataGrafikBatangHari6.value = hari6[0].percentase_telur;
-           } else {
-                dataGrafikBatangHari6.value = 0;
-           }
-           if(hari7.length > 0) {
-                dataGrafikBatangHari7.value = hari7[0].percentase_telur;
-           } else {
-                dataGrafikBatangHari7.value = 0;
-           }
+          getPresentaseProduksi();
+          //  if(hari1.length > 0) {
+          //       dataGrafikBatangHari1.value = hari1[0].percentase_telur;
+          //  } else {
+          //       dataGrafikBatangHari1.value = 0;
+          //  }
+          //  if(hari2.length > 0) {
+          //       dataGrafikBatangHari2.value = hari2[0].percentase_telur;
+          //  } else {
+          //       dataGrafikBatangHari2.value = 0;
+          //  }
+          //  if(hari3.length > 0) {
+          //       dataGrafikBatangHari3.value = hari3[0].percentase_telur;
+          //  } else {
+          //       dataGrafikBatangHari3.value = 0;
+          //  }
+          //  if(hari4.length > 0) {
+          //       dataGrafikBatangHari4.value = hari4[0].percentase_telur;
+          //  } else {
+          //       dataGrafikBatangHari4.value = 0;
+          //  }
+          //  if(hari5.length > 0) {
+          //       dataGrafikBatangHari5.value = hari5[0].percentase_telur;
+          //  } else {
+          //       dataGrafikBatangHari5.value = 0;
+          //  }
+          //  if(hari6.length > 0) {
+          //       dataGrafikBatangHari6.value = hari6[0].percentase_telur;
+          //  } else {
+          //       dataGrafikBatangHari6.value = 0;
+          //  }
+          //  if(hari7.length > 0) {
+          //       dataGrafikBatangHari7.value = hari7[0].percentase_telur;
+          //  } else {
+          //       dataGrafikBatangHari7.value = 0;
+          //  }
           
         } else if (value === 'fc') {
           namaFilter.value = 'Avg FC';
-          if(hari1.length > 0) {
-                dataGrafikBatangHari1.value = hari1[0].avg_fc;
-           } else {
-                dataGrafikBatangHari1.value = 0;
-           }
-           if(hari2.length > 0) {
-                dataGrafikBatangHari2.value = hari2[0].avg_fc;
-           } else {
-                dataGrafikBatangHari2.value = 0;
-           }
-           if(hari3.length > 0) {
-                dataGrafikBatangHari3.value = hari3[0].avg_fc;
-           } else {
-                dataGrafikBatangHari3.value = 0;
-           }
-           if(hari4.length > 0) {
-                dataGrafikBatangHari4.value = hari4[0].avg_fc;
-           } else {
-                dataGrafikBatangHari4.value = 0;
-           }
-           if(hari5.length > 0) {
-                dataGrafikBatangHari5.value = hari5[0].avg_fc;
-           } else {
-                dataGrafikBatangHari5.value = 0;
-           }
-           if(hari6.length > 0) {
-                dataGrafikBatangHari6.value = hari6[0].avg_fc;
-           } else {
-                dataGrafikBatangHari6.value = 0;
-           }
-           if(hari7.length > 0) {
-                dataGrafikBatangHari7.value = hari7[0].avg_fc;
-           } else {
-                dataGrafikBatangHari7.value = 0;
-           }
+          getAvgFc();
+          // if(hari1.length > 0) {
+          //       dataGrafikBatangHari1.value = hari1[0].avg_fc;
+          //  } else {
+          //       dataGrafikBatangHari1.value = 0;
+          //  }
+          //  if(hari2.length > 0) {
+          //       dataGrafikBatangHari2.value = hari2[0].avg_fc;
+          //  } else {
+          //       dataGrafikBatangHari2.value = 0;
+          //  }
+          //  if(hari3.length > 0) {
+          //       dataGrafikBatangHari3.value = hari3[0].avg_fc;
+          //  } else {
+          //       dataGrafikBatangHari3.value = 0;
+          //  }
+          //  if(hari4.length > 0) {
+          //       dataGrafikBatangHari4.value = hari4[0].avg_fc;
+          //  } else {
+          //       dataGrafikBatangHari4.value = 0;
+          //  }
+          //  if(hari5.length > 0) {
+          //       dataGrafikBatangHari5.value = hari5[0].avg_fc;
+          //  } else {
+          //       dataGrafikBatangHari5.value = 0;
+          //  }
+          //  if(hari6.length > 0) {
+          //       dataGrafikBatangHari6.value = hari6[0].avg_fc;
+          //  } else {
+          //       dataGrafikBatangHari6.value = 0;
+          //  }
+          //  if(hari7.length > 0) {
+          //       dataGrafikBatangHari7.value = hari7[0].avg_fc;
+          //  } else {
+          //       dataGrafikBatangHari7.value = 0;
+          //  }
         } else if (value === 'egg_mass') {
           namaFilter.value = 'Avg Egg Mass';
-          if(hari1.length > 0) {
-                dataGrafikBatangHari1.value = hari1[0].avg_egg_mass;
-           } else {
-                dataGrafikBatangHari1.value = 0;
-           }
-           if(hari2.length > 0) {
-                dataGrafikBatangHari2.value = hari2[0].avg_egg_mass;
-           } else {
-                dataGrafikBatangHari2.value = 0;
-           }
-           if(hari3.length > 0) {
-                dataGrafikBatangHari3.value = hari3[0].avg_egg_mass;
-           } else {
-                dataGrafikBatangHari3.value = 0;
-           }
-           if(hari4.length > 0) {
-                dataGrafikBatangHari4.value = hari4[0].avg_egg_mass;
-           } else {
-                dataGrafikBatangHari4.value = 0;
-           }
-           if(hari5.length > 0) {
-                dataGrafikBatangHari5.value = hari5[0].avg_egg_mass;
-           } else {
-                dataGrafikBatangHari5.value = 0;
-           }
-           if(hari6.length > 0) {
-                dataGrafikBatangHari6.value = hari6[0].avg_egg_mass;
-           } else {
-                dataGrafikBatangHari6.value = 0;
-           }
-           if(hari7.length > 0) {
-                dataGrafikBatangHari7.value = hari7[0].avg_egg_mass;
-           } else {
-                dataGrafikBatangHari7.value = 0;
-           }
+          getAvgEggMass();
+          // if(hari1.length > 0) {
+          //       dataGrafikBatangHari1.value = hari1[0].avg_egg_mass;
+          //  } else {
+          //       dataGrafikBatangHari1.value = 0;
+          //  }
+          //  if(hari2.length > 0) {
+          //       dataGrafikBatangHari2.value = hari2[0].avg_egg_mass;
+          //  } else {
+          //       dataGrafikBatangHari2.value = 0;
+          //  }
+          //  if(hari3.length > 0) {
+          //       dataGrafikBatangHari3.value = hari3[0].avg_egg_mass;
+          //  } else {
+          //       dataGrafikBatangHari3.value = 0;
+          //  }
+          //  if(hari4.length > 0) {
+          //       dataGrafikBatangHari4.value = hari4[0].avg_egg_mass;
+          //  } else {
+          //       dataGrafikBatangHari4.value = 0;
+          //  }
+          //  if(hari5.length > 0) {
+          //       dataGrafikBatangHari5.value = hari5[0].avg_egg_mass;
+          //  } else {
+          //       dataGrafikBatangHari5.value = 0;
+          //  }
+          //  if(hari6.length > 0) {
+          //       dataGrafikBatangHari6.value = hari6[0].avg_egg_mass;
+          //  } else {
+          //       dataGrafikBatangHari6.value = 0;
+          //  }
+          //  if(hari7.length > 0) {
+          //       dataGrafikBatangHari7.value = hari7[0].avg_egg_mass;
+          //  } else {
+          //       dataGrafikBatangHari7.value = 0;
+          //  }
         }
+  }
+
+  function getPresentaseProduksi() {
+        dataGrafikBatang.value = [];
+        const items = dataPelaporan.responseData.data.items;
+        const persentaseTanggal = {};
+        items.forEach(item => {
+            const tanggalSubmit = new Date(item.tanggal_submit);
+            const diffTime = Math.abs(today - tanggalSubmit);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays <= 6) {
+                const tanggalKey = tanggalSubmit.toDateString(); 
+                if (persentaseTanggal[tanggalKey]) {
+                  persentaseTanggal[tanggalKey] += parseFloat(item.avg_fc) || 0; 
+                } else {
+                  persentaseTanggal[tanggalKey] = parseFloat(item.avg_fc) || 0; 
+                }
+            }
+        });
+       
+        labels.value.forEach(label => {
+            dataGrafikBatang.value.push(persentaseTanggal[label] || null);
+        });
+
+  }
+
+  function getAvgFc() {
+        dataGrafikBatang.value = [];
+        const items = dataPelaporan.responseData.data.items;
+        const avgTanggal = {};
+        items.forEach(item => {
+            const tanggalSubmit = new Date(item.tanggal_submit);
+            const diffTime = Math.abs(today - tanggalSubmit);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays <= 6) {
+                const tanggalKey = tanggalSubmit.toDateString(); 
+                if (avgTanggal[tanggalKey]) {
+                  avgTanggal[tanggalKey] += parseFloat(item.avg_egg_mass) || 0; 
+                } else {
+                  avgTanggal[tanggalKey] = parseFloat(item.avg_egg_mass) || 0; 
+                }
+            }
+        });
+       
+        labels.value.forEach(label => {
+            dataGrafikBatang.value.push(avgTanggal[label] || null);
+        });
+
+  }
+
+  function getAvgEggMass() {
+        dataGrafikBatang.value = [];
+        const items = dataPelaporan.responseData.data.items;
+        const eggMassTanggal = {};
+        items.forEach(item => {
+            const tanggalSubmit = new Date(item.tanggal_submit);
+            const diffTime = Math.abs(today - tanggalSubmit);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays <= 6) {
+                const tanggalKey = tanggalSubmit.toDateString(); 
+                if (eggMassTanggal[tanggalKey]) {
+                  eggMassTanggal[tanggalKey] += parseFloat(item.percentase_telur) || 0; 
+                } else {
+                  eggMassTanggal[tanggalKey] = parseFloat(item.percentase_telur) || 0; 
+                }
+            }
+        });
+       
+        labels.value.forEach(label => {
+            dataGrafikBatang.value.push(eggMassTanggal[label] || null);
+        });
+
   }
 
   async function getPenjadwalan() {
@@ -612,19 +703,49 @@
                 dataPelaporan.setResponseData(response.data);
                 const items = dataPelaporan.responseData.data.items;
                
+                // items.forEach(item => {
+                //     const tanggalSubmit = new Date(item.tanggal_submit);
+                //     const diffTime = Math.abs(today - tanggalSubmit);
+                //     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                //     if (diffDays === 1) hari1.push(item);
+                //     else if (diffDays === 2) hari2.push(item);
+                //     else if (diffDays === 3) hari3.push(item);
+                //     else if (diffDays === 4) hari4.push(item);
+                //     else if (diffDays === 5) hari5.push(item);
+                //     else if (diffDays === 6) hari6.push(item);
+                //     else if (diffDays === 7) hari7.push(item);
+                // });
+
+                const jumlahMatiPerTanggal = {};
+
+                // Loop melalui data respons
                 items.forEach(item => {
                     const tanggalSubmit = new Date(item.tanggal_submit);
                     const diffTime = Math.abs(today - tanggalSubmit);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                    if (diffDays === 1) hari1.push(item);
-                    else if (diffDays === 2) hari2.push(item);
-                    else if (diffDays === 3) hari3.push(item);
-                    else if (diffDays === 4) hari4.push(item);
-                    else if (diffDays === 5) hari5.push(item);
-                    else if (diffDays === 6) hari6.push(item);
-                    else if (diffDays === 7) hari7.push(item);
+                    // Cek apakah tanggal submit ada di antara 7 hari terakhir
+                    if (diffDays <= 6) {
+                        const tanggalKey = tanggalSubmit.toDateString(); // Buat kunci berdasarkan tanggal
+
+                        // Tambahkan data telur utuh ke dalam objek, menjumlahkan jika sudah ada
+                        if (jumlahMatiPerTanggal[tanggalKey]) {
+                          jumlahMatiPerTanggal[tanggalKey] = item.sumall_jumlah_mati;
+                        } else {
+                          jumlahMatiPerTanggal[tanggalKey] = item.sumall_jumlah_mati;
+                        }
+                      
+                    }
                 });
+
+                // Buat array untuk menyimpan data telur utuh untuk 7 hari terakhir
+
+                labels.value.forEach(label => {
+                    totalJumlahMati.value.push(jumlahMatiPerTanggal[label] || null);
+                
+                });
+
                 getFilter(filter.value);
                 getDataGrafikGaris();
                 console.log("Data Hari 1:", hari1);

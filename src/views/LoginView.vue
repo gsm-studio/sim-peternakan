@@ -21,7 +21,7 @@
                     <div class="mb-4">
                       <Field name="password" placeholder="Password" type="password" class="form-control" :class="{ 'is-invalid': errors.password }" />
                       <div class="invalid-feedback">{{errors.password}}</div>
-                      <small class="form-text color-text-rossa">Lupa password?</small> <br>
+                      <!-- <small class="form-text color-text-rossa">Lupa password?</small> <br> -->
                       <!-- <small class="form-text color-text-rossa">Belum pernah daftar? <span>Sign in</span></small> -->
                     </div>
                     <div class="row">

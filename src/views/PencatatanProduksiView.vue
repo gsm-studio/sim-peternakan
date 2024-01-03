@@ -104,17 +104,18 @@
                         <CChart
                             type="bar"
                             :data="{
-                                labels: ['01', '02', '03', '04', '05', '06', '07'],
+                                labels: namaLabels,
                                 datasets: [
                                     {
                                         label: 'Telur Utuh',
                                         backgroundColor: '#5CA882',
-                                        data: [dataGrafikTelurHari1, dataGrafikTelurHari2, dataGrafikTelurHari3, dataGrafikTelurHari4, dataGrafikTelurHari5, dataGrafikTelurHari6]
+                                        data: telurUtuhData
                                     },
                                 ],
                             }"
                             labels="months"
                         />
+                       
                     </div>
                     <div class="card-footer d-flex justify-content-between">
                         <span> 
@@ -192,7 +193,7 @@
                                 type="line"
                                 :wrapper="false"
                                 :data="{
-                                    labels: ['01', '02', '03', '04', '05', '06', '07'],
+                                    labels: namaLabels,
                                     datasets: [
                                     {
                                         label: 'Mati',
@@ -200,7 +201,7 @@
                                         borderColor: 'rgba(220, 220, 220, 1)',
                                         pointBackgroundColor: 'rgba(220, 220, 220, 1)',
                                         pointBorderColor: '#e55353',
-                                        data: [dataGrafikPopulasiHari1, dataGrafikPopulasiHari2, dataGrafikPopulasiHari3, dataGrafikPopulasiHari4, dataGrafikPopulasiHari5, dataGrafikPopulasiHari6, dataGrafikPopulasiHari7]
+                                        data: jumlahMatiData
                                     },
                                 
                                     ]
@@ -264,7 +265,7 @@
                                     type="line"
                                     :wrapper="false"
                                     :data="{
-                                        labels: ['01', '02', '03', '04', '05', '06', '07'],
+                                        labels: namaLabels,
                                         datasets: [
                                         {
                                             label: 'Hari',
@@ -272,7 +273,7 @@
                                             borderColor: 'rgba(220, 220, 220, 1)',
                                             pointBackgroundColor: 'rgba(220, 220, 220, 1)',
                                             pointBorderColor: '#e55353',
-                                            data: [dataGrafikPopulasiHari1, dataGrafikPopulasiHari2, dataGrafikPopulasiHari3, dataGrafikPopulasiHari4, dataGrafikPopulasiHari5, dataGrafikPopulasiHari6, dataGrafikPopulasiHari7]
+                                            data: nilai_fi
                                         }
                                         ]
                                     }"
@@ -1161,17 +1162,6 @@
         deskripsi: '',
     });
 
-    onMounted(() => {
-        
-        console.log(detailPencatatan.tanggal_submit);
-        getIdKandang(route.params.id);
-        getPencatatan(route.params.id);
-     
-        // console.log("List Pencatatan : ", dataPencatatan.responseData.data.items);
-        console.log("Telur Utuh : ", totalTelurUtuh);
-
-    })
-
     const schemas = [
         yup.object({
             id_anak_kandang: yup.number().required(),
@@ -1211,6 +1201,21 @@
     const formatTanggalSubmit = (tanggal) => {
         return moment(tanggal).format('YYYY-MM-DD');
     }
+    const getOnlyDate = (tanggal) => {
+        return moment(tanggal).format('DD');
+    }
+    const labels = ref([]);
+    const namaLabels = ref([]);
+    const telurUtuhData = ref([]);
+    const jumlahMatiData = ref([]);
+    const nilai_fi = ref([]);
+    let tanggal1 = ref(0);
+    let tanggal2 = ref(0);
+    let tanggal3 = ref(0);
+    let tanggal4 = ref(0);
+    let tanggal5 = ref(0);
+    let tanggal6 = ref(0);
+    let tanggal7 = ref(0);
     let hari1 = [];
     let hari2 = [];
     let hari3 = [];
@@ -1246,6 +1251,21 @@
     const dataGrafikStandartHari5 = ref(0);
     const dataGrafikStandartHari6 = ref(0);
     const dataGrafikStandartHari7 = ref(0);
+
+    onMounted(() => {
+        
+        getIdKandang(route.params.id);
+        getPencatatan(route.params.id);
+        
+         // Buat label untuk 7 hari terakhir
+        for (let i = 6; i >= 0; i--) {
+            const date = new Date(today);
+            date.setDate(today.getDate() - i);
+            labels.value.push(date.toDateString()); // Tambahkan label tanggal
+            namaLabels.value.push(getOnlyDate(date));
+        }
+
+    })
 
     function getDataGrafikStandart() {
         console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari1.value);
@@ -1295,36 +1315,43 @@
     function getdataGrafikTelur() {
         if(hari1.length > 0) {
             dataGrafikTelurHari1.value = hari1[0].telur_utuh;
+            tanggal1.value = getOnlyDate(hari1[0].tanggal_submit)
            } else {
             dataGrafikTelurHari1.value = 0;
         }
         if(hari2.length > 0) {
             dataGrafikTelurHari2.value = hari2[0].telur_utuh;
+            tanggal2.value = getOnlyDate(hari2[0].tanggal_submit)
            } else {
             dataGrafikTelurHari2.value = 0;
         }
         if(hari3.length > 0) {
             dataGrafikTelurHari3.value = hari3[0].telur_utuh;
+            tanggal3.value = getOnlyDate(hari3[0].tanggal_submit)
            } else {
             dataGrafikTelurHari3.value = 0;
         }
         if(hari4.length > 0) {
             dataGrafikTelurHari4.value = hari4[0].telur_utuh;
+            tanggal4.value = getOnlyDate(hari4[0].tanggal_submit)
            } else {
             dataGrafikTelurHari4.value = 0;
         }
         if(hari5.length > 0) {
             dataGrafikTelurHari5.value = hari5[0].telur_utuh;
+            tanggal5.value = getOnlyDate(hari5[0].tanggal_submit)
            } else {
             dataGrafikTelurHari5.value = 0;
         }
         if(hari6.length > 0) {
             dataGrafikTelurHari6.value = hari6[0].telur_utuh;
+            tanggal6.value = getOnlyDate(hari6[0].tanggal_submit)
            } else {
             dataGrafikTelurHari6.value = 0;
         }
         if(hari7.length > 0) {
             dataGrafikTelurHari7.value = hari7[0].telur_utuh;
+            tanggal7.value = getOnlyDate(hari7[0].tanggal_submit)
            } else {
             dataGrafikTelurHari7.value = 0;
         }
@@ -1637,20 +1664,63 @@
             .then(response => {
                 dataPencatatan.setResponseData(response.data);
                 const items = dataPencatatan.responseData.data.items;
-               
+        
+                console.log("Data Pencatatan : ", response.data.data);
+
+                // items.forEach(item => {
+                //     const tanggalSubmit = new Date(item.tanggal_submit);
+                //     const diffTime = Math.abs(today - tanggalSubmit);
+                //     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                //     console.log("Diff Days : ", diffDays);
+                //     if (diffDays === 1) hari1.push(item);
+                //     else if (diffDays === 2) hari2.push(item);
+                //     else if (diffDays === 3) hari3.push(item);
+                //     else if (diffDays === 4) hari4.push(item);
+                //     else if (diffDays === 5) hari5.push(item);
+                //     else if (diffDays === 6) hari6.push(item);
+                //     else if (diffDays === 7) hari7.push(item);
+                // });
+
+
+                // Buat array untuk menyimpan data telur utuh per tanggal
+                const telurUtuhPerTanggal = {};
+                const jumlahMatiPerTanggal = {};
+
+                // Loop melalui data respons
                 items.forEach(item => {
                     const tanggalSubmit = new Date(item.tanggal_submit);
                     const diffTime = Math.abs(today - tanggalSubmit);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                    if (diffDays === 1) hari1.push(item);
-                    else if (diffDays === 2) hari2.push(item);
-                    else if (diffDays === 3) hari3.push(item);
-                    else if (diffDays === 4) hari4.push(item);
-                    else if (diffDays === 5) hari5.push(item);
-                    else if (diffDays === 6) hari6.push(item);
-                    else if (diffDays === 7) hari7.push(item);
+                    // Cek apakah tanggal submit ada di antara 7 hari terakhir
+                    if (diffDays <= 6) {
+                        const tanggalKey = tanggalSubmit.toDateString(); // Buat kunci berdasarkan tanggal
+
+                        // Tambahkan data telur utuh ke dalam objek, menjumlahkan jika sudah ada
+                        if (telurUtuhPerTanggal[tanggalKey]) {
+                            telurUtuhPerTanggal[tanggalKey] += item.telur_utuh;
+                        } else {
+                            telurUtuhPerTanggal[tanggalKey] = item.telur_utuh;
+                        }
+                        if (jumlahMatiPerTanggal[tanggalKey]) {
+                            jumlahMatiPerTanggal[tanggalKey] += item.jumlah_mati || 0; // Menambahkan jumlah_mati, jika tidak ada maka 0
+                        } else {
+                            jumlahMatiPerTanggal[tanggalKey] = item.jumlah_mati || 0; // Mengatur jumlah_mati, jika tidak ada maka 0
+                        }
+                    }
                 });
+
+                // Buat array untuk menyimpan data telur utuh untuk 7 hari terakhir
+               
+                labels.value.forEach(label => {
+                    telurUtuhData.value.push(telurUtuhPerTanggal[label] || null);
+                    jumlahMatiData.value.push(jumlahMatiPerTanggal[label] || null);
+                });
+
+
+                console.log("Labels : ", labels);
+                console.log("Telur Utuh Data : ", telurUtuhData);
+
                 getdataGrafikTelur();
                 getdataGrafikPopulasi();
                 latest_usia_mgg.value = dataPencatatan.responseData.data.latest_usia_mgg;
@@ -1661,6 +1731,7 @@
                 console.log("Data Hari 4:", hari4);
                 console.log("Data Hari 5:", hari5);
                 console.log("Data Hari 6:", hari6);
+                console.log("Data Hari 7:", hari7);
                 detailPencatatan.populasi_ayam = dataPencatatan.responseData.data.total_populasi;
                 console.log("List Pencatatan : ", dataPencatatan.responseData);
                 getTotal();
@@ -1783,18 +1854,46 @@
                 detailStandart.deskripsi = response.data.data.items[0].deskripsi;
 
                 const items = dataStandart.responseData.data.items;
+                // items.forEach(item => {
+                //     const tanggalSubmit = new Date(item.created_at);
+                //     const diffTime = Math.abs(today - tanggalSubmit);
+                //     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                //     if (diffDays === 1) standartHari1.push(item);
+                //     else if (diffDays === 2) standartHari2.push(item);
+                //     else if (diffDays === 3) standartHari3.push(item);
+                //     else if (diffDays === 4) standartHari4.push(item);
+                //     else if (diffDays === 5) standartHari5.push(item);
+                //     else if (diffDays === 6) standartHari6.push(item);
+                //     else if (diffDays === 7) standartHari7.push(item);
+                // });
+                const nilaiFiPerTanggal = {};
+
+                // Loop melalui data respons
                 items.forEach(item => {
                     const tanggalSubmit = new Date(item.created_at);
                     const diffTime = Math.abs(today - tanggalSubmit);
                     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
 
-                    if (diffDays === 1) standartHari1.push(item);
-                    else if (diffDays === 2) standartHari2.push(item);
-                    else if (diffDays === 3) standartHari3.push(item);
-                    else if (diffDays === 4) standartHari4.push(item);
-                    else if (diffDays === 5) standartHari5.push(item);
-                    else if (diffDays === 6) standartHari6.push(item);
-                    else if (diffDays === 7) standartHari7.push(item);
+                    // Cek apakah tanggal submit ada di antara 7 hari terakhir
+                    if (diffDays <= 6) {
+                        const tanggalKey = tanggalSubmit.toDateString(); // Buat kunci berdasarkan tanggal
+
+                        // Tambahkan data telur utuh ke dalam objek, menjumlahkan jika sudah ada
+                        if (nilaiFiPerTanggal[tanggalKey]) {
+                            nilaiFiPerTanggal[tanggalKey] += item.nilai_fi;
+                        } else {
+                            nilaiFiPerTanggal[tanggalKey] = item.nilai_fi;
+                        }
+                      
+                    }
+                });
+
+                // Buat array untuk menyimpan data telur utuh untuk 7 hari terakhir
+               
+                labels.value.forEach(label => {
+                    nilai_fi.value.push(nilaiFiPerTanggal[label] || null);
+                 
                 });
                 getDataGrafikStandart();
             })
