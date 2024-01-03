@@ -5,9 +5,9 @@
         <!-- /.row-->
         <div class="row">
           <div class="col-md-12">
-            <div class="card mb-4">
-              <div class="row mb-5">
-                <div class="col-lg-7">
+            <div class="card overflow-hidden mb-4">
+              <div class="row">
+                <div class="col-lg-7 border-end">
                   <div class="card-body">
                     <h4 class="d-inline">Dashboard</h4>
                     <small class="color-text-rossa ms-2">{{ getToday() }}</small>
@@ -119,7 +119,7 @@
                   </div>
                 </div>
                 <div class="col-lg-5">
-                  <div class="card-body">
+                  <div class="card-body populasi">
                     
                     <div class="d-flex justify-content-between mt-4">
                       <div>
@@ -184,24 +184,26 @@
                             ]
                           }"
                         /> -->
-                        <CChart
-                          type="line"
-                          :wrapper="false"
-                          :data="{
-                            labels: namaLabels,
-                            datasets: [
-                              {
-                                label: 'Mati',
-                                backgroundColor: 'rgba(220, 220, 220, 0.2)',
-                                borderColor: 'rgba(220, 220, 220, 1)',
-                                pointBackgroundColor: 'rgba(220, 220, 220, 1)',
-                                pointBorderColor: '#dc3545',
-                                data: totalJumlahMati
-                              },
-                             
-                            ]
-                          }"
-                        />
+                        <div class="chart">
+                          <CChart
+                            type="line"
+                            :wrapper="false"
+                            :data="{
+                              labels: namaLabels,
+                              datasets: [
+                                {
+                                  label: 'Mati',
+                                  backgroundColor: 'rgba(220, 220, 220, 0.2)',
+                                  borderColor: 'rgba(220, 220, 220, 1)',
+                                  pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+                                  pointBorderColor: '#dc3545',
+                                  data: totalJumlahMati
+                                },
+                              
+                              ]
+                            }"
+                          />
+                        </div>
                         
                     </div>
                     
@@ -218,8 +220,8 @@
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-lg-7">
+              <div class="row border-top">
+                <div class="col-lg-7 border-end">
                   <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
                       <h5>Kandang</h5>
@@ -869,5 +871,11 @@
   .pakan .card-title:last-child {
       border-right: none; 
       margin-right: 0; 
+  }
+  .card-body.populasi {
+      height: 90%;
+  }
+  .chart {
+    height: 100%;
   }
 </style>

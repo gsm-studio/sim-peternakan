@@ -5,9 +5,9 @@
             <!-- /.row-->
             <div class="row">
             <div class="col-md-12">
-                <div class="card mb-4">
-                <div class="row mb-5">
-                    <div class="col-lg-12">
+                <div class="card overflow-hidden mb-4">
+                <div class="row">
+                    <div class="col-lg-12 border-bottom">
                         <div class="card-body gx-2 row">
                             <div class="col">
                                 <h4 class="d-inline">Pencatatan produksi</h4>
@@ -42,10 +42,10 @@
                                 </button>
                             </div>
                         </div>
-                    <hr>
+                    
                     </div>
                     
-                    <div class="col-lg-7">
+                    <div class="col-lg-7 border-end">
                     <div class="card-body">
                         <div class="d-flex justify-content-between mt-4">
                             <div class="w-100">
@@ -129,7 +129,7 @@
                     </div>
                     </div>
                     <div class="col-lg-5">
-                    <div class="card-body">
+                    <div class="card-body populasi">
                         
                         <div class="d-flex justify-content-between mt-4">
                         <div>
@@ -219,15 +219,15 @@
                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last Week
                         </span>
                     </div>
-                    </div>
                 </div>
-                <div class="row">
-                    <div class="col-lg-7">
+                </div>
+                <div class="row border-top">
+                    <div class="col-lg-7 border-end">
                     <div class="card-body">
                         <div class="row">
-                            <div>
+                            <div class="mb-4">
                                
-                                <div class="row mb-3">
+                                <div class="row">
                                     <div class="col border-end">
                                         <div class="small text-medium-emphasis mb-2">
                                             Pakan  
@@ -1971,5 +1971,8 @@ table thead tr:nth-child(2) th {
 }
 table tbody tr:nth-child(1) td {
     background-color: rgba(15, 169, 88, 0.3);
+}
+.card-body.populasi {
+    height: 90%;
 }
 </style>
