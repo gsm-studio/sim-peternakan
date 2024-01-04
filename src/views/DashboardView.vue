@@ -41,7 +41,7 @@
                           </div>
                         </div>
                        
-                        <h5 class="card-title mb-0">{{ dataGrafikBatangHari1 }} gr/butir</h5>
+                        <h5 class="card-title mb-0">{{ valueFilter }}</h5>
                         <!-- <small>
                           <svg class="icon color-text-rossa">
                             <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
@@ -394,6 +394,7 @@
   const dataGrafikGarisHari6 = ref(0);
   const dataGrafikGarisHari7 = ref(0);
   const namaFilter = ref('');
+  const valueFilter = ref('');
   let hari1 = [];
   let hari2 = [];
   let hari3 = [];
@@ -609,6 +610,7 @@
         labels.value.forEach(label => {
             dataGrafikBatang.value.push(persentaseTanggal[label] || null);
         });
+        valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '%' : 0;
 
   }
 
@@ -634,6 +636,7 @@
         labels.value.forEach(label => {
             dataGrafikBatang.value.push(avgTanggal[label] || null);
         });
+        valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '' : 0;
 
   }
 
@@ -659,6 +662,7 @@
         labels.value.forEach(label => {
             dataGrafikBatang.value.push(eggMassTanggal[label] || null);
         });
+        valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '%' : 0;
 
   }
 
