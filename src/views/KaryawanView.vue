@@ -218,10 +218,10 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <Form @submit="onSubmitUpdate" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+                    <Form @submit="onSubmitUpdate" :validation-schema="schema2" v-slot="{ errors, isSubmitting }">
                         <Field class="form-control text-center mb-3" type="text" name="nama" placeholder="Nama" v-model="detailKaryawan.nama" :class="{ 'is-invalid': errors.nama }" />
                         <Field class="form-control text-center mb-3" type="email" name="email" placeholder="Email" v-model="detailKaryawan.email" :class="{ 'is-invalid': errors.email }"/>
-                        <Field class="form-control text-center mb-3" type="password" name="password" placeholder="Password" v-model="detailKaryawan.password" :class="{ 'is-invalid': errors.password }"/>
+                        <Field class="form-control text-center mb-3" type="password" name="password_edit" placeholder="Password" v-model="detailKaryawan.password" :class="{ 'is-invalid': errors.password_edit }"/>
                         <Field class="form-control text-center mb-3" type="text" name="nomor_telepon" placeholder="Nomot Telepon" v-model="detailKaryawan.nomor_telepon" :class="{ 'is-invalid': errors.nomor_telepon }"/>
                         <Field class="form-control text-center mb-3" type="text" name="alamat" placeholder="Alamat" v-model="detailKaryawan.alamat" :class="{ 'is-invalid': errors.alamat }"/>
                         <Field v-model="detailKaryawan.role_ids" class="form-control text-center mb-3" name="role_ids" as="select" :class="{ 'is-invalid': errors.role_ids }">
@@ -264,6 +264,15 @@
         nama: Yup.string().required('Nama is required'),
         email: Yup.string().required('Email is required'),
         password: Yup.string().required('Password is required'),
+        password_edit: Yup.string().nullable(),
+        nomor_telepon: Yup.string().required('Nomor Telepon is required'),
+        role_ids: Yup.string().required('Role is required'),
+    });
+
+    const schema2 = Yup.object().shape({
+        nama: Yup.string().required('Nama is required'),
+        email: Yup.string().required('Email is required'),
+        password_edit: Yup.string().nullable(),
         nomor_telepon: Yup.string().required('Nomor Telepon is required'),
         role_ids: Yup.string().required('Role is required'),
     });
@@ -288,6 +297,7 @@
         email: '',
         nomor_telepon: '',
         role_name: '',
+        role_ids: '',
     });
     let search = ref("");
     
@@ -429,12 +439,12 @@
     async function onSubmitUpdate(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama, email, password, nomor_telepon, alamat, role_ids } = values;
+        const { nama, email, password_edit, nomor_telepon, alamat, role_ids } = values;
         console.log(values);
         return axios.put(baseUrl + '/karyawan/' + detailKaryawan.id, {
             nama: nama,
             email: email,
-            password: password,
+            password: password_edit,
             nomor_telepon: nomor_telepon,
             alamat: alamat,
             role_ids: role_ids,
@@ -472,7 +482,8 @@
                 detailKaryawan.email = response.data.data.email;
                 detailKaryawan.nomor_telepon = response.data.data.nomor_telepon;
                 detailKaryawan.role_name = response.data.data.user_roles[0].role.nama;
-                // console.log(detailKaryawan.nama);
+                detailKaryawan.role_ids = response.data.data.user_roles[0].role.id;
+                // console.log(response.data.data);
             })
             .catch(error => {
                 console.error(error);

@@ -34,7 +34,7 @@
                                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
                                     </svg>
                                 </button>
-                                <button @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-secondary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
+                                <button v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0" @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-secondary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
                                     Edit 
                                     <svg class="icon">
                                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-pen"></use>
@@ -669,7 +669,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-if="dataPencatatan.responseData">
+                        <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
                         <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index" class="text-center">
                             <td>{{ formatTanggalSubmit(item.tanggal_submit) }}</td>
                             <td>{{ formatTanggalSubmit(item.tanggal_validasi) }}</td>
@@ -1577,7 +1577,7 @@
             .then(response => {
                 console.log(response);
                 alert('success', 'Data pencatatan berhasil diubah');
-                getPencatatan(1);
+                getPencatatan(detailKandang.id);
                 closeModal();
             })
             .catch(error => {

@@ -350,6 +350,7 @@
 
     onMounted(() => {
         getKandang()
+        getKaryawan()
     });
 
     function clearSearch() {
@@ -468,7 +469,7 @@
             .then(response => {
                 console.log(response);
                 alert('success', 'Data berhasil ditambahkan');
-                getKandang(1);
+                getKandang();
                 closeModal();
             })
             .catch(error => {
@@ -500,7 +501,7 @@
             .then(response => {
                 console.log(response);
                 alert('success', 'Data berhasil diubah');
-                getKandang(1);
+                getKandang();
                 closeModal();
             })
             .catch(error => {
@@ -550,7 +551,7 @@
         })
             .then(response => {
                 console.log(response);
-                getKandang(1);
+                getKandang();
                 alert('success', 'Data berhasil dihapus');
             })
             .catch(error => {

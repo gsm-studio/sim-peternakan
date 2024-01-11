@@ -74,12 +74,12 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-start p-3 shadow">
                             <select v-model="idStrain" @change="getStandart(currentPage, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
-                            <option value="0" selected> 
+                            <!-- <option value="0" selected> 
                                 Semua Strain Ayam 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
                                 <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
                                 </svg>
-                            </option>
+                            </option> -->
                             <template v-if="dataStrain.responseData">
                                 <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">
                                     {{ item.nama }}
@@ -325,14 +325,14 @@
 
     const schema = Yup.object().shape({
         id_strain_ayam: Yup.string().required('Strain ayam is required'),
-        umur: Yup.string().required('Umur is required'),
-        nilai_hd: Yup.string().required('Nilai hd is required'),
-        nilai_bb: Yup.string().required('Nilai bb is required'),
-        nilai_bt: Yup.string().required('Nilai bt is required'),
-        nilai_fi: Yup.string().required('Nilai fi is required'),
-        nilai_fc: Yup.string().required('Nilai fc is required'),
-        egg_mass: Yup.string().required('Nilai Egg mass is required'),
-        deskripsi: Yup.string().required('Deskripsi is required'),
+        umur: Yup.number().required('Umur is required'),
+        nilai_hd: Yup.number().nullable(),
+        nilai_bb: Yup.number().nullable(),
+        nilai_bt: Yup.number().nullable(),
+        nilai_fi: Yup.number().nullable(),
+        nilai_fc: Yup.number().nullable(),
+        egg_mass: Yup.number().nullable(),
+        deskripsi: Yup.string().nullable(),
     });
 
     const onClickHandler = (page) => {
@@ -439,6 +439,7 @@
             })
                 .then(response => {
                     dataStrain.setResponseData(response.data);
+                    idStrain.value = dataStrain.responseData ? dataStrain.responseData.data.items[0].id : 0;
                 })
                 .catch(error => {
                     console.error(error);
@@ -467,13 +468,13 @@
         })
             .then(response => {
                 console.log(response);
-                getStandart(1, idStrain.value);
+                getStandart(currentPage.value, idStrain.value);
                 alert('success', 'Data berhasil ditambahkan');
                 closeModal();
             })
             .catch(error => {
                 console.error(error);
-                alert('error', 'Data gagal ditambahkan');
+                alert('error', error.response.data.message);
                 setErrors({ apiError: error.response.data.message });
             });
         
@@ -502,12 +503,12 @@
             .then(response => {
                 console.log(response);
                 alert('success', 'Data berhasil diubah');
-                getStandart(1, idStrain.value);
+                getStandart(currentPage.value, idStrain.value);
                 closeModal();
             })
             .catch(error => {
                 console.error(error);
-                alert('error', 'Data gagal diubah');
+                alert('error', error.response.data.message);
                 setErrors({ apiError: error.response.data.message });
             });
         
