@@ -430,7 +430,7 @@
             })
             .catch(error => {
                 console.error(error);
-                alert('error', 'Data gagal ditambahkan');
+                alert('error', error.response.data.message);
                 setErrors({ apiError: error.response.data.message });
             });
         
@@ -461,7 +461,7 @@
             })
             .catch(error => {
                 console.error(error);
-                alert('error', 'Data gagal diubah');
+                alert('error', error.response.data.message);
                 setErrors({ apiError: error.response.data.message });
             });
         

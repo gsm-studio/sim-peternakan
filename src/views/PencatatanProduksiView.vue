@@ -58,13 +58,13 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
                                     <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
                                     </svg>
-                                <h5 class="card-title mb-0 text-secondary">{{ berat_telur_gr }} gr/butir</h5>
+                                <h5 class="card-title mb-0 text-secondary">{{ avgall_berat_telur_gr }} gr/butir</h5>
                                 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
                                     <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
                                     </svg>
                                 <!-- <h5 class="card-title mb-0 text-secondary">{{ ((parseInt(totalBeratTelurUtuh) + parseInt(totalBeratTelurBentes)) / (parseInt(totalTelurUtuh) + parseInt(totalTelurBentes))).toFixed(2) }} gr/butir</h5> -->
-                                <h5 class="card-title mb-0 text-secondary">{{ berat_telur_kg }} KG</h5>
+                                <h5 class="card-title mb-0 text-secondary">{{ berat_telur_kg }} kg</h5>
                               
                                 </div>
                                 <!-- <small class="color-text-rossa">
@@ -306,7 +306,11 @@
                             </svg>
                             <svg xmlns="http://www.w3.org/2000/svg" width="136" height="135" viewBox="0 0 136 135" fill="none">
                             <circle cx="68.1484" cy="67.5" r="67.5" fill="#8660D8" fill-opacity="0.7"/>
-                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">FI {{ detailStandart.nilai_fi }}</text>
+                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">FI {{ berat_pakan_per_ekor_gram }}</text>
+                            </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="136" height="135" viewBox="0 0 136 135" fill="none">
+                            <circle cx="68.1484" cy="67.5" r="67.5" fill="#638889" fill-opacity="0.7"/>
+                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">Produksi Telur {{ percentase_telur }}</text>
                             </svg>
                         </div>
                     </div>
@@ -1231,6 +1235,9 @@
     const berat_telur_gr = ref(0);
     const berat_telur_kg = ref(0);
     const total_telur = ref(0);
+    const berat_pakan_per_ekor_gram = ref(0);
+    const percentase_telur = ref(0);
+    const avgall_berat_telur_gr = ref(0);
     let hari1 = [];
     let hari2 = [];
     let hari3 = [];
@@ -1755,6 +1762,9 @@
                 berat_telur_gr.value = dataPelaporan.responseData.data.items[0].berat_telur_gr ?? 0;
                 berat_telur_kg.value = dataPelaporan.responseData.data.items[0].berat_telur_kg ?? 0;
                 total_telur.value = dataPelaporan.responseData.data.items[0].total_telur ?? 0;
+                berat_pakan_per_ekor_gram.value = dataPelaporan.responseData.data.items[0].berat_pakan_per_ekor_gram ?? 0;
+                percentase_telur.value = dataPelaporan.responseData.data.items[0].percentase_telur ?? 0;
+                avgall_berat_telur_gr.value = dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0;
                 const items = dataPelaporan.responseData.data.items;
                 const gramPerEkorPakan = {};
                 items.forEach(item => {
