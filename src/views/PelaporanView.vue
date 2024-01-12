@@ -134,7 +134,7 @@
                             <td>{{ item.telur_bentes }}</td>
                             <td>{{ item.total_telur }}</td>
                             <td>{{ item.percentase_telur }}</td>
-                            <td>{{ item.berat_telur_gr }}</td>
+                            <td>{{ item.avg_berat_telur_gr }}</td>
 
                             <td>{{ item.berat_telur_utuh_kg }}</td>
                             <td>{{ item.berat_telur_bentes_kg }}</td>
@@ -197,7 +197,7 @@
                              <td>{{ dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0 }}</td>
                              <td>{{ dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0 }}</td>
                              <td>{{ dataPelaporan.responseData.data.items[0].avg_percentase_telur ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_gr ?? 0 }}</td>
+                             <td>{{ dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0 }}</td>
                              <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0 }}</td>
                              <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0 }}</td>
                              <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0 }}</td>

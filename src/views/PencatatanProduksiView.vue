@@ -679,6 +679,7 @@
                         <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
                         <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index" class="text-center">
                             <td>{{ formatTanggalSubmit(item.tanggal_submit) }}</td>
+                            <!-- <td>{{ item.tanggal_submit }}</td> -->
                             <td>{{ formatTanggalSubmit(item.tanggal_validasi) }}</td>
                             <td>{{ item.usia_hari }}</td>
                             <td>{{ item.usia_mgg }}</td>
@@ -1051,6 +1052,7 @@
     import axios from 'axios'
     import { useRoute } from 'vue-router'
     import moment from 'moment'
+    import moments from 'moment-timezone';
     import Swal from 'sweetalert2'
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
@@ -1219,7 +1221,7 @@
         return schemas[currentStep.value];
     });
     const formatTanggalSubmit = (tanggal) => {
-        return moment(tanggal).format('YYYY-MM-DD');
+        return moment.utc(tanggal).format('DD-MM-YYYY');
     }
     const getOnlyDate = (tanggal) => {
         return moment(tanggal).format('DD');
@@ -1230,6 +1232,7 @@
     const jumlahMatiData = ref([]);
     const nilai_fi = ref([]);
     const totalGramPerEkorPakan = ref([]);
+    const totalAvgAllBeratTelurGr = ref([]);
     const egg_mass_pelaporan = ref(0);
     const fc_pelaporan = ref(0);
     const berat_telur_gr = ref(0);
@@ -1238,13 +1241,6 @@
     const berat_pakan_per_ekor_gram = ref(0);
     const percentase_telur = ref(0);
     const avgall_berat_telur_gr = ref(0);
-    let hari1 = [];
-    let hari2 = [];
-    let hari3 = [];
-    let hari4 = [];
-    let hari5 = [];
-    let hari6 = [];
-    let hari7 = [];
 
     onMounted(() => {
         rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
@@ -1530,7 +1526,7 @@
                 dataPencatatan.setResponseData(response.data);
                 const items = dataPencatatan.responseData.data.items;
         
-                console.log("Data Pencatatan : ", response.data.data);
+                console.log("Data Pencatatan : ", items);
 
                 // Buat array untuk menyimpan data telur utuh per tanggal
                 const telurUtuhPerTanggal = {};
@@ -1538,14 +1534,18 @@
 
                 // Loop melalui data respons
                 items.forEach(item => {
-                    const tanggalSubmit = new Date(item.tanggal_submit);
-                    const diffTime = Math.abs(today - tanggalSubmit);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
+                    // const tanggalSubmit = new Date(item.tanggal_submit);
+                    const todays = moments().utc();
+                    const tanggalSubmit = moments(item.tanggal_submit).utc();
+                    console.log("Tanggal Submit : ", tanggalSubmit);
+                    const diffTime = Math.abs(todays - tanggalSubmit);
+                    // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                    const diffDays = todays.diff(tanggalSubmit, 'days'); 
                     // Cek apakah tanggal submit ada di antara 7 hari terakhir
+                    console.log("Diff Days : ", item.tanggal_submit);
                     if (diffDays <= 6) {
-                        const tanggalKey = tanggalSubmit.toDateString(); // Buat kunci berdasarkan tanggal
-
+                        const tanggalKey = tanggalSubmit.format('ddd MMM DD YYYY'); // Buat kunci berdasarkan tanggal
+                        console.log("Tanggal Key : ", tanggalKey);
                         // Tambahkan data telur utuh ke dalam objek, menjumlahkan jika sudah ada
                         if (telurUtuhPerTanggal[tanggalKey]) {
                             telurUtuhPerTanggal[tanggalKey] += item.telur_utuh;
@@ -1573,13 +1573,7 @@
 
                 latest_usia_mgg.value = dataPencatatan.responseData.data.latest_usia_mgg;
                 latest_usia_hari.value = dataPencatatan.responseData.data.latest_usia_hari;
-                console.log("Data Hari 1:", hari1);
-                console.log("Data Hari 2:", hari2);
-                console.log("Data Hari 3:", hari3);
-                console.log("Data Hari 4:", hari4);
-                console.log("Data Hari 5:", hari5);
-                console.log("Data Hari 6:", hari6);
-                console.log("Data Hari 7:", hari7);
+            
                 detailPencatatan.populasi_ayam = dataPencatatan.responseData.data.total_populasi;
                 console.log("List Pencatatan : ", dataPencatatan.responseData);
                 getTotal();
@@ -1764,9 +1758,10 @@
                 total_telur.value = dataPelaporan.responseData.data.items[0].total_telur ?? 0;
                 berat_pakan_per_ekor_gram.value = dataPelaporan.responseData.data.items[0].berat_pakan_per_ekor_gram ?? 0;
                 percentase_telur.value = dataPelaporan.responseData.data.items[0].percentase_telur ?? 0;
-                avgall_berat_telur_gr.value = dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0;
+                // avgall_berat_telur_gr.value = dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0;
                 const items = dataPelaporan.responseData.data.items;
                 const gramPerEkorPakan = {};
+                const avgAllBeratTelurGr = {};
                 items.forEach(item => {
                     const tanggalSubmit = new Date(item.tanggal_submit);
                     const diffTime = Math.abs(today - tanggalSubmit);
@@ -1779,14 +1774,20 @@
                         } else {
                           gramPerEkorPakan[tanggalKey] = item.berat_pakan_per_ekor_gram;
                         }
-                      
+                        if (avgAllBeratTelurGr[tanggalKey]) {
+                            avgAllBeratTelurGr[tanggalKey] = item.avgall_berat_telur_gr;
+                        } else {
+                            avgAllBeratTelurGr[tanggalKey] = item.avgall_berat_telur_gr;
+                        }
                     }
                 });
 
                 labels.value.forEach(label => {
                     totalGramPerEkorPakan.value.push(gramPerEkorPakan[label] || null);
-                
+                    totalAvgAllBeratTelurGr.value.push(avgAllBeratTelurGr[label] || null);
                 });
+                console.log("avgAllBeratTelurGr : ", avgAllBeratTelurGr);
+                avgall_berat_telur_gr.value = totalAvgAllBeratTelurGr.value[6] ? totalAvgAllBeratTelurGr.value[6] + '' : 0;
 
             })
             .catch(error => {

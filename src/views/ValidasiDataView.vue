@@ -1138,7 +1138,7 @@
                 closeModal();
             })
             .catch(error => {
-                alert('error', 'Data gagal diubah')
+                alert('error', error.response.data.message);
                 console.error(error);
             });
     }
@@ -1337,7 +1337,7 @@
                 getIdPencatatan(id);
             })
             .catch(error => {
-                alert('error', 'Data gagal disetujui')
+                alert('error', error.response.data.message);
                 console.error(error);
             });
     }
@@ -1359,7 +1359,7 @@
                 getIdPencatatan(id);
             })
             .catch(error => {
-                alert('error', 'Data gagal ditolak')
+                alert('error', error.response.data.message);
                 console.error(error);
             });
     }
