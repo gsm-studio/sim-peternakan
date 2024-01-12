@@ -106,7 +106,7 @@
 
                             <th class="row-bawah-bg" scope="col">Berat Telur utuh</th>
                             <th class="row-bawah-bg" scope="col">Berat Telur bentes</th>
-                            <th class="row-bawah-bg" scope="col">Total</th>
+                            <th class="row-bawah-bg" scope="col">Total (kg)</th>
                         
                             <th class="row-bawah-bg" scope="col">%</th>
                             <th class="row-bawah-bg" scope="col">gr/butir</th>
@@ -158,17 +158,7 @@
                             <td>{{ item.nama_strain_ayam }}</td>
 
                             <td>{{ item.nama_treatment }}</td>
-                            <!-- <td>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <mask id="mask0_142_372" style="mask-type:luminance" maskUnits="userSpaceOnUse" x="1" y="1" width="18" height="18">
-                                    <path d="M2.91699 17.5H17.917" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                    <path d="M4.58398 11.1333V14.1667H7.63273L16.2507 5.545L13.2069 2.5L4.58398 11.1333Z" fill="white" stroke="white" stroke-width="2" stroke-linejoin="round"/>
-                                </mask>
-                                <g mask="url(#mask0_142_372)">
-                                    <path d="M0 0H20V20H0V0Z" fill="#0FA958"/>
-                                </g>
-                                </svg>
-                            </td> -->
+                          
                         
                         </tr>
                         <tr>

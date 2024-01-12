@@ -368,6 +368,8 @@
       avg_telur_bentes: null,
       avg_jumlah_mati: null,
       avg_populasi_total: null,
+      avg_percentase_telur: null,
+      avg_fc: null,
   });
   const getOnlyDate = (tanggal) => {
       return moment(tanggal).format('DD');
@@ -379,20 +381,6 @@
   const uniquePakan = ref([]);
   const filter = ref('avg');
   const dataGrafikBatang = ref([]);
-  const dataGrafikBatangHari1 = ref(0);
-  const dataGrafikBatangHari2 = ref(0);
-  const dataGrafikBatangHari3 = ref(0);
-  const dataGrafikBatangHari4 = ref(0);
-  const dataGrafikBatangHari5 = ref(0);
-  const dataGrafikBatangHari6 = ref(0);
-  const dataGrafikBatangHari7 = ref(0);
-  const dataGrafikGarisHari1 = ref(0);
-  const dataGrafikGarisHari2 = ref(0);
-  const dataGrafikGarisHari3 = ref(0);
-  const dataGrafikGarisHari4 = ref(0);
-  const dataGrafikGarisHari5 = ref(0);
-  const dataGrafikGarisHari6 = ref(0);
-  const dataGrafikGarisHari7 = ref(0);
   const namaFilter = ref('');
   const valueFilter = ref('');
   let hari1 = [];
@@ -430,161 +418,23 @@
         getPelaporan(idKandang.value, rangeDate.start, rangeDate.end);
     });
 
-  function getDataGrafikGaris() {
-        if(hari1.length > 0) {
-            dataGrafikGarisHari1.value = hari1[0].sumall_jumlah_mati;
-
-        } else {
-            dataGrafikGarisHari1.value = 0;
-        }
-        if(hari2.length > 0) {
-            dataGrafikGarisHari2.value = hari2[0].sumall_jumlah_mati;
-        } else {
-            dataGrafikGarisHari2.value = 0;
-        }
-        if(hari3.length > 0) {
-            dataGrafikGarisHari3.value = hari3[0].sumall_jumlah_mati;
-        } else {
-            dataGrafikGarisHari3.value = 0;
-        }
-        if(hari4.length > 0) {
-            dataGrafikGarisHari4.value = hari4[0].sumall_jumlah_mati;
-        } else {
-            dataGrafikGarisHari4.value = 0;
-        }
-        if(hari5.length > 0) {
-            dataGrafikGarisHari5.value = hari5[0].sumall_jumlah_mati;
-        } else {
-            dataGrafikGarisHari5.value = 0;
-        }
-        if(hari6.length > 0) {
-            dataGrafikGarisHari6.value = hari6[0].sumall_jumlah_mati;
-        } else {
-            dataGrafikGarisHari6.value = 0;
-        }
-        if(hari7.length > 0) {
-            dataGrafikGarisHari7.value = hari7[0].sumall_jumlah_mati;
-        } else {
-            dataGrafikGarisHari7.value = 0;
-        }
-  }
 
   function getFilter(value) {
         if (value === 'avg') {
           namaFilter.value = 'Avg. % persentase produksi';
           getPresentaseProduksi();
-          //  if(hari1.length > 0) {
-          //       dataGrafikBatangHari1.value = hari1[0].percentase_telur;
-          //  } else {
-          //       dataGrafikBatangHari1.value = 0;
-          //  }
-          //  if(hari2.length > 0) {
-          //       dataGrafikBatangHari2.value = hari2[0].percentase_telur;
-          //  } else {
-          //       dataGrafikBatangHari2.value = 0;
-          //  }
-          //  if(hari3.length > 0) {
-          //       dataGrafikBatangHari3.value = hari3[0].percentase_telur;
-          //  } else {
-          //       dataGrafikBatangHari3.value = 0;
-          //  }
-          //  if(hari4.length > 0) {
-          //       dataGrafikBatangHari4.value = hari4[0].percentase_telur;
-          //  } else {
-          //       dataGrafikBatangHari4.value = 0;
-          //  }
-          //  if(hari5.length > 0) {
-          //       dataGrafikBatangHari5.value = hari5[0].percentase_telur;
-          //  } else {
-          //       dataGrafikBatangHari5.value = 0;
-          //  }
-          //  if(hari6.length > 0) {
-          //       dataGrafikBatangHari6.value = hari6[0].percentase_telur;
-          //  } else {
-          //       dataGrafikBatangHari6.value = 0;
-          //  }
-          //  if(hari7.length > 0) {
-          //       dataGrafikBatangHari7.value = hari7[0].percentase_telur;
-          //  } else {
-          //       dataGrafikBatangHari7.value = 0;
-          //  }
+          valueFilter.value = detailPelaporan.avg_percentase_telur ? detailPelaporan.avg_percentase_telur + '%' : 0;
           
         } else if (value === 'fc') {
           namaFilter.value = 'Avg FC';
+          valueFilter.value = detailPelaporan.avg_fc ? detailPelaporan.avg_fc + '' : 0;
           getAvgFc();
-          // if(hari1.length > 0) {
-          //       dataGrafikBatangHari1.value = hari1[0].avg_fc;
-          //  } else {
-          //       dataGrafikBatangHari1.value = 0;
-          //  }
-          //  if(hari2.length > 0) {
-          //       dataGrafikBatangHari2.value = hari2[0].avg_fc;
-          //  } else {
-          //       dataGrafikBatangHari2.value = 0;
-          //  }
-          //  if(hari3.length > 0) {
-          //       dataGrafikBatangHari3.value = hari3[0].avg_fc;
-          //  } else {
-          //       dataGrafikBatangHari3.value = 0;
-          //  }
-          //  if(hari4.length > 0) {
-          //       dataGrafikBatangHari4.value = hari4[0].avg_fc;
-          //  } else {
-          //       dataGrafikBatangHari4.value = 0;
-          //  }
-          //  if(hari5.length > 0) {
-          //       dataGrafikBatangHari5.value = hari5[0].avg_fc;
-          //  } else {
-          //       dataGrafikBatangHari5.value = 0;
-          //  }
-          //  if(hari6.length > 0) {
-          //       dataGrafikBatangHari6.value = hari6[0].avg_fc;
-          //  } else {
-          //       dataGrafikBatangHari6.value = 0;
-          //  }
-          //  if(hari7.length > 0) {
-          //       dataGrafikBatangHari7.value = hari7[0].avg_fc;
-          //  } else {
-          //       dataGrafikBatangHari7.value = 0;
-          //  }
+          
         } else if (value === 'egg_mass') {
           namaFilter.value = 'Avg Egg Mass';
+          valueFilter.value = detailPelaporan.avg_egg_mass ? detailPelaporan.avg_egg_mass + '' : 0;
           getAvgEggMass();
-          // if(hari1.length > 0) {
-          //       dataGrafikBatangHari1.value = hari1[0].avg_egg_mass;
-          //  } else {
-          //       dataGrafikBatangHari1.value = 0;
-          //  }
-          //  if(hari2.length > 0) {
-          //       dataGrafikBatangHari2.value = hari2[0].avg_egg_mass;
-          //  } else {
-          //       dataGrafikBatangHari2.value = 0;
-          //  }
-          //  if(hari3.length > 0) {
-          //       dataGrafikBatangHari3.value = hari3[0].avg_egg_mass;
-          //  } else {
-          //       dataGrafikBatangHari3.value = 0;
-          //  }
-          //  if(hari4.length > 0) {
-          //       dataGrafikBatangHari4.value = hari4[0].avg_egg_mass;
-          //  } else {
-          //       dataGrafikBatangHari4.value = 0;
-          //  }
-          //  if(hari5.length > 0) {
-          //       dataGrafikBatangHari5.value = hari5[0].avg_egg_mass;
-          //  } else {
-          //       dataGrafikBatangHari5.value = 0;
-          //  }
-          //  if(hari6.length > 0) {
-          //       dataGrafikBatangHari6.value = hari6[0].avg_egg_mass;
-          //  } else {
-          //       dataGrafikBatangHari6.value = 0;
-          //  }
-          //  if(hari7.length > 0) {
-          //       dataGrafikBatangHari7.value = hari7[0].avg_egg_mass;
-          //  } else {
-          //       dataGrafikBatangHari7.value = 0;
-          //  }
+        
         }
   }
 
@@ -600,9 +450,9 @@
             if (diffDays <= 6) {
                 const tanggalKey = tanggalSubmit.toDateString(); 
                 if (persentaseTanggal[tanggalKey]) {
-                  persentaseTanggal[tanggalKey] += parseFloat(item.avg_fc) || 0; 
+                  persentaseTanggal[tanggalKey] += parseFloat(item.percentase_telur) || 0; 
                 } else {
-                  persentaseTanggal[tanggalKey] = parseFloat(item.avg_fc) || 0; 
+                  persentaseTanggal[tanggalKey] = parseFloat(item.percentase_telur) || 0; 
                 }
             }
         });
@@ -610,7 +460,7 @@
         labels.value.forEach(label => {
             dataGrafikBatang.value.push(persentaseTanggal[label] || null);
         });
-        valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '%' : 0;
+        // valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '%' : 0;
 
   }
 
@@ -626,9 +476,9 @@
             if (diffDays <= 6) {
                 const tanggalKey = tanggalSubmit.toDateString(); 
                 if (avgTanggal[tanggalKey]) {
-                  avgTanggal[tanggalKey] += parseFloat(item.avg_egg_mass) || 0; 
+                  avgTanggal[tanggalKey] += parseFloat(item.fc) || 0; 
                 } else {
-                  avgTanggal[tanggalKey] = parseFloat(item.avg_egg_mass) || 0; 
+                  avgTanggal[tanggalKey] = parseFloat(item.fc) || 0; 
                 }
             }
         });
@@ -636,7 +486,7 @@
         labels.value.forEach(label => {
             dataGrafikBatang.value.push(avgTanggal[label] || null);
         });
-        valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '' : 0;
+        // valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '' : 0;
 
   }
 
@@ -652,9 +502,9 @@
             if (diffDays <= 6) {
                 const tanggalKey = tanggalSubmit.toDateString(); 
                 if (eggMassTanggal[tanggalKey]) {
-                  eggMassTanggal[tanggalKey] += parseFloat(item.percentase_telur) || 0; 
+                  eggMassTanggal[tanggalKey] += parseFloat(item.egg_mass) || 0; 
                 } else {
-                  eggMassTanggal[tanggalKey] = parseFloat(item.percentase_telur) || 0; 
+                  eggMassTanggal[tanggalKey] = parseFloat(item.egg_mass) || 0; 
                 }
             }
         });
@@ -662,7 +512,7 @@
         labels.value.forEach(label => {
             dataGrafikBatang.value.push(eggMassTanggal[label] || null);
         });
-        valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '%' : 0;
+        // valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '%' : 0;
 
   }
 
@@ -708,20 +558,6 @@
             .then(response => {
                 dataPelaporan.setResponseData(response.data);
                 const items = dataPelaporan.responseData.data.items;
-               
-                // items.forEach(item => {
-                //     const tanggalSubmit = new Date(item.tanggal_submit);
-                //     const diffTime = Math.abs(today - tanggalSubmit);
-                //     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                //     if (diffDays === 1) hari1.push(item);
-                //     else if (diffDays === 2) hari2.push(item);
-                //     else if (diffDays === 3) hari3.push(item);
-                //     else if (diffDays === 4) hari4.push(item);
-                //     else if (diffDays === 5) hari5.push(item);
-                //     else if (diffDays === 6) hari6.push(item);
-                //     else if (diffDays === 7) hari7.push(item);
-                // });
 
                 const jumlahMatiPerTanggal = {};
 
@@ -753,7 +589,6 @@
                 });
 
                 getFilter(filter.value);
-                getDataGrafikGaris();
                 console.log("Data Hari 1:", hari1);
                 console.log("Data Hari 2:", hari2);
                 console.log("Data Hari 3:", hari3);
@@ -779,6 +614,8 @@
                     detailPelaporan.avg_telur_bentes = parseFloat(dataPelaporan.responseData.data.items[0].avg_telur_bentes).toFixed(2);
                     detailPelaporan.avg_jumlah_mati = parseFloat(dataPelaporan.responseData.data.items[0].avg_jumlah_mati).toFixed(2);
                     detailPelaporan.avg_populasi_total = parseFloat(dataPelaporan.responseData.data.items[0].avg_populasi_total).toFixed(2);
+                    detailPelaporan.avg_percentase_telur = parseFloat(dataPelaporan.responseData.data.items[0].avg_percentase_telur).toFixed(2);
+                    detailPelaporan.avg_fc = parseFloat(dataPelaporan.responseData.data.items[0].avg_fc).toFixed(2);
 
                 } else {
                     detailPelaporan.avg_egg_mass = 0;
@@ -798,10 +635,13 @@
                     detailPelaporan.avg_telur_bentes = 0;
                     detailPelaporan.avg_jumlah_mati = 0;
                     detailPelaporan.avg_populasi_total = 0;
+                    detailPelaporan.avg_percentase_telur = 0;
+                    detailPelaporan.avg_fc = 0;
                     
                 } 
                 filteredPakan.value = dataPelaporan.responseData.data.items.filter(item => item.nama_jenis_pakan !== null && item.nama_jenis_pakan !== undefined);
                 uniquePakan.value = [...new Set(filteredPakan.value.map(item => item.nama_jenis_pakan))];
+                valueFilter.value = detailPelaporan.avg_percentase_telur ? detailPelaporan.avg_percentase_telur + '%' : 0;
                 console.log("Pelaporan : ", response);
             })
             .catch(error => {

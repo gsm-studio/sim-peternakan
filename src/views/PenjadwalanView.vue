@@ -65,7 +65,7 @@
                     <table class="table pelaporan table-bordered">
                     <thead>
                         <tr>
-                            <th scope="col">No</th>
+                            <!-- <th scope="col">No</th> -->
                             <th scope="col">Nama Tugas</th>
                             <th scope="col">Nama Kandang</th>
                             <th scope="col">Waktu Pelaksana</th>
@@ -76,7 +76,7 @@
                     <tbody>
                         <template v-if="dataPenjadwalan.responseData && dataPenjadwalan.responseData.data.items.length > 0">
                         <tr v-for="item in dataPenjadwalan.responseData.data.items" :key="item.id">
-                            <td>{{ item.id }}</td>
+                            <!-- <td>{{ item.id }}</td> -->
                             <td>{{ item.tugas.nama }}</td>
                             <td>{{ item.kandang.nama }}</td>
                             <td>{{ formatTanggal(item.waktu_pelaksanaan) }}</td>

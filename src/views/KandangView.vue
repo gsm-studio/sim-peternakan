@@ -93,7 +93,7 @@
                     <table class="table pelaporan table-bordered">
                     <thead>
                         <tr>
-                        <th scope="col">ID Kandang</th>
+                        <!-- <th scope="col">ID Kandang</th> -->
                         <th scope="col">Nama Kandang</th>
                         <th scope="col">Anak Kandang</th>
                         <th scope="col">Nama Mandor</th>
@@ -105,7 +105,7 @@
                     <tbody>
                         <template v-if="dataKandang.responseData && dataKandang.responseData.data.items.length > 0">
                             <tr v-for="item in dataKandang.responseData.data.items" :key="item.id" class="text-center">
-                                <td>{{ item.id }}</td>
+                                <!-- <td>{{ item.id }}</td> -->
                                 <td>{{ item.nama }}</td>
                                 <td>{{ item.nama_anak_kandang }}</td>
                                 <td>{{ item.nama_mandor }}</td>

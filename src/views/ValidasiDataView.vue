@@ -137,7 +137,7 @@
                     <thead>
                         <tr>
                             <!-- <th>No</th> -->
-                            <th scope="col">ID Kandang</th>
+                            <!-- <th scope="col">ID Kandang</th> -->
                             <th scope="col">Nama Kandang</th>
                             <th scope="col">Anak Kandang</th>
                             <th scope="col">Nama Mandor</th>
@@ -151,7 +151,7 @@
                         <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
                         <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index">
                             <!-- <td>{{ item.id }}</td> -->
-                            <td>{{ item.id_kandang }}</td>
+                            <!-- <td>{{ item.id_kandang }}</td> -->
                             <td>{{ item.kandang.nama }}</td>
                             <td>{{ item.nama_anak_kandang }}</td>
                             <td>{{ item.nama_mandor }}</td>

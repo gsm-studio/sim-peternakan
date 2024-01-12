@@ -54,15 +54,18 @@
                                 <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
                                 </div>
                                 <div class="w-100 d-flex align-items-center justify-content-between">
-                                <h5 class="card-title mb-0">{{ parseInt(totalTelurUtuh) + parseInt(totalTelurBentes) }} Butir</h5>
+                                <h5 class="card-title mb-0">{{ total_telur }} Butir</h5>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
                                     <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
                                     </svg>
-                                <h5 class="card-title mb-0 text-secondary">{{ parseInt(totalBeratTelurUtuh) + parseInt(totalBeratTelurBentes) }} Gram</h5>
+                                <h5 class="card-title mb-0 text-secondary">{{ berat_telur_gr }} gr/butir</h5>
+                                
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
                                     <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
                                     </svg>
-                                <h5 class="card-title mb-0 text-secondary">{{ ((parseInt(totalBeratTelurUtuh) + parseInt(totalBeratTelurBentes)) / (parseInt(totalTelurUtuh) + parseInt(totalTelurBentes))).toFixed(2) }} gr/butir</h5>
+                                <!-- <h5 class="card-title mb-0 text-secondary">{{ ((parseInt(totalBeratTelurUtuh) + parseInt(totalBeratTelurBentes)) / (parseInt(totalTelurUtuh) + parseInt(totalTelurBentes))).toFixed(2) }} gr/butir</h5> -->
+                                <h5 class="card-title mb-0 text-secondary">{{ berat_telur_kg }} KG</h5>
+                              
                                 </div>
                                 <!-- <small class="color-text-rossa">
                                 (20,1 %)
@@ -137,7 +140,7 @@
                             Populasi Ayam 
                             <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
                             </div>
-                            <h5 class="card-title mb-0">{{ totalPopulasi }} ekor</h5>
+                            <h5 class="card-title mb-0">{{ totalPopulasi ? totalPopulasi : detailKandang.populasi_awal }} ekor</h5>
                             <!-- <small>
                             <svg class="icon color-text-rossa">
                                 <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
@@ -241,7 +244,7 @@
                                     </div>
                                     <div class="col border-start">
                                         <h5 class="card-title mb-0">Standar pakan</h5>
-                                        <h5 class="card-title mb-0 text-secondary">90.2 gr/ekor</h5>
+                                        <h5 class="card-title mb-0 text-secondary">N/A gr/ekor</h5>
                                     </div>
                                     
                                 </div>
@@ -273,7 +276,7 @@
                                             borderColor: 'rgba(220, 220, 220, 1)',
                                             pointBackgroundColor: 'rgba(220, 220, 220, 1)',
                                             pointBorderColor: '#e55353',
-                                            data: nilai_fi
+                                            data: totalGramPerEkorPakan
                                         }
                                         ]
                                     }"
@@ -295,11 +298,11 @@
                         
                         <svg xmlns="http://www.w3.org/2000/svg" width="146" height="145" viewBox="0 0 146 145" fill="none">
                             <circle cx="73.1484" cy="72.5" r="72.5" fill="#6AD0B8"/>
-                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">Egg Mass {{ detailStandart.egg_mass }}</text>
+                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">Egg Mass {{ egg_mass_pelaporan }}</text>
                             </svg>
                             <svg xmlns="http://www.w3.org/2000/svg" width="118" height="117" viewBox="0 0 118 117" fill="none">
                             <circle cx="59.1484" cy="58.5" r="58.5" fill="#D8608B" fill-opacity="0.7"/>
-                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">FC {{ detailStandart.nilai_fc }}</text>
+                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">FC {{ fc_pelaporan }}</text>
                             </svg>
                             <svg xmlns="http://www.w3.org/2000/svg" width="136" height="135" viewBox="0 0 136 135" fill="none">
                             <circle cx="68.1484" cy="67.5" r="67.5" fill="#8660D8" fill-opacity="0.7"/>
@@ -544,7 +547,7 @@
                             <div class="mb-3">
                                 <Field as="select" name="jenis_pakan" class="form-control text-center">
                                     <template v-if="dataPakan.responseData">
-                                        <option value="" disabled>Pilih Nama Pakan</option>
+                                        <option value="">Pilih Nama Pakan</option>
                                         <option v-for="item in dataPakan.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                                     </template>
                                 </Field>
@@ -553,7 +556,7 @@
                             <div class="mb-3">
                                 <Field as="select" name="jenis_treatment" class="form-control text-center">
                                     <template v-if="dataTreatment.responseData">
-                                        <option value="" disabled>Pilih Nama Treatment</option>
+                                        <option value="">Pilih Nama Treatment</option>
                                         <option v-for="item in dataTreatment.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                                     </template>
                                 </Field>
@@ -853,7 +856,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <Field name="jumlah_pindah" class="form-control text-center" type="number" placeholder="Jumlah Pindah" />
+                                        <Field v-model="detailPencatatan.jumlah_pindah" name="jumlah_pindah" class="form-control text-center" type="number" placeholder="Jumlah Pindah" />
                                         <ErrorMessage class="text-danger" name="jumlah_pindah" />
                                     </div>
 
@@ -862,7 +865,7 @@
                                     <div class="mb-3">
                                         <Field @change="getKandangPenerima($event)" as="select" name="id_kandang_tujuan" class="form-control text-center">
                                             <template v-if="dataKandang.responseData">
-                                                <option value="" disabled>Pilih Nama Kandang Penerima</option>
+                                                <option value="">Pilih Nama Kandang Penerima</option>
                                                 <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                                             </template>
                                         </Field>
@@ -873,7 +876,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
-                                        <Field name="jumlah_terima" class="form-control text-center" type="number" placeholder="Jumlah Terima" />
+                                        <Field v-model="detailPencatatan.jumlah_terima" name="jumlah_terima" class="form-control text-center" type="number" placeholder="Jumlah Terima" />
                                         <ErrorMessage class="text-danger" name="jumlah_terima" />
                                     </div>
                                 </div>
@@ -881,7 +884,7 @@
                                     <div class="mb-3">
                                         <Field @change="getKandangPengirim($event)" as="select" name="id_kandang_pengirim" class="form-control text-center">
                                             <template v-if="dataKandang.responseData">
-                                                <option value="" disabled>Pilih Nama Kandang Pengirim</option>
+                                                <option value="">Pilih Nama Kandang Pengirim</option>
                                                 <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                                             </template>
                                         </Field>
@@ -985,7 +988,7 @@
                             <div class="mb-3">
                                 <Field v-model="detailPencatatan.id_jenis_pakan" as="select" name="jenis_pakan" class="form-control text-center">
                                     <template v-if="dataPakan.responseData">
-                                        <option value="" disabled>Pilih Nama Pakan</option>
+                                        <option value="">Pilih Nama Pakan</option>
                                         <option v-for="item in dataPakan.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                                     </template>
                                 </Field>
@@ -994,7 +997,7 @@
                             <div class="mb-3">
                                 <Field v-model="detailPencatatan.id_treatment" as="select" name="jenis_treatment" class="form-control text-center">
                                     <template v-if="dataTreatment.responseData">
-                                        <option value="" disabled>Pilih Nama Treatment</option>
+                                        <option value="">Pilih Nama Treatment</option>
                                         <option v-for="item in dataTreatment.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                                     </template>
                                 </Field>
@@ -1040,7 +1043,7 @@
     import { onMounted, ref, computed, reactive, watch } from 'vue'
     import { Field, ErrorMessage, Form } from 'vee-validate';
     import * as yup from 'yup';
-    import { kandangStore, strainStore, pakanStore, treatmentStore, pencatatanStore, standartStore } from '@/stores';
+    import { kandangStore, strainStore, pakanStore, treatmentStore, pencatatanStore, standartStore, pelaporanStore } from '@/stores';
     import axios from 'axios'
     import { useRoute } from 'vue-router'
     import moment from 'moment'
@@ -1069,6 +1072,7 @@
     const dataTreatment = reactive(treatmentStore());
     const dataPencatatan = reactive(pencatatanStore());
     const dataStandart = reactive(standartStore());
+    const dataPelaporan = reactive(pelaporanStore());
 
     const detailKandang = reactive({
         id: '',
@@ -1079,6 +1083,7 @@
         nama_mandor: '',
         nama_anak_kandang: '',
         id_strain_ayam: '',
+        populasi_awal: '',
     });
 
     const detailPencatatan = reactive({
@@ -1151,6 +1156,17 @@
     const today = new Date();
     const latest_usia_mgg = ref(0);
     const latest_usia_hari = ref(0);
+    const tomorrow = new Date(today);
+    tomorrow.setDate(today.getDate() + 1);
+    const rangeDate = reactive({
+        start: null,
+        end: null,
+    });
+    const selectedDate = ref([
+        new Date(2022, 1, 1),
+        tomorrow,
+    ]);
+    
     watch(() => detailPencatatan.tanggal_submit, (newValue, oldValue) => {
         date.value = new Date(newValue);
         dateSubmitPencatatan.value = moment(date).format("DD MMMM YYYY");
@@ -1209,13 +1225,12 @@
     const telurUtuhData = ref([]);
     const jumlahMatiData = ref([]);
     const nilai_fi = ref([]);
-    let tanggal1 = ref(0);
-    let tanggal2 = ref(0);
-    let tanggal3 = ref(0);
-    let tanggal4 = ref(0);
-    let tanggal5 = ref(0);
-    let tanggal6 = ref(0);
-    let tanggal7 = ref(0);
+    const totalGramPerEkorPakan = ref([]);
+    const egg_mass_pelaporan = ref(0);
+    const fc_pelaporan = ref(0);
+    const berat_telur_gr = ref(0);
+    const berat_telur_kg = ref(0);
+    const total_telur = ref(0);
     let hari1 = [];
     let hari2 = [];
     let hari3 = [];
@@ -1223,40 +1238,13 @@
     let hari5 = [];
     let hari6 = [];
     let hari7 = [];
-    let standartHari1 = [];
-    let standartHari2 = [];
-    let standartHari3 = [];
-    let standartHari4 = [];
-    let standartHari5 = [];
-    let standartHari6 = [];
-    let standartHari7 = [];
-    const dataGrafikTelurHari1 = ref(0);
-    const dataGrafikTelurHari2 = ref(0);
-    const dataGrafikTelurHari3 = ref(0);
-    const dataGrafikTelurHari4 = ref(0);
-    const dataGrafikTelurHari5 = ref(0);
-    const dataGrafikTelurHari6 = ref(0);
-    const dataGrafikTelurHari7 = ref(0);
-    const dataGrafikPopulasiHari1 = ref(0);
-    const dataGrafikPopulasiHari2 = ref(0);
-    const dataGrafikPopulasiHari3 = ref(0);
-    const dataGrafikPopulasiHari4 = ref(0);
-    const dataGrafikPopulasiHari5 = ref(0);
-    const dataGrafikPopulasiHari6 = ref(0);
-    const dataGrafikPopulasiHari7 = ref(0);
-    const dataGrafikStandartHari1 = ref(0);
-    const dataGrafikStandartHari2 = ref(0);
-    const dataGrafikStandartHari3 = ref(0);
-    const dataGrafikStandartHari4 = ref(0);
-    const dataGrafikStandartHari5 = ref(0);
-    const dataGrafikStandartHari6 = ref(0);
-    const dataGrafikStandartHari7 = ref(0);
 
     onMounted(() => {
-        
+        rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
+        rangeDate.end = moment(selectedDate.value[1]).format("YYYY-MM-DD");
         getIdKandang(route.params.id);
         getPencatatan(route.params.id);
-        
+        getPelaporan(route.params.id, rangeDate.start, rangeDate.end);
          // Buat label untuk 7 hari terakhir
         for (let i = 6; i >= 0; i--) {
             const date = new Date(today);
@@ -1266,136 +1254,6 @@
         }
 
     })
-
-    function getDataGrafikStandart() {
-        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari1.value);
-        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari2.value);
-        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari3.value);
-        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari4.value);
-        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari5.value);
-        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari6.value);
-        console.log("getDataGrafikStandart : ", dataGrafikPopulasiHari7.value);
-        if(standartHari1.length > 0) {
-            dataGrafikStandartHari1.value = standartHari1[0].nilai_hd;
-           } else {
-            dataGrafikStandartHari1.value = 0;
-        }
-        if(standartHari2.length > 0) {
-            dataGrafikStandartHari2.value = standartHari2[0].nilai_hd;
-           } else {
-            dataGrafikStandartHari2.value = 0;
-        }
-        if(standartHari3.length > 0) {
-            dataGrafikStandartHari3.value = standartHari3[0].nilai_hd;
-           } else {
-            dataGrafikStandartHari3.value = 0;
-        }
-        if(standartHari4.length > 0) {
-            dataGrafikStandartHari4.value = standartHari4[0].nilai_hd;
-           } else {
-            dataGrafikStandartHari4.value = 0;
-        }
-        if(standartHari5.length > 0) {
-            dataGrafikStandartHari5.value = standartHari5[0].nilai_hd;
-           } else {
-            dataGrafikStandartHari5.value = 0;
-        }
-        if(standartHari6.length > 0) {
-            dataGrafikStandartHari6.value = standartHari6[0].nilai_hd;
-           } else {
-            dataGrafikStandartHari6.value = 0;
-        }
-        if(standartHari7.length > 0) {
-            dataGrafikStandartHari7.value = standartHari7[0].nilai_hd;
-           } else {
-            dataGrafikStandartHari7.value = 0;
-        }
-    }
-
-    function getdataGrafikTelur() {
-        if(hari1.length > 0) {
-            dataGrafikTelurHari1.value = hari1[0].telur_utuh;
-            tanggal1.value = getOnlyDate(hari1[0].tanggal_submit)
-           } else {
-            dataGrafikTelurHari1.value = 0;
-        }
-        if(hari2.length > 0) {
-            dataGrafikTelurHari2.value = hari2[0].telur_utuh;
-            tanggal2.value = getOnlyDate(hari2[0].tanggal_submit)
-           } else {
-            dataGrafikTelurHari2.value = 0;
-        }
-        if(hari3.length > 0) {
-            dataGrafikTelurHari3.value = hari3[0].telur_utuh;
-            tanggal3.value = getOnlyDate(hari3[0].tanggal_submit)
-           } else {
-            dataGrafikTelurHari3.value = 0;
-        }
-        if(hari4.length > 0) {
-            dataGrafikTelurHari4.value = hari4[0].telur_utuh;
-            tanggal4.value = getOnlyDate(hari4[0].tanggal_submit)
-           } else {
-            dataGrafikTelurHari4.value = 0;
-        }
-        if(hari5.length > 0) {
-            dataGrafikTelurHari5.value = hari5[0].telur_utuh;
-            tanggal5.value = getOnlyDate(hari5[0].tanggal_submit)
-           } else {
-            dataGrafikTelurHari5.value = 0;
-        }
-        if(hari6.length > 0) {
-            dataGrafikTelurHari6.value = hari6[0].telur_utuh;
-            tanggal6.value = getOnlyDate(hari6[0].tanggal_submit)
-           } else {
-            dataGrafikTelurHari6.value = 0;
-        }
-        if(hari7.length > 0) {
-            dataGrafikTelurHari7.value = hari7[0].telur_utuh;
-            tanggal7.value = getOnlyDate(hari7[0].tanggal_submit)
-           } else {
-            dataGrafikTelurHari7.value = 0;
-        }
-        
-    }
-
-    function getdataGrafikPopulasi() {
-        if(hari1.length > 0) {
-            dataGrafikPopulasiHari1.value = hari1[0].jumlah_mati;
-           } else {
-            dataGrafikPopulasiHari1.value = 0;
-        }
-        if(hari2.length > 0) {
-            dataGrafikPopulasiHari2.value = hari2[0].jumlah_mati;
-           } else {
-            dataGrafikPopulasiHari2.value = 0;
-        }
-        if(hari3.length > 0) {
-            dataGrafikPopulasiHari3.value = hari3[0].jumlah_mati;
-           } else {
-            dataGrafikPopulasiHari3.value = 0;
-        }
-        if(hari4.length > 0) {
-            dataGrafikPopulasiHari4.value = hari4[0].jumlah_mati;
-           } else {
-            dataGrafikPopulasiHari4.value = 0;
-        }
-        if(hari5.length > 0) {
-            dataGrafikPopulasiHari5.value = hari5[0].jumlah_mati;
-           } else {
-            dataGrafikPopulasiHari5.value = 0;
-        }
-        if(hari6.length > 0) {
-            dataGrafikPopulasiHari6.value = hari6[0].jumlah_mati;
-           } else {
-            dataGrafikPopulasiHari6.value = 0;
-        }
-        if(hari7.length > 0) {
-            dataGrafikPopulasiHari7.value = hari7[0].jumlah_mati;
-           } else {
-            dataGrafikPopulasiHari7.value = 0;
-        }
-        
-    }
 
     function nextStep(values) {
         if (currentStep.value === 3) {
@@ -1538,7 +1396,7 @@
             })
             .catch(error => {
                 console.error(error);
-                alert('error', 'Data pencatatan gagal ditambahkan');
+                alert('error', error.response.data.message);
                 apiError.value = error.response.data.message;
             });
     }
@@ -1581,7 +1439,7 @@
                 closeModal();
             })
             .catch(error => {
-                alert('error', 'Data gagal diubah')
+                alert('error', error.response.data.message);
                 console.error(error);
             });
     }
@@ -1667,21 +1525,6 @@
         
                 console.log("Data Pencatatan : ", response.data.data);
 
-                // items.forEach(item => {
-                //     const tanggalSubmit = new Date(item.tanggal_submit);
-                //     const diffTime = Math.abs(today - tanggalSubmit);
-                //     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                //     console.log("Diff Days : ", diffDays);
-                //     if (diffDays === 1) hari1.push(item);
-                //     else if (diffDays === 2) hari2.push(item);
-                //     else if (diffDays === 3) hari3.push(item);
-                //     else if (diffDays === 4) hari4.push(item);
-                //     else if (diffDays === 5) hari5.push(item);
-                //     else if (diffDays === 6) hari6.push(item);
-                //     else if (diffDays === 7) hari7.push(item);
-                // });
-
-
                 // Buat array untuk menyimpan data telur utuh per tanggal
                 const telurUtuhPerTanggal = {};
                 const jumlahMatiPerTanggal = {};
@@ -1721,8 +1564,6 @@
                 console.log("Labels : ", labels);
                 console.log("Telur Utuh Data : ", telurUtuhData);
 
-                getdataGrafikTelur();
-                getdataGrafikPopulasi();
                 latest_usia_mgg.value = dataPencatatan.responseData.data.latest_usia_mgg;
                 latest_usia_hari.value = dataPencatatan.responseData.data.latest_usia_hari;
                 console.log("Data Hari 1:", hari1);
@@ -1780,6 +1621,7 @@
                 detailKandang.nama_mandor = response.data.data.nama_mandor;
                 detailKandang.nama_anak_kandang = response.data.data.nama_anak_kandang;
                 detailKandang.id_strain_ayam = response.data.data.id_strain_ayam;
+                detailKandang.populasi_awal = response.data.data.populasi_total;
                 getIdStrain(detailKandang.id_strain_ayam);
                 idKandang.value = response.data.data.id;
                 console.log(detailKandang);
@@ -1854,19 +1696,6 @@
                 detailStandart.deskripsi = response.data.data.items[0].deskripsi;
 
                 const items = dataStandart.responseData.data.items;
-                // items.forEach(item => {
-                //     const tanggalSubmit = new Date(item.created_at);
-                //     const diffTime = Math.abs(today - tanggalSubmit);
-                //     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                //     if (diffDays === 1) standartHari1.push(item);
-                //     else if (diffDays === 2) standartHari2.push(item);
-                //     else if (diffDays === 3) standartHari3.push(item);
-                //     else if (diffDays === 4) standartHari4.push(item);
-                //     else if (diffDays === 5) standartHari5.push(item);
-                //     else if (diffDays === 6) standartHari6.push(item);
-                //     else if (diffDays === 7) standartHari7.push(item);
-                // });
                 const nilaiFiPerTanggal = {};
 
                 // Loop melalui data respons
@@ -1895,12 +1724,66 @@
                     nilai_fi.value.push(nilaiFiPerTanggal[label] || null);
                  
                 });
-                getDataGrafikStandart();
+               
             })
             .catch(error => {
                 console.error(error);
             });
     }
+
+    async function getPelaporan(id_kandang, startDate, endDate) {
+        if (id_kandang == 0) {
+            id_kandang = null;
+        }
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/laporan', {
+            params: {
+                id_kandang: id_kandang,
+                start_date: startDate,
+                end_date: endDate,
+            },
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataPelaporan.setResponseData(response.data);
+                console.log("Data Pelaporan : ", response);
+                egg_mass_pelaporan.value = dataPelaporan.responseData.data.items[0].egg_mass ?? 0;
+                fc_pelaporan.value = dataPelaporan.responseData.data.items[0].fc ?? 0;
+                berat_telur_gr.value = dataPelaporan.responseData.data.items[0].berat_telur_gr ?? 0;
+                berat_telur_kg.value = dataPelaporan.responseData.data.items[0].berat_telur_kg ?? 0;
+                total_telur.value = dataPelaporan.responseData.data.items[0].total_telur ?? 0;
+                const items = dataPelaporan.responseData.data.items;
+                const gramPerEkorPakan = {};
+                items.forEach(item => {
+                    const tanggalSubmit = new Date(item.tanggal_submit);
+                    const diffTime = Math.abs(today - tanggalSubmit);
+                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+                    if (diffDays <= 6) {
+                        const tanggalKey = tanggalSubmit.toDateString(); 
+                        if (gramPerEkorPakan[tanggalKey]) {
+                            gramPerEkorPakan[tanggalKey] = item.berat_pakan_per_ekor_gram;
+                        } else {
+                          gramPerEkorPakan[tanggalKey] = item.berat_pakan_per_ekor_gram;
+                        }
+                      
+                    }
+                });
+
+                labels.value.forEach(label => {
+                    totalGramPerEkorPakan.value.push(gramPerEkorPakan[label] || null);
+                
+                });
+
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
 
     async function getPakan() {
         const user = localStorage.getItem('user');

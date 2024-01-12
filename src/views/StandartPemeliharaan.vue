@@ -202,13 +202,13 @@
                                 <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
-                        <Field class="form-control text-center mb-3" type="text" name="umur" placeholder="Umur" :class="{ 'is-invalid': errors.umur }" />
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_hd" placeholder="Nilai HD" :class="{ 'is-invalid': errors.nilai_hd }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_bb" placeholder="Nilai BB" :class="{ 'is-invalid': errors.nilai_bb }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_bt" placeholder="Nilai BT" :class="{ 'is-invalid': errors.nilai_bt }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_fi" placeholder="Nilai FI" :class="{ 'is-invalid': errors.nilai_fi }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_fc" placeholder="Nilai FC" :class="{ 'is-invalid': errors.nilai_fc }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="egg_mass" placeholder="Egg Mass" :class="{ 'is-invalid': errors.egg_mass }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="umur" placeholder="Umur" :class="{ 'is-invalid': errors.umur }" />
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_hd" placeholder="Nilai HD" :class="{ 'is-invalid': errors.nilai_hd }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_bb" placeholder="Nilai BB" :class="{ 'is-invalid': errors.nilai_bb }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_bt" placeholder="Nilai BT" :class="{ 'is-invalid': errors.nilai_bt }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_fi" placeholder="Nilai FI" :class="{ 'is-invalid': errors.nilai_fi }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_fc" placeholder="Nilai FC" :class="{ 'is-invalid': errors.nilai_fc }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="egg_mass" placeholder="Egg Mass" :class="{ 'is-invalid': errors.egg_mass }"/>
                         <Field as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }"/>
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
@@ -265,13 +265,13 @@
                                 <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
-                        <Field class="form-control text-center mb-3" type="text" name="umur" placeholder="Umur" :class="{ 'is-invalid': errors.umur }" v-model="detailStandart.umur" />
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_hd" placeholder="Nilai HD" :class="{ 'is-invalid': errors.nilai_hd }" v-model="detailStandart.nilai_hd"/>
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_bb" placeholder="Nilai BB" :class="{ 'is-invalid': errors.nilai_bb }" v-model="detailStandart.nilai_bb" />
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_bt" placeholder="Nilai BT" :class="{ 'is-invalid': errors.nilai_bt }" v-model="detailStandart.nilai_bt" />
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_fi" placeholder="Nilai FI" :class="{ 'is-invalid': errors.nilai_fi }" v-model="detailStandart.nilai_fi" />
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_fc" placeholder="Nilai FC" :class="{ 'is-invalid': errors.nilai_fc }" v-model="detailStandart.nilai_fc" />
-                        <Field class="form-control text-center mb-3" type="text" name="egg_mass" placeholder="Egg Mass" :class="{ 'is-invalid': errors.egg_mass }" v-model="detailStandart.egg_mass" />
+                        <Field class="form-control text-center mb-3" type="number" name="umur" placeholder="Umur" :class="{ 'is-invalid': errors.umur }" v-model="detailStandart.umur" />
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_hd" placeholder="Nilai HD" :class="{ 'is-invalid': errors.nilai_hd }" v-model="detailStandart.nilai_hd"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_bb" placeholder="Nilai BB" :class="{ 'is-invalid': errors.nilai_bb }" v-model="detailStandart.nilai_bb" />
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_bt" placeholder="Nilai BT" :class="{ 'is-invalid': errors.nilai_bt }" v-model="detailStandart.nilai_bt" />
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_fi" placeholder="Nilai FI" :class="{ 'is-invalid': errors.nilai_fi }" v-model="detailStandart.nilai_fi" />
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_fc" placeholder="Nilai FC" :class="{ 'is-invalid': errors.nilai_fc }" v-model="detailStandart.nilai_fc" />
+                        <Field class="form-control text-center mb-3" type="number" name="egg_mass" placeholder="Egg Mass" :class="{ 'is-invalid': errors.egg_mass }" v-model="detailStandart.egg_mass" />
                         <Field as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }" v-model="detailStandart.deskripsi" />
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
@@ -326,12 +326,12 @@
     const schema = Yup.object().shape({
         id_strain_ayam: Yup.string().required('Strain ayam is required'),
         umur: Yup.number().required('Umur is required'),
-        nilai_hd: Yup.number().nullable(),
-        nilai_bb: Yup.number().nullable(),
-        nilai_bt: Yup.number().nullable(),
-        nilai_fi: Yup.number().nullable(),
-        nilai_fc: Yup.number().nullable(),
-        egg_mass: Yup.number().nullable(),
+        nilai_hd: Yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+        nilai_bb: Yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+        nilai_bt: Yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+        nilai_fi: Yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+        nilai_fc: Yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+        egg_mass: Yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
         deskripsi: Yup.string().nullable(),
     });
 

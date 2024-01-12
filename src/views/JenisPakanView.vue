@@ -59,7 +59,7 @@
                     <table class="table pelaporan table-bordered">
                         <thead>
                             <tr>
-                            <th scope="col">No</th>
+                            <!-- <th scope="col">No</th> -->
                             <th scope="col">Nama</th>
                             <th scope="col">Deskripsi</th>
                             <th scope="col"></th>
@@ -68,7 +68,7 @@
                         <tbody>
                             <template v-if="dataPakan.responseData">
                                 <tr v-for="(item, index) in dataPakan.responseData.data.items" :key="index" class="text-center">
-                                    <td>{{ item.id }}</td>
+                                    <!-- <td>{{ item.id }}</td> -->
                                     <td>{{ item.nama }}</td>
                                     <td>{{ item.deskripsi }}</td>
                                     <td>
