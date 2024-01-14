@@ -163,7 +163,8 @@
                         </tr>
                         <tr>
                              <td colspan="2">Total</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_usia_mgg ?? 0 }}</td>
+                             <td>   </td>
+                             <!-- <td>{{ dataPelaporan.responseData.data.items[0].sumall_usia_mgg ?? 0 }}</td> -->
                              <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0 }}</td>
                              <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0 }}</td>
                              <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0 }}</td>

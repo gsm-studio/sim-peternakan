@@ -476,14 +476,14 @@
             },
         })
             .then(response => {
-                detailKaryawan.id = response.data.data.id;
+                detailKaryawan.id = response.data.data.id_karyawan;
                 detailKaryawan.nama = response.data.data.nama;
                 detailKaryawan.alamat = response.data.data.alamat;
                 detailKaryawan.email = response.data.data.email;
                 detailKaryawan.nomor_telepon = response.data.data.nomor_telepon;
                 detailKaryawan.role_name = response.data.data.user_roles[0].role.nama;
                 detailKaryawan.role_ids = response.data.data.user_roles[0].role.id;
-                // console.log(response.data.data);
+                console.log("Data Karyawan", detailKaryawan.id);
             })
             .catch(error => {
                 console.error(error);

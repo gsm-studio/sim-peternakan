@@ -54,7 +54,7 @@
                                 <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
                                 </div>
                                 <div class="w-100 d-flex align-items-center justify-content-between">
-                                <h5 class="card-title mb-0">{{ total_telur }} Butir</h5>
+                                <h5 class="card-title mb-0">{{ avg_total_telur }} Butir</h5>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
                                     <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
                                     </svg>
@@ -64,7 +64,7 @@
                                     <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
                                     </svg>
                                 <!-- <h5 class="card-title mb-0 text-secondary">{{ ((parseInt(totalBeratTelurUtuh) + parseInt(totalBeratTelurBentes)) / (parseInt(totalTelurUtuh) + parseInt(totalTelurBentes))).toFixed(2) }} gr/butir</h5> -->
-                                <h5 class="card-title mb-0 text-secondary">{{ berat_telur_kg }} kg</h5>
+                                <h5 class="card-title mb-0 text-secondary">{{ avg_berat_telur_kg }} kg</h5>
                               
                                 </div>
                                 <!-- <small class="color-text-rossa">
@@ -310,7 +310,8 @@
                             </svg>
                             <svg xmlns="http://www.w3.org/2000/svg" width="136" height="135" viewBox="0 0 136 135" fill="none">
                             <circle cx="68.1484" cy="67.5" r="67.5" fill="#638889" fill-opacity="0.7"/>
-                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">Produksi Telur {{ percentase_telur }}</text>
+                            <text x="50%" y="40%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">Produksi Telur</text>
+                            <text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">{{ percentase_telur }} %</text>
                             </svg>
                         </div>
                     </div>
@@ -428,7 +429,7 @@
                                     <div class="mb-3">
                                         <Field @change="getKandangPenerima($event)" as="select" name="id_kandang_tujuan" class="form-control text-center">
                                             <template v-if="dataKandang.responseData">
-                                                <option value="" disabled>Pilih Nama Kandang Penerima</option>
+                                                <option value="">Pilih Nama Kandang Penerima</option>
                                                 <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                                             </template>
                                         </Field>
@@ -447,7 +448,7 @@
                                     <div class="mb-3">
                                         <Field @change="getKandangPengirim($event)" as="select" name="id_kandang_pengirim" class="form-control text-center">
                                             <template v-if="dataKandang.responseData">
-                                                <option value="" disabled>Pilih Nama Kandang Pengirim</option>
+                                                <option value="">Pilih Nama Kandang Pengirim</option>
                                                 <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                                             </template>
                                         </Field>
@@ -1208,10 +1209,10 @@
             berat_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
         }),
         yup.object({
-            jenis_pakan: yup.number(),
-            jenis_treatment: yup.number(),
+            jenis_pakan: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            jenis_treatment: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
             berat_pakan: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            catatan: yup.string(),
+            catatan: yup.string().nullable(),
         }),
     ];
 
@@ -1233,14 +1234,18 @@
     const nilai_fi = ref([]);
     const totalGramPerEkorPakan = ref([]);
     const totalAvgAllBeratTelurGr = ref([]);
+    const totalAvgTotalTelur = ref([]);
+    const totalAvgBeratTelur = ref([]);
     const egg_mass_pelaporan = ref(0);
     const fc_pelaporan = ref(0);
     const berat_telur_gr = ref(0);
     const berat_telur_kg = ref(0);
     const total_telur = ref(0);
+    const avg_total_telur = ref(0);
     const berat_pakan_per_ekor_gram = ref(0);
     const percentase_telur = ref(0);
     const avgall_berat_telur_gr = ref(0);
+    const avg_berat_telur_kg = ref(0);
 
     onMounted(() => {
         rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
@@ -1758,10 +1763,15 @@
                 total_telur.value = dataPelaporan.responseData.data.items[0].total_telur ?? 0;
                 berat_pakan_per_ekor_gram.value = dataPelaporan.responseData.data.items[0].berat_pakan_per_ekor_gram ?? 0;
                 percentase_telur.value = dataPelaporan.responseData.data.items[0].percentase_telur ?? 0;
+                // avg_total_telur.value = dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0;
+                // avg_berat_telur_kg.value = dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0;
                 // avgall_berat_telur_gr.value = dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0;
                 const items = dataPelaporan.responseData.data.items;
                 const gramPerEkorPakan = {};
                 const avgAllBeratTelurGr = {};
+                const avgTotaltelur = {};
+                const avgBeratTelur = {};
+                
                 items.forEach(item => {
                     const tanggalSubmit = new Date(item.tanggal_submit);
                     const diffTime = Math.abs(today - tanggalSubmit);
@@ -1779,15 +1789,29 @@
                         } else {
                             avgAllBeratTelurGr[tanggalKey] = item.avgall_berat_telur_gr;
                         }
+                        if (avgTotaltelur[tanggalKey]) {
+                            avgTotaltelur[tanggalKey] = item.avg_total_telur;
+                        } else {
+                            avgTotaltelur[tanggalKey] = item.avg_total_telur;
+                        }
+                        if (avgBeratTelur[tanggalKey]) {
+                            avgBeratTelur[tanggalKey] = item.avg_berat_telur_kg;
+                        } else {
+                            avgBeratTelur[tanggalKey] = item.avg_berat_telur_kg;
+                        }
                     }
                 });
 
                 labels.value.forEach(label => {
                     totalGramPerEkorPakan.value.push(gramPerEkorPakan[label] || null);
                     totalAvgAllBeratTelurGr.value.push(avgAllBeratTelurGr[label] || null);
+                    totalAvgTotalTelur.value.push(avgTotaltelur[label] || null);
+                    totalAvgBeratTelur.value.push(avgBeratTelur[label] || null);
                 });
                 console.log("avgAllBeratTelurGr : ", avgAllBeratTelurGr);
                 avgall_berat_telur_gr.value = totalAvgAllBeratTelurGr.value[6] ? totalAvgAllBeratTelurGr.value[6] + '' : 0;
+                avg_total_telur.value = totalAvgTotalTelur.value[6] ? totalAvgTotalTelur.value[6] + '' : 0;
+                avg_berat_telur_kg.value = totalAvgBeratTelur.value[6] ? totalAvgBeratTelur.value[6] + '' : 0;
 
             })
             .catch(error => {

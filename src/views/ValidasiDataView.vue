@@ -834,8 +834,8 @@
             berat_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
         }),
         yup.object({
-            jenis_pakan: yup.number(),
-            jenis_treatment: yup.number(),
+            jenis_pakan: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            jenis_treatment: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
             berat_pakan: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
             catatan: yup.string().nullable(),
         }),
