@@ -8,9 +8,9 @@
                 <div class="card overflow-hidden mb-4">
                 <div class="row">
                     <div class="col-lg-12 border-bottom">
-                        <div class="card-body gx-2 row">
-                            <div class="col">
-                                <h4 class="d-inline">Pencatatan produksi</h4>
+                        <div class="card-body row">
+                            <div class="col-4">
+                                <h4 class="d-inline me-2">Pencatatan produksi</h4>
                                 <div class="d-inline">
                                     <svg class="icon">
                                     <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-right
@@ -20,11 +20,11 @@
                                 <h5 class="color-text-rossa d-inline ms-2">{{ detailKandang.nama }}</h5>
                                 <!-- <img src="@/assets/img/vector-1.png" alt=""> -->
                             </div>
-                            <div class="col d-grid gap-2 d-md-block">
+                            <div class="col-3 d-grid d-md-block">
                                 <small class="color-text-rossa">{{ dateSubmitPencatatan }}</small>
                                 <!-- <button class="btn btn-secondary ms-3" type="button">Hisex</button> -->
                             </div>
-                            <div class="col d-grid gap-2 d-md-block">
+                            <div class="col-5 d-grid d-md-block">
                                 <button v-if="status == 'submitted'" class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Pending</button>
                                 <button v-else-if="status == 'accepted'" class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Terima</button>
                                 <button v-else class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Tolak</button>
@@ -34,12 +34,15 @@
                                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
                                     </svg>
                                 </button>
-                                <button v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0" @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-secondary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
+                                <template v-if="role == adminKantor || role == superadmin">
+                                    <button v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0" @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-secondary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
                                     Ubah 
                                     <svg class="icon">
                                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-pen"></use>
                                     </svg>
-                                </button>
+                                    </button>
+                                </template>
+                               
                             </div>
                         </div>
                     
@@ -1058,6 +1061,11 @@
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
     const route = useRoute();
+    const user = localStorage.getItem('user');
+    const role = JSON.parse(user) ? JSON.parse(user).data.roles[0].nama : '';
+    const superadmin = ref('Administrator12');
+    const adminKandang = ref('Admin Kandang');
+    const adminKantor = ref('Admin Kantor');
 
     function formatTanggal() {
         const hariIni = new Date();
