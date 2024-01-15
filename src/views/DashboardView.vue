@@ -127,7 +127,7 @@
                           Populasi Ayam 
                           <span class="color-text-rossa ms-3">{{ namaKandang }}</span>
                         </div>
-                        <h5 class="card-title mb-0">{{ detailPelaporan.sumall_populasi_total }} ekor</h5>
+                        <h5 class="card-title mb-0">{{ detailPelaporan.populasi_total_alltime }} ekor</h5>
                         <!-- <small>
                           <svg class="icon color-text-rossa">
                             <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
@@ -264,8 +264,12 @@
                         Pakan 
                         <span class="color-text-rossa ms-3">{{ namaKandang }}</span>
                       </div>
+                      <div class="small text-medium-emphasis mt-2 mb-3">
+                          {{ formatRangeDate.start }} -
+                          {{ formatRangeDate.end }}
+                        </div>
                       <div class="pakan d-flex justify-content-around mb-3">
-                        <h5 class="card-title mb-0">{{ detailPelaporan.avg_berat_pakan }} kg</h5>
+                        <h5 class="card-title mb-0">{{ detailPelaporan.sumall_berat_pakan }} kg</h5>
                         <h5 class="card-title mb-0">{{ detailPelaporan.avg_berat_pakan_per_ekor_gram }} gram/ekor</h5>
                       </div>
                       <!-- <small>
@@ -372,7 +376,9 @@
       avg_fc: null,
       avg_percentase_telur_daily: null,
       avg_fc_daily: null,
-      avg_egg_mass_daily: null
+      avg_egg_mass_daily: null,
+      populasi_total_alltime: null,
+      sumall_berat_pakan: null,
   });
   const getOnlyDate = (tanggal) => {
       return moment(tanggal).format('DD');
@@ -570,9 +576,9 @@
 
                         // Tambahkan data telur utuh ke dalam objek, menjumlahkan jika sudah ada
                         if (jumlahMatiPerTanggal[tanggalKey]) {
-                          jumlahMatiPerTanggal[tanggalKey] = item.sumall_jumlah_mati;
+                          jumlahMatiPerTanggal[tanggalKey] += item.jumlah_mati;
                         } else {
-                          jumlahMatiPerTanggal[tanggalKey] = item.sumall_jumlah_mati;
+                          jumlahMatiPerTanggal[tanggalKey] = item.jumlah_mati;
                         }
                       
                     }
@@ -610,6 +616,9 @@
                     detailPelaporan.avg_percentase_telur_daily = parseFloat(dataPelaporan.responseData.data.items[0].avg_percentase_telur_daily).toFixed(2);
                     detailPelaporan.avg_fc_daily = parseFloat(dataPelaporan.responseData.data.items[0].avg_fc_daily).toFixed(2);
                     detailPelaporan.avg_egg_mass_daily = parseFloat(dataPelaporan.responseData.data.items[0].avg_egg_mass_daily).toFixed(2);
+                    detailPelaporan.populasi_total_alltime = dataPelaporan.responseData.data.populasi_total_alltime[0].populasi_total_alltime;
+                    detailPelaporan.sumall_berat_pakan = dataPelaporan.responseData.data.items[0].sumall_berat_pakan;
+                    // console.log("Detail Populasi Total : ", detailPelaporan.populasi_total_alltime);
 
                 } else {
                     detailPelaporan.avg_egg_mass = 0;
@@ -634,6 +643,8 @@
                     detailPelaporan.avg_percentase_telur_daily = 0;
                     detailPelaporan.avg_fc_daily = 0;
                     detailPelaporan.avg_egg_mass_daily = 0;
+                    detailPelaporan.populasi_total_alltime = 0;
+                    detailPelaporan.sumall_berat_pakan = 0;
                     
                 } 
                 filteredPakan.value = dataPelaporan.responseData.data.items.filter(item => item.nama_jenis_pakan !== null && item.nama_jenis_pakan !== undefined);
