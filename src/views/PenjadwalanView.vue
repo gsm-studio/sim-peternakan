@@ -69,6 +69,8 @@
                             <th scope="col">Nama Tugas</th>
                             <th scope="col">Nama Kandang</th>
                             <th scope="col">Waktu Pelaksana</th>
+                            <th scope="col">Penanggung Jawab</th>
+                            <th scope="col">Pelaksana</th>
                             <th scope="col">Catatan</th>
                             <th scope="col"></th>
                         </tr>
@@ -80,6 +82,8 @@
                             <td>{{ item.tugas.nama }}</td>
                             <td>{{ item.kandang.nama }}</td>
                             <td>{{ formatTanggal(item.waktu_pelaksanaan) }}</td>
+                            <td>{{ item.penanggungjawab }}</td>
+                            <td>{{ item.pelaksana }}</td>
                             <td>{{ item.deskripsi }}</td>
                             <td>
                                 <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -144,6 +148,8 @@
                         </template>
                     </Field> 
                     <Field class="form-control text-center mb-3" type="date" name="waktu_pelaksanaan" placeholder="Waktu Pelaksanaan" :class="{ 'is-invalid': errors.waktu_pelaksanaan }" />
+                    <Field class="form-control text-center mb-3" type="text" name="penanggungjawab" placeholder="Penanggung Jawab" :class="{ 'is-invalid': errors.penanggungjawab }" />
+                    <Field class="form-control text-center mb-3" type="text" name="pelaksana" placeholder="Pelaksana" :class="{ 'is-invalid': errors.pelaksana }" />
                     <Field as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }" />
                 </div>
                 <div class="modal-footer">
@@ -171,6 +177,8 @@
                     <p>Nama Tugas : {{ detailPenjadwalan.nama_tugas }}</p>
                     <p>Nama Kandang : {{ detailPenjadwalan.nama_kandang }}</p>
                     <p>Waktu Pelaksanaan : {{ formatTanggal(detailPenjadwalan.waktu_pelaksanaan) }}</p>
+                    <p>Penanggung Jawab : {{ detailPenjadwalan.penanggungjawab }}</p>
+                    <p>Pelaksana : {{ detailPenjadwalan.pelaksana }}</p>                
                     <p>Deskripsi : {{ detailPenjadwalan.deskripsi }}</p>
                 </div>
                 <div class="modal-footer">
@@ -202,6 +210,8 @@
                             </template>
                         </Field> 
                         <Field class="form-control text-center mb-3" type="date" name="waktu_pelaksanaan" placeholder="Waktu Pelaksanaan" v-model="formatTanggalEdit" :class="{ 'is-invalid': errors.waktu_pelaksanaan }" />
+                        <Field v-model="detailPenjadwalan.penanggungjawab" class="form-control text-center mb-3" type="text" name="penanggungjawab" placeholder="Penanggung Jawab" :class="{ 'is-invalid': errors.penanggungjawab }" />
+                        <Field v-model="detailPenjadwalan.pelaksana" class="form-control text-center mb-3" type="text" name="pelaksana" placeholder="Pelaksana" :class="{ 'is-invalid': errors.pelaksana }" />
                         <Field as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Waktu Pelaksanaan" v-model="detailPenjadwalan.deskripsi" :class="{ 'is-invalid': errors.deskripsi }" />
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
@@ -242,6 +252,8 @@
         id_tugas: Yup.string().required('Tugas is required'),
         id_kandang: Yup.string().required('Kandang is required'),
         waktu_pelaksanaan: Yup.string().required('Waktu pelaksana is required'),
+        pelaksana : Yup.string().nullable(),
+        penanggungjawab : Yup.string().nullable(),
         deskripsi: Yup.string()
     });
 
@@ -261,6 +273,8 @@
         deskripsi: '',
         nama_tugas: '',
         nama_kandang: '',
+        pelaksana: '',
+        penanggungjawab: '',
     });
 
     let search = ref("");
@@ -426,12 +440,14 @@
     async function onSubmit(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { id_kandang, id_tugas, waktu_pelaksanaan, deskripsi } = values;
+        const { id_kandang, id_tugas, waktu_pelaksanaan, penanggungjawab, pelaksana, deskripsi } = values;
         console.log(values);
         return axios.post(baseUrl + '/penjadwalan', {
             id_kandang: id_kandang,
             id_tugas: id_tugas,
             waktu_pelaksanaan: waktu_pelaksanaan,
+            penanggungjawab: penanggungjawab,
+            pelaksana: pelaksana,
             deskripsi: deskripsi,
         }, {
             headers: {
@@ -455,12 +471,14 @@
     async function onSubmitUpdate(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { id_kandang, id_tugas, waktu_pelaksanaan, deskripsi } = values;
+        const { id_kandang, id_tugas, waktu_pelaksanaan, penanggungjawab, pelaksana, deskripsi } = values;
         console.log(values);
         return axios.put(baseUrl + '/penjadwalan/' + detailPenjadwalan.id, {
             id_tugas: id_tugas,
             id_kandang: id_kandang,
             waktu_pelaksanaan: waktu_pelaksanaan,
+            penanggungjawab: penanggungjawab,
+            pelaksana: pelaksana,
             deskripsi: deskripsi,
         }, {
             headers: {
@@ -497,6 +515,8 @@
                 detailPenjadwalan.deskripsi = response.data.data.deskripsi;
                 detailPenjadwalan.nama_tugas = response.data.data.tugas.nama;
                 detailPenjadwalan.nama_kandang = response.data.data.kandang.nama;
+                detailPenjadwalan.pelaksana = response.data.data.pelaksana;
+                detailPenjadwalan.penanggungjawab = response.data.data.penanggungjawab;
                 console.log(detailPenjadwalan);
             })
             .catch(error => {

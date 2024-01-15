@@ -98,6 +98,7 @@
                         <th scope="col">Anak Kandang</th>
                         <th scope="col">Nama Mandor</th>
                         <th scope="col">Alamat Kandang</th>
+                        <th scope="col">Populasi Awal</th>
                         <th scope="col">Populasi Total</th>
                         <th scope="col"></th>
                         </tr>
@@ -110,6 +111,7 @@
                                 <td>{{ item.nama_anak_kandang }}</td>
                                 <td>{{ item.nama_mandor }}</td>
                                 <td>{{ item.alamat }}</td>
+                                <td>{{ item.populasi_awal }}</td>
                                 <td>{{ item.populasi_total }}</td>
                                 <td>
                                     <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -172,7 +174,7 @@
                             <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                         </template>
                     </Field> 
-                    <Field class="form-control text-center mb-3" type="number" name="populasi_total" placeholder="Populasi Total" :class="{ 'is-invalid': errors.populasi_total }" />
+                    <Field class="form-control text-center mb-3" type="number" name="populasi_awal" placeholder="Populasi Awal" :class="{ 'is-invalid': errors.populasi_awal }" />
                     <Field id="id_strain_ayam" as="select" name="id_strain_ayam" class="form-control text-center mb-3">
                         <template v-if="dataStrain.responseData">
                             <option value="" disabled>Pilih Strain Ayam</option>
@@ -208,6 +210,7 @@
                     <p>Alamat : {{ detailKandang.alamat }}</p>
                     <p>Nama Mandor : {{ detailKandang.nama_mandor }}</p>
                     <p>Nama Anak Kandang : {{ detailKandang.nama_anak_kandang }}</p>
+                    <p>Populasi Awal : {{ detailKandang.populasi_awal }}</p>
                     <p>Populasi Total : {{ detailKandang.populasi_total }}</p>
                     <p>Tanggal Chick in : {{ formatTanggal(detailKandang.tanggal_chickin) }}</p>
                     <p>Strain Ayam : {{ detailKandang.strain_ayam }}</p>
@@ -244,7 +247,7 @@
                                 <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
-                        <Field class="form-control text-center mb-3" type="number" name="populasi_total" placeholder="Populasi Total" v-model="detailKandang.populasi_total" :class="{ 'is-invalid': errors.populasi_total }" />
+                        <Field class="form-control text-center mb-3" type="number" name="populasi_awal" placeholder="Populasi Awal" v-model="detailKandang.populasi_awal" :class="{ 'is-invalid': errors.populasi_awal }" />
                         <Field v-model="detailKandang.id_strain_ayam" id="id_strain_ayam" as="select" name="id_strain_ayam" class="form-control text-center mb-3">
                             <template v-if="dataStrain.responseData">
                                 <option value="" disabled>Pilih Strain Ayam</option>
@@ -306,6 +309,7 @@
         id_anak_kandang: '',
         nama_mandor: '',
         nama_anak_kandang: '',
+        populasi_awal: 0,
         populasi_total: 0,
         tanggal_chickin: '',
         id_strain_ayam: '',
@@ -451,13 +455,13 @@
     async function onSubmit(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama, id_mandor, id_anak_kandang, populasi_total, id_strain_ayam, tanggal_chickin, alamat } = values;
+        const { nama, id_mandor, id_anak_kandang, populasi_awal, id_strain_ayam, tanggal_chickin, alamat } = values;
         console.log(values);
         return axios.post(baseUrl + '/kandang', {
             nama: nama,
             id_mandor: id_mandor,
             id_anak_kandang: id_anak_kandang,
-            populasi_total: populasi_total,
+            populasi_awal: populasi_awal,
             id_strain_ayam: id_strain_ayam,
             tanggal_chickin: tanggal_chickin,
             alamat: alamat,
@@ -483,13 +487,13 @@
     async function onSubmitUpdate(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama, id_mandor, id_anak_kandang, populasi_total, id_strain_ayam, tanggal_chickin, alamat } = values;
+        const { nama, id_mandor, id_anak_kandang, populasi_awal, id_strain_ayam, tanggal_chickin, alamat } = values;
         console.log(values);
         return axios.put(baseUrl + '/kandang/' + detailKandang.id, {
             nama: nama,
             id_mandor: id_mandor,
             id_anak_kandang: id_anak_kandang,
-            populasi_total: populasi_total,
+            populasi_awal: populasi_awal,
             id_strain_ayam: id_strain_ayam,
             tanggal_chickin: tanggal_chickin,
             alamat: alamat,
@@ -533,6 +537,7 @@
                 detailKandang.tanggal_chickin = response.data.data.tanggal_chickin;
                 detailKandang.strain_ayam = response.data.data.strain_ayam.nama;
                 detailKandang.id_strain_ayam = response.data.data.strain_ayam.id;
+                detailKandang.populasi_awal = response.data.data.populasi_awal;
                 tanggal_chickin_edit.value = formatTanggal2(response.data.data.tanggal_chickin);
                 console.log(detailKandang);
             })

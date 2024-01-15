@@ -370,6 +370,9 @@
       avg_populasi_total: null,
       avg_percentase_telur: null,
       avg_fc: null,
+      avg_percentase_telur_daily: null,
+      avg_fc_daily: null,
+      avg_egg_mass_daily: null
   });
   const getOnlyDate = (tanggal) => {
       return moment(tanggal).format('DD');
@@ -383,13 +386,6 @@
   const dataGrafikBatang = ref([]);
   const namaFilter = ref('');
   const valueFilter = ref('');
-  let hari1 = [];
-  let hari2 = [];
-  let hari3 = [];
-  let hari4 = [];
-  let hari5 = [];
-  let hari6 = [];
-  let hari7 = [];
 
   onMounted(() => {
     console.log("Tanggal 6 hari yang lalu:", sixDaysAgo);
@@ -423,16 +419,16 @@
         if (value === 'avg') {
           namaFilter.value = 'Avg. % persentase produksi';
           getPresentaseProduksi();
-          valueFilter.value = detailPelaporan.avg_percentase_telur ? detailPelaporan.avg_percentase_telur + '%' : 0;
+          valueFilter.value = detailPelaporan.avg_percentase_telur_daily ? detailPelaporan.avg_percentase_telur_daily + '%' : 0;
           
         } else if (value === 'fc') {
           namaFilter.value = 'Avg FC';
-          valueFilter.value = detailPelaporan.avg_fc ? detailPelaporan.avg_fc + '' : 0;
+          valueFilter.value = detailPelaporan.avg_fc_daily ? detailPelaporan.avg_fc_daily + '' : 0;
           getAvgFc();
           
         } else if (value === 'egg_mass') {
           namaFilter.value = 'Avg Egg Mass';
-          valueFilter.value = detailPelaporan.avg_egg_mass ? detailPelaporan.avg_egg_mass + '' : 0;
+          valueFilter.value = detailPelaporan.avg_egg_mass_daily ? detailPelaporan.avg_egg_mass_daily + '' : 0;
           getAvgEggMass();
         
         }
@@ -450,9 +446,9 @@
             if (diffDays <= 6) {
                 const tanggalKey = tanggalSubmit.toDateString(); 
                 if (persentaseTanggal[tanggalKey]) {
-                  persentaseTanggal[tanggalKey] += parseFloat(item.percentase_telur) || 0; 
+                  persentaseTanggal[tanggalKey] = parseFloat(item.avg_percentase_telur_daily) || 0; 
                 } else {
-                  persentaseTanggal[tanggalKey] = parseFloat(item.percentase_telur) || 0; 
+                  persentaseTanggal[tanggalKey] = parseFloat(item.avg_percentase_telur_daily) || 0; 
                 }
             }
         });
@@ -460,6 +456,7 @@
         labels.value.forEach(label => {
             dataGrafikBatang.value.push(persentaseTanggal[label] || null);
         });
+        console.log("Data Grafik Batang : ", dataGrafikBatang.value);
         // valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '%' : 0;
 
   }
@@ -476,9 +473,9 @@
             if (diffDays <= 6) {
                 const tanggalKey = tanggalSubmit.toDateString(); 
                 if (avgTanggal[tanggalKey]) {
-                  avgTanggal[tanggalKey] += parseFloat(item.fc) || 0; 
+                  avgTanggal[tanggalKey] = parseFloat(item.avg_fc_daily) || 0; 
                 } else {
-                  avgTanggal[tanggalKey] = parseFloat(item.fc) || 0; 
+                  avgTanggal[tanggalKey] = parseFloat(item.avg_fc_daily) || 0; 
                 }
             }
         });
@@ -502,9 +499,9 @@
             if (diffDays <= 6) {
                 const tanggalKey = tanggalSubmit.toDateString(); 
                 if (eggMassTanggal[tanggalKey]) {
-                  eggMassTanggal[tanggalKey] += parseFloat(item.egg_mass) || 0; 
+                  eggMassTanggal[tanggalKey] = parseFloat(item.avg_egg_mass_daily) || 0; 
                 } else {
-                  eggMassTanggal[tanggalKey] = parseFloat(item.egg_mass) || 0; 
+                  eggMassTanggal[tanggalKey] = parseFloat(item.avg_egg_mass_daily) || 0; 
                 }
             }
         });
@@ -589,13 +586,7 @@
                 });
 
                 getFilter(filter.value);
-                console.log("Data Hari 1:", hari1);
-                console.log("Data Hari 2:", hari2);
-                console.log("Data Hari 3:", hari3);
-                console.log("Data Hari 4:", hari4);
-                console.log("Data Hari 5:", hari5);
-                console.log("Data Hari 6:", hari6);
-
+               
                 if(dataPelaporan.responseData.data.items.length > 0) {
                     detailPelaporan.avg_egg_mass = parseFloat(dataPelaporan.responseData.data.items[0].avg_egg_mass).toFixed(2);
                     detailPelaporan.sumall_populasi_total = dataPelaporan.responseData.data.items[0].sumall_populasi_total;
@@ -616,6 +607,9 @@
                     detailPelaporan.avg_populasi_total = parseFloat(dataPelaporan.responseData.data.items[0].avg_populasi_total).toFixed(2);
                     detailPelaporan.avg_percentase_telur = parseFloat(dataPelaporan.responseData.data.items[0].avg_percentase_telur).toFixed(2);
                     detailPelaporan.avg_fc = parseFloat(dataPelaporan.responseData.data.items[0].avg_fc).toFixed(2);
+                    detailPelaporan.avg_percentase_telur_daily = parseFloat(dataPelaporan.responseData.data.items[0].avg_percentase_telur_daily).toFixed(2);
+                    detailPelaporan.avg_fc_daily = parseFloat(dataPelaporan.responseData.data.items[0].avg_fc_daily).toFixed(2);
+                    detailPelaporan.avg_egg_mass_daily = parseFloat(dataPelaporan.responseData.data.items[0].avg_egg_mass_daily).toFixed(2);
 
                 } else {
                     detailPelaporan.avg_egg_mass = 0;
@@ -637,11 +631,15 @@
                     detailPelaporan.avg_populasi_total = 0;
                     detailPelaporan.avg_percentase_telur = 0;
                     detailPelaporan.avg_fc = 0;
+                    detailPelaporan.avg_percentase_telur_daily = 0;
+                    detailPelaporan.avg_fc_daily = 0;
+                    detailPelaporan.avg_egg_mass_daily = 0;
                     
                 } 
                 filteredPakan.value = dataPelaporan.responseData.data.items.filter(item => item.nama_jenis_pakan !== null && item.nama_jenis_pakan !== undefined);
                 uniquePakan.value = [...new Set(filteredPakan.value.map(item => item.nama_jenis_pakan))];
-                valueFilter.value = detailPelaporan.avg_percentase_telur ? detailPelaporan.avg_percentase_telur + '%' : 0;
+                valueFilter.value = detailPelaporan.avg_percentase_telur_daily ? detailPelaporan.avg_percentase_telur_daily + '%' : 0;
+                getPresentaseProduksi();
                 console.log("Pelaporan : ", response);
             })
             .catch(error => {

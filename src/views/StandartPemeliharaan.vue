@@ -202,13 +202,13 @@
                                 <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
-                        <Field class="form-control text-center mb-3" type="number" name="umur" placeholder="Umur" :class="{ 'is-invalid': errors.umur }" />
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_hd" placeholder="Nilai HD" :class="{ 'is-invalid': errors.nilai_hd }"/>
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_bb" placeholder="Nilai BB" :class="{ 'is-invalid': errors.nilai_bb }"/>
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_bt" placeholder="Nilai BT" :class="{ 'is-invalid': errors.nilai_bt }"/>
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_fi" placeholder="Nilai FI" :class="{ 'is-invalid': errors.nilai_fi }"/>
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_fc" placeholder="Nilai FC" :class="{ 'is-invalid': errors.nilai_fc }"/>
-                        <Field class="form-control text-center mb-3" type="number" name="egg_mass" placeholder="Egg Mass" :class="{ 'is-invalid': errors.egg_mass }"/>
+                        <Field class="form-control text-center mb-3" type="text" name="umur" placeholder="Umur" :class="{ 'is-invalid': errors.umur }" />
+                        <Field class="form-control text-center mb-3" type="text" name="nilai_hd" placeholder="Nilai HD" :class="{ 'is-invalid': errors.nilai_hd }"/>
+                        <Field class="form-control text-center mb-3" type="text" name="nilai_bb" placeholder="Nilai BB" :class="{ 'is-invalid': errors.nilai_bb }"/>
+                        <Field class="form-control text-center mb-3" type="text" name="nilai_bt" placeholder="Nilai BT" :class="{ 'is-invalid': errors.nilai_bt }"/>
+                        <Field class="form-control text-center mb-3" type="text" name="nilai_fi" placeholder="Nilai FI" :class="{ 'is-invalid': errors.nilai_fi }"/>
+                        <Field class="form-control text-center mb-3" type="text" name="nilai_fc" placeholder="Nilai FC" :class="{ 'is-invalid': errors.nilai_fc }"/>
+                        <Field class="form-control text-center mb-3" type="text" name="egg_mass" placeholder="Egg Mass" :class="{ 'is-invalid': errors.egg_mass }"/>
                         <Field as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }"/>
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">

@@ -29,13 +29,13 @@
                                 <button v-else-if="status == 'accepted'" class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Terima</button>
                                 <button v-else class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Tolak</button>
                                 <button @click="getKandang()" class="btn btn-success ms-3" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    Input 
+                                    Input Harian
                                     <svg class="icon">
                                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
                                     </svg>
                                 </button>
                                 <button v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0" @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-secondary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
-                                    Edit 
+                                    Ubah 
                                     <svg class="icon">
                                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-pen"></use>
                                     </svg>
@@ -236,7 +236,7 @@
                                             Pakan  
                                             <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
                                         </div>
-                                        <h5 class="card-title mb-0">{{ detailPencatatan.berat_pakan }} kg</h5>
+                                        <h5 class="card-title mb-0">{{ sum_berat_pakan }} kg</h5>
                                         <!-- <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
                                             <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
                                         </svg>
@@ -244,7 +244,7 @@
                                     </div>
                                     <div class="col border-start">
                                         <h5 class="card-title mb-0">Standar pakan</h5>
-                                        <h5 class="card-title mb-0 text-secondary">N/A gr/ekor</h5>
+                                        <h5 class="card-title mb-0 text-secondary">{{ total_berat_pakan }} gr/ekor</h5>
                                     </div>
                                     
                                 </div>
@@ -258,7 +258,7 @@
                             <div class="col-md-4 d-flex align-items-end">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" fill="none">
                                     <circle cx="90" cy="90" r="90" fill="#0FA958" fill-opacity="0.6"/>
-                                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="20px">100 % 
+                                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="20px">{{ persentase_pakan }} % 
                                         {{ detailPakan.nama ? detailPakan.nama : 'Tidak Ada' }}</text>
                                 </svg>
                             </div>
@@ -1246,6 +1246,9 @@
     const percentase_telur = ref(0);
     const avgall_berat_telur_gr = ref(0);
     const avg_berat_telur_kg = ref(0);
+    const sum_berat_pakan = ref(0);
+    const total_berat_pakan = ref(0);
+    const persentase_pakan = ref(0);
 
     onMounted(() => {
         rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
@@ -1763,6 +1766,9 @@
                 total_telur.value = dataPelaporan.responseData.data.items[0].total_telur ?? 0;
                 berat_pakan_per_ekor_gram.value = dataPelaporan.responseData.data.items[0].berat_pakan_per_ekor_gram ?? 0;
                 percentase_telur.value = dataPelaporan.responseData.data.items[0].percentase_telur ?? 0;
+                sum_berat_pakan.value = dataPelaporan.responseData.data.jenis_pakan_items[0].sum_berat_pakan ?? 0;
+                total_berat_pakan.value = dataPelaporan.responseData.data.jenis_pakan_items[0].total_berat_pakan ?? 0;
+                persentase_pakan.value = dataPelaporan.responseData.data.jenis_pakan_items[0].persentase_pakan ?? 0;
                 // avg_total_telur.value = dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0;
                 // avg_berat_telur_kg.value = dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0;
                 // avgall_berat_telur_gr.value = dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0;
