@@ -113,31 +113,6 @@
                         </tbody> -->
                     </table>
                 </div>
-                <!-- <nav aria-label="Page navigation example">
-                    <ul class="pagination justify-content-end align-items-center">
-                    <li class="me-3">
-                        Row per page: 
-                    </li>
-                    <li class="me-3">
-                        <a href="#" type="button" class="border p-2 rounded">10 <svg xmlns="http://www.w3.org/2000/svg" width="6" height="4" viewBox="0 0 6 4" fill="none">
-                        <path d="M0.705 0.289978L3 2.58498L5.295 0.289978L6 0.999978L3 3.99998L0 0.999978L0.705 0.289978Z" fill="black"/>
-                        </svg></a>
-                    </li>
-                    <li class="me-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M12.8415 13.8167L9.02484 10L12.8415 6.175L11.6665 5L6.6665 10L11.6665 15L12.8415 13.8167Z" fill="black"/>
-                        </svg>
-                    </li>
-                    <li class="me-3">
-                        Page 1
-                    </li>
-                    <li class="me-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M7.1582 13.8167L10.9749 10L7.1582 6.175L8.3332 5L13.3332 10L8.3332 15L7.1582 13.8167Z" fill="black"/>
-                        </svg>
-                    </li>
-                    </ul>
-                </nav> -->
                     <div class="d-flex justify-content-end">
                         <vue-awesome-paginate
                             :total-items="totalItems"
@@ -303,8 +278,7 @@
     
     const currentPage = ref(1);
     const pageSize = ref(10);
-    const totalItems = dataKaryawan.responseData ? dataKaryawan.responseData.data.total_record : 0;
-
+    const totalItems = ref(0);
     const onClickHandler = (page) => {
         getKaryawan(page);
     };
@@ -374,7 +348,7 @@
         })
             .then(response => {
                 dataKaryawan.setResponseData(response.data);
-                console.log(dataKaryawan);
+                totalItems.value = dataKaryawan.responseData ? dataKaryawan.responseData.data.total_record : 0;
             })
             .catch(error => {
                 console.error(error);

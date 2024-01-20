@@ -107,7 +107,7 @@
                         
                     </div>
                   </div>
-                  <div class="card-footer d-flex justify-content-between">
+                  <!-- <div class="card-footer d-flex justify-content-between">
                     <span> 
                       <svg class="icon bg-button-rossa">
                       <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last 6 days
@@ -116,7 +116,7 @@
                       <svg class="icon bg-grey-rossa">
                       <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last Week
                     </span>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="col-lg-5">
                   <div class="card-body populasi">
@@ -208,7 +208,7 @@
                     </div>
                     
                   </div>
-                  <div class="card-footer d-flex justify-content-between">
+                  <!-- <div class="card-footer d-flex justify-content-between">
                     <span> 
                       <svg class="icon bg-button-rossa">
                       <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last 6 days
@@ -217,7 +217,7 @@
                       <svg class="icon bg-grey-rossa">
                       <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last Week
                     </span>
-                  </div>
+                  </div> -->
                 </div>
               </div>
               <div class="row border-top">

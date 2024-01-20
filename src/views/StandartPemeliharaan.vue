@@ -73,13 +73,13 @@
                         Filter
                         </button>
                         <div class="dropdown-menu dropdown-menu-start p-3 shadow">
-                            <select v-model="idStrain" @change="getStandart(currentPage, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
-                            <!-- <option value="0" selected> 
+                            <select v-model="idStrain" @change="getStandart(1, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <option value="0" selected> 
                                 Semua Strain Ayam 
                                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
                                 <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
                                 </svg>
-                            </option> -->
+                            </option>
                             <template v-if="dataStrain.responseData">
                                 <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">
                                     {{ item.nama }}
@@ -202,13 +202,13 @@
                                 <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
-                        <Field class="form-control text-center mb-3" type="text" name="umur" placeholder="Umur" :class="{ 'is-invalid': errors.umur }" />
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_hd" placeholder="Nilai HD" :class="{ 'is-invalid': errors.nilai_hd }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_bb" placeholder="Nilai BB" :class="{ 'is-invalid': errors.nilai_bb }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_bt" placeholder="Nilai BT" :class="{ 'is-invalid': errors.nilai_bt }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_fi" placeholder="Nilai FI" :class="{ 'is-invalid': errors.nilai_fi }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="nilai_fc" placeholder="Nilai FC" :class="{ 'is-invalid': errors.nilai_fc }"/>
-                        <Field class="form-control text-center mb-3" type="text" name="egg_mass" placeholder="Egg Mass" :class="{ 'is-invalid': errors.egg_mass }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="umur" placeholder="Umur" :class="{ 'is-invalid': errors.umur }" />
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_hd" placeholder="Nilai HD" :class="{ 'is-invalid': errors.nilai_hd }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_bb" placeholder="Nilai BB" :class="{ 'is-invalid': errors.nilai_bb }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_bt" placeholder="Nilai BT" :class="{ 'is-invalid': errors.nilai_bt }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_fi" placeholder="Nilai FI" :class="{ 'is-invalid': errors.nilai_fi }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_fc" placeholder="Nilai FC" :class="{ 'is-invalid': errors.nilai_fc }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="egg_mass" placeholder="Egg Mass" :class="{ 'is-invalid': errors.egg_mass }"/>
                         <Field as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }"/>
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
@@ -335,12 +335,12 @@
         deskripsi: Yup.string().nullable(),
     });
 
+    const namaStrain = ref('');
+    const idStrain = ref(0);
+
     const onClickHandler = (page) => {
         getStandart(page, idStrain.value);
     };
-
-    const namaStrain = ref('');
-    const idStrain = ref(0);
 
     onMounted(() => {
         getStandart(1, null);
@@ -404,6 +404,9 @@
         if(id_strain_ayam == 0) {
             id_strain_ayam = null;
         }
+        if(page_number == 1) {
+            currentPage.value = 1;
+        }
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/standar_pemeliharaan', {
@@ -420,7 +423,8 @@
             .then(response => {
                 dataStandart.setResponseData(response.data);
                 totalItems.value = dataStandart.responseData ? dataStandart.responseData.data.total_record : 0;
-                console.log(dataStandart);
+                console.log(response);
+                console.log(currentPage.value);
             })
             .catch(error => {
                 console.error(error);
@@ -439,7 +443,7 @@
             })
                 .then(response => {
                     dataStrain.setResponseData(response.data);
-                    idStrain.value = dataStrain.responseData ? dataStrain.responseData.data.items[0].id : 0;
+                    // idStrain.value = dataStrain.responseData ? dataStrain.responseData.data.items[0].id : 0;
                 })
                 .catch(error => {
                     console.error(error);

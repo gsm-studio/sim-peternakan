@@ -30,7 +30,6 @@ import VueRangedatePicker from 'vue-rangedate-picker';
 import VueDatepickerUi from 'vue-datepicker-ui'
 import 'vue-datepicker-ui/lib/vuedatepickerui.css';
 
-
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 

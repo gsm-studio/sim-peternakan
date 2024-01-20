@@ -17,7 +17,7 @@
                                 @input="inputDate"
                                 range
                                 v-model="selectedDate"
-                                lang="en"
+                                lang="id"
                             />
                             <svg xmlns="http://www.w3.org/2000/svg" width="9" height="6" viewBox="0 0 9 6" fill="none">
                             <path d="M1 1L4 5L8 1" stroke="white"/>
@@ -27,27 +27,114 @@
                         <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
                         </svg></p> -->
                         <p>
-                            <select v-model="idKandang" @change="getPelaporan($event.target.value, rangeDate.start, rangeDate.end)" class="form-select form-select-sm ms-3" aria-label=".form-select-sm example">
-                                <option value="0" selected> 
-                                    Semua kandang 
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
-                                    <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
-                                    </svg>
-                                </option>
-                                <template v-if="dataKandang.responseData">
-                                    <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">
-                                        {{ item.id }} - {{ item.nama }}
+                            <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="ms-3 btn btn-success bg-button-rossa">
+                                Filter
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-start p-3 shadow">
+                                <div class="d-flex justify-content-between">
+                                    <label class="form-label">Pilih Arsip</label>
+                                    <a href="javascript:void(0)" @click="clearFilter()">Clear</a>
+                                </div>
+                                <select v-model="is_archived" @change="getPelaporan($event.target.value, idKandang, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                    <option value="-1">Semua Laporan</option>
+                                    <option value="0">Tidak</option>
+                                    <option value="1">Ya</option>
+                                </select>
+                                <label class="form-label">Pilih Filter</label> 
+                                <select v-model="idKandang" @change="getPelaporan(is_archived, $event.target.value, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                    <option value="0" selected> 
+                                        Semua Kandang 
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                        <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                        </svg>
                                     </option>
-                                </template>
-                                <template v-else>
-                                    <option>Belum ada kandang</option>
-                                </template>
-                            </select> 
-                         </p>
+                                    <template v-if="dataKandang.responseData && dataKandang.responseData.data.items.length > 0">
+                                        <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option>Belum ada Kandang</option>
+                                    </template>
+                                </select> 
+                                <select v-model="id_kategori_kandang" @change="getPelaporan(is_archived, idKandang, $event.target.value, id_treatment, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                    <option value="0" selected> 
+                                        Semua Kategori Kandang 
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                        <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                        </svg>
+                                    </option>
+                                    <template v-if="dataKandang.kategori">
+                                        <option v-for="item in dataKandang.kategori" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option>Belum ada Kategori Kandang</option>
+                                    </template>
+                                </select>
+                                <select v-model="id_treatment" @change="getPelaporan(is_archived, idKandang, id_kategori_kandang, $event.target.value, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                    <option value="0" selected> 
+                                        Semua Treatment 
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                        <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                        </svg>
+                                    </option>
+                                    <template v-if="dataTreatment.responseData">
+                                        <option v-for="item in dataTreatment.responseData.data.items" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option>Belum ada Treatment</option>
+                                    </template>
+                                </select> 
+                                <select v-model="id_mandor" @change="getPelaporan(is_archived, idKandang, id_kategori_kandang, id_treatment, $event.target.value, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                    <option value="0" selected> 
+                                        Semua Mandor 
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                        <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                        </svg>
+                                    </option>
+                                    <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                        <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option>Belum ada Mandor</option>
+                                    </template>
+                                </select> 
+                                <select v-model="id_anak_kandang" @change="getPelaporan(is_archived, idKandang, id_kategori_kandang, id_treatment, id_mandor, $event.target.value, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                    <option value="0" selected> 
+                                        Semua Anak Kandang 
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                        <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                        </svg>
+                                    </option>
+                                    <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                        <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option>Belum ada Anak Kandang</option>
+                                    </template>
+                                </select> 
+                              
+                              
+                            </div> 
+                        </p>
                     </div>
                     <div class="d-inline">
                         <template v-if="role == adminKantor || role == superadmin">
-                            <button @click="printLaporan()" type="button" class="btn btn-success bg-button-rossa">Download laporan</button>
+                            <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="ms-3 btn btn-secondary bg-button-rossa">
+                                Download Laporan
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-start p-3 shadow">
+                                <button @click="printLaporan()" type="button" class="btn btn-danger bg-button-rossa">Download PDF</button>
+                                <button @click="downloadExcel()" class="btn btn-success ms-3">Download Excel</button>
+                            </div>
                         </template>
                     </div>
                 </div> 
@@ -232,10 +319,11 @@
 <script setup>
     import HeaderItem from '@/components/HeaderItem.vue';
     import { reactive, onMounted, ref, watch } from 'vue';
-    import { pencatatanStore, kandangStore, pelaporanStore } from '@/stores';
+    import { pencatatanStore, kandangStore, pelaporanStore, treatmentStore, karyawanStore } from '@/stores';
     import axios from 'axios'
     import moment from 'moment';
     import jsPDF from "jspdf";
+    import { excelParser } from "@/helpers/excel-parser";
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
     const user = localStorage.getItem('user');
@@ -247,6 +335,18 @@
     const dataPencatatan = reactive(pencatatanStore());
     const dataKandang = reactive(kandangStore());
     const dataPelaporan = reactive(pelaporanStore());
+    const dataKaryawan = reactive(karyawanStore());
+    const dataTreatment = reactive(treatmentStore());
+
+    const currentPage = ref(1);
+    const pageSize = ref(10);
+    const id_mandor = ref(0);
+    const id_anak_kandang = ref(0);
+    const id_strain_ayam = ref(0);
+    const is_archived = ref(0);
+    const id_kategori_kandang = ref(0);
+    const id_treatment = ref(0);
+
     const idKandang = ref(0);
     const date = ref(0);
     const rangeDate = reactive({
@@ -255,10 +355,12 @@
     });
     const today = new Date();
     const tomorrow = new Date(today);
+    const yesterday = new Date(today);
     tomorrow.setDate(today.getDate() + 1);
+    yesterday.setDate(today.getDate() - 1);
 
     const selectedDate = ref([
-        new Date(2022, 1, 1),
+        yesterday,
         tomorrow,
     ]);
 
@@ -271,8 +373,10 @@
     onMounted(() => {
         rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(selectedDate.value[1]).format("YYYY-MM-DD");
-        getPelaporan(null, rangeDate.start, rangeDate.end);
+        getPelaporan(is_archived.value, idKandang.value, id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
         getKandang();
+        getTreatment();
+        getKaryawan();
     });
 
     const generateData = function() {
@@ -448,7 +552,7 @@
         date.value = new Date(newValue[0]);
         rangeDate.start = moment(newValue[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(newValue[1]).format("YYYY-MM-DD");
-        getPelaporan(idKandang.value, rangeDate.start, rangeDate.end);
+        getPelaporan(is_archived.value, idKandang.value, id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
     });
 
     async function getPencatatan(page, id_kandang = idKandang.value, startDate = rangeDate.start, endDate = rangeDate.end) {
@@ -478,6 +582,42 @@
             });
     }
 
+    async function getKaryawan() {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/karyawan', {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataKaryawan.setResponseData(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    async function getTreatment() {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/tugas', {
+            params: {
+                is_treatment: true,
+            },
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataTreatment.setResponseData(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+
 
     async function getKandang() {
         
@@ -498,15 +638,39 @@
             });
     }
 
-    async function getPelaporan(id_kandang, startDate, endDate) {
+    async function getPelaporan(is_archived, id_kandang, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, startDate, endDate) {
         if (id_kandang == 0) {
             id_kandang = null;
+        }
+        if (id_kategori_kandang == 0) {
+            id_kategori_kandang = null;
+        }
+        if (id_treatment == 0) {
+            id_treatment = null;
+        }
+        if (id_mandor == 0) {
+            id_mandor = null;
+        }
+        if (id_anak_kandang == 0) {
+            id_anak_kandang = null;
+        }
+        if(is_archived == 0) {
+            is_archived = false;
+        } else if(is_archived == 1) {
+            is_archived = true;
+        } else {
+            is_archived = null;
         }
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/laporan', {
             params: {
+                is_archived: is_archived,
                 id_kandang: id_kandang,
+                id_kategori_kandang: id_kategori_kandang,
+                id_treatment: id_treatment,
+                id_mandor: id_mandor,
+                id_anak_kandang: id_anak_kandang,
                 start_date: startDate,
                 end_date: endDate,
             },
@@ -516,15 +680,26 @@
         })
             .then(response => {
                 dataPelaporan.setResponseData(response.data);
-                console.log(response);
+                console.log("Data JSON Laporan : ", dataPelaporan.exportData.items);
             })
             .catch(error => {
                 console.error(error);
             });
     }
 
+    function clearFilter() {
+        idKandang.value = 0;
+        id_kategori_kandang.value = 0;
+        id_treatment.value = 0;
+        id_mandor.value = 0;
+        id_anak_kandang.value = 0;
+        is_archived.value = 0;
+        getPelaporan(is_archived.value, idKandang.value, id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
+    }
 
-
+    function downloadExcel() {
+        excelParser().exportDataFromJSON(dataPelaporan.exportData.items, null, null)
+    }
    
 </script>
 

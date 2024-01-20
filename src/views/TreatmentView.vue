@@ -241,7 +241,7 @@
     const is_treatment = ref(-1);
     const currentPage = ref(1);
     const pageSize = ref(10);
-    const totalItems = dataTreatment.responseData ? dataTreatment.responseData.data.total_record : 0;
+    const totalItems = ref(0);
     const onClickHandler = (page) => {
         getTreatment(page);
     };
@@ -312,7 +312,7 @@
         })
             .then(response => {
                 dataTreatment.setResponseData(response.data);
-                console.log(dataTreatment.responseData);
+                totalItems.value = dataTreatment.responseData ? dataTreatment.responseData.data.total_record : 0;
             })
             .catch(error => {
                 console.error(error);

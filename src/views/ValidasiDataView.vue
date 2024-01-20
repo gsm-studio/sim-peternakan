@@ -47,7 +47,14 @@
                         Filter
                         </button>
                         <div class="dropdown-menu dropdown-menu-start p-3 shadow">
-                            <select v-model="id_mandor" @change="getPencatatan(currentPage, $event.target.value, id_kandang, id_anak_Kandang, id_strain_ayam)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <label class="form-label">Pilih Arsip</label>
+                            <select v-model="is_archived" @change="getPencatatan(currentPage, id_mandor, id_kandang, id_anak_Kandang, id_strain_ayam, id_treatment, id_jenis_pakan, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <option value="-1">Semua Laporan</option>
+                                <option value="0">Tidak</option>
+                                <option value="1">Ya</option>
+                            </select>
+                            <label class="form-label">Pilih Filter</label> 
+                            <select v-model="id_mandor" @change="getPencatatan(currentPage, $event.target.value, id_kandang, id_anak_Kandang, id_strain_ayam, id_treatment, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua Mandor 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -60,10 +67,10 @@
                                     </option>
                                 </template>
                                 <template v-else>
-                                    <option>Belum ada karyawan</option>
+                                    <option>Belum ada mandor</option>
                                 </template>
                             </select> 
-                            <select v-model="id_kandang" @change="getPencatatan(currentPage, id_mandor, $event.target.value, id_anak_Kandang, id_strain_ayam)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <select v-model="id_kandang" @change="getPencatatan(currentPage, id_mandor, $event.target.value, id_anak_Kandang, id_strain_ayam, id_treatment, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua Kandang 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -79,7 +86,7 @@
                                     <option>Belum ada Kandang</option>
                                 </template>
                             </select> 
-                            <select v-model="id_anak_kandang" @change="getPencatatan(currentPage, id_mandor, id_kandang, $event.target.value, id_strain_ayam)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <select v-model="id_anak_kandang" @change="getPencatatan(currentPage, id_mandor, id_kandang, $event.target.value, id_strain_ayam, id_treatment, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua Anak Kandang 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -95,7 +102,7 @@
                                     <option>Belum ada Anak Kandang</option>
                                 </template>
                             </select> 
-                            <select v-model="id_strain_ayam" @change="getPencatatan(currentPage, id_mandor, id_kandang, id_anak_kandang, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <select v-model="id_strain_ayam" @change="getPencatatan(currentPage, id_mandor, id_kandang, id_anak_kandang, $event.target.value, id_treatment, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua Strain Ayam 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -109,6 +116,38 @@
                                 </template>
                                 <template v-else>
                                     <option>Belum ada Strain Ayam</option>
+                                </template>
+                            </select>
+                            <select v-model="id_treatment" @change="getPencatatan(currentPage, id_mandor, id_kandang, id_anak_kandang, id_strain_ayam, $event.target.value, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <option value="0" selected> 
+                                    Semua Treatment 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                    <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                    </svg>
+                                </option>
+                                <template v-if="dataTreatment.responseData && dataTreatment.responseData.data.items.length > 0">
+                                    <option v-for="item in dataTreatment.responseData.data.items" :key="item.id" :value="item.id">
+                                        {{ item.nama }}
+                                    </option>
+                                </template>
+                                <template v-else>
+                                    <option>Belum ada Treatment</option>
+                                </template>
+                            </select>
+                            <select v-model="id_jenis_pakan" @change="getPencatatan(currentPage, id_mandor, id_kandang, id_anak_kandang, id_strain_ayam, id_treatment, $event.target.value, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <option value="0" selected> 
+                                    Semua Jenis Pakan 
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
+                                    <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
+                                    </svg>
+                                </option>
+                                <template v-if="dataPakan.responseData && dataPakan.responseData.data.items.length > 0">
+                                    <option v-for="item in dataPakan.responseData.data.items" :key="item.id" :value="item.id">
+                                        {{ item.nama }}
+                                    </option>
+                                </template>
+                                <template v-else>
+                                    <option>Belum ada Pakan</option>
                                 </template>
                             </select>
                         </div>
@@ -191,7 +230,7 @@
                                     </div>
                                 </div>
                             </td>
-                            <td @click="getIdPencatatan(item.id)" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#first-modal">
+                            <td class="text-center" @click="getIdPencatatan(item.id)" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#first-modal">
                                 <a href="javascript:void(0)">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18" fill="none">
                                     <path d="M1.615 18C1.155 18 0.771 17.846 0.463 17.538C0.154333 17.2293 0 16.845 0 16.385V1.615C0 1.155 0.154333 0.771 0.463 0.463C0.771 0.154333 1.155 0 1.615 0H9.5L14 4.5V16.385C14 16.845 13.846 17.229 13.538 17.537C13.2293 17.8457 12.845 18 12.385 18H1.615ZM9 5H13L9 1V5Z" fill="#0FA958"/>
@@ -227,44 +266,8 @@
         </div>
     </div>
 
-    <!-- <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg">
-            <div class="modal-content p-3">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                
-                
-                </div>
-                <div class="modal-footer">
-                    <div v-if="apiError" class="alert alert-danger mt-3 mb-0">{{ apiError }}</div> 
-                </div>
-            </div>
-        </div>
-    </div> -->
-
-    
-        <!-- <h1>Working with Multiple Modals</h1>
-        <div class="margin-lg">
-            <button type="button" class="btn-first-modal btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#first-modal">
-            Launch First Modal
-            </button>
-        </div>
-        <div class="margin-lg">
-            <button type="button" class="btn-second-modal btn btn-primary btn-lg">
-            Launch second Modal
-            </button>
-        </div>
-        <div class="margin-lg">
-            <button type="button" class="btn-toggle-fade btn btn-lg">
-            Toggle Fade
-            </button>
-        </div>
-   -->
-
-    <div class="modal fade" id="first-modal" data-bs-backdrop="static">
-        <div class="modal-dialog modal-fullscreen">
+    <div class="modal fade" id="first-modal" data-bs-backdrop="static" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-fullscreen" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel2"></h5>
@@ -428,23 +431,14 @@
                         </svg>
                         Hapus
                     </button>
-                <!-- <a class="btn-second-modal within-first-modal btn btn-primary">
-            Launch second Modal
-                </a>
-                <a class="btn-second-modal within-first-modal btn btn-primary">
-            Launch second Modal
-                </a>
-                <a class="btn-second-modal within-first-modal btn btn-primary">
-            Launch second Modal
-                </a> -->
                 
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="modal fade" id="second-modal" data-bs-backdrop="static">
-        <div class="modal-dialog modal-lg shadow-lg">
+    <div class="modal fade" id="second-modal" data-bs-backdrop="static" role="dialog">
+        <div class="modal-dialog modal-lg shadow-lg modal-dialog-scrollable" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button @click="clickCloseSecondModal" type="button" class="btn-close btn-second-modal-close"></button>
@@ -472,17 +466,38 @@
                                 <ErrorMessage class="text-danger" name="nama_kandang" />
                             </div>
                             <!-- {{ values }} -->
-                            <Field v-model="detailPencatatan.id_anak_kandang" name="id_anak_kandang" class="form-control text-center" type="hidden"/>
+                            <!-- <Field v-model="detailPencatatan.id_anak_kandang" name="id_anak_kandang" class="form-control text-center" type="hidden"/> -->
+                            <div class="mb-3">
+                                <label for="id_anak_kandang" class="form-label">Nama Anak Kandang</label>
+                                <Field v-model="detailPencatatan.id_anak_kandang" id="id_anak_kandang" as="select" name="id_anak_kandang" class="form-control text-center">
+                                    <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                        <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option>Belum ada anak kandang</option>
+                                    </template>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="id_anak_kandang" />
+                            </div>
                             <div class="mb-3">
                                 <label for="nama_mandor" class="form-label">Nama Mandor</label>
                                 <Field v-model="detailPencatatan.id_mandor" id="nama_mandor" as="select" name="nama_mandor" class="form-control text-center">
-                                    <option :value="detailPencatatan.id_mandor">{{ detailPencatatan.nama_mandor }}</option>
+                                    <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                        <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option>Belum ada mandor</option>
+                                    </template>
                                 </Field>
                                 <ErrorMessage class="text-danger" name="nama_mandor" />
                             </div>
                             <div class="mb-3">
                                 <label for="usia_hari" class="form-label">Usia Hari</label>
-                                <Field v-model="detailPencatatan.usia_hari" id="usia_hari" name="usia_hari" class="form-control text-center" type="number" />
+                                <Field v-model="detailPencatatan.usia_hari" id="usia_hari" name="usia_hari" class="form-control text-center" type="number" autofocus />
                                 <ErrorMessage class="text-danger" name="usia_hari" />
                             </div>
                             <div class="mb-3">
@@ -529,23 +544,27 @@
                             <h6 class="mb-3">Ayam</h6>
 
                             <div class="mb-3">
+                                <label for="mati" class="form-label">Mati</label>
                                 <Field v-model="detailPencatatan.jumlah_mati" name="mati" class="form-control text-center" type="number" placeholder="Mati" />
                                 <ErrorMessage class="text-danger" name="mati" />
                             </div>
 
                             <div class="mb-3">
+                                <label for="afkir" class="form-label">Afkir</label>
                                 <Field v-model="detailPencatatan.jumlah_afkir" name="afkir" class="form-control text-center" type="number" placeholder="Afkir" />
                                 <ErrorMessage class="text-danger" name="afkir" />
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
+                                    <label for="jumlah_pindah" class="form-label">Jumlah Pindah</label>
                                     <Field v-model="detailPencatatan.jumlah_pindah" name="jumlah_pindah" class="form-control text-center" type="number" placeholder="Jumlah Pindah" />
                                     <ErrorMessage class="text-danger" name="jumlah_pindah" />
                                 </div>
                                 </div>
                                 <div class="col">
                                     <div class="mb-3">
+                                        <label></label>
                                         <Field v-model="detailPencatatan.id_kandang_tujuan" @change="getKandangPenerima($event.target.value)" as="select" name="id_kandang_tujuan" class="form-control text-center">
                                             <template v-if="dataKandang.responseData">
                                                 <option value="" disabled>Pilih Nama Kandang Penerima</option>
@@ -559,12 +578,14 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="mb-3">
+                                        <label for="mati" class="form-label">Jumlah Terima</label>
                                         <Field v-model="detailPencatatan.jumlah_terima" name="jumlah_terima" class="form-control text-center" type="number" placeholder="Jumlah Terima" />
                                         <ErrorMessage class="text-danger" name="jumlah_terima" />
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="mb-3">
+                                        <label></label>
                                         <Field v-model="detailPencatatan.id_kandang_pengirim" @change="getKandangPengirim($event.target.value)" as="select" name="id_kandang_pengirim" class="form-control text-center">
                                             <template v-if="dataKandang.responseData">
                                                 <option value="" disabled>Pilih Nama Kandang Pengirim</option>
@@ -619,18 +640,22 @@
                             </div>
                             <h6 class="mb-3">Produksi telur</h6>
                             <div class="mb-3">
+                                <label for="jml_telur_utuh" class="form-label">Jml Telur Utuh</label>
                                 <Field v-model="detailPencatatan.telur_utuh" name="jml_telur_utuh" class="form-control text-center" type="number" placeholder="Jumlah Telur Utuh" />
                                 <ErrorMessage class="text-danger" name="jml_telur_utuh" />
                             </div>
                             <div class="mb-3">
+                                <label for="jml_telur_bentes" class="form-label">Jml Telur Bentes</label>
                                 <Field v-model="detailPencatatan.telur_bentes" name="jml_telur_bentes" class="form-control text-center" type="number" placeholder="Jumlah Telur Bentes" />
                                 <ErrorMessage class="text-danger" name="jml_telur_bentes" />
                             </div>
                             <div class="mb-3">
+                                <label for="berat_telur_utuh" class="form-label">Berat Telur Utuh</label>
                                 <Field v-model="detailPencatatan.berat_utuh" name="berat_telur_utuh" class="form-control text-center" type="number" placeholder="Berat Telur Utuh" />
                                 <ErrorMessage class="text-danger" name="berat_telur_utuh" />
                             </div>
                             <div class="mb-3">
+                                <label for="berat_telur_bentes" class="form-label">Berat Telur Bentes</label>
                                 <Field v-model="detailPencatatan.berat_bentes" name="berat_telur_bentes" class="form-control text-center" type="number" placeholder="Berat Telur Bentes" />
                                 <ErrorMessage class="text-danger" name="berat_telur_bentes" />
                             </div>
@@ -671,7 +696,7 @@
                             <div class="mb-3">
                                 <Field v-model="detailPencatatan.id_jenis_pakan" as="select" name="jenis_pakan" class="form-control text-center">
                                     <template v-if="dataPakan.responseData">
-                                        <option value="" disabled>Pilih Nama Pakan</option>
+                                        <option value="">Pilih Nama Pakan</option>
                                         <option v-for="item in dataPakan.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                                     </template>
                                 </Field>
@@ -680,13 +705,14 @@
                             <div class="mb-3">
                                 <Field v-model="detailPencatatan.id_treatment" as="select" name="jenis_treatment" class="form-control text-center">
                                     <template v-if="dataTreatment.responseData">
-                                        <option value="" disabled>Pilih Nama Treatment</option>
+                                        <option value="">Pilih Nama Treatment</option>
                                         <option v-for="item in dataTreatment.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                                     </template>
                                 </Field>
                                 <ErrorMessage class="text-danger" name="jenis_treatment" />
                             </div>
                             <div class="mb-3">
+                                <label for="berat_pakan" class="form-label">Berat Pakan</label>
                                 <Field v-model="detailPencatatan.berat_pakan" name="berat_pakan" class="form-control text-center" type="number" placeholder="Berat Pakan" />
                                 <ErrorMessage class="text-danger" name="berat_pakan" />
                             </div>
@@ -805,7 +831,7 @@
     const date = ref(0);
     const currentPage = ref(1);
     const pageSize = ref(10);
-    const totalItems = dataPencatatan.responseData ? dataPencatatan.responseData.data.total_record : 0;
+    const totalItems = ref(0);
     const onClickHandler = (page) => {
         getPencatatan(page);
     };
@@ -850,6 +876,10 @@
     const id_mandor = ref(0);
     const id_anak_kandang = ref(0);
     const id_strain_ayam = ref(0);
+    const id_treatment = ref(0);
+    const id_jenis_pakan = ref(0);
+    const is_archived = ref(0);
+
     function nextStep(values) {
         if (currentStep.value === 3) {
             onUpdateSubmit(values);
@@ -900,10 +930,6 @@
         return moment(tanggal).format('DD-MM-YYYY');
     }
 
-    // watch(() => detailPencatatan.tanggal_submit, () => {
-    //     formatTanggalSubmit.value = moment(detailPencatatan.tanggal_submit).format('YYYY-MM-DD');
-    // });
-
     function getNamaKandang(id) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
@@ -928,6 +954,9 @@
         id_mandor.value = 0;
         id_anak_kandang.value = 0;
         id_strain_ayam.value = 0;
+        id_treatment.value = 0;
+        id_jenis_pakan.value = 0;
+        is_archived.value = 0;
         getPencatatan(1);
     }
 
@@ -970,6 +999,7 @@
             $('#first-modal').modal('hide');
         }
         $('#second-modal').modal('show');
+
         getKandangPengirim(detailPencatatan.id_kandang_pengirim);
         getKandangPenerima(detailPencatatan.id_kandang_tujuan);
     }
@@ -1178,7 +1208,7 @@
             });
     }
 
-    async function getPencatatan(page_number, id_mandor = null, id_kandang = null, id_anak_kandang = null, id_strain_ayam = null, ) {
+    async function getPencatatan(page_number, id_mandor = null, id_kandang = null, id_anak_kandang = null, id_strain_ayam = null, id_treatment = null, id_jenis_pakan = null, is_archived = null) {
         if(id_mandor == 0) {
             id_mandor = null;
         }
@@ -1191,6 +1221,19 @@
         if(id_strain_ayam == 0) {
             id_strain_ayam = null;
         }
+        if(id_treatment == 0) {
+            id_treatment = null;
+        }
+        if(id_jenis_pakan == 0) {
+            id_jenis_pakan = null;
+        }
+        if(is_archived == 0) {
+            is_archived = false;
+        } else if(is_archived == 1) {
+            is_archived = true;
+        } else {
+            is_archived = null;
+        }
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/pencatatan', {
@@ -1199,6 +1242,9 @@
                 id_kandang: id_kandang,
                 id_anak_kandang: id_anak_kandang,
                 id_strain_ayam: id_strain_ayam,
+                id_treatment: id_treatment,
+                id_jenis_pakan: id_jenis_pakan,
+                is_archived: is_archived,
                 column_sorting: 'tanggal_submit desc',
                 page_number: page_number, 
                 page_size: pageSize.value, 
@@ -1209,7 +1255,8 @@
         })
             .then(response => {
                 dataPencatatan.setResponseData(response.data);
-                console.log(dataPencatatan);
+                totalItems.value = dataPencatatan.responseData ? dataPencatatan.responseData.data.total_record : 0;
+                console.log("Response Pencatatan : ", response);
             })
             .catch(error => {
                 console.error(error);
@@ -1369,41 +1416,9 @@
         getKandang();
         getKaryawan();
         getStrain();
-        // Mengambil elemen button (icon SVG) dan popover
-        // const buttons = document.querySelectorAll('.btnPersetujuan');
-        // const popover = document.getElementById('myPopover');
-
-        // // Menampilkan atau menyembunyikan popover saat button diklik
-        // buttons.forEach(button => {
-        //     button.addEventListener('click', function(event) {
-        //         if (popover.style.display === 'block') {
-        //             popover.style.display = 'none';
-        //         } else {
-        //             popover.style.display = 'block';
-        //         }
-        //         event.stopPropagation(); // Mencegah event bubbling
-        //     });
-        // });
-
-        // Menutup popover saat klik di luar popover
-        // document.addEventListener('click', function(event) {
-        //     if (!popover.contains(event.target)) {
-        //         popover.style.display = 'none';
-        //     }
-        // });
-
-        $(document).ready(function() {
-            // $('.btn-toggle-fade').on('click', function() {
-            // if ($('.modal').hasClass('fade')) {
-            //     $('.modal').removeClass('fade');
-            //     $(this).removeClass('btn-success');
-            // } else {
-            //     $('.modal').addClass('fade');
-            //     $(this).addClass('btn-success');
-            // }
-            // });
-        });
-            
+        getTreatment();
+        getPakan();
+       
     });
 
      
@@ -1412,6 +1427,14 @@
 <style scoped>
 .margin-lg {
   margin: 15px;
+}
+
+#second-modal {
+    z-index: 1102 !important;
+}
+
+#first-modal {
+    z-index: 1101 !important;
 }
     
 </style>

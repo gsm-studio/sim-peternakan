@@ -10,7 +10,7 @@
                     <div class="col-lg-12 border-bottom">
                         <div class="card-body row">
                             <div class="col-4">
-                                <h4 class="d-inline me-2">Pencatatan produksi</h4>
+                                <h4 class="d-inline me-2">Pencatatan Produksi</h4>
                                 <div class="d-inline">
                                     <svg class="icon">
                                     <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-right
@@ -21,13 +21,14 @@
                                 <!-- <img src="@/assets/img/vector-1.png" alt=""> -->
                             </div>
                             <div class="col-3 d-grid d-md-block">
-                                <small class="color-text-rossa">{{ dateSubmitPencatatan }}</small>
+                                <!-- <small class="color-text-rossa">{{ dateSubmitPencatatan }}</small> -->
                                 <!-- <button class="btn btn-secondary ms-3" type="button">Hisex</button> -->
                             </div>
                             <div class="col-5 d-grid d-md-block">
-                                <button v-if="status == 'submitted'" class="btn btn-warning" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Pending</button>
-                                <button v-else-if="status == 'accepted'" class="btn btn-success" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Terima</button>
-                                <button v-else class="btn btn-danger" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal2">Tolak</button>
+                                <h6 class="d-inline-block">Status : </h6>
+                                <h5 v-if="status == 'submitted'" class="text-warning d-inline-block"> Pending</h5>
+                                <h5 v-else-if="status == 'accepted'" class="text-success d-inline-block"> Terima</h5>
+                                <h5 v-else class="text-danger"> Tolak</h5>
                                 <button @click="getKandang()" class="btn btn-success ms-3" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     Input Harian
                                     <svg class="icon">
@@ -91,22 +92,7 @@
                             
                             </div>
                         </div>
-                        <!-- <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
-                        <CChart
-                            type="bar"
-                            :data="{
-                                labels: ['Telur Utuh', 'Telur Bentes', 'Berat Utuh', 'Berat Bentes'],
-                                datasets: [
-                                    {
-                                        label: 'Total',
-                                        backgroundColor: '#5CA882',
-                                        data: [dataPencatatan.responseData.data.items[0].telur_utuh ?? 0, dataPencatatan.responseData.data.items[0].telur_bentes ?? 0, dataPencatatan.responseData.data.items[0].berat_utuh ?? 0, dataPencatatan.responseData.data.items[0].berat_bentes ?? 0]
-                                    },
-                                ],
-                            }"
-                            labels="months"
-                        />
-                        </template> -->
+                       
                         <CChart
                             type="bar"
                             :data="{
@@ -123,7 +109,7 @@
                         />
                        
                     </div>
-                    <div class="card-footer d-flex justify-content-between">
+                    <!-- <div class="card-footer d-flex justify-content-between">
                         <span> 
                         <svg class="icon bg-button-rossa">
                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last 6 days
@@ -132,7 +118,7 @@
                         <svg class="icon bg-grey-rossa">
                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last Week
                         </span>
-                    </div>
+                    </div> -->
                     </div>
                     <div class="col-lg-5">
                     <div class="card-body populasi">
@@ -175,26 +161,7 @@
                         </div>
                         </div>
                         <div>
-                            <!-- <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
-                            <CChart
-                                type="line"
-                                :wrapper="false"
-                                :data="{
-                                    labels: ['Mati', 'Afkir', 'Pindah', 'Terima'],
-                                    datasets: [
-                                    {
-                                        label: 'Total',
-                                        backgroundColor: 'rgba(220, 220, 220, 0.2)',
-                                        borderColor: 'rgba(220, 220, 220, 1)',
-                                        pointBackgroundColor: 'rgba(220, 220, 220, 1)',
-                                        pointBorderColor: '#e55353',
-                                        data: [dataPencatatan.responseData.data.items[0].jumlah_mati ?? 0, dataPencatatan.responseData.data.items[0].jumlah_afkir ?? 0, dataPencatatan.responseData.data.items[0].jumlah_pindah ?? 0, dataPencatatan.responseData.data.items[0].jumlah_terima ?? 0]
-                                    },
-                                
-                                    ]
-                                }"
-                             />
-                            </template> -->
+                       
                             <CChart
                                 type="line"
                                 :wrapper="false"
@@ -215,7 +182,7 @@
                              />
                         </div>
                     </div>
-                    <div class="card-footer d-flex justify-content-between">
+                    <!-- <div class="card-footer d-flex justify-content-between">
                         <span> 
                         <svg class="icon bg-button-rossa">
                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last 6 days
@@ -224,7 +191,7 @@
                         <svg class="icon bg-grey-rossa">
                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last Week
                         </span>
-                    </div>
+                    </div> -->
                 </div>
                 </div>
                 <div class="row border-top">
@@ -355,11 +322,32 @@
                                 <ErrorMessage class="text-danger" name="nama_kandang" />
                             </div>
                             <!-- {{ values }} -->
-                            <Field v-model="detailKandang.id_anak_kandang" name="id_anak_kandang" class="form-control text-center" type="hidden"/>
+                            <!-- <Field v-model="detailKandang.id_anak_kandang" name="id_anak_kandang" class="form-control text-center" type="hidden"/> -->
+                            <div class="mb-3">
+                                <label for="id_anak_kandang" class="form-label">Nama Anak Kandang</label>
+                                <Field v-model="detailKandang.id_anak_kandang" id="id_anak_kandang" as="select" name="id_anak_kandang" class="form-control text-center">
+                                    <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                        <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option>Belum ada anak kandang</option>
+                                    </template>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="id_anak_kandang" />
+                            </div>
                             <div class="mb-3">
                                 <label for="nama_mandor" class="form-label">Nama Mandor</label>
-                                <Field v-model="detailKandang.id_mandor" id="nama_mandor" as="select" name="nama_mandor" class="form-control text-center" readonly>
-                                    <option :value="detailKandang.id_mandor">{{ detailKandang.nama_mandor }}</option>
+                                <Field v-model="detailKandang.id_mandor" id="nama_mandor" as="select" name="nama_mandor" class="form-control text-center">
+                                    <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                        <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option>Belum ada mandor</option>
+                                    </template>
                                 </Field>
                                 <ErrorMessage class="text-danger" name="nama_mandor" />
                             </div>
@@ -790,17 +778,38 @@
                             </div>
                             <div class="mb-3">
                                 <label for="nama_kandang" class="form-label">Nama Kandang</label>
-                                <Field v-model="detailPencatatan.id_kandang" id="nama_kandang" as="select" name="nama_kandang" class="form-control text-center">
+                                <Field v-model="detailPencatatan.id_kandang" id="nama_kandang" as="select" name="nama_kandang" class="form-control text-center" readonly>
                                     <option :value="detailPencatatan.id_kandang">{{ detailPencatatan.nama_kandang }}</option>
                                 </Field>
                                 <ErrorMessage class="text-danger" name="nama_kandang" />
                             </div>
                             <!-- {{ values }} -->
-                            <Field v-model="detailPencatatan.id_anak_kandang" name="id_anak_kandang" class="form-control text-center" type="hidden"/>
+                            <!-- <Field v-model="detailPencatatan.id_anak_kandang" name="id_anak_kandang" class="form-control text-center" type="hidden"/> -->
+                            <div class="mb-3">
+                                <label for="id_anak_kandang" class="form-label">Nama Anak Kandang</label>
+                                <Field v-model="detailKandang.id_anak_kandang" id="id_anak_kandang" as="select" name="id_anak_kandang" class="form-control text-center">
+                                    <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                        <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option>Belum ada anak kandang</option>
+                                    </template>
+                                </Field>
+                                <ErrorMessage class="text-danger" name="id_anak_kandang" />
+                            </div>
                             <div class="mb-3">
                                 <label for="nama_mandor" class="form-label">Nama Mandor</label>
                                 <Field v-model="detailPencatatan.id_mandor" id="nama_mandor" as="select" name="nama_mandor" class="form-control text-center">
-                                    <option :value="detailPencatatan.id_mandor">{{ detailPencatatan.nama_mandor }}</option>
+                                    <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                        <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                    </template>
+                                    <template v-else>
+                                        <option>Belum ada mandor</option>
+                                    </template>
                                 </Field>
                                 <ErrorMessage class="text-danger" name="nama_mandor" />
                             </div>
@@ -1047,12 +1056,12 @@
 </template>
 
 <script setup>
-    import HeaderItem from '../components/HeaderItem.vue'
+    import HeaderItem from '@/components/HeaderItem.vue'
     import { CChart } from '@coreui/vue-chartjs'
     import { onMounted, ref, computed, reactive, watch } from 'vue'
     import { Field, ErrorMessage, Form } from 'vee-validate';
     import * as yup from 'yup';
-    import { kandangStore, strainStore, pakanStore, treatmentStore, pencatatanStore, standartStore, pelaporanStore } from '@/stores';
+    import { kandangStore, strainStore, pakanStore, treatmentStore, pencatatanStore, standartStore, pelaporanStore, karyawanStore } from '@/stores';
     import axios from 'axios'
     import { useRoute } from 'vue-router'
     import moment from 'moment'
@@ -1088,6 +1097,7 @@
     const dataPencatatan = reactive(pencatatanStore());
     const dataStandart = reactive(standartStore());
     const dataPelaporan = reactive(pelaporanStore());
+    const dataKaryawan = reactive(karyawanStore());
 
     const detailKandang = reactive({
         id: '',
@@ -1259,6 +1269,7 @@
     const persentase_pakan = ref(0);
 
     onMounted(() => {
+        getKaryawan();
         rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(selectedDate.value[1]).format("YYYY-MM-DD");
         getIdKandang(route.params.id);
@@ -1520,6 +1531,22 @@
                 getIdPakan(detailPencatatan.id_jenis_pakan);
                 // console.log("Detail Pencatatan : ", detailPencatatan);
                 console.log("Detail Pencatatan : ", response);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    async function getKaryawan() {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/karyawan', {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataKaryawan.setResponseData(response.data);
             })
             .catch(error => {
                 console.error(error);

@@ -216,7 +216,7 @@
     
     const currentPage = ref(1);
     const pageSize = ref(10);
-    const totalItems = dataStrain.responseData ? dataStrain.responseData.data.total_record : 0;
+    const totalItems = ref(0);
     const onClickHandler = (page) => {
         getStrain(page);
     };
@@ -281,7 +281,7 @@
         })
             .then(response => {
                 dataStrain.setResponseData(response.data);
-                console.log(dataStrain.responseData);
+                totalItems.value = dataStrain.responseData ? dataStrain.responseData.data.total_record : 0;
             })
             .catch(error => {
                 console.error(error);

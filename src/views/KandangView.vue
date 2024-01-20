@@ -97,9 +97,9 @@
                         <th scope="col">Nama Kandang</th>
                         <th scope="col">Anak Kandang</th>
                         <th scope="col">Nama Mandor</th>
-                        <th scope="col">Alamat Kandang</th>
                         <th scope="col">Populasi Awal</th>
                         <th scope="col">Populasi Total</th>
+                        <th scope="col">Alamat Kandang</th>
                         <th scope="col"></th>
                         </tr>
                     </thead>
@@ -110,9 +110,9 @@
                                 <td>{{ item.nama }}</td>
                                 <td>{{ item.nama_anak_kandang }}</td>
                                 <td>{{ item.nama_mandor }}</td>
-                                <td>{{ item.alamat }}</td>
                                 <td>{{ item.populasi_awal }}</td>
                                 <td>{{ item.populasi_total }}</td>
+                                <td>{{ item.alamat }}</td>
                                 <td>
                                     <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
@@ -124,6 +124,7 @@
                                     <div class="dropdown-menu dropdown-menu-end">
                                         <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdKandang(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
                                         <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKandang(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                        <a data-bs-toggle="modal" data-bs-target="#resetModal" @click="getIdKandang(item.id)" class="dropdown-item" href="javascript:void(0)">Reset</a>
                                         <a @click="deleteKandang(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
                                     </div>
                                 </td>
@@ -162,19 +163,25 @@
                 <div class="modal-body">
                 
                     <Field class="form-control text-center mb-3" type="text" name="nama" placeholder="Nama" :class="{ 'is-invalid': errors.nama }" />
-                    <Field class="form-control text-center mb-3" name="id_mandor" as="select" :class="{ 'is-invalid': errors.id_mandor }">
+                    <!-- <Field class="form-control text-center mb-3" name="id_mandor" as="select" :class="{ 'is-invalid': errors.id_mandor }">
                         <option value="">----- Pilih Nama Mandor -----</option>
                         <template v-if="dataKaryawan.responseData">
                             <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id" >{{ item.nama }}</option>
                         </template>
-                    </Field> 
-                    <Field class="form-control text-center mb-3" name="id_anak_kandang" as="select" :class="{ 'is-invalid': errors.id_anak_kandang }">
+                    </Field>  -->
+                    <!-- <Field class="form-control text-center mb-3" name="id_anak_kandang" as="select" :class="{ 'is-invalid': errors.id_anak_kandang }">
                         <option value="">----- Pilih Nama Anak Kandang -----</option>
                         <template v-if="dataKaryawan.responseData">
                             <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                         </template>
-                    </Field> 
+                    </Field>  -->
                     <Field class="form-control text-center mb-3" type="number" name="populasi_awal" placeholder="Populasi Awal" :class="{ 'is-invalid': errors.populasi_awal }" />
+                     <Field class="form-control text-center mb-3" name="id_kategori_kandang" as="select" :class="{ 'is-invalid': errors.id_kategori_kandang }">
+                        <option value="" disabled>Pilih Kategori Kandang</option>
+                        <template v-if="dataKandang.kategori">
+                            <option v-for="item in dataKandang.kategori" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                        </template>
+                    </Field> 
                     <Field id="id_strain_ayam" as="select" name="id_strain_ayam" class="form-control text-center mb-3">
                         <template v-if="dataStrain.responseData">
                             <option value="" disabled>Pilih Strain Ayam</option>
@@ -207,13 +214,14 @@
                 </div>
                 <div class="modal-body">
                     <p>Nama : {{ detailKandang.nama }}</p>
-                    <p>Alamat : {{ detailKandang.alamat }}</p>
                     <p>Nama Mandor : {{ detailKandang.nama_mandor }}</p>
                     <p>Nama Anak Kandang : {{ detailKandang.nama_anak_kandang }}</p>
                     <p>Populasi Awal : {{ detailKandang.populasi_awal }}</p>
                     <p>Populasi Total : {{ detailKandang.populasi_total }}</p>
                     <p>Tanggal Chick in : {{ formatTanggal(detailKandang.tanggal_chickin) }}</p>
                     <p>Strain Ayam : {{ detailKandang.strain_ayam }}</p>
+                    <p>Kategori Kandang : {{ detailKandang.nama_kategori_kandang }}</p>
+                    <p>Alamat : {{ detailKandang.alamat }}</p>
                 </div>
                 <div class="modal-footer">
                 <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
@@ -232,22 +240,15 @@
                 <div class="modal-body">
                     <Form @submit="onSubmitUpdate" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
                         <Field class="form-control text-center mb-3" type="text" name="nama" placeholder="Nama" v-model="detailKandang.nama" :class="{ 'is-invalid': errors.nama }" />
-                        <Field v-model="detailKandang.id_mandor" class="form-control text-center mb-3" name="id_mandor" :class="{ 'is-invalid': errors.id_mandor }" as="select">
-                            <template v-if="dataKaryawan.responseData">
-                                <option value="" disabled>Pilih Nama Mandor</option>
-                                <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
-                            </template>
-                        </Field> 
-                        <!-- {{ detailKandang  }} -->
-                        <Field v-model="detailKandang.id_anak_kandang" class="form-control text-center mb-3" name="id_anak_kandang" :class="{ 'is-invalid': errors.id_anak_kandang }" as="select">
-                            <!-- {{ detailKandang }} -->
-                            <template v-if="dataKaryawan.responseData">
-                                <option value="" disabled>Pilih Nama Anak Kandang</option>
-                                <option value="" selected>Anjing</option>
-                                <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
-                            </template>
-                        </Field> 
+                       
+                     
                         <Field class="form-control text-center mb-3" type="number" name="populasi_awal" placeholder="Populasi Awal" v-model="detailKandang.populasi_awal" :class="{ 'is-invalid': errors.populasi_awal }" />
+                        <Field v-model="detailKandang.id_kategori_kandang" class="form-control text-center mb-3" name="id_kategori_kandang" as="select" :class="{ 'is-invalid': errors.id_kategori_kandang }">
+                            <option value="" disabled>Pilih Kategori Kandang</option>
+                            <template v-if="dataKandang.kategori">
+                                <option v-for="item in dataKandang.kategori" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                            </template>
+                        </Field> 
                         <Field v-model="detailKandang.id_strain_ayam" id="id_strain_ayam" as="select" name="id_strain_ayam" class="form-control text-center mb-3">
                             <template v-if="dataStrain.responseData">
                                 <option value="" disabled>Pilih Strain Ayam</option>
@@ -263,6 +264,54 @@
                             </button> 
                         </div>
                         <div v-if="errors.apiError" class="alert alert-danger mt-3 mb-0">{{errors.apiError}}</div> 
+                    </Form>
+                </div>
+                <div class="modal-footer">
+                <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="resetModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content p-3">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Reset Kandang</h5>
+                    
+                    <button @click="closeModal()" type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6>Kandang: {{ detailKandang.nama }}</h6>
+                    <Form class="form" id="form" @submit="resetKandang" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+                        <div class="modal-body">
+                        
+                            <Field class="form-control text-center mb-3" type="text" name="nama" placeholder="Nama" :class="{ 'is-invalid': errors.nama }" />
+                            <Field class="form-control text-center mb-3" type="number" name="populasi_awal" placeholder="Populasi Awal" :class="{ 'is-invalid': errors.populasi_awal }" />
+                            <Field class="form-control text-center mb-3" name="id_kategori_kandang" as="select" :class="{ 'is-invalid': errors.id_kategori_kandang }">
+                                <option value="" disabled>Pilih Kategori Kandang</option>
+                                <template v-if="dataKandang.kategori">
+                                    <option v-for="item in dataKandang.kategori" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                </template>
+                            </Field> 
+                            <Field id="id_strain_ayam" as="select" name="id_strain_ayam" class="form-control text-center mb-3">
+                                <template v-if="dataStrain.responseData">
+                                    <option value="" disabled>Pilih Strain Ayam</option>
+                                    <option v-for="item in dataStrain.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                </template>
+                            </Field>
+                            <Field class="form-control text-center mb-3" type="date" name="tanggal_chickin" placeholder="Tanggal Chickin" :class="{ 'is-invalid': errors.tanggal_chickin }" />
+                            <Field as="textarea" class="form-control text-center mb-3" name="alamat" placeholder="Alamat" :class="{ 'is-invalid': errors.alamat }" />
+                        </div>
+                        <div class="modal-footer">
+                            <div class="text-end">
+                                    <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
+                                        Submit
+                                        <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
+                                    </button> 
+                            </div>
+                            <div v-if="errors.apiError" class="alert alert-danger mt-3 mb-0">{{errors.apiError}}</div>
+                        </div>
                     </Form>
                 </div>
                 <div class="modal-footer">
@@ -289,13 +338,13 @@
 
     const schema = Yup.object().shape({
         nama: Yup.string().required('Nama is required'),
-        id_mandor: Yup.string().required('Nama mandor is required'),
-        id_anak_kandang: Yup.string().required('Nama anak kandang is required'),
-        populasi_total: Yup.number(),
+        // id_mandor: Yup.string().required('Nama mandor is required'),
+        // id_anak_kandang: Yup.string().required('Nama anak kandang is required'),
+        populasi_awal: Yup.number(),
         tanggal_chickin: Yup.date(),
         id_strain_ayam: Yup.number().required('Strain ayam is required'),
         alamat: Yup.string().required('Alamat is required'),
-
+        id_kategori_kandang: Yup.number().required('Kategori kandang is required'),
     });
 
     const dataKaryawan  = reactive(karyawanStore());
@@ -314,12 +363,14 @@
         tanggal_chickin: '',
         id_strain_ayam: '',
         strain_ayam: '',
+        id_kategori_kandang: '',
+        nama_kategori_kandang: '',
     });
     let search = ref("");
 
     const currentPage = ref(1);
     const pageSize = ref(10);
-    const totalItems = dataKandang.responseData ? dataKandang.responseData.data.total_record : 0;
+    const totalItems = ref(0);
     const id_mandor = ref(0);
     const id_anak_kandang = ref(0);
     const onClickHandler = (page) => {
@@ -408,7 +459,8 @@
         })
             .then(response => {
                 dataKandang.setResponseData(response.data);
-                console.log(dataKandang.responseData.data);
+                totalItems.value = dataKandang.responseData ? dataKandang.responseData.data.total_record : 0;
+                console.log("Daftar Kategori Kandang : ", dataKandang.kategori);
             })
             .catch(error => {
                 console.error(error);
@@ -455,16 +507,15 @@
     async function onSubmit(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama, id_mandor, id_anak_kandang, populasi_awal, id_strain_ayam, tanggal_chickin, alamat } = values;
+        const { nama, populasi_awal, id_strain_ayam, tanggal_chickin, alamat, id_kategori_kandang } = values;
         console.log(values);
         return axios.post(baseUrl + '/kandang', {
             nama: nama,
-            id_mandor: id_mandor,
-            id_anak_kandang: id_anak_kandang,
             populasi_awal: populasi_awal,
             id_strain_ayam: id_strain_ayam,
             tanggal_chickin: tanggal_chickin,
             alamat: alamat,
+            id_kategori_kandang: id_kategori_kandang,
         }, {
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -487,16 +538,15 @@
     async function onSubmitUpdate(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama, id_mandor, id_anak_kandang, populasi_awal, id_strain_ayam, tanggal_chickin, alamat } = values;
+        const { nama, populasi_awal, id_strain_ayam, tanggal_chickin, alamat, id_kategori_kandang } = values;
         console.log(values);
         return axios.put(baseUrl + '/kandang/' + detailKandang.id, {
             nama: nama,
-            id_mandor: id_mandor,
-            id_anak_kandang: id_anak_kandang,
             populasi_awal: populasi_awal,
             id_strain_ayam: id_strain_ayam,
             tanggal_chickin: tanggal_chickin,
             alamat: alamat,
+            id_kategori_kandang: id_kategori_kandang,
         }, {
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -511,6 +561,37 @@
             .catch(error => {
                 console.error(error);
                 alert('error', 'Data gagal diubah')
+                setErrors({ apiError: error.response.data.message });
+            });
+        
+    }
+
+    async function resetKandang(values, { setErrors }) {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        const { nama, populasi_awal, id_strain_ayam, tanggal_chickin, alamat, id_kategori_kandang } = values;
+        console.log(values);
+        return axios.put(baseUrl + '/kandang/reset/' + detailKandang.id, {
+            nama: nama,
+            populasi_awal: populasi_awal,
+            id_strain_ayam: id_strain_ayam,
+            tanggal_chickin: tanggal_chickin,
+            alamat: alamat,
+            id_kategori_kandang: id_kategori_kandang,
+        }, {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                console.log(response);
+                alert('success', 'Data kandang berhasil direset');
+                getKandang();
+                closeModal();
+            })
+            .catch(error => {
+                console.error(error);
+                alert('error', 'Data kandang gagal direset')
                 setErrors({ apiError: error.response.data.message });
             });
         
@@ -538,6 +619,8 @@
                 detailKandang.strain_ayam = response.data.data.strain_ayam.nama;
                 detailKandang.id_strain_ayam = response.data.data.strain_ayam.id;
                 detailKandang.populasi_awal = response.data.data.populasi_awal;
+                detailKandang.id_kategori_kandang = response.data.data.id_kategori_kandang;
+                detailKandang.nama_kategori_kandang = response.data.data.nama_kategori;
                 tanggal_chickin_edit.value = formatTanggal2(response.data.data.tanggal_chickin);
                 console.log(detailKandang);
             })
