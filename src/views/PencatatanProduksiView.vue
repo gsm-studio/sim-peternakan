@@ -79,12 +79,12 @@
                                 <div class="col text-center">
                                     <p>Telur utuh</p>
                                     <div class="small text-medium-emphasis mt-2">{{ totalTelurUtuh }}</div>
-                                    <div class="small text-medium-emphasis mt-2">{{ totalBeratTelurUtuh }} gr</div>
+                                    <div class="small text-medium-emphasis mt-2">{{ totalBeratTelurUtuh }} kg</div>
                                 </div>
                                 <div class="col text-center border-start">
                                     <p>Telur bentes</p>
                                     <div class="small text-medium-emphasis mt-2">{{ totalTelurBentes }}</div>
-                                    <div class="small text-medium-emphasis mt-2">{{ totalBeratTelurBentes }} gr</div>
+                                    <div class="small text-medium-emphasis mt-2">{{ totalBeratTelurBentes }} kg</div>
                                 </div>
                                 </div>
                                 
@@ -207,7 +207,7 @@
                                             Pakan  
                                             <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
                                         </div>
-                                        <h5 class="card-title mb-0">{{ sumall_berat_pakan }} kg</h5>
+                                        <h5 class="card-title mb-0">{{ sum_berat_pakan_daily }} kg</h5>
                                         <!-- <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
                                             <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
                                         </svg>
@@ -1278,6 +1278,7 @@
     const persentase_pakan = ref(0);
     const sumall_berat_pakan = ref(0);
     const std_gr_perekor = ref(0);
+    const sum_berat_pakan_daily = ref(0);
 
     onMounted(() => {
         getKaryawan();
@@ -1820,6 +1821,7 @@
                 persentase_pakan.value = dataPelaporan.responseData.data.jenis_pakan_items[0].persentase_pakan ?? 0;
                 sumall_berat_pakan.value = dataPelaporan.responseData.data.items[0].sumall_berat_pakan ?? 0;
                 std_gr_perekor.value = dataPelaporan.responseData.data.items[0].std_gr_perekor ?? 0;
+                sum_berat_pakan_daily.value = dataPelaporan.responseData.data.items[0].sum_berat_pakan_daily ?? 0;
                 // avg_total_telur.value = dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0;
                 // avg_berat_telur_kg.value = dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0;
                 // avgall_berat_telur_gr.value = dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0;
