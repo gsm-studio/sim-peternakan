@@ -576,9 +576,11 @@
 
                         // Tambahkan data telur utuh ke dalam objek, menjumlahkan jika sudah ada
                         if (jumlahMatiPerTanggal[tanggalKey]) {
-                          jumlahMatiPerTanggal[tanggalKey] += item.jumlah_mati;
+                          jumlahMatiPerTanggal[tanggalKey] = item.sum_jumlah_mati_daily
+;
                         } else {
-                          jumlahMatiPerTanggal[tanggalKey] = item.jumlah_mati;
+                          jumlahMatiPerTanggal[tanggalKey] = item.sum_jumlah_mati_daily
+;
                         }
                       
                     }
