@@ -227,7 +227,7 @@
                             <td>{{ item.berat_telur_bentes_kg }}</td>
                             <td>{{ item.berat_telur_kg }}</td>
 
-                            <td>{{ item.std_egg_mass }}</td>
+                            <td>{{ item.std_nilai_hd }}</td>
                             <td>{{ item.std_berat_telur }}</td>
 
                             <td>{{ item.berat_pakan_per_ekor_gram }}</td>
@@ -248,7 +248,7 @@
                           
                         
                         </tr>
-                        <tr>
+                        <tr class="row-total">
                              <td colspan="2">Total</td>
                              <td>   </td>
                              <!-- <td>{{ dataPelaporan.responseData.data.items[0].sumall_usia_mgg ?? 0 }}</td> -->
@@ -277,7 +277,7 @@
                             <td></td>
                             <td></td>
                         </tr>
-                        <tr>
+                        <tr class="row-rata">
                              <td colspan="2">Rata - rata</td>
                              <td>{{ dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0 }}</td>
                              <td>{{ dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0 }}</td>
@@ -714,12 +714,29 @@
     .row-bawah-bg {
         background-color: #E1F4EA;
     }
-    tbody tr:first-child td {
+    /* tbody tr:first-child td {
+        background-color: rgba(15, 169, 88, 0.3);
+    } */
+    tbody .row-total td {
+        background-color: rgba(15, 169, 88, 0.3);
+    }
+    tbody .row-rata td {
         background-color: rgba(15, 169, 88, 0.3);
     }
     table {
         border-width: 3px;
         border-color: grey;
+    }
+    .table-responsive {
+        max-height: 600px;
+        overflow: auto;
+        /* height: 80vh; */
+    }
 
+    th[scope="row"], thead tr {
+        position: sticky;
+        top: 0;
+        left: 0;
+        z-index: 999;
     }
 </style>
