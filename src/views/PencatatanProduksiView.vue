@@ -20,16 +20,16 @@
                                 <h5 class="color-text-rossa d-inline ms-2">{{ detailKandang.nama }}</h5>
                                 <!-- <img src="@/assets/img/vector-1.png" alt=""> -->
                             </div>
-                            <div class="col-3 d-grid d-md-block">
+                            <div class="col-3 d-grid d-md-block text-center">
                                 <!-- <small class="color-text-rossa">{{ dateSubmitPencatatan }}</small> -->
                                 <!-- <button class="btn btn-secondary ms-3" type="button">Hisex</button> -->
-                            </div>
-                            <div class="col-5 d-grid d-md-block">
                                 <h6 class="d-inline-block">Status : </h6>
                                 <h5 v-if="status == 'submitted'" class="text-warning d-inline-block"> Pending</h5>
                                 <h5 v-else-if="status == 'accepted'" class="text-success d-inline-block"> Terima</h5>
                                 <h5 v-else class="text-danger"> Tolak</h5>
-                                <button @click="getKandang()" class="btn btn-success ms-3" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            </div>
+                            <div class="col-5 d-flex d-md-block text-end">
+                                <button @click="getKandang()" class="btn btn-success ms-3 mb-lg-0 mb-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
                                     Input Harian
                                     <svg class="icon">
                                         <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>

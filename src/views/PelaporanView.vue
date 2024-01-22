@@ -274,6 +274,8 @@
                              <td></td>
                              <td>{{ dataPelaporan.responseData.data.items[0].sumall_std_fc ?? 0 }}</td>
                              <td>{{ dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0 }}</td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tr>
                              <td colspan="2">Rata - rata</td>
@@ -298,11 +300,13 @@
                              <td>{{ dataPelaporan.responseData.data.items[0].avg_fc ?? 0 }}</td>
                              <td>{{ dataPelaporan.responseData.data.items[0].avg_std_fc ?? 0 }}</td>
                              <td>{{ dataPelaporan.responseData.data.items[0].avg_egg_mass ?? 0 }}</td>
+                             <td></td>
+                             <td></td>
                         </tr>
                         </template>
                         <template v-else>
                             <tr>
-                                <td colspan="15" class="text-center">Data tidak ditemukan</td>
+                                <td colspan="27" class="text-center">Data tidak ditemukan</td>
                             </tr>
                         </template> 
                     </tbody>
