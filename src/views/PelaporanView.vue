@@ -713,4 +713,9 @@
     tbody tr:first-child td {
         background-color: rgba(15, 169, 88, 0.3);
     }
+    table {
+        border-width: 3px;
+        border-color: grey;
+
+    }
 </style>
