@@ -458,6 +458,11 @@
                                 <button class="btn btn-success">{{ dateSubmitPencatatan }}</button>
                                 <h6 class="modal-title" id="exampleModalLabel">Populasi Ayam : {{ detailPencatatan.populasi_ayam }} ekor</h6>
                             </div>
+                            <div class="mb-3"> 
+                                <label for="tanggal_submit" class="form-label">Tanggal Submit</label>
+                                <Field v-model="tanggal_submit" name="tanggal_submit" class="form-control text-center" type="date" placeholder="Tanggal Submit" />
+                                <ErrorMessage class="text-danger" name="tanggal_submit" />
+                            </div>
                             <div class="mb-3">
                                 <label for="nama_kandang" class="form-label">Nama Kandang</label>
                                 <Field v-model="detailPencatatan.id_kandang" id="nama_kandang" as="select" name="nama_kandang" class="form-control text-center">
@@ -821,10 +826,6 @@
     });
 
     const dateSubmitPencatatan = ref(0);
-    watch(() => detailPencatatan.tanggal_submit, (newValue, oldValue) => {
-        date.value = new Date(newValue);
-        dateSubmitPencatatan.value = moment(date).format("DD MMMM YYYY");
-    });
 
     let search = ref("");
     
@@ -838,6 +839,7 @@
 
     const schemas = [
         yup.object({
+            tanggal_submit: yup.date().required(),  
             id_anak_kandang: yup.number().required(),
             nama_kandang: yup.number().required(),
             nama_mandor: yup.string().required(),
@@ -879,6 +881,7 @@
     const id_treatment = ref(0);
     const id_jenis_pakan = ref(0);
     const is_archived = ref(0);
+    const tanggal_submit = ref(null);
 
     function nextStep(values) {
         if (currentStep.value === 3) {
@@ -899,6 +902,11 @@
     }
 
     let within_first_modal = false;
+
+    watch(() => tanggal_submit.value, (newValue, oldValue) => {
+        date.value = new Date(newValue);
+        dateSubmitPencatatan.value = moment(date).format("DD MMMM YYYY");
+    });
 
     const namaKandangPengirim = ref(null);
     function getKandangPengirim(id) {
@@ -1133,9 +1141,10 @@
     async function onUpdateSubmit(values) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { usia_hari, usia_mgg, nama_kandang, id_anak_kandang, nama_mandor, strain_ayam, mati, afkir, jumlah_pindah, id_kandang_pengirim, jumlah_terima, id_kandang_tujuan, jml_telur_utuh, jml_telur_bentes, berat_telur_utuh, berat_telur_bentes, jenis_pakan, jenis_treatment, berat_pakan, catatan } = values;
+        const { tanggal_submit, usia_hari, usia_mgg, nama_kandang, id_anak_kandang, nama_mandor, strain_ayam, mati, afkir, jumlah_pindah, id_kandang_pengirim, jumlah_terima, id_kandang_tujuan, jml_telur_utuh, jml_telur_bentes, berat_telur_utuh, berat_telur_bentes, jenis_pakan, jenis_treatment, berat_pakan, catatan } = values;
         console.log(values);
         return axios.put(baseUrl + '/pencatatan/' + detailPencatatan.id, {
+            tanggal_submit: tanggal_submit,
             usia_hari: usia_hari,
             usia_mgg: usia_mgg,
             id_kandang: nama_kandang,
@@ -1317,6 +1326,8 @@
                 detailPencatatan.nama_jenis_pakan = response.data.data.jenis_pakan ? response.data.data.jenis_pakan.nama : '-';
                 detailPencatatan.nama_treatment = response.data.data.treatment ? response.data.data.treatment.nama : '-';
                 detailPencatatan.telur_utuh = response.data.data.telur_utuh;
+                tanggal_submit.value = response.data.data.tanggal_submit;
+                tanggal_submit.value = moment(tanggal_submit).format("YYYY-MM-DD");
                 getIdStrain(detailPencatatan.id_strain_ayam);
                 // console.log("Detail Pencatatan : ", detailPencatatan);
                 console.log("Detail Pencatatan : ", response);
