@@ -33,7 +33,7 @@
                         <!-- <button type="button" class="btn btn-success bg-button-rossa">
                         Select
                         </button> -->
-                        <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="ms-3 btn btn-success bg-button-rossa">
+                        <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="dropdown-toggle ms-3 btn btn-success bg-button-rossa">
                         Filter
                         </button>
                         <div class="dropdown-menu dropdown-menu-start p-3 shadow">

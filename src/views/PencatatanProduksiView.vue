@@ -226,17 +226,31 @@
                                 </small> -->
                                 
                             </div>
-                            <div class="col-md-4 d-flex align-items-end">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" fill="none">
+                            <div class="col-md-5 d-flex align-items-end pie">
+                                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" fill="none">
                                     <circle cx="90" cy="90" r="90" fill="#0FA958" fill-opacity="0.6"/>
                                     <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="20px">{{ persentase_pakan }} % 
                                         {{ detailPakan.nama ? detailPakan.nama : 'Tidak Ada' }}</text>
-                                </svg>
+                                </svg> -->
+                                <CChart
+                                    type="pie"
+                                    width="180"
+                                    :data="{
+                                        labels: labelJenisPakan,
+                                        datasets: [
+                                            {
+                                                backgroundColor: backgroundColorJenisPakan,
+                                                data: dataJenisPakan,
+                                            },
+                                        ],
+                                    }"
+                                />
                             </div>
-                            <div class="col-md-8">
+                            <div class="col-md-7">
                                
                                 <CChart
                                     type="line"
+
                                     :wrapper="false"
                                     :data="{
                                         labels: namaLabels,
@@ -1279,6 +1293,10 @@
     const sumall_berat_pakan = ref(0);
     const std_gr_perekor = ref(0);
     const sum_berat_pakan_daily = ref(0);
+    const jenis_pakan_items = ref([]);
+    const labelJenisPakan = ref([]);
+    const backgroundColorJenisPakan = ref([]);
+    const dataJenisPakan = ref([]);
 
     onMounted(() => {
         getKaryawan();
@@ -1790,6 +1808,73 @@
             });
     }
 
+    function getProduksiTelur(items) {
+        const gramPerEkorPakan = {};
+        const avgAllBeratTelurGr = {};
+        const avgTotaltelur = {};
+        const avgBeratTelur = {};
+        
+        items.forEach(item => {
+            const tanggalSubmit = new Date(item.tanggal_submit);
+            const diffTime = Math.abs(today - tanggalSubmit);
+            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+
+            if (diffDays <= 6) {
+                const tanggalKey = tanggalSubmit.toDateString(); 
+                if (gramPerEkorPakan[tanggalKey]) {
+                    gramPerEkorPakan[tanggalKey] = item.berat_pakan_per_ekor_gram;
+                } else {
+                    gramPerEkorPakan[tanggalKey] = item.berat_pakan_per_ekor_gram;
+                }
+                if (avgAllBeratTelurGr[tanggalKey]) {
+                    avgAllBeratTelurGr[tanggalKey] = item.avg_berat_telur_gr;
+                } else {
+                    avgAllBeratTelurGr[tanggalKey] = item.avg_berat_telur_gr;
+                }
+                if (avgTotaltelur[tanggalKey]) {
+                    avgTotaltelur[tanggalKey] = item.total_telur;
+                } else {
+                    avgTotaltelur[tanggalKey] = item.total_telur;
+                }
+                if (avgBeratTelur[tanggalKey]) {
+                    avgBeratTelur[tanggalKey] = item.berat_telur_kg;
+                } else {
+                    avgBeratTelur[tanggalKey] = item.berat_telur_kg;
+                }
+            }
+        });
+
+        labels.value.forEach(label => {
+            totalGramPerEkorPakan.value.push(gramPerEkorPakan[label] || null);
+            totalAvgAllBeratTelurGr.value.push(avgAllBeratTelurGr[label] || null);
+            totalAvgTotalTelur.value.push(avgTotaltelur[label] || null);
+            totalAvgBeratTelur.value.push(avgBeratTelur[label] || null);
+        });
+        console.log("avgAllBeratTelurGr : ", avgAllBeratTelurGr);
+        avgall_berat_telur_gr.value = totalAvgAllBeratTelurGr.value[6] ? totalAvgAllBeratTelurGr.value[6] + '' : 0;
+        avg_total_telur.value = totalAvgTotalTelur.value[6] ? totalAvgTotalTelur.value[6] + '' : 0;
+        avg_berat_telur_kg.value = totalAvgBeratTelur.value[6] ? totalAvgBeratTelur.value[6] + '' : 0;
+    }
+
+    function getJenisPakanItems(items) {
+        const randomColor = () => {
+            const r = Math.floor(Math.random() * 255);
+            const g = Math.floor(Math.random() * 255);
+            const b = Math.floor(Math.random() * 255);
+
+            return `rgb(${r}, ${g}, ${b})`;
+        };
+        jenis_pakan_items.value = items;
+        labelJenisPakan.value = [];
+        backgroundColorJenisPakan.value = [];
+        dataJenisPakan.value = [];
+        items.forEach(item => {
+            labelJenisPakan.value.push(item.nama_jenis_pakan);
+            backgroundColorJenisPakan.value.push(randomColor());
+            dataJenisPakan.value.push(item.persentase_pakan);
+        });
+    }
+
     async function getPelaporan(id_kandang, startDate, endDate) {
         if (id_kandang == 0) {
             id_kandang = null;
@@ -1826,51 +1911,8 @@
                 // avg_berat_telur_kg.value = dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0;
                 // avgall_berat_telur_gr.value = dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0;
                 const items = dataPelaporan.responseData.data.items;
-                const gramPerEkorPakan = {};
-                const avgAllBeratTelurGr = {};
-                const avgTotaltelur = {};
-                const avgBeratTelur = {};
-                
-                items.forEach(item => {
-                    const tanggalSubmit = new Date(item.tanggal_submit);
-                    const diffTime = Math.abs(today - tanggalSubmit);
-                    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-                    if (diffDays <= 6) {
-                        const tanggalKey = tanggalSubmit.toDateString(); 
-                        if (gramPerEkorPakan[tanggalKey]) {
-                            gramPerEkorPakan[tanggalKey] = item.berat_pakan_per_ekor_gram;
-                        } else {
-                          gramPerEkorPakan[tanggalKey] = item.berat_pakan_per_ekor_gram;
-                        }
-                        if (avgAllBeratTelurGr[tanggalKey]) {
-                            avgAllBeratTelurGr[tanggalKey] = item.avg_berat_telur_gr;
-                        } else {
-                            avgAllBeratTelurGr[tanggalKey] = item.avg_berat_telur_gr;
-                        }
-                        if (avgTotaltelur[tanggalKey]) {
-                            avgTotaltelur[tanggalKey] = item.total_telur;
-                        } else {
-                            avgTotaltelur[tanggalKey] = item.total_telur;
-                        }
-                        if (avgBeratTelur[tanggalKey]) {
-                            avgBeratTelur[tanggalKey] = item.berat_telur_kg;
-                        } else {
-                            avgBeratTelur[tanggalKey] = item.berat_telur_kg;
-                        }
-                    }
-                });
-
-                labels.value.forEach(label => {
-                    totalGramPerEkorPakan.value.push(gramPerEkorPakan[label] || null);
-                    totalAvgAllBeratTelurGr.value.push(avgAllBeratTelurGr[label] || null);
-                    totalAvgTotalTelur.value.push(avgTotaltelur[label] || null);
-                    totalAvgBeratTelur.value.push(avgBeratTelur[label] || null);
-                });
-                console.log("avgAllBeratTelurGr : ", avgAllBeratTelurGr);
-                avgall_berat_telur_gr.value = totalAvgAllBeratTelurGr.value[6] ? totalAvgAllBeratTelurGr.value[6] + '' : 0;
-                avg_total_telur.value = totalAvgTotalTelur.value[6] ? totalAvgTotalTelur.value[6] + '' : 0;
-                avg_berat_telur_kg.value = totalAvgBeratTelur.value[6] ? totalAvgBeratTelur.value[6] + '' : 0;
+                getProduksiTelur(items);
+                getJenisPakanItems(dataPelaporan.responseData.data.jenis_pakan_items);
 
             })
             .catch(error => {

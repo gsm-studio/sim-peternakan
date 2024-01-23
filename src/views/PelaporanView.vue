@@ -27,7 +27,7 @@
                         <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
                         </svg></p> -->
                         <p>
-                            <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="ms-3 btn btn-success bg-button-rossa">
+                            <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="dropdown-toggle ms-3 btn btn-secondary">
                                 Filter
                             </button>
                             <div class="dropdown-menu dropdown-menu-start p-3 shadow">
@@ -35,13 +35,13 @@
                                     <label class="form-label">Pilih Arsip</label>
                                     <a href="javascript:void(0)" @click="clearFilter()">Clear</a>
                                 </div>
-                                <select v-model="is_archived" @change="getPelaporan($event.target.value, idKandang, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <select v-model="is_archived" @change="getPelaporanX($event.target.value, idKandang, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                     <option value="-1">Semua Laporan</option>
                                     <option value="0">Tidak</option>
                                     <option value="1">Ya</option>
                                 </select>
                                 <label class="form-label">Pilih Filter</label> 
-                                <select v-model="idKandang" @change="getPelaporan(is_archived, $event.target.value, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <select v-model="idKandang" @change="getPelaporanX(is_archived, $event.target.value, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                     <option value="0" selected> 
                                         Semua Kandang 
                                         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -57,7 +57,7 @@
                                         <option>Belum ada Kandang</option>
                                     </template>
                                 </select> 
-                                <select v-model="id_kategori_kandang" @change="getPelaporan(is_archived, idKandang, $event.target.value, id_treatment, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <select v-model="id_kategori_kandang" @change="getPelaporanX(is_archived, idKandang, $event.target.value, id_treatment, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                     <option value="0" selected> 
                                         Semua Kategori Kandang 
                                         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -73,7 +73,7 @@
                                         <option>Belum ada Kategori Kandang</option>
                                     </template>
                                 </select>
-                                <select v-model="id_treatment" @change="getPelaporan(is_archived, idKandang, id_kategori_kandang, $event.target.value, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <select v-model="id_treatment" @change="getPelaporanX(is_archived, idKandang, id_kategori_kandang, $event.target.value, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                     <option value="0" selected> 
                                         Semua Treatment 
                                         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -89,7 +89,7 @@
                                         <option>Belum ada Treatment</option>
                                     </template>
                                 </select> 
-                                <select v-model="id_mandor" @change="getPelaporan(is_archived, idKandang, id_kategori_kandang, id_treatment, $event.target.value, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <select v-model="id_mandor" @change="getPelaporanX(is_archived, idKandang, id_kategori_kandang, id_treatment, $event.target.value, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                     <option value="0" selected> 
                                         Semua Mandor 
                                         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -105,7 +105,7 @@
                                         <option>Belum ada Mandor</option>
                                     </template>
                                 </select> 
-                                <select v-model="id_anak_kandang" @change="getPelaporan(is_archived, idKandang, id_kategori_kandang, id_treatment, id_mandor, $event.target.value, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <select v-model="id_anak_kandang" @change="getPelaporanX(is_archived, idKandang, id_kategori_kandang, id_treatment, id_mandor, $event.target.value, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                     <option value="0" selected> 
                                         Semua Anak Kandang 
                                         <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -121,14 +121,13 @@
                                         <option>Belum ada Anak Kandang</option>
                                     </template>
                                 </select> 
-                              
-                              
+                                <button @click="getFilterLaporan()" type="button" class="btn btn-success">Terapkan</button>
                             </div> 
                         </p>
                     </div>
                     <div class="d-inline">
                         <template v-if="role == adminKantor || role == superadmin">
-                            <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="ms-3 btn btn-secondary bg-button-rossa">
+                            <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="dropdown-toggle ms-3 btn btn-secondary bg-button-rossa">
                                 Download Laporan
                             </button>
                             <div class="dropdown-menu dropdown-menu-start p-3 shadow">
@@ -621,8 +620,6 @@
             });
     }
 
-
-
     async function getKandang() {
         
         const user = localStorage.getItem('user');
@@ -640,6 +637,14 @@
             .catch(error => {
                 console.error(error);
             });
+    }
+
+    function getPelaporanX(is_archived, id_kandang, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, startDate, endDate) {
+       console.log("Data Filter : ", is_archived, id_kandang, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, startDate, endDate);
+    }
+
+    function getFilterLaporan() {
+        getPelaporan(is_archived.value, idKandang.value, id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
     }
 
     async function getPelaporan(is_archived, id_kandang, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, startDate, endDate) {
@@ -733,7 +738,7 @@
         /* height: 80vh; */
     }
 
-    th[scope="row"], thead tr {
+    thead{
         position: sticky;
         top: 0;
         left: 0;

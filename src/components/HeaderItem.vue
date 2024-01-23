@@ -18,6 +18,19 @@
         console.log(getToday);
         getKaryawan();
         console.log("Data User : ", authStore.user.data.nama)
+
+        // const btnHideSidebar = document.getElementById('btnHideSidebar');
+        // btnHideSidebar.addEventListener('click', function() {
+        //     console.log('Klik');
+        //     var icon = document.getElementById('menuIcon');
+        //     var currentHref = icon.querySelector('use').getAttribute('xlink:href');
+
+        //     if (currentHref === "@/assets/vendors/@coreui/icons/svg/free.svg#cil-menu") {
+        //         icon.querySelector('use').setAttribute('xlink:href', '@/path/to/your/new/icon.svg#cil-arrow-left');
+        //     } else {
+        //         icon.querySelector('use').setAttribute('xlink:href', '@/assets/vendors/@coreui/icons/svg/free.svg#cil-menu');
+        //     }
+        // })
     })
 
     async function getKaryawan() {
@@ -48,8 +61,8 @@
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
             <div class="d-flex align-items-center">
-            <button class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
-                <svg class="icon icon-lg">
+            <button id="btnHideSidebar" class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
+                <svg class="icon icon-lg" id="menuIcon">
                     <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
                 </svg>
             </button>
