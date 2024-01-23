@@ -372,7 +372,9 @@
         })
             .then(response => {
                 dataRole.setResponseData(response.data);
-                console.log(dataRole);
+                dataRole.responseData.data.items = dataRole.responseData.data.items.filter(role => role.id !== 12);
+                console.log(dataRole.responseData.data.items.filter(role => role.id !== 12));
+                // console.log(dataRole.responseData.data.items);
             })
             .catch(error => {
                 console.error(error);

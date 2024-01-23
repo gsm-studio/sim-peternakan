@@ -1097,7 +1097,7 @@
     const route = useRoute();
     const user = localStorage.getItem('user');
     const role = JSON.parse(user) ? JSON.parse(user).data.roles[0].nama : '';
-    const superadmin = ref('Administrator12');
+    const superadmin = ref('Super Admin');
     const adminKandang = ref('Admin Kandang');
     const adminKantor = ref('Admin Kantor');
 
