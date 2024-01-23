@@ -17,21 +17,28 @@
     onMounted(() => {
         console.log(getToday);
         getKaryawan();
-        console.log("Data User : ", authStore.user.data.nama)
+        console.log("Data User : ", authStore.user.data.nama);
 
-        // const btnHideSidebar = document.getElementById('btnHideSidebar');
-        // btnHideSidebar.addEventListener('click', function() {
-        //     console.log('Klik');
-        //     var icon = document.getElementById('menuIcon');
-        //     var currentHref = icon.querySelector('use').getAttribute('xlink:href');
+        const btnHideSidebar = document.getElementById('btnHideSidebar');
+        const menuIcon = document.getElementById('menuIcon');
+        const arrowLeftIcon = document.getElementById('arrowLeftIcon');
+        let sidebarVisible = true;
 
-        //     if (currentHref === "@/assets/vendors/@coreui/icons/svg/free.svg#cil-menu") {
-        //         icon.querySelector('use').setAttribute('xlink:href', '@/path/to/your/new/icon.svg#cil-arrow-left');
-        //     } else {
-        //         icon.querySelector('use').setAttribute('xlink:href', '@/assets/vendors/@coreui/icons/svg/free.svg#cil-menu');
-        //     }
-        // })
+        btnHideSidebar.addEventListener('click', function () {
+
+            sidebarVisible = !sidebarVisible;
+
+            if (sidebarVisible) {
+                menuIcon.style.display = 'none';
+                arrowLeftIcon.style.display = 'inline-block';
+            } else {
+                menuIcon.style.display = 'inline-block';
+                arrowLeftIcon.style.display = 'none';
+            }
+        });
     })
+
+ 
 
     async function getKaryawan() {
       
@@ -62,8 +69,11 @@
         <div class="container-fluid">
             <div class="d-flex align-items-center">
             <button id="btnHideSidebar" class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
-                <svg class="icon icon-lg" id="menuIcon">
+                <svg class="icon icon-lg" id="menuIcon" style="display:none;">
                     <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
+                </svg>
+                <svg class="icon icon-lg" id="arrowLeftIcon">
+                    <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-left"></use>
                 </svg>
             </button>
             <a class="header-brand d-md-none" href="#">

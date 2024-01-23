@@ -80,7 +80,7 @@
                         <tr v-for="item in dataPenjadwalan.responseData.data.items" :key="item.id">
                             <!-- <td>{{ item.id }}</td> -->
                             <td>{{ item.tugas.nama }}</td>
-                            <td>{{ item.kandang.nama }}</td>
+                            <td>{{ item.kandang ? item.kandang.nama : "Semua Kandang" }}</td>
                             <td>{{ formatTanggal(item.waktu_pelaksanaan) }}</td>
                             <td>{{ item.penanggungjawab }}</td>
                             <td>{{ item.pelaksana }}</td>
@@ -136,13 +136,14 @@
             <Form id="form" @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
                 <div class="modal-body">
                     <Field as="select" class="form-control text-center mb-3" name="id_tugas" :class="{ 'is-invalid': errors.id_tugas }">
-                        <option value="">----- Pilih Nama Tugas -----</option>
+                        <option value="">Pilih Nama Tugas</option>
                         <template v-if="dataTugas.responseData">
                             <option v-for="item in dataTugas.responseData.data.items" :key="item.id" :value="item.id" >{{ item.nama }}</option>
                         </template>
                     </Field> 
                     <Field as="select" class="form-control text-center mb-3" name="id_kandang" :class="{ 'is-invalid': errors.id_kandang }">
-                        <option value="">----- Pilih Nama Kandang -----</option>
+                        <option value="" disabled>Pilih Nama Kandang</option>
+                        <option value="0">Semua Kandang</option>
                         <template v-if="dataKandang.responseData">
                             <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                         </template>
@@ -206,6 +207,7 @@
                         <Field v-model="detailPenjadwalan.id_kandang" class="form-control text-center mb-3" name="id_kandang" :class="{ 'is-invalid': errors.id_kandang }" as="select">
                             <template v-if="dataKandang.responseData">
                                 <option value="" disabled>Pilih Nama Kandang</option>
+                                <option value="0">Semua Kandang</option>
                                 <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
                             </template>
                         </Field> 
@@ -440,7 +442,10 @@
     async function onSubmit(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { id_kandang, id_tugas, waktu_pelaksanaan, penanggungjawab, pelaksana, deskripsi } = values;
+        let { id_kandang, id_tugas, waktu_pelaksanaan, penanggungjawab, pelaksana, deskripsi } = values;
+        if(id_kandang == 0){
+            id_kandang = null;
+        }
         console.log(values);
         return axios.post(baseUrl + '/penjadwalan', {
             id_kandang: id_kandang,
@@ -471,8 +476,11 @@
     async function onSubmitUpdate(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { id_kandang, id_tugas, waktu_pelaksanaan, penanggungjawab, pelaksana, deskripsi } = values;
+        let { id_kandang, id_tugas, waktu_pelaksanaan, penanggungjawab, pelaksana, deskripsi } = values;
         console.log(values);
+        if(id_kandang == 0){
+            id_kandang = null;
+        }
         return axios.put(baseUrl + '/penjadwalan/' + detailPenjadwalan.id, {
             id_tugas: id_tugas,
             id_kandang: id_kandang,
@@ -510,11 +518,11 @@
             .then(response => {
                 detailPenjadwalan.id = response.data.data.id;
                 detailPenjadwalan.id_tugas = response.data.data.id_tugas;
-                detailPenjadwalan.id_kandang = response.data.data.id_kandang;
+                detailPenjadwalan.id_kandang = response.data.data.id_kandang ? response.data.data.id_kandang : 0;
                 detailPenjadwalan.waktu_pelaksanaan = response.data.data.waktu_pelaksanaan;
                 detailPenjadwalan.deskripsi = response.data.data.deskripsi;
                 detailPenjadwalan.nama_tugas = response.data.data.tugas.nama;
-                detailPenjadwalan.nama_kandang = response.data.data.kandang.nama;
+                detailPenjadwalan.nama_kandang = response.data.data.kandang ? response.data.data.kandang.nama : "Semua Kandang";
                 detailPenjadwalan.pelaksana = response.data.data.pelaksana;
                 detailPenjadwalan.penanggungjawab = response.data.data.penanggungjawab;
                 console.log(detailPenjadwalan);
