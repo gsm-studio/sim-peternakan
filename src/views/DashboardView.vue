@@ -259,7 +259,7 @@
                 </div>
                 <div class="col-lg-5">
                   <div class="mt-4">
-                    <div>
+                    <div class="ps-3 ps-lg-0">
                       <div class="small text-medium-emphasis mb-2">
                         Pakan 
                         <span class="color-text-rossa ms-3">{{ namaKandang }}</span>
@@ -278,7 +278,7 @@
                         </svg> 2,4 % vs last week
                       </small> -->
                     </div>
-                    <div>
+                    <div class="pie-chart">
                     <!-- <template v-if="uniquePakan.length > 0">
                         <svg v-for="(item, index) in uniquePakan" :key="index" xmlns="http://www.w3.org/2000/svg" width="108" height="108" viewBox="0 0 108 108" fill="none">
                           <circle cx="54" cy="54" r="54" :fill="colors[index]" fill-opacity="0.6"/>
@@ -289,7 +289,7 @@
                     </template> -->
                     <CChart
                         type="pie"
-                        width="180"
+                        :width="180"
                         :data="{
                             labels: labelJenisPakan,
                             datasets: [
@@ -770,5 +770,8 @@
   }
   .chart {
     height: 100%;
+  }
+  .pie-chart {
+      width: 200px !important;
   }
 </style>

@@ -117,7 +117,7 @@
                             <th scope="col">Strain Ayam</th>
                             <th scope="col">Usia (minggu)</th>
                             <th scope="col">HD (%)</th>
-                            <th scope="col">Berat Butir (gr)</th>
+                            <th scope="col">Berat Badan (gr)</th>
                             <th scope="col">Berat Telur (gr)</th>
                             <th scope="col">FI</th>
                             <th scope="col">FC</th>
@@ -203,10 +203,10 @@
                             </template>
                         </Field> 
                         <Field class="form-control text-center mb-3" type="number" name="umur" placeholder="Umur" :class="{ 'is-invalid': errors.umur }" />
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_hd" placeholder="Nilai HD" :class="{ 'is-invalid': errors.nilai_hd }"/>
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_bb" placeholder="Nilai BB" :class="{ 'is-invalid': errors.nilai_bb }"/>
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_bt" placeholder="Nilai BT" :class="{ 'is-invalid': errors.nilai_bt }"/>
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_fi" placeholder="Nilai FI" :class="{ 'is-invalid': errors.nilai_fi }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_hd" placeholder="Nilai HD %" :class="{ 'is-invalid': errors.nilai_hd }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_bb" placeholder="Nilai Berat Badan" :class="{ 'is-invalid': errors.nilai_bb }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_bt" placeholder="Nilai Berat Telur" :class="{ 'is-invalid': errors.nilai_bt }"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_fi" placeholder="Nilai Feed Intake" :class="{ 'is-invalid': errors.nilai_fi }"/>
                         <Field class="form-control text-center mb-3" type="number" name="nilai_fc" placeholder="Nilai FC" :class="{ 'is-invalid': errors.nilai_fc }"/>
                         <Field class="form-control text-center mb-3" type="number" name="egg_mass" placeholder="Egg Mass" :class="{ 'is-invalid': errors.egg_mass }"/>
                         <Field as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }"/>
@@ -236,10 +236,10 @@
                 <div class="modal-body">
                     <p>Nama Strain Ayam : {{ detailStandart.nama_strain_ayam }}</p>
                     <p>Umur : {{ detailStandart.umur }}</p>
-                    <p>Nilai HD : {{ detailStandart.nilai_hd }}</p>
-                    <p>Nilai BB : {{ detailStandart.nilai_bb }}</p>
-                    <p>Nilai BT : {{ detailStandart.nilai_bt }}</p>
-                    <p>Nilai FI : {{ detailStandart.nilai_fi }}</p>
+                    <p>Nilai HD % : {{ detailStandart.nilai_hd }}</p>
+                    <p>Nilai Berat Badan : {{ detailStandart.nilai_bb }}</p>
+                    <p>Nilai Berat Telur : {{ detailStandart.nilai_bt }}</p>
+                    <p>Nilai Feed Intake : {{ detailStandart.nilai_fi }}</p>
                     <p>Egg Mass : {{ detailStandart.egg_mass }}</p>
                     <p>Deskripsi : {{ detailStandart.deskripsi }}</p>
                 </div>
@@ -266,10 +266,10 @@
                             </template>
                         </Field> 
                         <Field class="form-control text-center mb-3" type="number" name="umur" placeholder="Umur" :class="{ 'is-invalid': errors.umur }" v-model="detailStandart.umur" />
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_hd" placeholder="Nilai HD" :class="{ 'is-invalid': errors.nilai_hd }" v-model="detailStandart.nilai_hd"/>
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_bb" placeholder="Nilai BB" :class="{ 'is-invalid': errors.nilai_bb }" v-model="detailStandart.nilai_bb" />
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_bt" placeholder="Nilai BT" :class="{ 'is-invalid': errors.nilai_bt }" v-model="detailStandart.nilai_bt" />
-                        <Field class="form-control text-center mb-3" type="number" name="nilai_fi" placeholder="Nilai FI" :class="{ 'is-invalid': errors.nilai_fi }" v-model="detailStandart.nilai_fi" />
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_hd" placeholder="Nilai HD %" :class="{ 'is-invalid': errors.nilai_hd }" v-model="detailStandart.nilai_hd"/>
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_bb" placeholder="Nilai Berat Badan" :class="{ 'is-invalid': errors.nilai_bb }" v-model="detailStandart.nilai_bb" />
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_bt" placeholder="Nilai Berat Telur" :class="{ 'is-invalid': errors.nilai_bt }" v-model="detailStandart.nilai_bt" />
+                        <Field class="form-control text-center mb-3" type="number" name="nilai_fi" placeholder="Nilai Feed Intake" :class="{ 'is-invalid': errors.nilai_fi }" v-model="detailStandart.nilai_fi" />
                         <Field class="form-control text-center mb-3" type="number" name="nilai_fc" placeholder="Nilai FC" :class="{ 'is-invalid': errors.nilai_fc }" v-model="detailStandart.nilai_fc" />
                         <Field class="form-control text-center mb-3" type="number" name="egg_mass" placeholder="Egg Mass" :class="{ 'is-invalid': errors.egg_mass }" v-model="detailStandart.egg_mass" />
                         <Field as="textarea" class="form-control text-center mb-3" name="deskripsi" placeholder="Deskripsi" :class="{ 'is-invalid': errors.deskripsi }" v-model="detailStandart.deskripsi" />
