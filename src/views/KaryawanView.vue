@@ -96,8 +96,21 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-end">
                                             <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
-                                            <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
-                                            <a @click="deleteKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                                            <template v-if="role == superadmin">
+                                                <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                                <template v-if="item.id !== 39">
+                                                    <a @click="validasiDeleteKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                                                </template>
+                                            </template>
+                                            <template v-else-if="item.id !== 39">
+                                                <template v-if="getIdUser == item.id || getRoleName(item.user_roles) == 'Admin Kandang' || getRoleName(item.user_roles) == 'Anak Kandang'"> 
+                                                    <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a> 
+                                                </template>
+                                                <template v-if="getRoleName(item.user_roles) == 'Admin Kandang' || getRoleName(item.user_roles) == 'Anak Kandang'"> 
+                                                    <a @click="validasiDeleteKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                                                </template>
+                                            </template>
+                                            <!-- {{ getRoleName(item.user_roles) }} -->
                                         </div>
                                     </td>
                                 </tr>
@@ -234,6 +247,12 @@
     import Swal from 'sweetalert2';
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
+    const user = localStorage.getItem('user');
+    const getIdUser = JSON.parse(user) ? JSON.parse(user).data.id : '';
+    const role = JSON.parse(user) ? JSON.parse(user).data.roles[0].nama : '';
+    const superadmin = ref('Super Admin');
+    const adminKandang = ref('Admin Kandang');
+    const adminKantor = ref('Admin Kantor');
 
     const schema = Yup.object().shape({
         nama: Yup.string().required('Nama is required'),
@@ -290,6 +309,13 @@
         getKaryawan(1)
         // getRole()
     });
+
+    function getRoleName(userRoles) {
+      if (userRoles && userRoles.length > 0) {
+        return userRoles[0].role.nama;
+      }
+      return '-';
+    }
 
     function alert(icon, title) {
         const Toast = Swal.mixin({
@@ -349,6 +375,7 @@
             .then(response => {
                 dataKaryawan.setResponseData(response.data);
                 totalItems.value = dataKaryawan.responseData ? dataKaryawan.responseData.data.total_record : 0;
+                console.log("Daftar Karyawan", dataKaryawan.responseData.data.items);
             })
             .catch(error => {
                 console.error(error);
@@ -459,11 +486,28 @@
                 detailKaryawan.nomor_telepon = response.data.data.nomor_telepon;
                 detailKaryawan.role_name = response.data.data.user_roles[0].role.nama;
                 detailKaryawan.role_ids = response.data.data.user_roles[0].role.id;
-                console.log("Data Karyawan", detailKaryawan.id);
+                console.log("Data Karyawan", response.data.data);
             })
             .catch(error => {
                 console.error(error);
             });
+    }
+
+    function validasiDeleteKaryawan(id) {
+        Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "Data yang dihapus tidak dapat dikembalikan!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#0FA958',
+            cancelButtonColor: '#797979',
+            confirmButtonText: 'Ya, Hapus!',
+            cancelButtonText: 'Batal'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                deleteKaryawan(id);
+            }
+        })
     }
 
     async function deleteKaryawan(id) {
@@ -477,7 +521,7 @@
             .then(response => {
                 console.log(response);
                 alert('success', 'Data berhasil dihapus');
-                getKaryawan(1);
+                getKaryawan(currentPage.value);
             })
             .catch(error => {
                 console.error(error);

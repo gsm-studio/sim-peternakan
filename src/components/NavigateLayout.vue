@@ -206,7 +206,7 @@
             </ul>
           </li>
         </template>
-        <template v-if="role == adminKantor || role == superadmin">
+        <template v-if="role == superadmin">
           <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="19" height="16" viewBox="0 0 19 16" fill="none">
               <g clip-path="url(#clip0_4_114)">

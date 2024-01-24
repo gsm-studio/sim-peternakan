@@ -279,14 +279,28 @@
                       </small> -->
                     </div>
                     <div>
-                    <template v-if="uniquePakan.length > 0">
+                    <!-- <template v-if="uniquePakan.length > 0">
                         <svg v-for="(item, index) in uniquePakan" :key="index" xmlns="http://www.w3.org/2000/svg" width="108" height="108" viewBox="0 0 108 108" fill="none">
                           <circle cx="54" cy="54" r="54" :fill="colors[index]" fill-opacity="0.6"/>
                           <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">
                               {{ item }}
                           </text>
                         </svg>
-                    </template>
+                    </template> -->
+                    <CChart
+                        type="pie"
+                        width="180"
+                        :data="{
+                            labels: labelJenisPakan,
+                            datasets: [
+                                {
+                                    backgroundColor: backgroundColorJenisPakan,
+                                    data: dataPresentasePakan,
+                                },
+                             
+                            ],
+                        }"
+                      />
                     </div>
                   </div>
                 </div>
@@ -392,6 +406,10 @@
   const dataGrafikBatang = ref([]);
   const namaFilter = ref('');
   const valueFilter = ref('');
+  const labelJenisPakan = ref([]);
+  const dataPresentasePakan = ref([]);
+  const backgroundColorJenisPakan = ref([]);
+  const jenis_pakan_items = ref([]);
 
   onMounted(() => {
     console.log("Tanggal 6 hari yang lalu:", sixDaysAgo);
@@ -479,9 +497,9 @@
             if (diffDays <= 6) {
                 const tanggalKey = tanggalSubmit.toDateString(); 
                 if (avgTanggal[tanggalKey]) {
-                  avgTanggal[tanggalKey] = parseFloat(item.avg_fc) || 0; 
+                  avgTanggal[tanggalKey] = parseFloat(item.avg_fc_daily) || 0; 
                 } else {
-                  avgTanggal[tanggalKey] = parseFloat(item.avg_fc) || 0; 
+                  avgTanggal[tanggalKey] = parseFloat(item.avg_fc_daily) || 0; 
                 }
             }
         });
@@ -505,9 +523,9 @@
             if (diffDays <= 6) {
                 const tanggalKey = tanggalSubmit.toDateString(); 
                 if (eggMassTanggal[tanggalKey]) {
-                  eggMassTanggal[tanggalKey] = parseFloat(item.avg_egg_mass) || 0; 
+                  eggMassTanggal[tanggalKey] = parseFloat(item.avg_egg_mass_daily) || 0; 
                 } else {
-                  eggMassTanggal[tanggalKey] = parseFloat(item.avg_egg_mass) || 0; 
+                  eggMassTanggal[tanggalKey] = parseFloat(item.avg_egg_mass_daily) || 0; 
                 }
             }
         });
@@ -540,6 +558,25 @@
               console.error(error);
           });
   }
+
+  function getJenisPakanItems(items) {
+        const randomColor = () => {
+            const r = Math.floor(Math.random() * 255);
+            const g = Math.floor(Math.random() * 255);
+            const b = Math.floor(Math.random() * 255);
+
+            return `rgb(${r}, ${g}, ${b})`;
+        };
+        jenis_pakan_items.value = items;
+        labelJenisPakan.value = [];
+        backgroundColorJenisPakan.value = [];
+        dataPresentasePakan.value = [];
+        items.forEach(item => {
+            labelJenisPakan.value.push(item.nama_jenis_pakan);
+            backgroundColorJenisPakan.value.push(randomColor());
+            dataPresentasePakan.value.push(item.persentase_pakan);
+        });
+    }
 
   async function getPelaporan(id_kandang, startDate, endDate) {
         if (id_kandang == 0) {
@@ -653,6 +690,7 @@
                 uniquePakan.value = [...new Set(filteredPakan.value.map(item => item.nama_jenis_pakan))];
                 valueFilter.value = detailPelaporan.avg_percentase_telur ? detailPelaporan.avg_percentase_telur + '%' : 0;
                 getPresentaseProduksi();
+                getJenisPakanItems(dataPelaporan.responseData.data.jenis_pakan_items);
                 console.log("Pelaporan : ", response);
             })
             .catch(error => {

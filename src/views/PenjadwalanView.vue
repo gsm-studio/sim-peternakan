@@ -357,7 +357,6 @@
         })
             .then(response => {
                 dataTugas.setResponseData(response.data);
-                totalItems.value = dataPenjadwalan.responseData ? dataPenjadwalan.responseData.data.total_record : 0;
             })
             .catch(error => {
                 console.error(error);
@@ -432,6 +431,7 @@
         })
             .then(response => {
                 dataPenjadwalan.setResponseData(response.data);
+                totalItems.value = dataPenjadwalan.responseData ? dataPenjadwalan.responseData.data.total_record : 0;
                 console.log(dataPenjadwalan.responseData.data);
             })
             .catch(error => {

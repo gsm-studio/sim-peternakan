@@ -335,7 +335,7 @@
         })
             .then(response => {
                 console.log(response);
-                getTreatment(1);
+                getTreatment(currentPage.value);
                 alert('success', 'Data berhasil ditambahkan');
                 closeModal();
             })
@@ -363,7 +363,7 @@
         })
             .then(response => {
                 console.log(response);
-                getTreatment(1);
+                getTreatment(currentPage.value);
                 alert('success', 'Data berhasil diubah');
                 closeModal();
             })
@@ -405,7 +405,7 @@
             .then(response => {
                 console.log(response);
                 alert('success', 'Data berhasil dihapus');
-                getTreatment(1);
+                getTreatment(currentPage.value);
             })
             .catch(error => {
                 console.error(error);

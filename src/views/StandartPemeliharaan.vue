@@ -556,7 +556,7 @@
             .then(response => {
                 console.log(response);
                 alert('success', 'Data berhasil dihapus');
-                getStandart(1, idStrain.value);
+                getStandart(currentPage.value, idStrain.value);
             })
             .catch(error => {
                 alert('error', error.response.data.message);

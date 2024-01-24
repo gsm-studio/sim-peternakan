@@ -303,7 +303,7 @@
         })
             .then(response => {
                 console.log(response);
-                getStrain(1);
+                getStrain(currentPage.value);
                 alert('success', 'Data berhasil ditambahkan');
                 closeModal();
             })
@@ -330,7 +330,7 @@
         })
             .then(response => {
                 console.log(response);
-                getStrain(1);
+                getStrain(currentPage.value);
                 alert('success', 'Data berhasil diubah');
                 closeModal();
             })
@@ -371,7 +371,7 @@
             .then(response => {
                 console.log(response);
                 alert('success', 'Data berhasil dihapus');
-                getStrain(1);
+                getStrain(currentPage.value);
             })
             .catch(error => {
                 console.error(error);
