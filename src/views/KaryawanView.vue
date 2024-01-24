@@ -400,7 +400,7 @@
         })
             .then(response => {
                 console.log(response);
-                getKaryawan(1);
+                getKaryawan(currentPage.value);
                 alert('success', 'Data berhasil ditambahkan');
                 closeModal();
             })
@@ -431,7 +431,7 @@
         })
             .then(response => {
                 console.log(response);
-                getKaryawan(1);
+                getKaryawan(currentPage.value);
                 alert('success', 'Data berhasil diubah');
                 closeModal();
             })

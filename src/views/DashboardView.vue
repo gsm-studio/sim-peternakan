@@ -452,9 +452,9 @@
             if (diffDays <= 6) {
                 const tanggalKey = tanggalSubmit.toDateString(); 
                 if (persentaseTanggal[tanggalKey]) {
-                  persentaseTanggal[tanggalKey] = parseFloat(item.avg_percentase_telur) || 0; 
+                  persentaseTanggal[tanggalKey] = parseFloat(item.avg_percentase_telur_daily) || 0; 
                 } else {
-                  persentaseTanggal[tanggalKey] = parseFloat(item.avg_percentase_telur) || 0; 
+                  persentaseTanggal[tanggalKey] = parseFloat(item.avg_percentase_telur_daily) || 0; 
                 }
             }
         });
