@@ -6,6 +6,7 @@ import vue from '@vitejs/plugin-vue'
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
 export default defineConfig({
+  base: './',
   esbuild: {
     drop: ['console', 'debugger'],
   },

@@ -692,8 +692,8 @@
                                     <p>Berat Telur Bentes : {{ values.berat_telur_bentes }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.jml_telur_utuh) + parseInt(values.jml_telur_bentes) }}</p>
-                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.berat_telur_utuh) + parseInt(values.berat_telur_bentes) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ parseFloat(values.jml_telur_utuh) + parseFloat(values.jml_telur_bentes) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ parseFloat(values.berat_telur_utuh) + parseFloat(values.berat_telur_bentes) }}</p>
                                 </div>
                             </div>
                             <h6 class="mb-3">Pakan & Treatment Ayam</h6>

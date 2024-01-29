@@ -9,7 +9,7 @@
                 <div class="row">
                     <div class="col-lg-12 border-bottom">
                         <div class="card-body row">
-                            <div class="col-4">
+                            <div class="col-5">
                                 <h4 class="d-inline me-2">Pencatatan Produksi</h4>
                                 <div class="d-inline">
                                     <svg class="icon">
@@ -20,31 +20,34 @@
                                 <h5 class="color-text-rossa d-inline ms-2">{{ detailKandang.nama }}</h5>
                                 <!-- <img src="@/assets/img/vector-1.png" alt=""> -->
                             </div>
-                            <div class="col-1 d-grid d-md-block text-center">
+                            <!-- <div class="col-1 d-grid d-md-block text-center"> -->
                                 <!-- <small class="color-text-rossa">{{ dateSubmitPencatatan }}</small> -->
                                 <!-- <button class="btn btn-secondary ms-3" type="button">Hisex</button> -->
                               
-                            </div>
+                            <!-- </div> -->
                             <div class="col-7 d-flex d-md-block text-end">
-                                <h6 class="d-inline-block">Status : </h6>
-                                <h5 v-if="status == 'submitted'" class="text-warning d-inline-block"> Pending</h5>
-                                <h5 v-else-if="status == 'accepted'" class="text-success d-inline-block"> Terima</h5>
-                                <h5 v-else class="text-danger"> Tolak</h5>
-                                <button @click="getKandang()" class="btn btn-success ms-3 mb-lg-0 mb-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    Input Harian
-                                    <svg class="icon">
-                                        <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
-                                    </svg>
-                                </button>
-                                <template v-if="role == adminKantor || role == superadmin">
-                                    <button v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0" @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-secondary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
-                                    Ubah 
-                                    <svg class="icon">
-                                        <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-pen"></use>
-                                    </svg>
+                                <div class="d-flex justify-content-end align-items-center">   
+                                    <div class="d-flex align-items-center"> 
+                                        <h6>Status : </h6>
+                                        <h5 v-if="status == 'submitted'" class="text-warning d-inline-block"> Pending</h5>
+                                        <h5 v-else-if="status == 'accepted'" class="text-success d-inline-block"> Terima</h5>
+                                        <h5 v-else class="text-danger"> Tolak</h5>
+                                    </div>
+                                    <button @click="getKandang()" class="btn btn-success ms-3 mb-lg-0 mb-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        Input Harian
+                                        <svg class="icon">
+                                            <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+                                        </svg>
                                     </button>
-                                </template>
-                               
+                                    <template v-if="role == adminKantor || role == superadmin">
+                                        <button v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0" @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-secondary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
+                                        Ubah 
+                                        <svg class="icon">
+                                            <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-pen"></use>
+                                        </svg>
+                                        </button>
+                                    </template>
+                                </div>
                             </div>
                         </div>
                     
@@ -554,8 +557,8 @@
                                     <p>Berat Telur Bentes : {{ values.berat_telur_bentes }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.jml_telur_utuh) + parseInt(values.jml_telur_bentes) }}</p>
-                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.berat_telur_utuh) + parseInt(values.berat_telur_bentes) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ parseFloat(values.jml_telur_utuh) + parseFloat(values.jml_telur_bentes) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ parseFloat(values.berat_telur_utuh) + parseFloat(values.berat_telur_bentes) }}</p>
                                 </div>
                             </div>
                             <h6 class="mb-3">Pakan & Treatment Ayam</h6>
@@ -1022,8 +1025,8 @@
                                     <p>Berat Telur Bentes : {{ values.berat_telur_bentes }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.jml_telur_utuh) + parseInt(values.jml_telur_bentes) }}</p>
-                                    <p><span class="color-text-rossa">Total:</span> {{ parseInt(values.berat_telur_utuh) + parseInt(values.berat_telur_bentes) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ parseFloat(values.jml_telur_utuh) + parseFloat(values.jml_telur_bentes) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ parseFloat(values.berat_telur_utuh) + parseFloat(values.berat_telur_bentes) }}</p>
                                 </div>
                             </div>
                             <h6 class="mb-3">Pakan & Treatment Ayam</h6>
