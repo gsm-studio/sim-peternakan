@@ -93,7 +93,7 @@
                     <table class="table pelaporan table-bordered">
                     <thead>
                         <tr>
-                        <!-- <th scope="col">ID Kandang</th> -->
+                        <th scope="col">Urutan</th>
                         <th scope="col">Nama Kandang</th>
                         <th scope="col">Anak Kandang</th>
                         <th scope="col">Nama Mandor</th>
@@ -106,7 +106,7 @@
                     <tbody>
                         <template v-if="dataKandang.responseData && dataKandang.responseData.data.items.length > 0">
                             <tr v-for="item in dataKandang.responseData.data.items" :key="item.id" class="text-center">
-                                <!-- <td>{{ item.id }}</td> -->
+                                <td>{{ item.urutan }}</td>
                                 <td>{{ item.nama }}</td>
                                 <td>{{ item.nama_anak_kandang }}</td>
                                 <td>{{ item.nama_mandor }}</td>
@@ -190,6 +190,7 @@
                     </Field>
                     <Field class="form-control text-center mb-3" type="date" name="tanggal_chickin" placeholder="Tanggal Chickin" :class="{ 'is-invalid': errors.tanggal_chickin }" />
                     <Field as="textarea" class="form-control text-center mb-3" name="alamat" placeholder="Alamat" :class="{ 'is-invalid': errors.alamat }" />
+                    <Field type="number" class="form-control text-center mb-3" name="urutan" placeholder="Urutan" :class="{ 'is-invalid': errors.urutan }" />
                 </div>
                 <div class="modal-footer">
                     <div class="text-end">
@@ -222,6 +223,7 @@
                     <p>Strain Ayam : {{ detailKandang.strain_ayam }}</p>
                     <p>Kategori Kandang : {{ detailKandang.nama_kategori_kandang }}</p>
                     <p>Alamat : {{ detailKandang.alamat }}</p>
+                    <p>Urutan : {{ detailKandang.urutan }}</p>
                 </div>
                 <div class="modal-footer">
                 <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
@@ -257,6 +259,7 @@
                         </Field>
                         <Field v-model="tanggal_chickin_edit" class="form-control text-center mb-3" type="date" name="tanggal_chickin" placeholder="Tanggal Chickin" :class="{ 'is-invalid': errors.tanggal_chickin }" />
                         <Field v-model="detailKandang.alamat" as="textarea" class="form-control text-center mb-3" name="alamat" placeholder="Alamat" :class="{ 'is-invalid': errors.alamat }" />
+                        <Field v-model="detailKandang.urutan" type="number" class="form-control text-center mb-3" name="urutan" placeholder="Urutan" :class="{ 'is-invalid': errors.urutan }" />
                         <div class="text-end">
                             <button class="btn btn-success bg-button-rossa ms-auto" type="submit" :disabled="isSubmitting">
                                 Submit
@@ -345,6 +348,7 @@
         id_strain_ayam: Yup.number().required('Strain ayam is required'),
         alamat: Yup.string().required('Alamat is required'),
         id_kategori_kandang: Yup.number().required('Kategori kandang is required'),
+        urutan: Yup.number().required('Urutan is required'),
     });
 
     const dataKaryawan  = reactive(karyawanStore());
@@ -365,6 +369,7 @@
         strain_ayam: '',
         id_kategori_kandang: '',
         nama_kategori_kandang: '',
+        urutan: '',
     });
     let search = ref("");
 
@@ -431,7 +436,6 @@
         form.forEach((formElement) => {
             formElement.reset();
         });
-        
         
     }
 
@@ -507,7 +511,7 @@
     async function onSubmit(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama, populasi_awal, id_strain_ayam, tanggal_chickin, alamat, id_kategori_kandang } = values;
+        const { nama, populasi_awal, id_strain_ayam, tanggal_chickin, alamat, id_kategori_kandang, urutan } = values;
         console.log(values);
         return axios.post(baseUrl + '/kandang', {
             nama: nama,
@@ -516,6 +520,7 @@
             tanggal_chickin: tanggal_chickin,
             alamat: alamat,
             id_kategori_kandang: id_kategori_kandang,
+            urutan: urutan,
         }, {
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -538,7 +543,7 @@
     async function onSubmitUpdate(values, { setErrors }) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        const { nama, populasi_awal, id_strain_ayam, tanggal_chickin, alamat, id_kategori_kandang } = values;
+        const { nama, populasi_awal, id_strain_ayam, tanggal_chickin, alamat, id_kategori_kandang, urutan } = values;
         console.log(values);
         return axios.put(baseUrl + '/kandang/' + detailKandang.id, {
             nama: nama,
@@ -547,6 +552,7 @@
             tanggal_chickin: tanggal_chickin,
             alamat: alamat,
             id_kategori_kandang: id_kategori_kandang,
+            urutan: urutan,
         }, {
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -621,6 +627,7 @@
                 detailKandang.populasi_awal = response.data.data.populasi_awal;
                 detailKandang.id_kategori_kandang = response.data.data.id_kategori_kandang;
                 detailKandang.nama_kategori_kandang = response.data.data.nama_kategori;
+                detailKandang.urutan = response.data.data.urutan;
                 tanggal_chickin_edit.value = formatTanggal2(response.data.data.tanggal_chickin);
                 console.log(detailKandang);
             })
