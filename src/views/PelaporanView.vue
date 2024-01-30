@@ -131,7 +131,7 @@
                                 Download Laporan
                             </button>
                             <div class="dropdown-menu dropdown-menu-start p-3 shadow">
-                                <button @click="printLaporan()" type="button" class="btn btn-danger bg-button-rossa">Download PDF</button>
+                                <button @click="cekPrintLaporan()" type="button" class="btn btn-danger bg-button-rossa">Download PDF</button>
                                 <button @click="downloadExcel()" class="btn btn-success ms-3">Download Excel</button>
                             </div>
                         </template>
@@ -327,6 +327,7 @@
     import moment from 'moment';
     import jsPDF from "jspdf";
     import { excelParser } from "@/helpers/excel-parser";
+    import Swal from 'sweetalert2';
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
     const user = localStorage.getItem('user');
@@ -384,43 +385,45 @@
 
     const generateData = function() {
         const dataKandang = dataPelaporan.responseData.data.items;
+        console.log("Data Generate laporan : ", dataKandang);
         const result = [];
+        console.log("Data Result : ", result);
         dataKandang.forEach((item) => {
-            result.push({
-                tanggal_submit: formatTanggalSubmit(item.tanggal_submit),
-                nama_kandang: item.nama_kandang,
-                usia_mgg: item.usia_mgg ? item.usia_mgg : '-',
-                jumlah_mati: item.jumlah_mati ? item.jumlah_mati : '-',
-                jumlah_afkir: item.jumlah_afkir ? item.jumlah_afkir : '-',
-                jumlah_pindah: item.jumlah_pindah ? item.jumlah_pindah : '-',
-                jumlah_terima: item.jumlah_terima ? item.jumlah_terima : '-',
-                populasi_total: item.populasi_total ? item.populasi_total : '-',
-                telur_utuh: item.telur_utuh ? item.telur_utuh : '-',
-                telur_bentes: item.telur_bentes ? item.telur_bentes : '-',
-                total_telur: item.total_telur ? item.total_telur : '-',
-                percentase_telur: item.percentase_telur ? item.percentase_telur : '-',
-                berat_telur_gr: item.berat_telur_gr ? item.berat_telur_gr : '-',
-                berat_telur_utuh_kg: item.berat_telur_utuh_kg ? item.berat_telur_utuh_kg : '-',
-                berat_telur_bentes_kg: item.berat_telur_bentes_kg ? item.berat_telur_bentes_kg : '-',
-                berat_telur_kg: item.berat_telur_kg ? item.berat_telur_kg : '-',
-                std_egg_mass: item.std_egg_mass ? item.std_egg_mass : '-',
-                std_berat_telur: item.std_berat_telur ? item.std_berat_telur : '-',
-                berat_pakan_per_ekor_gram: item.berat_pakan_per_ekor_gram ? item.berat_pakan_per_ekor_gram : '-',
-                berat_pakan: item.berat_pakan ? item.berat_pakan : '-',
-                nama_jenis_pakan: item.nama_jenis_pakan ? item.nama_jenis_pakan : '-',
-                std_gr_perekor: item.std_gr_perekor ? item.std_gr_perekor : '-',
-                fc: item.fc ? item.fc : '-',
-                std_fc: item.std_fc ? item.std_fc : '-',
-                egg_mass: item.egg_mass ? item.egg_mass : '-',
-                nama_strain_ayam: item.nama_strain_ayam ? item.nama_strain_ayam : '-',
-                nama_treatment: item.nama_treatment ? item.nama_treatment : '-',
+        result.push({
+            tanggal_submit: formatTanggalSubmit(item.tanggal_submit),
+            nama_kandang: item.nama_kandang,
+            usia_mgg: item.usia_mgg ? item.usia_mgg : '-',
+            jumlah_mati: item.jumlah_mati ? item.jumlah_mati : '-',
+            jumlah_afkir: item.jumlah_afkir ? item.jumlah_afkir : '-',
+            jumlah_pindah: item.jumlah_pindah ? item.jumlah_pindah : '-',
+            jumlah_terima: item.jumlah_terima ? item.jumlah_terima : '-',
+            populasi_total: item.populasi_total ? item.populasi_total : '-',
+            telur_utuh: item.telur_utuh ? item.telur_utuh : '-',
+            telur_bentes: item.telur_bentes ? item.telur_bentes : '-',
+            total_telur: item.total_telur ? item.total_telur : '-',
+            percentase_telur: item.percentase_telur ? item.percentase_telur : '-',
+            berat_telur_gr: item.avg_berat_telur_gr ? item.avg_berat_telur_gr : '-',
+            berat_telur_utuh_kg: item.berat_telur_utuh_kg ? item.berat_telur_utuh_kg : '-',
+            berat_telur_bentes_kg: item.berat_telur_bentes_kg ? item.berat_telur_bentes_kg : '-',
+            berat_telur_kg: item.berat_telur_kg ? item.berat_telur_kg : '-',
+            std_nilai_hd: item.std_nilai_hd ? item.std_nilai_hd : '-',
+            std_berat_telur: item.std_berat_telur ? item.std_berat_telur : '-',
+            berat_pakan_per_ekor_gram: item.berat_pakan_per_ekor_gram ? item.berat_pakan_per_ekor_gram : '-',
+            berat_pakan: item.berat_pakan ? item.berat_pakan : '-',
+            nama_jenis_pakan: item.nama_jenis_pakan ? item.nama_jenis_pakan : '-',
+            std_gr_perekor: item.std_gr_perekor ? item.std_gr_perekor : '-',
+            fc: item.fc ? item.fc : '-',
+            std_fc: item.std_fc ? item.std_fc : '-',
+            egg_mass: item.egg_mass ? item.egg_mass : '-',
+            nama_strain_ayam: item.nama_strain_ayam ? item.nama_strain_ayam : '-',
+            nama_treatment: item.nama_treatment ? item.nama_treatment : '-',
 
-            });
+        });
         });
         result.push({
             tanggal_submit: 'Total',
             nama_kandang: '-',
-            usia_mgg: dataPelaporan.responseData.data.items[0].sumall_usia_mgg ?? 0,
+            usia_mgg: '-',
             jumlah_mati: dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0,
             jumlah_afkir: dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0,
             jumlah_pindah: dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0,
@@ -434,7 +437,7 @@
             berat_telur_utuh_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_utuh_kg ?? 0,
             berat_telur_bentes_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_bentes_kg ?? 0,
             berat_telur_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_kg ?? 0,
-            std_egg_mass: '-',
+            std_nilai_hd: '-',
             std_berat_telur: '-',
             berat_pakan_per_ekor_gram: '-',
             berat_pakan: dataPelaporan.responseData.data.items[0].sumall_berat_pakan ?? 0,
@@ -459,17 +462,17 @@
             telur_bentes: dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0,
             total_telur: dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0,
             percentase_telur: dataPelaporan.responseData.data.items[0].avg_percentase_telur ?? 0,
-            berat_telur_gr: dataPelaporan.responseData.data.items[0].avg_berat_telur_gr ?? 0,
+            berat_telur_gr: dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0,
             berat_telur_utuh_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0,
             berat_telur_bentes_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0,
             berat_telur_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0,
-            std_egg_mass: '-',
+            std_nilai_hd: '-',
             std_berat_telur: '-',
-            berat_pakan_per_ekor_gram: '-',
+            berat_pakan_per_ekor_gram: dataPelaporan.responseData.data.items[0].avg_berat_pakan_per_ekor_gram ?? 0,
             berat_pakan: dataPelaporan.responseData.data.items[0].avg_berat_pakan ?? 0,
             nama_jenis_pakan: '-',
             std_gr_perekor: '-',
-            fc: '-',
+            fc: dataPelaporan.responseData.data.items[0].avg_fc ?? 0,
             std_fc: dataPelaporan.responseData.data.items[0].avg_std_fc ?? 0,
             egg_mass: dataPelaporan.responseData.data.items[0].avg_egg_mass ?? 0,
             nama_strain_ayam: '-',
@@ -477,6 +480,7 @@
         
         });
         return result;
+      
     };
 
     function createHeaders(keys) {
@@ -511,7 +515,7 @@
         "berat_telur_utuh_kg",
         "berat_telur_bentes_kg",
         "berat_telur_kg",
-        "std_egg_mass",
+        "std_nilai_hd",
         "std_berat_telur",
         "berat_pakan_per_ekor_gram",
         "berat_pakan",
@@ -522,8 +526,29 @@
         "egg_mass",
         "nama_strain_ayam",
         "nama_treatment",
-        
     ]);
+
+    function cekPrintLaporan() {
+        if (dataPelaporan.responseData.data.items.length > 0) {
+            printLaporan();
+        } else {
+            const Toast = Swal.mixin({
+                toast: true,
+                position: "bottom-end",
+                showConfirmButton: false,
+                timer: 3000,
+                timerProgressBar: true,
+                didOpen: (toast) => {
+                    toast.onmouseenter = Swal.stopTimer;
+                    toast.onmouseleave = Swal.resumeTimer;
+                }
+                });
+                Toast.fire({
+                    icon: "error",
+                    title: "Data tidak ditemukan"
+            });
+        }
+    }
 
     function printLaporan() {
         const namaKandang = ref('');
