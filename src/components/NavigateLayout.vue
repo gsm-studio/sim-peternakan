@@ -22,12 +22,15 @@
       const token = JSON.parse(user);
       // console.log(JSON.parse(token).token);
       axios.get(baseUrl + '/kandang', {
+        params: {
+          column_sorting: 'urutan asc',
+        },
           headers: {
               Authorization: `Bearer ${token.token}`,
           },
       })
           .then(response => {
-              dataKandang.setResponseData(response.data);
+              dataKandang.setDataSidebar(response.data);
           })
           .catch(error => {
               console.error(error);
@@ -61,8 +64,8 @@
               Pencatatan Produksi
             </a>
             <ul class="nav-group-items">
-              <template v-if="dataKandang.responseData">
-                <li v-for="item in dataKandang.responseData.data.items" :key="item.id" class="nav-item">
+              <template v-if="dataKandang.dataSidebar">
+                <li v-for="item in dataKandang.dataSidebar.data.items" :key="item.id" class="nav-item">
                   <router-link :to="{ name: 'pencatatan-produksi', params: { id: item.id }}" class="nav-link">
                     <span class="nav-icon"></span> {{ item.nama }}
                   </router-link>

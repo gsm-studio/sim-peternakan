@@ -455,6 +455,7 @@
                 id_anak_kandang: id_anak_kandang,
                 page_number: currentPage.value, 
                 page_size: pageSize.value, 
+                column_sorting: 'urutan asc',
             },
            
             headers: {
@@ -464,7 +465,7 @@
             .then(response => {
                 dataKandang.setResponseData(response.data);
                 totalItems.value = dataKandang.responseData ? dataKandang.responseData.data.total_record : 0;
-                console.log("Daftar Kategori Kandang : ", dataKandang.kategori);
+                console.log("Daftar Kandang : ", dataKandang.responseData.data.items);
             })
             .catch(error => {
                 console.error(error);
