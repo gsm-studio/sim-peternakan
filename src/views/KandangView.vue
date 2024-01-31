@@ -286,7 +286,7 @@
                 </div>
                 <div class="modal-body">
                     <h6>Kandang: {{ detailKandang.nama }}</h6>
-                    <Form class="form" id="form" @submit="resetKandang" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
+                    <Form class="form" id="form" @submit="resetKandang" :validation-schema="schemaResetKandang" v-slot="{ errors, isSubmitting }">
                         <div class="modal-body">
                         
                             <Field class="form-control text-center mb-3" type="text" name="nama" placeholder="Nama" :class="{ 'is-invalid': errors.nama }" />
@@ -349,6 +349,17 @@
         alamat: Yup.string().required('Alamat is required'),
         id_kategori_kandang: Yup.number().required('Kategori kandang is required'),
         urutan: Yup.number().required('Urutan is required'),
+    });
+
+    const schemaResetKandang = Yup.object().shape({
+        nama: Yup.string().required('Nama is required'),
+        // id_mandor: Yup.string().required('Nama mandor is required'),
+        // id_anak_kandang: Yup.string().required('Nama anak kandang is required'),
+        populasi_awal: Yup.number(),
+        tanggal_chickin: Yup.date(),
+        id_strain_ayam: Yup.number().required('Strain ayam is required'),
+        alamat: Yup.string().required('Alamat is required'),
+        id_kategori_kandang: Yup.number().required('Kategori kandang is required'),
     });
 
     const dataKaryawan  = reactive(karyawanStore());
