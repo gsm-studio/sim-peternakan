@@ -7,7 +7,7 @@
           <div class="col-md-12">
             <div class="card overflow-hidden mb-4">
               <div class="row">
-                <div class="col-lg-7 border-end">
+                <div class="col-lg-12 border-bottom">
                   <div class="card-body">
                     <h4 class="d-inline">Dashboard</h4>
                     <small class="color-text-rossa ms-2">{{ getToday() }}</small>
@@ -15,29 +15,104 @@
                       <div>
                         <div class="small text-medium-emphasis mb-2">
                           {{ namaFilter }}
-                          <a data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" class="color-text-rossa ms-3">Filter</a>
-                          <div class="dropdown-menu dropdown-menu-start p-3">
-                              <select v-model="filter" @change="getFilter($event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
-                                <option value="0" selected> 
+                          <!-- <a data-coreui-toggle="dropdown" role="button" aria-haspopup="true" id="dropdownMenuClickableInside" class="color-text-rossa ms-3" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">Filter</a> -->
+                            <a class="color-text-rossa ms-3" role="button" id="dropdownMenuClickableInside" data-coreui-toggle="dropdown" data-coreui-auto-close="outside" aria-expanded="false">
+                              Filter
+                            </a>
+                          <div class="dropdown-menu dropdown-menu-start p-3 shadow" aria-labelledby="dropdownMenuClickableInside" >
+                            <div class="d-flex justify-content-between">
+                                    <label class="form-label">Pilih Filter</label>
+                                    <a href="javascript:void(0)" @click="clearFilter()">Clear</a>
+                              </div>
+                            <select v-model="filter" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                                <!-- <option value="0" selected> 
                                     Pilih Filter 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
                                     <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
                                     </svg>
-                                </option>
-                                <option value="avg">Avg. % persentase produksi</option>
-                                <option value="fc">FC</option>
-                                <option value="egg_mass">Egg mass</option>
+                                </option> -->
+                                <option value="avg" selected>Avg. % persentase produksi</option>
+                                <!-- <option value="fc">FC</option> -->
+                                <!-- <option value="egg_mass">Egg mass</option> -->
+                                <option value="jmlButir">Jumlah Butir</option>
                               </select> 
-                              <!-- <Datepicker
+                              <label class="form-label">Waktu</label>
+                              <select v-model="filterWaktu" class="form-control mb-3">
+                                <option value="daily">Hari</option>
+                                <option value="monthly">Bulan</option>
+                                <option value="yearly">Tahun</option>
+                                <option value="period">Period</option>
+                              </select>
+                              <!-- <div class="waktuDatePicker"> -->
+                                <Datepicker
+                                  v-if="filterWaktu == 'daily'"
+                                  position="center"
                                   :date-format="{
-                                      day: '2-digit',
-                                      month: '2-digit',
-                                      year: 'numeric' }"
-                                  @input="inputDate"
+                                    day: '2-digit',
+                                    month: '2-digit',
+                                    year: 'numeric' }"
+                                  @input="inputWaktu"
                                   range
-                                  v-model="selectedDate"
-                                  lang="en"
-                              /> -->
+                                  v-model="selectedWaktu"
+                                  lang="id"
+                                />
+                                <Datepicker
+                                  v-else-if="filterWaktu == 'monthly'"
+                                  position="center"
+                                  :date-format="{
+                                    month: '2-digit',
+                                    year: 'numeric' }"
+                                  @input="inputWaktu"
+                                  range
+                                  v-model="selectedWaktu"
+                                  lang="id"
+                                />
+                                <Datepicker
+                                  v-else-if="filterWaktu == 'yearly'"
+                                  position="center"
+                                  :date-format="{
+                                    year: 'numeric' }"
+                                  @input="inputWaktu"
+                                  range
+                                  v-model="selectedWaktu"
+                                  lang="id"
+                                />
+                              <!-- </div> -->
+                              <label class="form-label mt-3">Kandang</label>
+                              <select @change="getListPeriode($event.target.value)" v-model="filterKandang" class="form-control mb-3">
+                                <option value="0">Semua Kandang</option>
+                                  <template v-if="dataKandang.responseData && dataKandang.responseData.data.items.length > 0">
+                                    <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">{{ item.nama }}</option>
+                                  </template>
+                              </select>
+                              <select v-model="id_kategori_kandang" class="form-control mb-3">
+                                <option value="0">Pilih Kategori Kandang</option>
+                                  <template v-if="dataKandang.kategori">
+                                        <option v-for="item in dataKandang.kategori" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                  </template>
+                              </select>
+                              <select v-model="id_anak_kandang" class="form-control mb-3">
+                                <option value="0">Pilih Anak Kandang</option>
+                                <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                        <option v-for="item in dataKaryawan.responseData.data.items" :key="item.id" :value="item.id">
+                                            {{ item.nama }}
+                                        </option>
+                                    </template>
+                              </select>
+                              <template v-if="filterWaktu == 'period'">
+                                <label class="form-label">Periode</label>
+                                <select v-model="period" class="form-control">
+                                  <option value="0">Pilih Periode</option>
+                                  <template v-if="dataPelaporan.periode && dataPelaporan.periode.data.items.length > 0">
+                                    <option v-for="item in dataPelaporan.periode.data.items" :key="item" :value="item.id">{{ item.period }}</option>
+                                  </template>
+                                </select>
+                              </template>
+                             <button @click="submitFilter()" class="btn btn-success bg-button-rossa mt-3" type="button">
+                                Terapkan
+                              </button>
                           </div>
                         </div>
                        
@@ -48,8 +123,8 @@
                           </svg> 2,4 % vs last week
                         </small> -->
                         <div class="small text-medium-emphasis mt-2">
-                          {{ formatRangeDate.start }} - 
-                          {{ formatRangeDate.end }}
+                          {{ formatRangeDateGrafik1.start }} - 
+                          {{ formatRangeDateGrafik1.end }}
                         </div>
                       </div>
                       <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
@@ -90,22 +165,28 @@
                           }"
                           labels="Diagram Batang"
                         /> -->
-                        <CChart
-                          type="bar"
-                          :data="{
-                            labels: namaLabels,
-                            datasets: [
-                              {
-                                label: 'Total',
-                                backgroundColor: '#5CA882',
-                                data: dataGrafikBatang,
-                              },
-                            ],
-                          }"
-                          labels="Diagram Batang"
-                        />
+                        <div class="chart">
+                          <CChart
+                            type="line"
+                            :wrapper="false"
+                            :data="{
+                              labels: listLabelGrafik1,
+                              datasets: [
+                                {
+                                  label: 'Jumlah',
+                                  backgroundColor: 'rgba(220, 220, 220, 0.2)',
+                                  borderColor: 'rgba(220, 220, 220, 1)',
+                                  pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+                                  pointBorderColor: '#dc3545',
+                                  data: dataGrafik1
+                                },
+                              
+                              ]
+                            }"
+                          />
                         
                     </div>
+                  </div>
                   </div>
                   <!-- <div class="card-footer d-flex justify-content-between">
                     <span> 
@@ -118,7 +199,7 @@
                     </span>
                   </div> -->
                 </div>
-                <div class="col-lg-5">
+                <div class="col-lg-12">
                   <div class="card-body populasi">
                     
                     <div class="d-flex justify-content-between mt-4">
@@ -321,7 +402,7 @@
   import HeaderItem from '@/components/HeaderItem.vue'
   import { CChart } from '@coreui/vue-chartjs'
   import { storeToRefs } from 'pinia';
-  import { penjadwalanStore, pelaporanStore, kandangStore, pakanStore } from '@/stores';
+  import { penjadwalanStore, pelaporanStore, kandangStore, pakanStore, karyawanStore } from '@/stores';
   import { onMounted, reactive, ref, watch } from 'vue'
   import axios from 'axios'
   import Swal from 'sweetalert2'
@@ -339,6 +420,7 @@
   const dataPelaporan  = reactive(pelaporanStore());
   const dataKandang = reactive(kandangStore());
   const dataPakan = reactive(pakanStore());
+  const dataKaryawan = reactive(karyawanStore());
   const idKandang = ref(0);
   const date = ref(0);
   const colors = ref(['#6AD0B8', '#D8608BB2', '#8660D8B2']);
@@ -362,6 +444,10 @@
         start: null,
         end: null,
   }); 
+  const formatRangeDateGrafik1 = reactive({
+        start: null,
+        end: null,
+  });
   const getToday = () => {
         const today = new Date();
         const format  = moment(today).format("DD MMMM YYYY");
@@ -411,16 +497,36 @@
   const backgroundColorJenisPakan = ref([]);
   const jenis_pakan_items = ref([]);
 
+  const filterWaktu = ref('daily');
+  const period = ref(0);
+  const filterKandang = ref(0);
+  const selectedWaktu = ref([
+        new Date('2021-01-01'),
+        new Date()
+  ]);
+  const listLabelGrafik1 = ref([]);
+  const listTglWaktu = ref([]);
+  const listBulanWaktu = ref([]);
+  const listTahunWaktu = ref([]);
+  const id_kategori_kandang = ref(0);
+  const id_anak_kandang = ref(0);
+  const dataGrafik1 = ref([]);
+
   onMounted(() => {
     console.log("Tanggal 6 hari yang lalu:", sixDaysAgo);
     formatRangeDate.start = moment(selectedDate.value[0]).format("DD MMMM YYYY");
     formatRangeDate.end = moment(selectedDate.value[1]).format("DD MMMM YYYY");
     rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
     rangeDate.end = moment(selectedDate.value[1]).format("YYYY-MM-DD");
+    formatRangeDateGrafik1.start = moment(selectedWaktu.value[0]).format("DD MMMM YYYY");
+    formatRangeDateGrafik1.end = moment(selectedWaktu.value[1]).format("DD MMMM YYYY");
     getPelaporan(null, rangeDate.start, rangeDate.end);
     getPenjadwalan()
     getKandang()
     getPakan()
+    
+    getKaryawan()
+    // getListPeriode()
     // Buat label untuk 7 hari terakhir
     for (let i = 6; i >= 0; i--) {
         const date = new Date(today);
@@ -435,14 +541,31 @@
         date.value = new Date(newValue[0]);
         rangeDate.start = moment(newValue[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(newValue[1]).format("YYYY-MM-DD");
-        getPelaporan(idKandang.value, rangeDate.start, rangeDate.end);
+        // getPelaporan(idKandang.value, rangeDate.start, rangeDate.end);
     });
 
+  watch(selectedWaktu, (newValue, oldValue) => {
+      formatRangeDateGrafik1.start = moment(newValue[0]).format("DD MMMM YYYY");
+      formatRangeDateGrafik1.end = moment(newValue[1]).format("DD MMMM YYYY");
+  });
+
+  function clearFilter() {
+    filter.value = 'avg';
+    filterWaktu.value = 'daily';
+    selectedWaktu.value = [
+        new Date('2021-01-01'),
+        new Date()
+    ];
+    period.value = 0;
+    filterKandang.value = 0;
+    id_kategori_kandang.value = 0;
+    id_anak_kandang.value = 0;
+  }
 
   function getFilter(value) {
         if (value === 'avg') {
           namaFilter.value = 'Avg. % persentase produksi';
-          getPresentaseProduksi();
+          // getPresentaseProduksi();
           valueFilter.value = detailPelaporan.avg_percentase_telur ? detailPelaporan.avg_percentase_telur + '%' : 0;
           
         } else if (value === 'fc') {
@@ -458,32 +581,32 @@
         }
   }
 
-  function getPresentaseProduksi() {
-        dataGrafikBatang.value = [];
-        const items = dataPelaporan.responseData.data.items;
-        const persentaseTanggal = {};
-        items.forEach(item => {
-            const tanggalSubmit = new Date(item.tanggal_submit);
-            const diffTime = Math.abs(today - tanggalSubmit);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            if (diffDays <= 6) {
-                const tanggalKey = tanggalSubmit.toDateString(); 
-                if (persentaseTanggal[tanggalKey]) {
-                  persentaseTanggal[tanggalKey] = parseFloat(item.avg_percentase_telur_daily) || 0; 
-                } else {
-                  persentaseTanggal[tanggalKey] = parseFloat(item.avg_percentase_telur_daily) || 0; 
-                }
-            }
-        });
+  // function getPresentaseProduksi() {
+  //       dataGrafikBatang.value = [];
+  //       const items = dataPelaporan.responseData.data.items;
+  //       const persentaseTanggal = {};
+  //       items.forEach(item => {
+  //           const tanggalSubmit = new Date(item.tanggal_submit);
+  //           const diffTime = Math.abs(today - tanggalSubmit);
+  //           const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+         
+  //           if (diffDays <= 8) {
+  //               const tanggalKey = tanggalSubmit.toDateString(); 
+  //               if (persentaseTanggal[tanggalKey]) {
+  //                 persentaseTanggal[tanggalKey] = parseFloat(item.avg_percentase_telur_daily) || 0; 
+  //               } else {
+  //                 persentaseTanggal[tanggalKey] = parseFloat(item.avg_percentase_telur_daily) || 0; 
+  //               }
+  //           }
+  //       });
        
-        labels.value.forEach(label => {
-            dataGrafikBatang.value.push(persentaseTanggal[label] || null);
-        });
-        console.log("Data Grafik Batang : ", dataGrafikBatang.value);
-        // valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '%' : 0;
+  //       labels.value.forEach(label => {
+  //         dataGrafikBatang.value.push(persentaseTanggal[label] || null);
+  //       });
+       
+  //       console.log("Data Grafik 1 : ", dataGrafik1.value);
 
-  }
+  //   }
 
   function getAvgFc() {
         dataGrafikBatang.value = [];
@@ -537,6 +660,127 @@
 
   }
 
+  function defaultFilterWaktu() {
+    const rangeSelectedWaktu = selectedWaktu.value;
+    const startDate = rangeSelectedWaktu[0];
+    const endDate = rangeSelectedWaktu[1];
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    for (let i = 0; i <= diffDays; i++) {
+        const date = new Date(start);
+        date.setDate(start.getDate() + i);
+        listTglWaktu.value.push(date.toDateString());
+    }
+    if(dataPelaporan.responseData) {
+      dataPelaporan.responseData.data.items.forEach(item => {
+        listLabelGrafik1.value.push(item.tanggal_submit_date);
+        if(filterWaktu.value == "daily") {
+              dataGrafik1.value.push(item.avg_percentase_telur_daily);
+            } else if(filterWaktu.value == "monthly") {
+              dataGrafik1.value.push(item.avg_percentase_telur_monthly);
+            } else if(filterWaktu.value == "yearly") {
+              dataGrafik1.value.push(item.avg_percentase_telur_yearly);
+            } else {
+              dataGrafik1.value.push(item.avg_percentase_telur_period);
+            }
+      });
+      console.log("List Data Grafik 1 : ", dataGrafik1.value);
+    }
+    
+    // listLabelGrafik1.value = listTglWaktu.value;
+   
+    // console.log("List Label Grafik 1 : ", listLabelGrafik1.value);
+  }
+
+  function submitFilter() {
+    
+    listLabelGrafik1.value = [];
+    const rangeSelectedWaktu = selectedWaktu.value;
+    const startDate = rangeSelectedWaktu[0];
+    const endDate = rangeSelectedWaktu[1];
+    listTglWaktu.value = [];
+    listBulanWaktu.value = [];
+    listTahunWaktu.value = [];
+    const start = new Date(startDate);
+    const end = new Date(endDate);
+    const diffTime = Math.abs(end - start);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffMonths = (end.getMonth() - start.getMonth() + (12 * (end.getFullYear() - start.getFullYear())));
+    const diffYears = end.getFullYear() - start.getFullYear();
+
+    for (let i = 0; i <= diffDays; i++) {
+        const date = new Date(start);
+        date.setDate(start.getDate() + i);
+        listTglWaktu.value.push(date.toDateString());
+    }
+
+    for (let i = 0; i <= diffMonths; i++) {
+        const date = new Date(start);
+        date.setMonth(start.getMonth() + i);
+        const monthYear = date.toLocaleString('default', { month: 'long' }) + ' ' + date.getFullYear();
+        listBulanWaktu.value.push(monthYear);
+    }
+
+    for (let i = 0; i <= diffYears; i++) {
+        const date = new Date(start);
+        date.setFullYear(start.getFullYear() + i);
+        const year = date.getFullYear();
+        console.log("Year : ", year);
+        listTahunWaktu.value.push(year);
+    }
+    
+      if (filterWaktu.value == "daily") {
+        dataPelaporan.responseData.data.items.forEach(item => {
+          listLabelGrafik1.value.push(item.tanggal_submit_date);
+        });
+      } else if (filterWaktu.value == "monthly") {
+        dataPelaporan.responseData.data.items.forEach(item => {
+          listLabelGrafik1.value.push(item.tanggal_submit_month);
+        });
+      } else if (filterWaktu.value == "yearly"){
+        dataPelaporan.responseData.data.items.forEach(item => {
+          listLabelGrafik1.value.push(item.tanggal_submit_year);
+        });
+      } else {
+        listLabelGrafik1.value = period.value;
+      }
+
+      if (filter.value == "avg") {
+        namaFilter.value = 'Avg. % persentase produksi';
+        dataPelaporan.responseData.data.items.forEach(item => {
+          if(filterWaktu.value == "daily") {
+            dataGrafik1.value.push(item.avg_percentase_telur_daily);
+          } else if(filterWaktu.value == "monthly") {
+            dataGrafik1.value.push(item.avg_percentase_telur_monthly);
+          } else if(filterWaktu.value == "yearly") {
+            dataGrafik1.value.push(item.avg_percentase_telur_yearly);
+          } else {
+            dataGrafik1.value.push(item.avg_percentase_telur_period);
+          }
+        });
+      } else {
+        namaFilter.value = 'Jumlah Butir';
+        dataPelaporan.responseData.data.items.forEach(item => {
+          if(filterWaktu.value == "daily") {
+            dataGrafik1.value.push(item.sum_jumlah_butir_daily);
+          } else if(filterWaktu.value == "monthly") {
+            dataGrafik1.value.push(item.sum_jumlah_butir_daily);
+          } else if(filterWaktu.value == "yearly") {
+            dataGrafik1.value.push(item.sum_jumlah_butir_yearly);
+          } else {
+            dataGrafik1.value.push(item.sum_jumlah_butir_period);
+          }
+        });
+      }
+    console.log("Input Waktu : ", listLabelGrafik1.value);
+  }
+
+  function inputWaktu() {
+      console.log("Input Waktu : ", selectedWaktu.value);
+  }
+
   async function getPenjadwalan() {
       const user = localStorage.getItem('user');
       const token = JSON.parse(user);
@@ -578,7 +822,66 @@
         });
     }
 
-  async function getPelaporan(id_kandang, startDate, endDate) {
+    async function getListPeriode(id_kandang) {
+       
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/laporan/periodlist', {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+            params: {
+                id_kandang: filterKandang.value,
+            },
+        })
+            .then(response => {
+                dataPelaporan.setPeriode(response.data);
+                console.log("List Periode : ", dataPelaporan.periode);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    async function getKaryawan() {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/karyawan', {
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataKaryawan.setResponseData(response.data);
+            })
+            .catch(error => {
+                console.error(error);
+            });
+    }
+
+    async function getPelaporanGrafik1() {
+        const user = localStorage.getItem('user');
+        const token = JSON.parse(user);
+        axios.get(baseUrl + '/laporan', {
+            params: {
+                id_kandang: filterKandang.value,
+                id_kategori_kandang: id_kategori_kandang.value,
+                id_anak_kandang: id_anak_kandang.value,
+                start_date: selectedWaktu.value[0],
+                end_date: selectedWaktu.value[1],
+                period: period.value,
+                time_filter_type: filterWaktu.value,
+            },
+            headers: {
+                Authorization: `Bearer ${token.token}`,
+            },
+        })
+            .then(response => {
+                dataPelaporan.setDataGrafik1(response.data);
+            })
+    }
+
+  async function getPelaporan(id_kandang,  startDate, endDate) {
         if (id_kandang == 0) {
             id_kandang = null;
         }
@@ -590,6 +893,7 @@
                 id_kandang: id_kandang,
                 start_date: startDate,
                 end_date: endDate,
+               
             },
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -689,7 +993,6 @@
                 filteredPakan.value = dataPelaporan.responseData.data.items.filter(item => item.nama_jenis_pakan !== null && item.nama_jenis_pakan !== undefined);
                 uniquePakan.value = [...new Set(filteredPakan.value.map(item => item.nama_jenis_pakan))];
                 valueFilter.value = detailPelaporan.avg_percentase_telur ? detailPelaporan.avg_percentase_telur + '%' : 0;
-                getPresentaseProduksi();
                 getJenisPakanItems(dataPelaporan.responseData.data.jenis_pakan_items);
                 console.log("Pelaporan : ", response);
             })
@@ -773,5 +1076,8 @@
   }
   .pie-chart {
       width: 200px !important;
+  }
+  .waktuDatePicker .content {
+      z-index: 9999 !important;
   }
 </style>
