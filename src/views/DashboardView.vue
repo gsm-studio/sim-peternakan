@@ -102,14 +102,20 @@
                                     </template>
                               </select>
                               <template v-if="filterWaktu == 'period'">
-                                <label class="form-label">Periode</label>
-                                <select v-model="period" class="form-control">
-                                  <option value="0">Pilih Periode</option>
-                                  <template v-if="dataPelaporan.periode && dataPelaporan.periode.data.items.length > 0">
-                                    <option v-for="item in dataPelaporan.periode.data.items" :key="item" :value="item.id">{{ item.period }}</option>
-                                  </template>
-                                </select>
+                                <div class="mb-3">
+                                  <label class="form-label">Periode</label>
+                                  <select v-model="period" class="form-control">
+                                    <option value="0">Pilih Periode</option>
+                                    <template v-if="dataPelaporan.periode && dataPelaporan.periode.data.items.length > 0">
+                                      <option v-for="item in dataPelaporan.periode.data.items" :key="item" :value="item.id">{{ item.period }}</option>
+                                    </template>
+                                  </select>
+                                </div>
                               </template>
+                              <div class="form-check form-switch">
+                                <input v-model="view_by_usia" class="form-check-input" type="checkbox" id="view_by_usia">
+                                <label class="form-check-label" for="view_by_usia">Lihat Usia</label>
+                              </div>
                              <button @click="submitFilter()" class="btn btn-success bg-button-rossa mt-3" type="button">
                                 Terapkan
                               </button>
@@ -173,14 +179,14 @@
                               labels: listLabelGrafik1,
                               datasets: [
                                 {
-                                  label: 'Jumlah',
+                                  label: namaFilter,
                                   backgroundColor: 'rgba(220, 220, 220, 0.2)',
                                   borderColor: 'rgba(220, 220, 220, 1)',
                                   pointBackgroundColor: 'rgba(220, 220, 220, 1)',
                                   pointBorderColor: '#dc3545',
                                   data: dataGrafik1
                                 },
-                              
+                               
                               ]
                             }"
                           />
@@ -501,7 +507,8 @@
   const period = ref(0);
   const filterKandang = ref(0);
   const selectedWaktu = ref([
-        new Date('2021-01-01'),
+        // new Date('2021-01-01'),
+        sixDaysAgo,
         new Date()
   ]);
   const listLabelGrafik1 = ref([]);
@@ -511,6 +518,7 @@
   const id_kategori_kandang = ref(0);
   const id_anak_kandang = ref(0);
   const dataGrafik1 = ref([]);
+  const view_by_usia = ref('false');
 
   onMounted(() => {
     console.log("Tanggal 6 hari yang lalu:", sixDaysAgo);
@@ -524,9 +532,8 @@
     getPenjadwalan()
     getKandang()
     getPakan()
-    
     getKaryawan()
-    // getListPeriode()
+    getPelaporanGrafik1();
     // Buat label untuk 7 hari terakhir
     for (let i = 6; i >= 0; i--) {
         const date = new Date(today);
@@ -541,7 +548,6 @@
         date.value = new Date(newValue[0]);
         rangeDate.start = moment(newValue[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(newValue[1]).format("YYYY-MM-DD");
-        // getPelaporan(idKandang.value, rangeDate.start, rangeDate.end);
     });
 
   watch(selectedWaktu, (newValue, oldValue) => {
@@ -553,19 +559,19 @@
     filter.value = 'avg';
     filterWaktu.value = 'daily';
     selectedWaktu.value = [
-        new Date('2021-01-01'),
+        sixDaysAgo,
         new Date()
     ];
     period.value = 0;
     filterKandang.value = 0;
     id_kategori_kandang.value = 0;
     id_anak_kandang.value = 0;
+    view_by_usia.value = 'false';
   }
 
   function getFilter(value) {
         if (value === 'avg') {
           namaFilter.value = 'Avg. % persentase produksi';
-          // getPresentaseProduksi();
           valueFilter.value = detailPelaporan.avg_percentase_telur ? detailPelaporan.avg_percentase_telur + '%' : 0;
           
         } else if (value === 'fc') {
@@ -673,108 +679,82 @@
         date.setDate(start.getDate() + i);
         listTglWaktu.value.push(date.toDateString());
     }
-    if(dataPelaporan.responseData) {
-      dataPelaporan.responseData.data.items.forEach(item => {
-        listLabelGrafik1.value.push(item.tanggal_submit_date);
-        if(filterWaktu.value == "daily") {
-              dataGrafik1.value.push(item.avg_percentase_telur_daily);
-            } else if(filterWaktu.value == "monthly") {
-              dataGrafik1.value.push(item.avg_percentase_telur_monthly);
-            } else if(filterWaktu.value == "yearly") {
-              dataGrafik1.value.push(item.avg_percentase_telur_yearly);
-            } else {
-              dataGrafik1.value.push(item.avg_percentase_telur_period);
-            }
-      });
       console.log("List Data Grafik 1 : ", dataGrafik1.value);
-    }
     
-    // listLabelGrafik1.value = listTglWaktu.value;
-   
-    // console.log("List Label Grafik 1 : ", listLabelGrafik1.value);
   }
 
   function submitFilter() {
-    
+    getPelaporanGrafik1();
     listLabelGrafik1.value = [];
-    const rangeSelectedWaktu = selectedWaktu.value;
-    const startDate = rangeSelectedWaktu[0];
-    const endDate = rangeSelectedWaktu[1];
+    // const rangeSelectedWaktu = selectedWaktu.value;
+    // const startDate = rangeSelectedWaktu[0];
+    // const endDate = rangeSelectedWaktu[1];
     listTglWaktu.value = [];
     listBulanWaktu.value = [];
     listTahunWaktu.value = [];
-    const start = new Date(startDate);
-    const end = new Date(endDate);
-    const diffTime = Math.abs(end - start);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const diffMonths = (end.getMonth() - start.getMonth() + (12 * (end.getFullYear() - start.getFullYear())));
-    const diffYears = end.getFullYear() - start.getFullYear();
+    // const start = new Date(startDate);
+    // const end = new Date(endDate);
+    // const diffTime = Math.abs(end - start);
+    // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    // const diffMonths = (end.getMonth() - start.getMonth() + (12 * (end.getFullYear() - start.getFullYear())));
+    // const diffYears = end.getFullYear() - start.getFullYear();
 
-    for (let i = 0; i <= diffDays; i++) {
-        const date = new Date(start);
-        date.setDate(start.getDate() + i);
-        listTglWaktu.value.push(date.toDateString());
-    }
+    // for (let i = 0; i <= diffDays; i++) {
+    //     const date = new Date(start);
+    //     date.setDate(start.getDate() + i);
+    //     listTglWaktu.value.push(date.toDateString());
+    // }
 
-    for (let i = 0; i <= diffMonths; i++) {
-        const date = new Date(start);
-        date.setMonth(start.getMonth() + i);
-        const monthYear = date.toLocaleString('default', { month: 'long' }) + ' ' + date.getFullYear();
-        listBulanWaktu.value.push(monthYear);
-    }
+    // for (let i = 0; i <= diffMonths; i++) {
+    //     const date = new Date(start);
+    //     date.setMonth(start.getMonth() + i);
+    //     const monthYear = date.toLocaleString('default', { month: 'long' }) + ' ' + date.getFullYear();
+    //     listBulanWaktu.value.push(monthYear);
+    // }
 
-    for (let i = 0; i <= diffYears; i++) {
-        const date = new Date(start);
-        date.setFullYear(start.getFullYear() + i);
-        const year = date.getFullYear();
-        console.log("Year : ", year);
-        listTahunWaktu.value.push(year);
-    }
+    // for (let i = 0; i <= diffYears; i++) {
+    //     const date = new Date(start);
+    //     date.setFullYear(start.getFullYear() + i);
+    //     const year = date.getFullYear();
+    //     console.log("Year : ", year);
+    //     listTahunWaktu.value.push(year);
+    // }
     
-      if (filterWaktu.value == "daily") {
-        dataPelaporan.responseData.data.items.forEach(item => {
-          listLabelGrafik1.value.push(item.tanggal_submit_date);
-        });
-      } else if (filterWaktu.value == "monthly") {
-        dataPelaporan.responseData.data.items.forEach(item => {
-          listLabelGrafik1.value.push(item.tanggal_submit_month);
-        });
-      } else if (filterWaktu.value == "yearly"){
-        dataPelaporan.responseData.data.items.forEach(item => {
-          listLabelGrafik1.value.push(item.tanggal_submit_year);
-        });
-      } else {
-        listLabelGrafik1.value = period.value;
-      }
+  }
 
+  function setDataGrafik1() {
+      dataGrafik1.value = [];
+      dataPelaporan.dataGrafik1.data.items.forEach(item => {
+        listLabelGrafik1.value.push(item.grafik_x_value);
+      });
+    
       if (filter.value == "avg") {
         namaFilter.value = 'Avg. % persentase produksi';
-        dataPelaporan.responseData.data.items.forEach(item => {
+        dataPelaporan.dataGrafik1.data.items.forEach(item => {
           if(filterWaktu.value == "daily") {
-            dataGrafik1.value.push(item.avg_percentase_telur_daily);
+            dataGrafik1.value.push(item.avg_percentase_telur);
           } else if(filterWaktu.value == "monthly") {
-            dataGrafik1.value.push(item.avg_percentase_telur_monthly);
+            dataGrafik1.value.push(item.avg_percentase_telur);
           } else if(filterWaktu.value == "yearly") {
-            dataGrafik1.value.push(item.avg_percentase_telur_yearly);
+            dataGrafik1.value.push(item.avg_percentase_telur);
           } else {
-            dataGrafik1.value.push(item.avg_percentase_telur_period);
+            dataGrafik1.value.push(item.avg_percentase_telur);
           }
         });
       } else {
         namaFilter.value = 'Jumlah Butir';
-        dataPelaporan.responseData.data.items.forEach(item => {
+        dataPelaporan.dataGrafik1.data.items.forEach(item => {
           if(filterWaktu.value == "daily") {
-            dataGrafik1.value.push(item.sum_jumlah_butir_daily);
+            dataGrafik1.value.push(item.sum_jumlah_butir);
           } else if(filterWaktu.value == "monthly") {
-            dataGrafik1.value.push(item.sum_jumlah_butir_daily);
+            dataGrafik1.value.push(item.sum_jumlah_butir);
           } else if(filterWaktu.value == "yearly") {
-            dataGrafik1.value.push(item.sum_jumlah_butir_yearly);
+            dataGrafik1.value.push(item.sum_jumlah_butir);
           } else {
-            dataGrafik1.value.push(item.sum_jumlah_butir_period);
+            dataGrafik1.value.push(item.sum_jumlah_butir);
           }
         });
       }
-    console.log("Input Waktu : ", listLabelGrafik1.value);
   }
 
   function inputWaktu() {
@@ -784,7 +764,6 @@
   async function getPenjadwalan() {
       const user = localStorage.getItem('user');
       const token = JSON.parse(user);
-      // console.log(JSON.parse(token).token);
       axios.get(baseUrl + '/penjadwalan', {
           params: {
               page_number: 1, 
@@ -862,15 +841,16 @@
     async function getPelaporanGrafik1() {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        axios.get(baseUrl + '/laporan', {
+        axios.get(baseUrl + '/laporan/grafikdashboard', {
             params: {
-                id_kandang: filterKandang.value,
-                id_kategori_kandang: id_kategori_kandang.value,
-                id_anak_kandang: id_anak_kandang.value,
+                id_kandang: filterKandang.value ? filterKandang.value : null,
+                id_kategori_kandang: id_kategori_kandang.value ? id_kategori_kandang.value : null,
+                id_anak_kandang: id_anak_kandang.value ? id_anak_kandang.value : null,
                 start_date: selectedWaktu.value[0],
                 end_date: selectedWaktu.value[1],
-                period: period.value,
-                time_filter_type: filterWaktu.value,
+                period: period.value ? period.value : null,
+                time_filter_type: filterWaktu.value ? filterWaktu.value : null,
+                view_by_usia: view_by_usia.value ? view_by_usia.value : null,
             },
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -878,6 +858,8 @@
         })
             .then(response => {
                 dataPelaporan.setDataGrafik1(response.data);
+                setDataGrafik1();
+                console.log("Data Grafik 1 : ", dataPelaporan.dataGrafik1.data.items);
             })
     }
 
@@ -1005,7 +987,6 @@
         
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
-        // console.log(JSON.parse(token).token);
         axios.get(baseUrl + '/kandang', {
             headers: {
                 Authorization: `Bearer ${token.token}`,
@@ -1013,7 +994,7 @@
         })
             .then(response => {
                 dataKandang.setResponseData(response.data);
-                // console.log(dataKandang.responseData.data);
+                
             })
             .catch(error => {
                 console.error(error);

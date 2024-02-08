@@ -26,7 +26,7 @@
           column_sorting: 'urutan asc',
         },
           headers: {
-              Authorization: `Bearer ${token.token}`,
+              Authorization: `Bearer ${token ? token.token : ''}`,
           },
       })
           .then(response => {
