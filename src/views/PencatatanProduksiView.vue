@@ -557,8 +557,8 @@
                                     <p>Berat Telur Bentes : {{ values.berat_telur_bentes }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span class="color-text-rossa">Total:</span> {{ parseFloat(values.jml_telur_utuh) + parseFloat(values.jml_telur_bentes) }}</p>
-                                    <p><span class="color-text-rossa">Total:</span> {{ parseFloat(values.berat_telur_utuh) + parseFloat(values.berat_telur_bentes) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ (parseFloat(values.jml_telur_utuh) + parseFloat(values.jml_telur_bentes)).toFixed(2) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ (parseFloat(values.berat_telur_utuh) + parseFloat(values.berat_telur_bentes)).toFixed(2) }}</p>
                                 </div>
                             </div>
                             <h6 class="mb-3">Pakan & Treatment Ayam</h6>
@@ -1025,8 +1025,8 @@
                                     <p>Berat Telur Bentes : {{ values.berat_telur_bentes }}</p>
                                 </div>
                                 <div class="col-md-4">
-                                    <p><span class="color-text-rossa">Total:</span> {{ parseFloat(values.jml_telur_utuh) + parseFloat(values.jml_telur_bentes) }}</p>
-                                    <p><span class="color-text-rossa">Total:</span> {{ parseFloat(values.berat_telur_utuh) + parseFloat(values.berat_telur_bentes) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ (parseFloat(values.jml_telur_utuh) + parseFloat(values.jml_telur_bentes)).toFixed(2) }}</p>
+                                    <p><span class="color-text-rossa">Total:</span> {{ (parseFloat(values.berat_telur_utuh) + parseFloat(values.berat_telur_bentes)).toFixed(2) }}</p>
                                 </div>
                             </div>
                             <h6 class="mb-3">Pakan & Treatment Ayam</h6>
