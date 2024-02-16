@@ -48,13 +48,13 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-start p-3 shadow">
                             <label class="form-label">Pilih Arsip</label>
-                            <select v-model="is_archived" @change="getPencatatan(currentPage, id_mandor, id_kandang, id_anak_Kandang, id_strain_ayam, id_treatment, id_jenis_pakan, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <select v-model="is_archived" @change="getPencatatan(1, id_mandor, id_kandang, id_anak_Kandang, id_strain_ayam, id_treatment, id_jenis_pakan, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="-1">Semua Laporan</option>
                                 <option value="0">Tidak</option>
                                 <option value="1">Ya</option>
                             </select>
                             <label class="form-label">Pilih Filter</label> 
-                            <select v-model="id_mandor" @change="getPencatatan(currentPage, $event.target.value, id_kandang, id_anak_Kandang, id_strain_ayam, id_treatment, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <select v-model="id_mandor" @change="getPencatatan(1, $event.target.value, id_kandang, id_anak_Kandang, id_strain_ayam, id_treatment, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua Mandor 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -70,7 +70,7 @@
                                     <option>Belum ada mandor</option>
                                 </template>
                             </select> 
-                            <select v-model="id_kandang" @change="getPencatatan(currentPage, id_mandor, $event.target.value, id_anak_Kandang, id_strain_ayam, id_treatment, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <select v-model="id_kandang" @change="getPencatatan(1, id_mandor, $event.target.value, id_anak_Kandang, id_strain_ayam, id_treatment, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua Kandang 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -86,7 +86,7 @@
                                     <option>Belum ada Kandang</option>
                                 </template>
                             </select> 
-                            <select v-model="id_anak_kandang" @change="getPencatatan(currentPage, id_mandor, id_kandang, $event.target.value, id_strain_ayam, id_treatment, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <select v-model="id_anak_kandang" @change="getPencatatan(1, id_mandor, id_kandang, $event.target.value, id_strain_ayam, id_treatment, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua Anak Kandang 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -102,7 +102,7 @@
                                     <option>Belum ada Anak Kandang</option>
                                 </template>
                             </select> 
-                            <select v-model="id_strain_ayam" @change="getPencatatan(currentPage, id_mandor, id_kandang, id_anak_kandang, $event.target.value, id_treatment, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <select v-model="id_strain_ayam" @change="getPencatatan(1, id_mandor, id_kandang, id_anak_kandang, $event.target.value, id_treatment, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua Strain Ayam 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -118,7 +118,7 @@
                                     <option>Belum ada Strain Ayam</option>
                                 </template>
                             </select>
-                            <select v-model="id_treatment" @change="getPencatatan(currentPage, id_mandor, id_kandang, id_anak_kandang, id_strain_ayam, $event.target.value, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <select v-model="id_treatment" @change="getPencatatan(1, id_mandor, id_kandang, id_anak_kandang, id_strain_ayam, $event.target.value, id_jenis_pakan, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua Treatment 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -134,7 +134,7 @@
                                     <option>Belum ada Treatment</option>
                                 </template>
                             </select>
-                            <select v-model="id_jenis_pakan" @change="getPencatatan(currentPage, id_mandor, id_kandang, id_anak_kandang, id_strain_ayam, id_treatment, $event.target.value, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <select v-model="id_jenis_pakan" @change="getPencatatan(1, id_mandor, id_kandang, id_anak_kandang, id_strain_ayam, id_treatment, $event.target.value, is_archived)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua Jenis Pakan 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -187,65 +187,78 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
-                        <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index">
-                            <!-- <td>{{ item.id }}</td> -->
-                            <!-- <td>{{ item.id_kandang }}</td> -->
-                            <td>{{ item.kandang.nama }}</td>
-                            <td>{{ item.nama_anak_kandang }}</td>
-                            <td>{{ item.nama_mandor }}</td>
-                            <td class="status-warning">
-                                
-                                <span v-if="item.status == 'submitted'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
-                                        <path d="M11.8381 2.41663C17.2868 2.41663 21.7036 6.70708 21.7036 12C21.7036 17.2928 17.2868 21.5833 11.8381 21.5833C6.38943 21.5833 1.97266 17.2928 1.97266 12C1.97266 6.70708 6.38943 2.41663 11.8381 2.41663ZM11.8381 4.33329C9.74494 4.33329 7.73748 5.14103 6.25737 6.57881C4.77727 8.01659 3.94575 9.96663 3.94575 12C3.94575 14.0333 4.77727 15.9833 6.25737 17.4211C7.73748 18.8589 9.74494 19.6666 11.8381 19.6666C13.9313 19.6666 15.9388 18.8589 17.4189 17.4211C18.899 15.9833 19.7305 14.0333 19.7305 12C19.7305 9.96663 18.899 8.01659 17.4189 6.57881C15.9388 5.14103 13.9313 4.33329 11.8381 4.33329ZM11.8381 6.24996C12.0798 6.24999 12.313 6.33617 12.4936 6.49214C12.6741 6.64812 12.7895 6.86305 12.8178 7.09617L12.8247 7.20829V11.6032L15.4953 14.1974C15.6722 14.3699 15.7749 14.6013 15.7826 14.8447C15.7902 15.088 15.7022 15.3251 15.5364 15.5077C15.3707 15.6904 15.1396 15.8048 14.89 15.8279C14.6405 15.851 14.3913 15.781 14.193 15.632L14.1003 15.5525L11.1406 12.6775C10.9873 12.5284 10.8888 12.3344 10.8605 12.1255L10.8516 12V7.20829C10.8516 6.95413 10.9555 6.71037 11.1405 6.53065C11.3255 6.35093 11.5765 6.24996 11.8381 6.24996Z" fill="#D4780C"/>
-                                    </svg>
-                                    Menunggu persetujuan
-                                </span>
-                                <span v-else-if="item.status == 'accepted'">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
-                                    <g clip-path="url(#clip0_209_1058)">
-                                    <path d="M24 10L21.56 7.22004L21.9 3.54004L18.29 2.72004L16.4 -0.459961L13 1.00004L9.6 -0.459961L7.71 2.72004L4.1 3.53004L4.44 7.21004L2 10L4.44 12.78L4.1 16.47L7.71 17.29L9.6 20.47L13 19L16.4 20.46L18.29 17.28L21.9 16.46L21.56 12.78L24 10ZM11 15L7 11L8.41 9.59004L11 12.17L17.59 5.58004L19 7.00004L11 15Z" fill="#0FA958"/>
-                                    </g>
-                                    <defs>
-                                    <clipPath id="clip0_209_1058">
-                                        <rect width="28" height="24" fill="white"/>
-                                    </clipPath>
-                                    </defs>
-                                    </svg>
-                                    Disetujui
-                                </span>
-                                <span v-else>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
-                                        <path fill-rule="evenodd" clip-rule="evenodd" d="M17.5 9.75C17.5 14.5826 13.5826 18.5 8.75 18.5C3.91738 18.5 0 14.5826 0 9.75C0 4.91738 3.91738 1 8.75 1C13.5826 1 17.5 4.91738 17.5 9.75ZM5.34713 13.1529C5.26511 13.0708 5.21903 12.9596 5.21903 12.8436C5.21903 12.7276 5.26511 12.6163 5.34713 12.5343L8.13138 9.75L5.34713 6.96575C5.26743 6.88324 5.22333 6.77272 5.22433 6.65801C5.22533 6.5433 5.27134 6.43357 5.35245 6.35245C5.43357 6.27134 5.5433 6.22533 5.65801 6.22433C5.77272 6.22333 5.88324 6.26743 5.96575 6.34713L8.75 9.13138L11.5343 6.34713C11.6168 6.26743 11.7273 6.22333 11.842 6.22433C11.9567 6.22533 12.0664 6.27134 12.1475 6.35245C12.2287 6.43357 12.2747 6.5433 12.2757 6.65801C12.2767 6.77272 12.2326 6.88324 12.1529 6.96575L9.36862 9.75L12.1529 12.5343C12.2326 12.6168 12.2767 12.7273 12.2757 12.842C12.2747 12.9567 12.2287 13.0664 12.1475 13.1475C12.0664 13.2287 11.9567 13.2747 11.842 13.2757C11.7273 13.2767 11.6168 13.2326 11.5343 13.1529L8.75 10.3686L5.96575 13.1529C5.88371 13.2349 5.77245 13.281 5.65644 13.281C5.54043 13.281 5.42917 13.2349 5.34713 13.1529Z" fill="#F31422"/>
-                                    </svg>
-                                    Ditolak
-                                </span>
-                              
-                                <div id="myPopover" class="popover-content">
-                                    <div>
-                                        <p class="status-warning">Menunggu persetujuan</p>
-                                        <button class="btn btn-success w-100 mb-2">Setuju</button> <br>
-                                        <button class="btn btn-danger w-100">Tolak</button>
+                        <template v-if="isLoadingValidasiData">
+                            <tr>
+                                <td colspan="15" class="text-center">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner-border text-success" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="text-center" @click="getIdPencatatan(item.id)" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#first-modal">
-                                <a href="javascript:void(0)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18" fill="none">
-                                    <path d="M1.615 18C1.155 18 0.771 17.846 0.463 17.538C0.154333 17.2293 0 16.845 0 16.385V1.615C0 1.155 0.154333 0.771 0.463 0.463C0.771 0.154333 1.155 0 1.615 0H9.5L14 4.5V16.385C14 16.845 13.846 17.229 13.538 17.537C13.2293 17.8457 12.845 18 12.385 18H1.615ZM9 5H13L9 1V5Z" fill="#0FA958"/>
-                                    </svg>
-                                </a>
-                            </td>
-                            <td>
-                               {{ formatTanggalSubmit(item.tanggal_submit) }}
-                            </td>
-                        </tr>
+                                </td>
+                            </tr>
                         </template>
                         <template v-else>
-                            <tr>
-                                <td colspan="8" class="text-center">Tidak ada data</td>
+                            <template v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0">
+                            <tr v-for="(item, index) in dataPencatatan.responseData.data.items" :key="index">
+                                <!-- <td>{{ item.id }}</td> -->
+                                <!-- <td>{{ item.id_kandang }}</td> -->
+                                <td>{{ item.kandang.nama }}</td>
+                                <td>{{ item.nama_anak_kandang }}</td>
+                                <td>{{ item.nama_mandor }}</td>
+                                <td class="status-warning">
+                                    
+                                    <span v-if="item.status == 'submitted'">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
+                                            <path d="M11.8381 2.41663C17.2868 2.41663 21.7036 6.70708 21.7036 12C21.7036 17.2928 17.2868 21.5833 11.8381 21.5833C6.38943 21.5833 1.97266 17.2928 1.97266 12C1.97266 6.70708 6.38943 2.41663 11.8381 2.41663ZM11.8381 4.33329C9.74494 4.33329 7.73748 5.14103 6.25737 6.57881C4.77727 8.01659 3.94575 9.96663 3.94575 12C3.94575 14.0333 4.77727 15.9833 6.25737 17.4211C7.73748 18.8589 9.74494 19.6666 11.8381 19.6666C13.9313 19.6666 15.9388 18.8589 17.4189 17.4211C18.899 15.9833 19.7305 14.0333 19.7305 12C19.7305 9.96663 18.899 8.01659 17.4189 6.57881C15.9388 5.14103 13.9313 4.33329 11.8381 4.33329ZM11.8381 6.24996C12.0798 6.24999 12.313 6.33617 12.4936 6.49214C12.6741 6.64812 12.7895 6.86305 12.8178 7.09617L12.8247 7.20829V11.6032L15.4953 14.1974C15.6722 14.3699 15.7749 14.6013 15.7826 14.8447C15.7902 15.088 15.7022 15.3251 15.5364 15.5077C15.3707 15.6904 15.1396 15.8048 14.89 15.8279C14.6405 15.851 14.3913 15.781 14.193 15.632L14.1003 15.5525L11.1406 12.6775C10.9873 12.5284 10.8888 12.3344 10.8605 12.1255L10.8516 12V7.20829C10.8516 6.95413 10.9555 6.71037 11.1405 6.53065C11.3255 6.35093 11.5765 6.24996 11.8381 6.24996Z" fill="#D4780C"/>
+                                        </svg>
+                                        Menunggu persetujuan
+                                    </span>
+                                    <span v-else-if="item.status == 'accepted'">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="24" viewBox="0 0 28 24" fill="none">
+                                        <g clip-path="url(#clip0_209_1058)">
+                                        <path d="M24 10L21.56 7.22004L21.9 3.54004L18.29 2.72004L16.4 -0.459961L13 1.00004L9.6 -0.459961L7.71 2.72004L4.1 3.53004L4.44 7.21004L2 10L4.44 12.78L4.1 16.47L7.71 17.29L9.6 20.47L13 19L16.4 20.46L18.29 17.28L21.9 16.46L21.56 12.78L24 10ZM11 15L7 11L8.41 9.59004L11 12.17L17.59 5.58004L19 7.00004L11 15Z" fill="#0FA958"/>
+                                        </g>
+                                        <defs>
+                                        <clipPath id="clip0_209_1058">
+                                            <rect width="28" height="24" fill="white"/>
+                                        </clipPath>
+                                        </defs>
+                                        </svg>
+                                        Disetujui
+                                    </span>
+                                    <span v-else>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M17.5 9.75C17.5 14.5826 13.5826 18.5 8.75 18.5C3.91738 18.5 0 14.5826 0 9.75C0 4.91738 3.91738 1 8.75 1C13.5826 1 17.5 4.91738 17.5 9.75ZM5.34713 13.1529C5.26511 13.0708 5.21903 12.9596 5.21903 12.8436C5.21903 12.7276 5.26511 12.6163 5.34713 12.5343L8.13138 9.75L5.34713 6.96575C5.26743 6.88324 5.22333 6.77272 5.22433 6.65801C5.22533 6.5433 5.27134 6.43357 5.35245 6.35245C5.43357 6.27134 5.5433 6.22533 5.65801 6.22433C5.77272 6.22333 5.88324 6.26743 5.96575 6.34713L8.75 9.13138L11.5343 6.34713C11.6168 6.26743 11.7273 6.22333 11.842 6.22433C11.9567 6.22533 12.0664 6.27134 12.1475 6.35245C12.2287 6.43357 12.2747 6.5433 12.2757 6.65801C12.2767 6.77272 12.2326 6.88324 12.1529 6.96575L9.36862 9.75L12.1529 12.5343C12.2326 12.6168 12.2767 12.7273 12.2757 12.842C12.2747 12.9567 12.2287 13.0664 12.1475 13.1475C12.0664 13.2287 11.9567 13.2747 11.842 13.2757C11.7273 13.2767 11.6168 13.2326 11.5343 13.1529L8.75 10.3686L5.96575 13.1529C5.88371 13.2349 5.77245 13.281 5.65644 13.281C5.54043 13.281 5.42917 13.2349 5.34713 13.1529Z" fill="#F31422"/>
+                                        </svg>
+                                        Ditolak
+                                    </span>
+                                
+                                    <div id="myPopover" class="popover-content">
+                                        <div>
+                                            <p class="status-warning">Menunggu persetujuan</p>
+                                            <button class="btn btn-success w-100 mb-2">Setuju</button> <br>
+                                            <button class="btn btn-danger w-100">Tolak</button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center" @click="getIdPencatatan(item.id)" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#first-modal">
+                                    <a href="javascript:void(0)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18" fill="none">
+                                        <path d="M1.615 18C1.155 18 0.771 17.846 0.463 17.538C0.154333 17.2293 0 16.845 0 16.385V1.615C0 1.155 0.154333 0.771 0.463 0.463C0.771 0.154333 1.155 0 1.615 0H9.5L14 4.5V16.385C14 16.845 13.846 17.229 13.538 17.537C13.2293 17.8457 12.845 18 12.385 18H1.615ZM9 5H13L9 1V5Z" fill="#0FA958"/>
+                                        </svg>
+                                    </a>
+                                </td>
+                                <td>
+                                {{ formatTanggalSubmit(item.tanggal_submit) }}
+                                </td>
                             </tr>
+                            </template>
+                            <template v-else>
+                                <tr>
+                                    <td colspan="8" class="text-center">Tidak ada data</td>
+                                </tr>
+                            </template>
                         </template>
                     </tbody>
                     </table>
@@ -847,7 +860,13 @@
     const pageSize = ref(10);
     const totalItems = ref(0);
     const onClickHandler = (page) => {
-        getPencatatan(page);
+        // getPencatatan(page);
+        if(search.value == "") {
+            getPencatatan(currentPage.value, id_mandor.value, id_kandang.value, id_anak_kandang.value, id_strain_ayam.value, id_treatment.value, id_jenis_pakan.value, is_archived.value)
+        } else {
+            searchPencatatan(search.value);
+        }
+        
     };
 
     const schemas = [
@@ -896,6 +915,7 @@
     const is_archived = ref(0);
     const tanggal_submit = ref(null);
     const isLoading = ref(false);
+    const isLoadingValidasiData = ref(false);
 
     function nextStep(values) {
         if (currentStep.value === 3) {
@@ -1233,6 +1253,10 @@
     }
 
     async function getPencatatan(page_number, id_mandor = null, id_kandang = null, id_anak_kandang = null, id_strain_ayam = null, id_treatment = null, id_jenis_pakan = null, is_archived = null) {
+        isLoadingValidasiData.value = true;
+        if(page_number == 1) {
+            currentPage.value = 1;
+        }
         if(id_mandor == 0) {
             id_mandor = null;
         }
@@ -1278,11 +1302,13 @@
             },
         })
             .then(response => {
+                isLoadingValidasiData.value = false;
                 dataPencatatan.setResponseData(response.data);
                 totalItems.value = dataPencatatan.responseData ? dataPencatatan.responseData.data.total_record : 0;
                 console.log("Response Pencatatan : ", response);
             })
             .catch(error => {
+                isLoadingValidasiData.value = false;
                 console.error(error);
             });
     }
@@ -1356,6 +1382,14 @@
     }
 
     async function searchPencatatan(keyword) {
+        if(is_archived.value == 0) {
+            is_archived.value = false;
+        } else if(is_archived.value == 1) {
+            is_archived.value = true;
+        } else {
+            is_archived.value = null;
+        }
+        isLoadingValidasiData.value = true;
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         return axios.get(baseUrl + '/pencatatan', {
@@ -1364,14 +1398,19 @@
             },
             params: {
                 search_value: keyword.toLowerCase(),
+                is_archived: is_archived.value,
+                page_number: currentPage.value,
+                page_size: pageSize.value,
             },
         })
             .then(response => {
-                
+                isLoadingValidasiData.value = false;
                 dataPencatatan.setResponseData(response.data);
-                console.log(dataPencatatan.responseData);
+                totalItems.value = dataPencatatan.responseData ? dataPencatatan.responseData.data.total_record : 0;
+                console.log("Search: ", response);
             })
             .catch(error => {
+                isLoadingValidasiData.value = false;
                 console.error(error);
             });
     }

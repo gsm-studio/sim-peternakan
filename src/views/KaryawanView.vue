@@ -68,56 +68,69 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
-                                <tr v-for="(item, index) in dataKaryawan.responseData.data.items" :key="index" class="text-center">
-                                    <!-- <td>{{ item.id }}</td> -->
-                                    <td>{{ item.nama }}</td>
-                                    <td>{{ item.alamat }}</td>
-                                    <td>{{ item.email }}</td>
-                                    <td>
-                                        {{ item.nomor_telepon  }}
-                                    </td>
-                                    <!-- <td>
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none">
-                                            <path d="M2.57398 18C2.11398 18 1.72998 17.846 1.42198 17.538C1.11332 17.2293 0.958984 16.845 0.958984 16.385V1.615C0.958984 1.155 1.11332 0.771 1.42198 0.463C1.72998 0.154333 2.11398 0 2.57398 0H10.459L14.959 4.5V16.385C14.959 16.845 14.805 17.229 14.497 17.537C14.1883 17.8457 13.804 18 13.344 18H2.57398ZM9.95898 5H13.959L9.95898 1V5Z" fill="#0FA958"/>
-                                            </svg>
-                                    </td> -->
-                                    <!-- <td>
-                                        09  November 2023
-                                    </td> -->
-                                    <td>
-                                        
-                                        <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
-                                            <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
-                                            <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
-                                            <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
-                                            </svg>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
-                                            <template v-if="role == superadmin">
-                                                <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
-                                                <template v-if="item.id !== 39">
-                                                    <a @click="validasiDeleteKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
-                                                </template>
-                                            </template>
-                                            <template v-else-if="item.id !== 39">
-                                                <template v-if="getIdUser == item.id || getRoleName(item.user_roles) == 'Admin Kandang' || getRoleName(item.user_roles) == 'Anak Kandang'"> 
-                                                    <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a> 
-                                                </template>
-                                                <template v-if="getRoleName(item.user_roles) == 'Admin Kandang' || getRoleName(item.user_roles) == 'Anak Kandang'"> 
-                                                    <a @click="validasiDeleteKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
-                                                </template>
-                                            </template>
-                                            <!-- {{ getRoleName(item.user_roles) }} -->
+                            <template v-if="isLoading">
+                                <tr>
+                                    <td colspan="15" class="text-center">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="spinner-border text-success" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
                             </template>
-                            <tr v-else>
-                                <td colspan="6" class="text-center">No data available</td>
-                            </tr>
+                            <template v-else>
+                                <template v-if="dataKaryawan.responseData && dataKaryawan.responseData.data.items.length > 0">
+                                    <tr v-for="(item, index) in dataKaryawan.responseData.data.items" :key="index" class="text-center">
+                                        <!-- <td>{{ item.id }}</td> -->
+                                        <td>{{ item.nama }}</td>
+                                        <td>{{ item.alamat }}</td>
+                                        <td>{{ item.email }}</td>
+                                        <td>
+                                            {{ item.nomor_telepon  }}
+                                        </td>
+                                        <!-- <td>
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="18" viewBox="0 0 15 18" fill="none">
+                                                <path d="M2.57398 18C2.11398 18 1.72998 17.846 1.42198 17.538C1.11332 17.2293 0.958984 16.845 0.958984 16.385V1.615C0.958984 1.155 1.11332 0.771 1.42198 0.463C1.72998 0.154333 2.11398 0 2.57398 0H10.459L14.959 4.5V16.385C14.959 16.845 14.805 17.229 14.497 17.537C14.1883 17.8457 13.804 18 13.344 18H2.57398ZM9.95898 5H13.959L9.95898 1V5Z" fill="#0FA958"/>
+                                                </svg>
+                                        </td> -->
+                                        <!-- <td>
+                                            09  November 2023
+                                        </td> -->
+                                        <td>
+                                            
+                                            <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
+                                                <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
+                                                <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
+                                                <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
+                                                </svg>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
+                                                <template v-if="role == superadmin">
+                                                    <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                                    <template v-if="item.id !== 39">
+                                                        <a @click="validasiDeleteKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                                                    </template>
+                                                </template>
+                                                <template v-else-if="item.id !== 39">
+                                                    <template v-if="getIdUser == item.id || getRoleName(item.user_roles) == 'Admin Kandang' || getRoleName(item.user_roles) == 'Anak Kandang'"> 
+                                                        <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a> 
+                                                    </template>
+                                                    <template v-if="getRoleName(item.user_roles) == 'Admin Kandang' || getRoleName(item.user_roles) == 'Anak Kandang'"> 
+                                                        <a @click="validasiDeleteKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                                                    </template>
+                                                </template>
+                                                <!-- {{ getRoleName(item.user_roles) }} -->
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <tr v-else>
+                                    <td colspan="6" class="text-center">No data available</td>
+                                </tr>
+                            </template>
                         </tbody>
                         <!-- <tbody v-else>
                             <tr>
@@ -301,7 +314,7 @@
     const onClickHandler = (page) => {
         getKaryawan(page);
     };
-
+    const isLoading = ref(false);
     // const { karyawanList } = storeToRefs(dataKaryawan);
     // const { roleList } = storeToRefs(dataRole);
 
@@ -337,11 +350,13 @@
 
     function clearSearch() {
         search.value = '';
+        currentPage.value = 1;
         getKaryawan(1);
     }
 
     function searchItem() {
         console.log(search.value);
+        currentPage.value = 1;
         searchKaryawan(search.value);
     }
 
@@ -359,6 +374,7 @@
     }
 
     async function getKaryawan(page_number) {
+        isLoading.value = true;
         getRole();
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
@@ -373,11 +389,13 @@
             },
         })
             .then(response => {
+                isLoading.value = false;
                 dataKaryawan.setResponseData(response.data);
                 totalItems.value = dataKaryawan.responseData ? dataKaryawan.responseData.data.total_record : 0;
                 console.log("Daftar Karyawan", dataKaryawan.responseData.data.items);
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }
@@ -530,6 +548,7 @@
     }
 
     async function searchKaryawan(keyword) {
+        isLoading.value = true;
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         return axios.get(baseUrl + '/karyawan', {
@@ -538,14 +557,18 @@
             },
             params: {
                 search_value: keyword.toLowerCase(),
+                page_number: 1,
+                page_size: pageSize.value,
             },
         })
             .then(response => {
-                
+                isLoading.value = false;
                 dataKaryawan.setResponseData(response.data);
+                totalItems.value = dataKaryawan.responseData ? dataKaryawan.responseData.data.total_record : 0;
                 console.log(dataKaryawan.responseData);
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }

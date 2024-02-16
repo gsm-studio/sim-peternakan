@@ -80,15 +80,37 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <template v-if="dataHistory.responseData">
-                                <tr class="text-center" v-for="(item, index) in dataHistory.responseData.data.items" :key="index">
-                                
-                                    <td>{{ item.karyawan.nama }}</td>
-                                    <td>{{ item.action }}</td>
-                                    <td>{{ item.deskripsi }}</td>
-                                    <td>{{ formatTanggal(item.created_at) }}</td>
-
+                            <template v-if="isLoading">
+                                <tr>
+                                    <td colspan="15" class="text-center">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="spinner-border text-success" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </td>
                                 </tr>
+                            </template>
+                            <template v-else>
+                                <template v-if="dataHistory.responseData && dataHistory.responseData.data.total_record > 0">
+                                    <tr class="text-center" v-for="(item, index) in dataHistory.responseData.data.items" :key="index">
+                                    
+                                        <td>{{ item.karyawan.nama }}</td>
+                                        <td>{{ item.action }}</td>
+                                        <td>{{ item.deskripsi }}</td>
+                                        <td>{{ formatTanggal(item.created_at) }}</td>
+
+                                    </tr>
+                                </template>
+                                <template v-else>
+                                    <tr>
+                                        <td colspan="15" class="text-center">
+                                            <div class="d-flex justify-content-center">
+                                                <p>Data tidak ditemukan</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
                             </template>
                         </tbody>
                     </table>
@@ -126,11 +148,16 @@
     const totalItems = ref(0);
     const idKaryawan = ref(0);
     const onClickHandler = (page) => {
-        getHistory(page, idKaryawan.value);
+        if(search.value != "") {
+            searchHistory(search.value);
+        } else {
+            getHistory(page, idKaryawan.value);
+        }
     };
     const formatTanggal = (tanggal) => {
         return moment(tanggal).format('DD-MM-YYYY');
     }
+    const isLoading = ref(false);
     let search = ref("");
 
     onMounted(() => {
@@ -141,6 +168,8 @@
 
     function clearSearch() {
         search.value = '';
+        idKaryawan.value = 0;
+        currentPage.value = 1;
         getHistory(1, idKaryawan.value);
     }
 
@@ -151,6 +180,7 @@
 
 
     async function getHistory(page_number, id_karyawan = null) {
+        isLoading.value = true;
         if(id_karyawan == 0) {
             id_karyawan = null;
         }
@@ -167,16 +197,19 @@
             },
         })
             .then(response => {
+                isLoading.value = false;
                 dataHistory.setResponseData(response.data);
                 totalItems.value = dataHistory.responseData ? dataHistory.responseData.data.total_record : 0;
                 console.log(response);
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }
 
     async function searchHistory(keyword) {
+        isLoading.value = true;
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         return axios.get(baseUrl + '/user_histories', {
@@ -185,13 +218,18 @@
             },
             params: {
                 search_value: keyword.toLowerCase(),
+                page_number: 1,
+                page_size: pageSize.value,
             },
         })
             .then(response => {
+                isLoading.value = false;
                 dataHistory.setResponseData(response.data);
-                console.log(dataHistory.responseData);
+                totalItems.value = dataHistory.responseData ? dataHistory.responseData.data.total_record : 0;
+                console.log("Response Search: ", response);
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }

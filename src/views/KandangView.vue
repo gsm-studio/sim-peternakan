@@ -38,7 +38,7 @@
                         Filter
                         </button>
                         <div class="dropdown-menu dropdown-menu-start p-3 shadow">
-                            <select v-model="id_mandor" @change="getKandang($event.target.value, id_anak_kandang)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <select v-model="id_mandor" @change="getKandang(1, $event.target.value, id_anak_kandang)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua Mandor 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -54,7 +54,7 @@
                                     <option>Belum ada karyawan</option>
                                 </template>
                             </select> 
-                            <select v-model="id_anak_kandang" @change="getKandang(id_mandor, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
+                            <select v-model="id_anak_kandang" @change="getKandang(1, id_mandor, $event.target.value)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                 <option value="0" selected> 
                                     Semua Anak Kandang 
                                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
@@ -104,35 +104,48 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-if="dataKandang.responseData && dataKandang.responseData.data.items.length > 0">
-                            <tr v-for="item in dataKandang.responseData.data.items" :key="item.id" class="text-center">
-                                <td>{{ item.urutan }}</td>
-                                <td>{{ item.nama }}</td>
-                                <td>{{ item.nama_anak_kandang }}</td>
-                                <td>{{ item.nama_mandor }}</td>
-                                <td>{{ item.populasi_awal }}</td>
-                                <td>{{ item.populasi_total }}</td>
-                                <td>{{ item.alamat }}</td>
-                                <td>
-                                    <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
-                                        <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
-                                        <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
-                                        <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
-                                        </svg>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdKandang(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
-                                        <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKandang(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
-                                        <a data-bs-toggle="modal" data-bs-target="#resetModal" @click="getIdKandang(item.id)" class="dropdown-item" href="javascript:void(0)">Reset</a>
-                                        <a @click="deleteKandang(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                        <template v-if="isLoading">
+                            <tr>
+                                <td colspan="15" class="text-center">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner-border text-success" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
                         </template>
-                        <tr v-else>
-                            <td colspan="6" class="text-center">No data available</td>
-                        </tr>
+                        <template v-else>
+                            <template v-if="dataKandang.responseData && dataKandang.responseData.data.items.length > 0">
+                                <tr v-for="item in dataKandang.responseData.data.items" :key="item.id" class="text-center">
+                                    <td>{{ item.urutan }}</td>
+                                    <td>{{ item.nama }}</td>
+                                    <td>{{ item.nama_anak_kandang }}</td>
+                                    <td>{{ item.nama_mandor }}</td>
+                                    <td>{{ item.populasi_awal }}</td>
+                                    <td>{{ item.populasi_total }}</td>
+                                    <td>{{ item.alamat }}</td>
+                                    <td>
+                                        <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
+                                            <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
+                                            <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
+                                            <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
+                                            </svg>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdKandang(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
+                                            <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKandang(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                            <a data-bs-toggle="modal" data-bs-target="#resetModal" @click="getIdKandang(item.id)" class="dropdown-item" href="javascript:void(0)">Reset</a>
+                                            <a @click="deleteKandang(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                            <tr v-else>
+                                <td colspan="7" class="text-center">No data available</td>
+                            </tr>
+                        </template>
                     </tbody>
                     </table>
                 </div>
@@ -390,9 +403,10 @@
     const id_mandor = ref(0);
     const id_anak_kandang = ref(0);
     const onClickHandler = (page) => {
-        getKandang();
+        getKandang(currentPage.value, id_mandor.value, id_anak_kandang.value);
         
     };
+    const isLoading = ref(false);
     const formatTanggal = (tanggal) => {
         return moment(tanggal).format('DD-MM-YYYY');
     }
@@ -428,7 +442,7 @@
         search.value = '';
         id_mandor.value = 0;
         id_anak_kandang.value = 0;
-        getKandang(null, null);
+        getKandang(1, null, null);
     }
 
     function searchItem() {
@@ -450,7 +464,11 @@
         
     }
 
-    async function getKandang(id_mandor, id_anak_kandang) {
+    async function getKandang(page_number, id_mandor, id_anak_kandang) {
+        isLoading.value = true;
+        if (page_number) {
+            currentPage.value = page_number;
+        }
         if (id_mandor == 0) {
             id_mandor = null;
         }
@@ -474,11 +492,13 @@
             },
         })
             .then(response => {
+                isLoading.value = false;
                 dataKandang.setResponseData(response.data);
                 totalItems.value = dataKandang.responseData ? dataKandang.responseData.data.total_record : 0;
-                console.log("Daftar Kandang : ", dataKandang.responseData.data.items);
+                console.log("Response Kandang : ", response);
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }
@@ -668,6 +688,7 @@
     }
 
     async function searchKandang(keyword) {
+        isLoading.value = true;
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         return axios.get(baseUrl + '/kandang', {
@@ -676,14 +697,19 @@
             },
             params: {
                 search_value: keyword.toLowerCase(),
+                page_number: currentPage.value,
+                page_size: pageSize.value,
+                column_sorting: 'urutan asc',
             },
         })
             .then(response => {
-                
+                isLoading.value = false;
                 dataKandang.setResponseData(response.data);
+                totalItems.value = dataKandang.responseData ? dataKandang.responseData.data.total_record : 0;
                 console.log(dataKandang.responseData);
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }

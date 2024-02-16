@@ -127,47 +127,60 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-if="dataStandart.responseData && dataStandart.responseData.data.items.length > 0">
-                            <tr class="text-center" v-for="(item, index) in dataStandart.responseData.data.items" :key="index">
-                                <td>{{ item.strain_ayam.nama }}</td>
-                                <td>{{ item.umur }}</td>
-                                <td>{{ item.nilai_hd }}</td>
-                                <td>{{ item.nilai_bb }}</td>
-                                <td>
-                                    {{ item.nilai_bt }}
-                                </td>
-                                <td>
-                                    {{ item.nilai_fi }}
-                                </td>
-                                <td>
-                                    {{ item.nilai_fc }}
-                                </td>
-                                <td>
-                                    {{ item.egg_mass }}
-                                </td>
-                                <td>
-                                    {{ item.deskripsi }}
-                                </td>
-                                <td>     
-                                     <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
-                                        <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
-                                        <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
-                                        <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
-                                        </svg>
-                                    </a>
-                                    <div class="dropdown-menu dropdown-menu-end">
-                                        <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdStandart(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
-                                        <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdStandart(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
-                                        <a @click="deleteStandart(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                        <template v-if="isLoading">
+                            <tr>
+                                <td colspan="15" class="text-center">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner-border text-success" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>
                         </template>
                         <template v-else>
-                            <tr class="row-validasi text-center">
-                                <td colspan="9">Data tidak ditemukan</td>
-                            </tr>
+                            <template v-if="dataStandart.responseData && dataStandart.responseData.data.items.length > 0">
+                                <tr class="text-center" v-for="(item, index) in dataStandart.responseData.data.items" :key="index">
+                                    <td>{{ item.strain_ayam.nama }}</td>
+                                    <td>{{ item.umur }}</td>
+                                    <td>{{ item.nilai_hd }}</td>
+                                    <td>{{ item.nilai_bb }}</td>
+                                    <td>
+                                        {{ item.nilai_bt }}
+                                    </td>
+                                    <td>
+                                        {{ item.nilai_fi }}
+                                    </td>
+                                    <td>
+                                        {{ item.nilai_fc }}
+                                    </td>
+                                    <td>
+                                        {{ item.egg_mass }}
+                                    </td>
+                                    <td>
+                                        {{ item.deskripsi }}
+                                    </td>
+                                    <td>     
+                                        <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
+                                            <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
+                                            <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
+                                            <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
+                                            </svg>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-end">
+                                            <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdStandart(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
+                                            <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdStandart(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                            <a @click="deleteStandart(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                            <template v-else>
+                                <tr class="row-validasi text-center">
+                                    <td colspan="9">Data tidak ditemukan</td>
+                                </tr>
+                            </template>
                         </template>
                     </tbody>
                     </table>
@@ -337,6 +350,7 @@
 
     const namaStrain = ref('');
     const idStrain = ref(0);
+    const isLoading = ref(false);
 
     const onClickHandler = (page) => {
         getStandart(page, idStrain.value);
@@ -367,6 +381,7 @@
 
     function clearSearch() {
         search.value = '';
+        idStrain.value = 0;
         getStandart(1, null);
     }
 
@@ -401,6 +416,7 @@
     }
 
     async function getStandart(page_number, id_strain_ayam = null) {
+        isLoading.value = true;
         if(id_strain_ayam == 0) {
             id_strain_ayam = null;
         }
@@ -421,12 +437,14 @@
             },
         })
             .then(response => {
+                isLoading.value = false;
                 dataStandart.setResponseData(response.data);
                 totalItems.value = dataStandart.responseData ? dataStandart.responseData.data.total_record : 0;
                 console.log(response);
                 console.log(currentPage.value);
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }    
@@ -565,6 +583,7 @@
     }
 
     async function searchStandart(keyword) {
+        isLoading.value = true;
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         return axios.get(baseUrl + '/standar_pemeliharaan', {
@@ -573,13 +592,18 @@
             },
             params: {
                 search_value: keyword.toLowerCase(),
+                page_number: currentPage.value,
+                page_size: pageSize.value,
             },
         })
             .then(response => {
+                isLoading.value = false;
                 dataStandart.setResponseData(response.data);
+                totalItems.value = dataStandart.responseData ? dataStandart.responseData.data.total_record : 0;
                 console.log(dataStandart.responseData);
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }

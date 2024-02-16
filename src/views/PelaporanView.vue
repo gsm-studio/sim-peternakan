@@ -203,111 +203,124 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-if="dataPelaporan.responseData && dataPelaporan.responseData.data.items.length > 0">
-                        <tr v-for="(item, index) in dataPelaporan.responseData.data.items" :key="index" class="text-center">
-                            <td>{{ formatTanggalSubmit(item.tanggal_submit) }}</td>
-                            <td>{{ item.nama_kandang }}</td>
-                            <td>{{ item.usia_mgg }}</td>
-                            
-                            <td>{{ item.jumlah_mati }}</td>
-                            <td>{{ item.jumlah_afkir }}</td>
-                            <td>{{ item.jumlah_pindah }}</td>
-                            <td>{{ item.jumlah_terima }}</td>
-
-                            <td>{{ item.populasi_total }}</td>
-
-                            <td>{{ item.telur_utuh }}</td>
-                            <td>{{ item.telur_bentes }}</td>
-                            <td>{{ item.total_telur }}</td>
-                            <td>{{ item.percentase_telur }}</td>
-                            <td>{{ item.avg_berat_telur_gr }}</td>
-
-                            <td>{{ item.berat_telur_utuh_kg }}</td>
-                            <td>{{ item.berat_telur_bentes_kg }}</td>
-                            <td>{{ item.berat_telur_kg }}</td>
-
-                            <td>{{ item.std_nilai_hd }}</td>
-                            <td>{{ item.std_berat_telur }}</td>
-
-                            <td>{{ item.berat_pakan_per_ekor_gram }}</td>
-                            <td>{{ item.berat_pakan }}</td>
-                            <td>{{ item.nama_jenis_pakan }}</td>
-
-                            <td>{{ item.std_gr_perekor }}</td>
-
-                            <td>{{ item.fc }}</td>
-
-                            <td>{{ item.std_fc }}</td>
-
-                            <td>{{ item.egg_mass }}</td>
-
-                            <td>{{ item.nama_strain_ayam }}</td>
-
-                            <td>{{ item.nama_treatment }}</td>
-                          
-                        
-                        </tr>
-                        <tr class="row-total">
-                             <td colspan="2">Total</td>
-                             <td>   </td>
-                             <!-- <td>{{ dataPelaporan.responseData.data.items[0].sumall_usia_mgg ?? 0 }}</td> -->
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_terima ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_populasi_total ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_telur_utuh ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_telur_bentes ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_total_telur ?? 0 }}</td>
-                             <td></td>
-                             <td></td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_telur_utuh_kg ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_telur_bentes_kg ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_telur_kg ?? 0 }}</td>
-                             <td></td>
-                             <td></td>
-                             <td></td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_pakan ?? 0 }}</td>
-                             <td></td>
-                             <td></td>
-                             <td></td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_std_fc ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0 }}</td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr class="row-rata">
-                             <td colspan="2">Rata - rata</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0 }}</td>
-                             <td colspan="3"></td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_populasi_total ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_telur_utuh ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_percentase_telur ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0 }}</td>
-                             <td></td>
-                             <td></td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_pakan_per_ekor_gram ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_pakan ?? 0 }}</td>
-                             <td></td>
-                             <td></td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_fc ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_std_fc ?? 0 }}</td>
-                             <td>{{ dataPelaporan.responseData.data.items[0].avg_egg_mass ?? 0 }}</td>
-                             <td></td>
-                             <td></td>
-                        </tr>
+                        <template v-if="isLoading">
+                            <tr>
+                                <td colspan="15" class="text-center">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner-border text-success" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
                         </template>
                         <template v-else>
-                            <tr>
-                                <td colspan="27" class="text-center">Data tidak ditemukan</td>
+                            <template v-if="dataPelaporan.responseData && dataPelaporan.responseData.data.items.length > 0">
+                            <tr v-for="(item, index) in dataPelaporan.responseData.data.items" :key="index" class="text-center">
+                                <td>{{ formatTanggalSubmit(item.tanggal_submit) }}</td>
+                                <td>{{ item.nama_kandang }}</td>
+                                <td>{{ item.usia_mgg }}</td>
+                                
+                                <td>{{ item.jumlah_mati }}</td>
+                                <td>{{ item.jumlah_afkir }}</td>
+                                <td>{{ item.jumlah_pindah }}</td>
+                                <td>{{ item.jumlah_terima }}</td>
+
+                                <td>{{ item.populasi_total }}</td>
+
+                                <td>{{ item.telur_utuh }}</td>
+                                <td>{{ item.telur_bentes }}</td>
+                                <td>{{ item.total_telur }}</td>
+                                <td>{{ item.percentase_telur }}</td>
+                                <td>{{ item.avg_berat_telur_gr }}</td>
+
+                                <td>{{ item.berat_telur_utuh_kg }}</td>
+                                <td>{{ item.berat_telur_bentes_kg }}</td>
+                                <td>{{ item.berat_telur_kg }}</td>
+
+                                <td>{{ item.std_nilai_hd }}</td>
+                                <td>{{ item.std_berat_telur }}</td>
+
+                                <td>{{ item.berat_pakan_per_ekor_gram }}</td>
+                                <td>{{ item.berat_pakan }}</td>
+                                <td>{{ item.nama_jenis_pakan }}</td>
+
+                                <td>{{ item.std_gr_perekor }}</td>
+
+                                <td>{{ item.fc }}</td>
+
+                                <td>{{ item.std_fc }}</td>
+
+                                <td>{{ item.egg_mass }}</td>
+
+                                <td>{{ item.nama_strain_ayam }}</td>
+
+                                <td>{{ item.nama_treatment }}</td>
+                            
+                            
                             </tr>
-                        </template> 
+                            <tr class="row-total">
+                                <td colspan="2">Total</td>
+                                <td>   </td>
+                                <!-- <td>{{ dataPelaporan.responseData.data.items[0].sumall_usia_mgg ?? 0 }}</td> -->
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_terima ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_populasi_total ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_telur_utuh ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_telur_bentes ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_total_telur ?? 0 }}</td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_telur_utuh_kg ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_telur_bentes_kg ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_telur_kg ?? 0 }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_pakan ?? 0 }}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_std_fc ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0 }}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="row-rata">
+                                <td colspan="2">Rata - rata</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0 }}</td>
+                                <td colspan="3"></td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_populasi_total ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_telur_utuh ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_percentase_telur ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0 }}</td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_pakan_per_ekor_gram ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_pakan ?? 0 }}</td>
+                                <td></td>
+                                <td></td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_fc ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_std_fc ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].avg_egg_mass ?? 0 }}</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            </template>
+                            <template v-else>
+                                <tr>
+                                    <td colspan="27" class="text-center">Data tidak ditemukan</td>
+                                </tr>
+                            </template> 
+                        </template>
                     </tbody>
                     </table>
                 </div>
@@ -350,6 +363,7 @@
     const is_archived = ref(0);
     const id_kategori_kandang = ref(0);
     const id_treatment = ref(0);
+    const isLoading = ref(false);
 
     const idKandang = ref(0);
     const date = ref(0);
@@ -372,7 +386,6 @@
         return moment(tanggal).format('YYYY-MM-DD');
     }
     const doc = new jsPDF("l", "px", [595, 2000]); 
-
 
     onMounted(() => {
         rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
@@ -673,6 +686,7 @@
     }
 
     async function getPelaporan(is_archived, id_kandang, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, startDate, endDate) {
+        isLoading.value = true;
         if (id_kandang == 0) {
             id_kandang = null;
         }
@@ -713,10 +727,12 @@
             },
         })
             .then(response => {
+                isLoading.value = false;
                 dataPelaporan.setResponseData(response.data);
                 console.log("Data JSON Laporan : ", dataPelaporan.exportData.items);
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }

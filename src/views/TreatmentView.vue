@@ -77,31 +77,44 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <template v-if="dataTreatment.responseData && dataTreatment.responseData.data.items.length > 0">
-                                <tr v-for="(item, index) in dataTreatment.responseData.data.items" :key="index" class="text-center">
-                                    <!-- <td>{{ item.id }}</td> -->
-                                    <td>{{ item.nama }}</td>
-                                    <td>{{ item.is_treatment ? "Ya" : "Tidak" }}</td>
-                                    <td>{{ item.deskripsi }}</td>
-                                    <td>
-                                        <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
-                                            <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
-                                            <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
-                                            <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
-                                            </svg>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-end">
-                                            <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdTreatment(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
-                                            <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdTreatment(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
-                                            <a @click="deleteTreatment(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                            <template v-if="isLoading">
+                                <tr>
+                                    <td colspan="15" class="text-center">
+                                        <div class="d-flex justify-content-center">
+                                            <div class="spinner-border text-success" role="status">
+                                                <span class="visually-hidden">Loading...</span>
+                                            </div>
                                         </div>
                                     </td>
                                 </tr>
                             </template>
-                            <tr v-else>
-                                <td colspan="6" class="text-center">No data available</td>
-                            </tr>
+                            <template v-else> 
+                                <template v-if="dataTreatment.responseData && dataTreatment.responseData.data.items.length > 0">
+                                    <tr v-for="(item, index) in dataTreatment.responseData.data.items" :key="index" class="text-center">
+                                        <!-- <td>{{ item.id }}</td> -->
+                                        <td>{{ item.nama }}</td>
+                                        <td>{{ item.is_treatment ? "Ya" : "Tidak" }}</td>
+                                        <td>{{ item.deskripsi }}</td>
+                                        <td>
+                                            <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
+                                                <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
+                                                <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
+                                                <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
+                                                </svg>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-end">
+                                                <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdTreatment(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
+                                                <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdTreatment(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                                <a @click="deleteTreatment(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </template>
+                                <tr v-else>
+                                    <td colspan="6" class="text-center">No data available</td>
+                                </tr>
+                            </template>
                         </tbody>
                         <!-- <tbody v-else>
                             <tr>
@@ -243,9 +256,14 @@
     const pageSize = ref(10);
     const totalItems = ref(0);
     const onClickHandler = (page) => {
-        getTreatment(page);
+        if (search.value != '') {
+            searchTreatment(page, search.value);
+        } else {
+            getTreatment(page, isTreatment.value);
+        }
     };
     const isTreatment = ref(0);
+    const isLoading = ref(false);
 
     onMounted(() => {
         getTreatment(1)
@@ -272,12 +290,13 @@
     function clearSearch() {
         search.value = '';
         isTreatment.value = 0;
+        currentPage.value = 1;
         getTreatment(1);
     }
 
     function searchItem() {
         console.log(search.value);
-        searchTreatment(search.value);
+        searchTreatment(currentPage.value, search.value);
     }
 
     function closeModal() {
@@ -294,6 +313,7 @@
     }
 
     async function getTreatment(page_number, is_treatment = null) {
+        isLoading.value = true;
         if(is_treatment == 0) {
             is_treatment = null;
         }
@@ -311,10 +331,12 @@
             },
         })
             .then(response => {
+                isLoading.value = false;
                 dataTreatment.setResponseData(response.data);
                 totalItems.value = dataTreatment.responseData ? dataTreatment.responseData.data.total_record : 0;
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }
@@ -413,7 +435,11 @@
             });
     }
 
-    async function searchTreatment(keyword) {
+    async function searchTreatment(page_number, keyword) {
+        if(isTreatment.value == 0) {
+            isTreatment.value = null;
+        }
+        isLoading.value = true;
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         return axios.get(baseUrl + '/tugas', {
@@ -422,13 +448,19 @@
             },
             params: {
                 search_value: keyword.toLowerCase(),
+                page_number: page_number,
+                page_size: pageSize.value,
+                is_treatment: isTreatment.value,
             },
         })
             .then(response => {
+                isLoading.value = false;
                 dataTreatment.setResponseData(response.data);
-                console.log(dataTreatment.responseData);
+                totalItems.value = dataTreatment.responseData ? dataTreatment.responseData.data.total_record : 0;
+                console.log("Response Search: ", response);
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }

@@ -76,37 +76,50 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <template v-if="dataPenjadwalan.responseData && dataPenjadwalan.responseData.data.items.length > 0">
-                        <tr v-for="item in dataPenjadwalan.responseData.data.items" :key="item.id">
-                            <!-- <td>{{ item.id }}</td> -->
-                            <td>{{ item.tugas.nama }}</td>
-                            <td>{{ item.kandang ? item.kandang.nama : "Semua Kandang" }}</td>
-                            <td>{{ formatTanggal(item.waktu_pelaksanaan) }}</td>
-                            <td>{{ item.penanggungjawab }}</td>
-                            <td>{{ item.pelaksana }}</td>
-                            <td>{{ item.deskripsi }}</td>
-                            <td>
-                                <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
-                                    <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
-                                    <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
-                                    <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
-                                    </svg>
-                                </a>
-                                <div class="dropdown-menu dropdown-menu-end">
-                                    <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdPenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
-                                    <template v-if="role == adminKantor || role == superadmin">
-                                        <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdPenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
-                                        <a @click="deletePenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
-                                    </template>
-                                </div>
-                            </td>
-                        </tr>
-                        </template>
-                        <template v-else>
+                        <template v-if="isLoading">
                             <tr>
-                                <td colspan="7" class="text-center">No Data Available</td>
+                                <td colspan="15" class="text-center">
+                                    <div class="d-flex justify-content-center">
+                                        <div class="spinner-border text-success" role="status">
+                                            <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                    </div>
+                                </td>
                             </tr>
+                        </template>
+                        <template v-else> 
+                            <template v-if="dataPenjadwalan.responseData && dataPenjadwalan.responseData.data.items.length > 0">
+                            <tr v-for="item in dataPenjadwalan.responseData.data.items" :key="item.id">
+                                <!-- <td>{{ item.id }}</td> -->
+                                <td>{{ item.tugas.nama }}</td>
+                                <td>{{ item.kandang ? item.kandang.nama : "Semua Kandang" }}</td>
+                                <td>{{ formatTanggal(item.waktu_pelaksanaan) }}</td>
+                                <td>{{ item.penanggungjawab }}</td>
+                                <td>{{ item.pelaksana }}</td>
+                                <td>{{ item.deskripsi }}</td>
+                                <td>
+                                    <a data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="29" height="6" viewBox="0 0 29 6" fill="none">
+                                        <circle cx="2.5" cy="3" r="2.5" fill="#797979"/>
+                                        <circle cx="14.5" cy="3" r="2.5" fill="#797979"/>
+                                        <circle cx="26.5" cy="3" r="2.5" fill="#797979"/>
+                                        </svg>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-end">
+                                        <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdPenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
+                                        <template v-if="role == adminKantor || role == superadmin">
+                                            <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdPenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
+                                            <a @click="deletePenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
+                                        </template>
+                                    </div>
+                                </td>
+                            </tr>
+                            </template>
+                            <template v-else>
+                                <tr>
+                                    <td colspan="7" class="text-center">No Data Available</td>
+                                </tr>
+                            </template>
                         </template>
                     </tbody>
                     </table>
@@ -284,6 +297,7 @@
     const currentPage = ref(1);
     const pageSize = ref(10);
     const totalItems = ref(0);
+    const isLoading = ref(false);
 
     const onClickHandler = (page) => {
         getPenjadwalan(page);
@@ -311,7 +325,7 @@
 
     function searchItem() {
         console.log(search.value);
-        searchPenjadwalan(search.value);
+        searchPenjadwalan(1, search.value);
     }
 
     function alert(icon, title) {
@@ -356,9 +370,11 @@
             },
         })
             .then(response => {
+               
                 dataTugas.setResponseData(response.data);
             })
             .catch(error => {
+                
                 console.error(error);
             });
     }
@@ -416,6 +432,7 @@
     }
 
     async function getPenjadwalan() {
+        isLoading.value = true;
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         // console.log(JSON.parse(token).token);
@@ -430,11 +447,13 @@
             },
         })
             .then(response => {
+                isLoading.value = false;
                 dataPenjadwalan.setResponseData(response.data);
                 totalItems.value = dataPenjadwalan.responseData ? dataPenjadwalan.responseData.data.total_record : 0;
                 console.log(dataPenjadwalan.responseData.data);
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }
@@ -551,7 +570,8 @@
             });
     }
 
-    async function searchPenjadwalan(keyword) {
+    async function searchPenjadwalan(page_number, keyword) {
+        isLoading.value = true;
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         return axios.get(baseUrl + '/penjadwalan', {
@@ -560,13 +580,18 @@
             },
             params: {
                 search_value: keyword.toLowerCase(),
+                page_number: page_number,
+                page_size: pageSize.value
             },
         })
             .then(response => {
+                isLoading.value = false;
                 dataPenjadwalan.setResponseData(response.data);
+                totalItems.value = dataPenjadwalan.responseData ? dataPenjadwalan.responseData.data.total_record : 0;
                 console.log(dataPenjadwalan.responseData);
             })
             .catch(error => {
+                isLoading.value = false;
                 console.error(error);
             });
     }
