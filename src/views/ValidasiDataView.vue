@@ -762,7 +762,10 @@
 
                             <button type="submit" class="ms-3 btn btn-success bg-button-rossa" v-if="currentStep !== 3">Next</button>
 
-                            <button type="submit" class="ms-3 btn btn-success bg-button-rossa" v-if="currentStep === 3">Finish</button>
+                            <button type="submit" class="ms-3 btn btn-success bg-button-rossa" v-if="currentStep === 3" :disabled="isSubmitting">
+                                Finish
+                                <span v-show="isSubmitting" class="spinner-border spinner-border-sm mr-1"></span>
+                            </button>
                         </div>
                     
                     </Form>
@@ -859,6 +862,7 @@
     const currentPage = ref(1);
     const pageSize = ref(10);
     const totalItems = ref(0);
+    const isSubmitting = ref(false);
     const onClickHandler = (page) => {
         // getPencatatan(page);
         if(search.value == "") {
@@ -1174,6 +1178,7 @@
     }
 
     async function onUpdateSubmit(values) {
+        isSubmitting.value = true;
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         const { tanggal_submit, usia_hari, usia_mgg, nama_kandang, id_anak_kandang, nama_mandor, strain_ayam, mati, afkir, jumlah_pindah, id_kandang_pengirim, jumlah_terima, id_kandang_tujuan, jml_telur_utuh, jml_telur_bentes, berat_telur_utuh, berat_telur_bentes, jenis_pakan, jenis_treatment, berat_pakan, catatan } = values;
@@ -1206,12 +1211,14 @@
             },
         })
             .then(response => {
+                isSubmitting.value = false;
                 console.log(response);
                 alert('success', 'Data pencatatan berhasil diubah');
                 getPencatatan(currentPage.value);
                 closeModal();
             })
             .catch(error => {
+                isSubmitting.value = false;
                 alert('error', error.response.data.message);
                 console.error(error);
             });
