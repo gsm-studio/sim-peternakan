@@ -385,8 +385,7 @@
     const formatTanggalSubmit = (tanggal) => {
         return moment(tanggal).format('YYYY-MM-DD');
     }
-    const doc = new jsPDF("l", "px", [595, 2000]); 
-
+   
     onMounted(() => {
         rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(selectedDate.value[1]).format("YYYY-MM-DD");
@@ -570,19 +569,14 @@
         } else {
             namaKandang.value = dataKandang.responseData.data.items.find(item => item.id == idKandang.value).nama;
         }
+        
+        const doc = new jsPDF("l", "px", [595, 2000]); 
+
         doc.setFontSize(24);
         doc.text(`Nama Kandang: ${namaKandang.value}`, 10, 30)
         doc.text(`Tanggal: ${rangeDate.start} - ${rangeDate.end}`, 10, 60)
-        // doc.html(document.getElementById('element-to-convert'), {
-        //     callback: function (doc) {
-        //         doc.save("a4.pdf")
-        //     },
-        //     x: 10,
-        //     y: 10,
-        // });
         doc.table(10, 90, generateData(), headers, { autoSize: true });
         doc.save("laporan.pdf")
-
     }
 
     function inputDate() {
