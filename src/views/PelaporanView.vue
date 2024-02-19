@@ -226,7 +226,7 @@
                                 <td>{{ item.jumlah_pindah }}</td>
                                 <td>{{ item.jumlah_terima }}</td>
 
-                                <td>{{ item.populasi_total }}</td>
+                                <td>{{ item.populasi_terakhir }}</td>
 
                                 <td>{{ item.telur_utuh }}</td>
                                 <td>{{ item.telur_bentes }}</td>
@@ -267,7 +267,8 @@
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_terima ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_populasi_total ?? 0 }}</td>
+                                <!-- <td>{{ dataPelaporan.responseData.data.items[0].sumall_populasi_total ?? 0 }} </td> -->
+                                <td> - </td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_telur_utuh ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_telur_bentes ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_total_telur ?? 0 }}</td>
@@ -293,7 +294,8 @@
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0 }}</td>
                                 <td colspan="3"></td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_populasi_total ?? 0 }}</td>
+                                <!-- <td>{{ dataPelaporan.responseData.data.items[0].avg_populasi_total ?? 0 }} </td> -->
+                                <td> - </td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_telur_utuh ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0 }}</td>
@@ -409,7 +411,7 @@
             jumlah_afkir: item.jumlah_afkir ? item.jumlah_afkir : '-',
             jumlah_pindah: item.jumlah_pindah ? item.jumlah_pindah : '-',
             jumlah_terima: item.jumlah_terima ? item.jumlah_terima : '-',
-            populasi_total: item.populasi_total ? item.populasi_total : '-',
+            populasi_total: item.populasi_terakhir ? item.populasi_terakhir : '-',
             telur_utuh: item.telur_utuh ? item.telur_utuh : '-',
             telur_bentes: item.telur_bentes ? item.telur_bentes : '-',
             total_telur: item.total_telur ? item.total_telur : '-',
@@ -440,7 +442,8 @@
             jumlah_afkir: dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0,
             jumlah_pindah: dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0,
             jumlah_terima: dataPelaporan.responseData.data.items[0].sumall_jumlah_terima ?? 0,
-            populasi_total: dataPelaporan.responseData.data.items[0].sumall_populasi_total ?? 0,
+            // populasi_total: dataPelaporan.responseData.data.items[0].sumall_populasi_total ?? 0,
+            populasi_total: '-',
             telur_utuh: dataPelaporan.responseData.data.items[0].sumall_telur_utuh ?? 0,
             telur_bentes: dataPelaporan.responseData.data.items[0].sumall_telur_bentes ?? 0,
             total_telur: dataPelaporan.responseData.data.items[0].sumall_total_telur ?? 0,
@@ -469,7 +472,8 @@
             jumlah_afkir: '-',
             jumlah_pindah: '-',
             jumlah_terima: '-',
-            populasi_total: dataPelaporan.responseData.data.items[0].avg_populasi_total ?? 0,
+            // populasi_total: dataPelaporan.responseData.data.items[0].avg_populasi_total ?? 0,
+            populasi_total: '-',
             telur_utuh: dataPelaporan.responseData.data.items[0].avg_telur_utuh ?? 0,
             telur_bentes: dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0,
             total_telur: dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0,
@@ -743,6 +747,7 @@
 
     function downloadExcel() {
         excelParser().exportDataFromJSON(dataPelaporan.exportData.items, null, null)
+        console.log("Data Excel : ", dataPelaporan.exportData.items);
     }
    
 </script>
