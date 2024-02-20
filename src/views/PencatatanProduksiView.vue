@@ -797,14 +797,14 @@
                             <!-- <label for="recipient-name" class="col-form-label">Recipient:</label>
                             <input type="text" class="form-control" id="recipient-name"> -->
                             <div class="mb-4 d-flex justify-content-between">
-                                <button class="btn btn-success">{{ dateSubmitPencatatan }}</button>
+                                <button class="btn btn-success">{{ dateSubmitPencatatanEdit }}</button>
                                 <h6 class="modal-title">Latest Usia Mgg : {{ latest_usia_mgg }}</h6>
                                 <h6 class="modal-title">Latest Usia Hari : {{ latest_usia_hari }}</h6>
                                 <h6 class="modal-title" id="exampleModalLabel">Populasi Ayam : {{ detailPencatatan.populasi_ayam }} ekor</h6>
                             </div>
                             <div class="mb-3"> 
                                 <label for="tanggal_submit" class="form-label">Tanggal Submit</label>
-                                <Field v-model="tanggal_submit" name="tanggal_submit" class="form-control text-center" type="date" placeholder="Tanggal Submit" />
+                                <Field v-model="detailPencatatan.tanggal_submit_edit" name="tanggal_submit" class="form-control text-center" type="date" placeholder="Tanggal Submit" />
                                 <ErrorMessage class="text-danger" name="tanggal_submit" />
                             </div>
                             <div class="mb-3">
@@ -877,7 +877,7 @@
                                     </p>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="bg-grey-rossa rounded p-2 mb-2">{{ dateSubmitPencatatan }}</div>
+                                    <div class="bg-grey-rossa rounded p-2 mb-2">{{ dateSubmitPencatatanEdit }}</div>
                                     <p>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
                                         <path d="M4.90517 13.8423C5.57808 13.3578 6.29217 12.9749 7.04742 12.6936C7.80214 12.4118 8.61967 12.2708 9.5 12.2708C10.3798 12.2708 11.1973 12.4118 11.9526 12.6936C12.7073 12.9749 13.4214 13.3575 14.0948 13.8415C14.6173 13.3011 15.0377 12.6624 15.356 11.9257C15.6742 11.1878 15.8333 10.3793 15.8333 9.5C15.8333 7.74514 15.2166 6.25074 13.9832 5.01679C12.7498 3.78285 11.2554 3.16614 9.5 3.16667C7.74514 3.16667 6.25074 3.78338 5.01679 5.01679C3.78285 6.25021 3.16614 7.74461 3.16667 9.5C3.16667 10.3798 3.32579 11.1881 3.64404 11.9249C3.96229 12.6622 4.38267 13.3013 4.90517 13.8423ZM9.5 9.89583C8.83342 9.89583 8.27081 9.66678 7.81217 9.20867C7.35406 8.75003 7.125 8.18742 7.125 7.52083C7.125 6.85425 7.35406 6.29164 7.81217 5.833C8.27081 5.37489 8.83342 5.14583 9.5 5.14583C10.1666 5.14583 10.7292 5.37489 11.1878 5.833C11.6459 6.29164 11.875 6.85425 11.875 7.52083C11.875 8.18742 11.6459 8.75003 11.1878 9.20867C10.7292 9.66678 10.1666 9.89583 9.5 9.89583ZM9.5 16.625C8.50619 16.625 7.57599 16.44 6.70938 16.07C5.84276 15.7006 5.08857 15.195 4.44679 14.5532C3.80554 13.9114 3.29993 13.1572 2.92996 12.2906C2.55999 11.424 2.375 10.4938 2.375 9.5C2.375 8.50619 2.55999 7.57599 2.92996 6.70938C3.2994 5.84276 3.80501 5.08857 4.44679 4.44679C5.08857 3.80554 5.84276 3.29993 6.70938 2.92996C7.57599 2.55999 8.50619 2.375 9.5 2.375C10.4938 2.375 11.424 2.55999 12.2906 2.92996C13.1572 3.2994 13.9114 3.80501 14.5532 4.44679C15.1945 5.08857 15.7001 5.84276 16.07 6.70938C16.44 7.57599 16.625 8.50619 16.625 9.5C16.625 10.4938 16.44 11.424 16.07 12.2906C15.7006 13.1572 15.195 13.9114 14.5532 14.5532C13.9114 15.1945 13.1572 15.7001 12.2906 16.07C11.424 16.44 10.4938 16.625 9.5 16.625Z" fill="#0FA958"/>
@@ -955,7 +955,7 @@
                                     </p>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="bg-grey-rossa rounded p-2">{{ dateSubmitPencatatan }}</div>
+                                    <div class="bg-grey-rossa rounded p-2">{{ dateSubmitPencatatanEdit }}</div>
                                     <p>
                                         <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
                                         <path d="M4.90517 13.8423C5.57808 13.3578 6.29217 12.9749 7.04742 12.6936C7.80214 12.4118 8.61967 12.2708 9.5 12.2708C10.3798 12.2708 11.1973 12.4118 11.9526 12.6936C12.7073 12.9749 13.4214 13.3575 14.0948 13.8415C14.6173 13.3011 15.0377 12.6624 15.356 11.9257C15.6742 11.1878 15.8333 10.3793 15.8333 9.5C15.8333 7.74514 15.2166 6.25074 13.9832 5.01679C12.7498 3.78285 11.2554 3.16614 9.5 3.16667C7.74514 3.16667 6.25074 3.78338 5.01679 5.01679C3.78285 6.25021 3.16614 7.74461 3.16667 9.5C3.16667 10.3798 3.32579 11.1881 3.64404 11.9249C3.96229 12.6622 4.38267 13.3013 4.90517 13.8423ZM9.5 9.89583C8.83342 9.89583 8.27081 9.66678 7.81217 9.20867C7.35406 8.75003 7.125 8.18742 7.125 7.52083C7.125 6.85425 7.35406 6.29164 7.81217 5.833C8.27081 5.37489 8.83342 5.14583 9.5 5.14583C10.1666 5.14583 10.7292 5.37489 11.1878 5.833C11.6459 6.29164 11.875 6.85425 11.875 7.52083C11.875 8.18742 11.6459 8.75003 11.1878 9.20867C10.7292 9.66678 10.1666 9.89583 9.5 9.89583ZM9.5 16.625C8.50619 16.625 7.57599 16.44 6.70938 16.07C5.84276 15.7006 5.08857 15.195 4.44679 14.5532C3.80554 13.9114 3.29993 13.1572 2.92996 12.2906C2.55999 11.424 2.375 10.4938 2.375 9.5C2.375 8.50619 2.55999 7.57599 2.92996 6.70938C3.2994 5.84276 3.80501 5.08857 4.44679 4.44679C5.08857 3.80554 5.84276 3.29993 6.70938 2.92996C7.57599 2.55999 8.50619 2.375 9.5 2.375C10.4938 2.375 11.424 2.55999 12.2906 2.92996C13.1572 3.2994 13.9114 3.80501 14.5532 4.44679C15.1945 5.08857 15.7001 5.84276 16.07 6.70938C16.44 7.57599 16.625 8.50619 16.625 9.5C16.625 10.4938 16.44 11.424 16.07 12.2906C15.7006 13.1572 15.195 13.9114 14.5532 14.5532C13.9114 15.1945 13.1572 15.7001 12.2906 16.07C11.424 16.44 10.4938 16.625 9.5 16.625Z" fill="#0FA958"/>
@@ -1154,6 +1154,7 @@
         catatan: '',
         populasi_ayam: '',
         tanggal_submit: '',
+        tanggal_submit_edit: '',
         nama_anak_kandang: '',
         nama_mandor: '',
         nama_kandang: '',
@@ -1199,6 +1200,7 @@
     const status = ref(null);
     const date = ref(0);
     const dateSubmitPencatatan = ref(0);
+    const dateSubmitPencatatanEdit = ref(0);
     const idKandang = ref(null);
     const today = new Date();
     const latest_usia_mgg = ref(0);
@@ -1219,6 +1221,11 @@
     watch(() => detailPencatatan.tanggal_submit, (newValue, oldValue) => {
         date.value = new Date(newValue);
         dateSubmitPencatatan.value = moment(date).format("DD MMMM YYYY");
+    });
+
+    watch(() => detailPencatatan.tanggal_submit_edit, (newValue, oldValue) => {
+        console.log('tanggal submit edit', newValue, );
+        dateSubmitPencatatanEdit.value = moment(new Date(newValue)).format("DD MMMM YYYY");
     });
 
     function getTanggalSubmit() {
@@ -1313,7 +1320,7 @@
         rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(selectedDate.value[1]).format("YYYY-MM-DD");
         getIdKandang(route.params.id);
-        getPencatatan(route.params.id);
+        getPencatatan(route.params.id, null);
         getPelaporan(route.params.id, rangeDate.start, rangeDate.end);
          // Buat label untuk 7 hari terakhir
         for (let i = 6; i >= 0; i--) {
@@ -1462,10 +1469,10 @@
         })
             .then(response => {
                 isSubmitting.value = false;
-                getPencatatan(route.params.id);
+                getPencatatan(route.params.id, null);
                 alert('success', 'Data pencatatan berhasil ditambahkan');
                 closeModal();
-                console.log(response);
+                console.log("Response Submit Pencatatan : ", response);
             })
             .catch(error => {
                 isSubmitting.value = false;
@@ -1510,9 +1517,9 @@
         })
             .then(response => {
                 isSubmitting.value = false;
-                console.log(response);
+                console.log("Response Update Submit : ", response);
                 alert('success', 'Data pencatatan berhasil diubah');
-                getPencatatan(detailKandang.id);
+                getPencatatan(detailKandang.id, null);
                 closeModal();
             })
             .catch(error => {
@@ -1534,6 +1541,7 @@
             },
         })
             .then(response => {
+                console.log("Detail Pencatatan : ", response);
                 detailPencatatan.id = response.data.data.id;
                 detailPencatatan.id_kandang = response.data.data.id_kandang;
                 detailPencatatan.id_mandor = response.data.data.id_mandor;
@@ -1575,10 +1583,12 @@
                 detailPencatatan.nama_jenis_pakan = response.data.data.jenis_pakan ? response.data.data.jenis_pakan.nama : '-';
                 detailPencatatan.nama_treatment = response.data.data.treatment ? response.data.data.treatment.nama : '-';
                 detailPencatatan.telur_utuh = response.data.data.telur_utuh;
+                detailPencatatan.tanggal_submit_edit = moment(response.data.data.tanggal_submit).format("YYYY-MM-DD");
+                dateSubmitPencatatanEdit.value = moment(response.data.data.tanggal_submit).format("DD MMMM YYYY");
                 getIdStandart(response.data.data.strain_ayam.id);
                 getIdPakan(detailPencatatan.id_jenis_pakan);
                 // console.log("Detail Pencatatan : ", detailPencatatan);
-                console.log("Detail Pencatatan : ", response);
+                
             })
             .catch(error => {
                 console.error(error);
@@ -1601,12 +1611,12 @@
             });
     }
 
-    async function getPencatatan(id_kandang) {
+    async function getPencatatan(id_kandang, status_pencatatan) {
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/pencatatan', {
             params: {
-                status: "accepted",
+                status: status_pencatatan,
                 column_sorting: "tanggal_submit desc",
                 id_kandang: id_kandang,
             },
@@ -1615,60 +1625,70 @@
             },
         })
             .then(response => {
-                dataPencatatan.setResponseData(response.data);
-                const items = dataPencatatan.responseData.data.items;
-        
-                console.log("Data Pencatatan : ", items);
-
-                // Buat array untuk menyimpan data telur utuh per tanggal
-                const telurUtuhPerTanggal = {};
-                const jumlahMatiPerTanggal = {};
-
-                // Loop melalui data respons
-                items.forEach(item => {
-                    // const tanggalSubmit = new Date(item.tanggal_submit);
-                    const todays = moments().utc();
-                    const tanggalSubmit = moments(item.tanggal_submit).utc();
-                    console.log("Tanggal Submit : ", tanggalSubmit);
-                    const diffTime = Math.abs(todays - tanggalSubmit);
-                    // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-                    const diffDays = todays.diff(tanggalSubmit, 'days'); 
-                    // Cek apakah tanggal submit ada di antara 7 hari terakhir
-                    console.log("Diff Days : ", item.tanggal_submit);
-                    if (diffDays <= 6) {
-                        const tanggalKey = tanggalSubmit.format('ddd MMM DD YYYY'); // Buat kunci berdasarkan tanggal
-                        console.log("Tanggal Key : ", tanggalKey);
-                        // Tambahkan data telur utuh ke dalam objek, menjumlahkan jika sudah ada
-                        if (telurUtuhPerTanggal[tanggalKey]) {
-                            telurUtuhPerTanggal[tanggalKey] += item.telur_utuh;
-                        } else {
-                            telurUtuhPerTanggal[tanggalKey] = item.telur_utuh;
-                        }
-                        if (jumlahMatiPerTanggal[tanggalKey]) {
-                            jumlahMatiPerTanggal[tanggalKey] += item.jumlah_mati || 0; // Menambahkan jumlah_mati, jika tidak ada maka 0
-                        } else {
-                            jumlahMatiPerTanggal[tanggalKey] = item.jumlah_mati || 0; // Mengatur jumlah_mati, jika tidak ada maka 0
-                        }
-                    }
-                });
-
-                // Buat array untuk menyimpan data telur utuh untuk 7 hari terakhir
-               
-                labels.value.forEach(label => {
-                    telurUtuhData.value.push(telurUtuhPerTanggal[label] || null);
-                    jumlahMatiData.value.push(jumlahMatiPerTanggal[label] || null);
-                });
-
-
-                console.log("Labels : ", labels);
-                console.log("Telur Utuh Data : ", telurUtuhData);
-
-                latest_usia_mgg.value = dataPencatatan.responseData.data.latest_usia_mgg;
-                latest_usia_hari.value = dataPencatatan.responseData.data.latest_usia_hari;
+                console.log("Response Get Pencatatan : ", response);
+                if(response.data.data.items[0].status == "accepted") {
+                    dataPencatatan.setResponseData(response.data);
+                    const items = dataPencatatan.responseData.data.items;
             
-                detailPencatatan.populasi_ayam = dataPencatatan.responseData.data.total_populasi;
-                console.log("List Pencatatan : ", dataPencatatan.responseData);
-                getTotal();
+                    console.log("Data Pencatatan : ", items);
+
+                    // Buat array untuk menyimpan data telur utuh per tanggal
+                    const telurUtuhPerTanggal = {};
+                    const jumlahMatiPerTanggal = {};
+
+                    // Loop melalui data respons
+                    items.forEach(item => {
+                        // const tanggalSubmit = new Date(item.tanggal_submit);
+                        const todays = moments().utc();
+                        const tanggalSubmit = moments(item.tanggal_submit).utc();
+                        console.log("Tanggal Submit : ", tanggalSubmit);
+                        const diffTime = Math.abs(todays - tanggalSubmit);
+                        // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+                        const diffDays = todays.diff(tanggalSubmit, 'days'); 
+                        // Cek apakah tanggal submit ada di antara 7 hari terakhir
+                        console.log("Diff Days : ", item.tanggal_submit);
+                        if (diffDays <= 6) {
+                            const tanggalKey = tanggalSubmit.format('ddd MMM DD YYYY'); // Buat kunci berdasarkan tanggal
+                            console.log("Tanggal Key : ", tanggalKey);
+                            // Tambahkan data telur utuh ke dalam objek, menjumlahkan jika sudah ada
+                            if (telurUtuhPerTanggal[tanggalKey]) {
+                                telurUtuhPerTanggal[tanggalKey] += item.telur_utuh;
+                            } else {
+                                telurUtuhPerTanggal[tanggalKey] = item.telur_utuh;
+                            }
+                            if (jumlahMatiPerTanggal[tanggalKey]) {
+                                jumlahMatiPerTanggal[tanggalKey] += item.jumlah_mati || 0; // Menambahkan jumlah_mati, jika tidak ada maka 0
+                            } else {
+                                jumlahMatiPerTanggal[tanggalKey] = item.jumlah_mati || 0; // Mengatur jumlah_mati, jika tidak ada maka 0
+                            }
+                        }
+                    });
+
+                    // Buat array untuk menyimpan data telur utuh untuk 7 hari terakhir
+                
+                    labels.value.forEach(label => {
+                        telurUtuhData.value.push(telurUtuhPerTanggal[label] || null);
+                        jumlahMatiData.value.push(jumlahMatiPerTanggal[label] || null);
+                    });
+
+                    console.log("Labels : ", labels);
+                    console.log("Telur Utuh Data : ", telurUtuhData);
+
+                    latest_usia_mgg.value = dataPencatatan.responseData.data.latest_usia_mgg;
+                    latest_usia_hari.value = dataPencatatan.responseData.data.latest_usia_hari;
+                
+                    detailPencatatan.populasi_ayam = dataPencatatan.responseData.data.total_populasi;
+                    detailPencatatan.id = dataPencatatan.responseData.data.items[0].id;
+                    console.log("Resonse Get Pencatatan Accepted : ", response);
+                    getTotal();
+                    status.value = dataPencatatan.responseData.data.items[0].status || 0;
+                } else {
+                    dataPencatatan.setResponseData(response.data);
+                    detailPencatatan.id = dataPencatatan.responseData.data.items[0].id;
+                    status.value = dataPencatatan.responseData.data.items[0].status || 0;
+                    console.log("Resonse Get Pencatatan Reject / Submitted: ", response);
+                }
+                
             })
             .catch(error => {
                 console.error(error);

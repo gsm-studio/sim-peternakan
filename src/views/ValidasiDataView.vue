@@ -854,7 +854,7 @@
         deskripsi: '',
     });
 
-    const dateSubmitPencatatan = ref(0);
+    const dateSubmitPencatatan = ref('');
 
     let search = ref("");
     
@@ -942,8 +942,9 @@
     let within_first_modal = false;
 
     watch(() => tanggal_submit.value, (newValue, oldValue) => {
+        console.log("change tanggal submit: ", newValue);
         date.value = new Date(newValue);
-        dateSubmitPencatatan.value = moment(date).format("DD MMMM YYYY");
+        dateSubmitPencatatan.value = moment(newValue).format('DD MMMM YYYY');
     });
 
     const namaKandangPengirim = ref(null);
@@ -1375,8 +1376,7 @@
                 detailPencatatan.nama_jenis_pakan = response.data.data.jenis_pakan ? response.data.data.jenis_pakan.nama : '-';
                 detailPencatatan.nama_treatment = response.data.data.treatment ? response.data.data.treatment.nama : '-';
                 detailPencatatan.telur_utuh = response.data.data.telur_utuh;
-                tanggal_submit.value = response.data.data.tanggal_submit;
-                tanggal_submit.value = moment(tanggal_submit).format("YYYY-MM-DD");
+                tanggal_submit.value = moment(response.data.data.tanggal_submit).format("YYYY-MM-DD");
                 isLoading.value = false;
                 getIdStrain(detailPencatatan.id_strain_ayam);
                 // console.log("Detail Pencatatan : ", detailPencatatan);
