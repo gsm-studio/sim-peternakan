@@ -5,8 +5,8 @@
             <!-- /.row-->
             <div class="row">
                 <div class="col-md-12">
-                    <div class="card overflow-hidden mb-4">
-                        <div class="row">
+                    <div class="card mb-4">
+                        <div class="row g-0">
                             <div class="col-lg-12 border-bottom">
                                 <div class="card-body row">
                                     <div class="col-5">
@@ -201,7 +201,7 @@
                             </div> -->
                         </div>
                         </div>
-                        <div class="row border-top">
+                        <div class="row g-0 border-top">
                             <div class="col-lg-7 border-end">
                             <div class="card-body">
                                 <div class="row">

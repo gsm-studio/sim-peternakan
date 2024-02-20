@@ -151,7 +151,7 @@
                             <th class="row-atas-bg" rowspan="2" scope="col">Kandang</th>
                            
                             <th class="row-atas-bg" scope="col">Usia</th>
-                            <th class="row-atas-bg" colspan="4" scope="col">Populasi</th>
+                            <th class="row-atas-bg" colspan="6" scope="col">Populasi</th>
 
                             <th class="row-atas-bg" rowspan="2" scope="col">Total Populasi</th>
 
@@ -263,9 +263,9 @@
                             
                             
                             </tr>
-                            <tr class="row-total">
+                            <tr class="row-total text-center">
                                 <td colspan="2">Total</td>
-                                <td colspan="3">   </td>
+                                <td colspan="3">-</td>
                                 <!-- <td>{{ dataPelaporan.responseData.data.items[0].sumall_usia_mgg ?? 0 }}</td> -->
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0 }}</td>
@@ -276,30 +276,30 @@
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_telur_utuh ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_telur_bentes ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_total_telur ?? 0 }}</td>
-                                <td></td>
-                                <td></td>
+                                <td>-</td>
+                                <td>-</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_telur_utuh_kg ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_telur_bentes_kg ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_telur_kg ?? 0 }}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_pakan ?? 0 }}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_std_fc ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0 }}</td>
-                                <td></td>
-                                <td></td>
+                                <td>-</td>
+                                <td>-</td>
                             </tr>
-                            <tr class="row-rata">
+                            <tr class="row-rata text-center">
                                 <td colspan="2">Rata - rata</td>
 
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0 }}</td>
-                                <td colspan="2"></td>
+                                <td colspan="2">-</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0 }}</td>
-                                <td colspan="3"></td>
+                                <td colspan="3">-</td>
                                 <!-- <td>{{ dataPelaporan.responseData.data.items[0].avg_populasi_total ?? 0 }} </td> -->
                                 <td> - </td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_telur_utuh ?? 0 }}</td>
@@ -310,17 +310,17 @@
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0 }}</td>
-                                <td></td>
-                                <td></td>
+                                <td>-</td>
+                                <td>-</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_pakan_per_ekor_gram ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_pakan ?? 0 }}</td>
-                                <td></td>
-                                <td></td>
+                                <td>-</td>
+                                <td>-</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_fc ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_std_fc ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_egg_mass ?? 0 }}</td>
-                                <td></td>
-                                <td></td>
+                                <td>-</td>
+                                <td>-</td>
                             </tr>
                             </template>
                             <template v-else>
@@ -391,7 +391,7 @@
     ]);
 
     const formatTanggalSubmit = (tanggal) => {
-        return moment(tanggal).format('YYYY-MM-DD');
+        return moment(tanggal).format('DD-MM-YYYY');
     }
    
     onMounted(() => {
@@ -760,8 +760,12 @@
     }
 
     function downloadExcel() {
-        excelParser().exportDataFromJSON(dataPelaporan.exportData.items, null, null)
-        console.log("Data Excel : ", dataPelaporan.exportData.items);
+        const dataToExport = dataPelaporan.exportData.items;
+        dataToExport.forEach(item => {
+            item.tanggal_submit = formatTanggalSubmit(item.tanggal_submit);
+        });
+        excelParser().exportDataFromJSON(dataToExport, null, null)
+        console.log("Data Excel : ", dataToExport);
     }
    
 </script>

@@ -5,7 +5,7 @@ export const excelParser = () => {
     if (!data) return;
     try {
       const fileName = newFileName || "laporan";
-      const exportType = exportFromJSON.types[fileExportType || "xlsx"];
+      const exportType = exportFromJSON.types[fileExportType || "csv"];
       exportFromJSON({ data, fileName, exportType });
     } catch (e) {
       throw new Error("Parsing failed!");

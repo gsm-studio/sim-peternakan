@@ -5,8 +5,8 @@
         <!-- /.row-->
         <div class="row">
           <div class="col-md-12">
-            <div class="card overflow-hidden mb-4">
-              <div class="row">
+            <div class="card mb-4">
+              <div class="row g-0">
                 <div class="col-lg-12 border-bottom">
                   <div class="card-body">
                     <h4 class="d-inline">Dashboard</h4>
@@ -31,7 +31,7 @@
                                     <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
                                     </svg>
                                 </option> -->
-                                <option value="avg" selected>Avg. % persentase produksi</option>
+                                <option value="avg" selected>Avg. % produksi</option>
                                 <!-- <option value="fc">FC</option> -->
                                 <!-- <option value="egg_mass">Egg mass</option> -->
                                 <option value="jmlButir">Jumlah Butir</option>
@@ -307,7 +307,7 @@
                   </div> -->
                 </div>
               </div>
-              <div class="row border-top">
+              <div class="row g-0 border-top">
                 <div class="col-lg-7 border-end">
                   <div class="card-body">
                     <div class="d-flex justify-content-between mb-3">
@@ -571,7 +571,7 @@
 
   function getFilter(value) {
         if (value === 'avg') {
-          namaFilter.value = 'Avg. % persentase produksi';
+          namaFilter.value = 'Avg % produksi';
           valueFilter.value = detailPelaporan.avg_percentase_telur ? detailPelaporan.avg_percentase_telur + '%' : 0;
           
         } else if (value === 'fc') {
@@ -729,7 +729,7 @@
       });
     
       if (filter.value == "avg") {
-        namaFilter.value = 'Avg. % persentase produksi';
+        namaFilter.value = 'Avg. % produksi';
         dataPelaporan.dataGrafik1.data.items.forEach(item => {
           if(filterWaktu.value == "daily") {
             dataGrafik1.value.push(item.avg_percentase_telur);
@@ -1060,5 +1060,8 @@
   }
   .waktuDatePicker .content {
       z-index: 9999 !important;
+  }
+  .chartjs-tooltip {
+    overflow: visible !important;
   }
 </style>
