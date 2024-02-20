@@ -464,7 +464,7 @@
     </div>
 
     <div class="modal fade" id="second-modal" data-bs-backdrop="static" role="dialog">
-        <div class="modal-dialog modal-lg shadow-lg modal-dialog-scrollable" role="document">
+        <div class="modal-dialog modal-lg shadow-lg modal-dialog-scrollable rounded" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button @click="clickCloseSecondModal" type="button" class="btn-close btn-second-modal-close"></button>
@@ -1020,8 +1020,7 @@
     }
 
     function alert(icon, title) {
-        const Toast = Swal.mixin({
-            
+        const Toast = Swal.mixin({   
           toast: true,
           position: "bottom-start",
           showConfirmButton: false,
@@ -1039,8 +1038,31 @@
         });
     }
 
-    function clickSecondModal() {
+    function alertAfterSubmit(icon, title) {
+        const Toast = Swal.mixin({   
+          toast: true,
+          position: "bottom-start",
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+          }
+        });
+        Toast.fire({
+          icon: icon,
+          title: title,
+          target: document.getElementById('second-modal'),
+        }).then((result) => {
+            if (result.dismiss === Swal.DismissReason.timer) {
+                closeModal();
+            }
+        });
+    }
 
+    function clickSecondModal() {
+        $('#first-modal').modal('hide');
         console.log('click second modal');
         if ($(this).hasClass('within-first-modal')) {
             within_first_modal = true;
@@ -1055,6 +1077,7 @@
     function clickCloseSecondModal() { 
         console.log('click close second modal');
         $('#second-modal').modal('hide');
+        $('#first-modal').modal('show');
         if (within_first_modal) {
             $('#first-modal').modal('show');
             within_first_modal = false;
@@ -1213,14 +1236,14 @@
         })
             .then(response => {
                 isSubmitting.value = false;
-                console.log(response);
-                alert('success', 'Data pencatatan berhasil diubah');
+                console.log("Response Update Pencatatan : ", response);
+                alertAfterSubmit('success', 'Data pencatatan berhasil diubah');
                 getPencatatan(currentPage.value);
-                closeModal();
+                // closeModal();
             })
             .catch(error => {
                 isSubmitting.value = false;
-                alert('error', error.response.data.message);
+                alertAfterSubmit('error', error.response.data.message);
                 console.error(error);
             });
     }
@@ -1515,7 +1538,6 @@
 .swal2-container {
   display: -webkit-box;
   display: flex;
-  position: fixed;
   z-index: 300000;
 }
 </style>

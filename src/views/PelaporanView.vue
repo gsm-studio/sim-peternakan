@@ -179,6 +179,8 @@
                         
                             <th class="row-bawah-bg" scope="col">Mgg</th>
 
+                            <th class="row-bawah-bg" scope="col">Populasi Awal</th>
+                            <th class="row-bawah-bg" scope="col">Populasi Kemarin</th>
                             <th class="row-bawah-bg" scope="col">Mati</th>
                             <th class="row-bawah-bg" scope="col">Afkir</th>
                             <th class="row-bawah-bg" scope="col">Pindah</th>
@@ -221,6 +223,8 @@
                                 <td>{{ item.nama_kandang }}</td>
                                 <td>{{ item.usia_mgg }}</td>
                                 
+                                <td>{{ item.populasi_awal }}</td>
+                                <td>{{ item.populasi_kemarin }}</td>
                                 <td>{{ item.jumlah_mati }}</td>
                                 <td>{{ item.jumlah_afkir }}</td>
                                 <td>{{ item.jumlah_pindah }}</td>
@@ -261,7 +265,7 @@
                             </tr>
                             <tr class="row-total">
                                 <td colspan="2">Total</td>
-                                <td>   </td>
+                                <td colspan="3">   </td>
                                 <!-- <td>{{ dataPelaporan.responseData.data.items[0].sumall_usia_mgg ?? 0 }}</td> -->
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0 }}</td>
@@ -291,7 +295,9 @@
                             </tr>
                             <tr class="row-rata">
                                 <td colspan="2">Rata - rata</td>
+
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0 }}</td>
+                                <td colspan="2"></td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0 }}</td>
                                 <td colspan="3"></td>
                                 <!-- <td>{{ dataPelaporan.responseData.data.items[0].avg_populasi_total ?? 0 }} </td> -->
@@ -407,6 +413,8 @@
             tanggal_submit: formatTanggalSubmit(item.tanggal_submit),
             nama_kandang: item.nama_kandang,
             usia_mgg: item.usia_mgg ? item.usia_mgg : '-',
+            populasi_awal: item.populasi_awal ? item.populasi_awal : '-',
+            populasi_kemarin: item.populasi_kemarin ? item.populasi_kemarin : '-',
             jumlah_mati: item.jumlah_mati ? item.jumlah_mati : '-',
             jumlah_afkir: item.jumlah_afkir ? item.jumlah_afkir : '-',
             jumlah_pindah: item.jumlah_pindah ? item.jumlah_pindah : '-',
@@ -438,6 +446,8 @@
             tanggal_submit: 'Total',
             nama_kandang: '-',
             usia_mgg: '-',
+            populasi_awal: '-',
+            populasi_kemarin: '-',
             jumlah_mati: dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0,
             jumlah_afkir: dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0,
             jumlah_pindah: dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0,
@@ -468,6 +478,8 @@
             tanggal_submit: 'Rata - rata',
             nama_kandang: '-',
             usia_mgg: dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0,
+            populasi_awal: '-',
+            populasi_kemarin: '-',
             jumlah_mati: dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0,
             jumlah_afkir: '-',
             jumlah_pindah: '-',
@@ -518,6 +530,8 @@
         "tanggal_submit",
         "nama_kandang",
         "usia_mgg",
+        "populasi_awal",
+        "populasi_kemarin",
         "jumlah_mati",
         "jumlah_afkir",
         "jumlah_pindah",

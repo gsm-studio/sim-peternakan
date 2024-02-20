@@ -4,312 +4,319 @@
         <div class="container-lg">
             <!-- /.row-->
             <div class="row">
-            <div class="col-md-12">
-                <div class="card overflow-hidden mb-4">
-                <div class="row">
-                    <div class="col-lg-12 border-bottom">
-                        <div class="card-body row">
-                            <div class="col-5">
-                                <h4 class="d-inline me-2">Pencatatan Produksi</h4>
-                                <div class="d-inline">
-                                    <svg class="icon">
-                                    <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-right
-                                    "></use>
-                                    </svg>
-                                </div>
-                                <h5 class="color-text-rossa d-inline ms-2">{{ detailKandang.nama }}</h5>
-                                <!-- <img src="@/assets/img/vector-1.png" alt=""> -->
-                            </div>
-                            <!-- <div class="col-1 d-grid d-md-block text-center"> -->
-                                <!-- <small class="color-text-rossa">{{ dateSubmitPencatatan }}</small> -->
-                                <!-- <button class="btn btn-secondary ms-3" type="button">Hisex</button> -->
-                              
-                            <!-- </div> -->
-                            <div class="col-7 d-flex d-md-block text-end">
-                                <div class="d-flex justify-content-end align-items-center flex-wrap">   
-                                    <div class="d-flex align-items-center flex-wrap"> 
-                                        <h6>Status : </h6>
-                                        <h5 v-if="status == 'submitted'" class="text-warning d-inline-block"> Pending</h5>
-                                        <h5 v-else-if="status == 'accepted'" class="text-success d-inline-block"> Terima</h5>
-                                        <h5 v-else class="text-danger"> Tolak</h5>
-                                    </div>
-                                    <button @click="getKandang()" class="btn btn-success ms-3 mb-lg-0 mb-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                        Input Harian
-                                        <svg class="icon">
-                                            <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
-                                        </svg>
-                                    </button>
-                                    <template v-if="role == adminKantor || role == superadmin">
-                                        <button v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0" @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-secondary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
-                                        Ubah 
-                                        <svg class="icon">
-                                            <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-pen"></use>
-                                        </svg>
-                                        </button>
-                                    </template>
-                                </div>
-                            </div>
-                        </div>
-                    
-                    </div>
-                    
-                    <div class="col-lg-7 border-end">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between mt-4">
-                            <div class="w-100">
-                                <div class="small text-medium-emphasis mb-2">
-                                Produksi Telur 
-                                <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
-                                </div>
-                                <div class="w-100 d-flex align-items-center justify-content-between">
-                                <h5 class="card-title mb-0">{{ avg_total_telur }} Butir</h5>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
-                                    <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
-                                    </svg>
-                                <h5 class="card-title mb-0 text-secondary">{{ avgall_berat_telur_gr }} gr/butir</h5>
-                                
-                                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
-                                    <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
-                                    </svg>
-                                <!-- <h5 class="card-title mb-0 text-secondary">{{ ((parseInt(totalBeratTelurUtuh) + parseInt(totalBeratTelurBentes)) / (parseInt(totalTelurUtuh) + parseInt(totalTelurBentes))).toFixed(2) }} gr/butir</h5> -->
-                                <h5 class="card-title mb-0 text-secondary">{{ avg_berat_telur_kg }} kg</h5>
-                              
-                                </div>
-                                <!-- <small class="color-text-rossa">
-                                (20,1 %)
-                                </small> -->
-                                <div class="row mt-3">
-                                <div class="col text-center">
-                                    <p>Telur utuh</p>
-                                    <div class="small text-medium-emphasis mt-2">{{ totalTelurUtuh }}</div>
-                                    <div class="small text-medium-emphasis mt-2">{{ totalBeratTelurUtuh }} kg</div>
-                                </div>
-                                <div class="col text-center border-start">
-                                    <p>Telur bentes</p>
-                                    <div class="small text-medium-emphasis mt-2">{{ totalTelurBentes }}</div>
-                                    <div class="small text-medium-emphasis mt-2">{{ totalBeratTelurBentes }} kg</div>
-                                </div>
-                                </div>
-                                
-                            </div>
-                            <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
-                            
-                            </div>
-                        </div>
-                       
-                        <CChart
-                            type="bar"
-                            :data="{
-                                labels: namaLabels,
-                                datasets: [
-                                    {
-                                        label: 'Telur Utuh',
-                                        backgroundColor: '#5CA882',
-                                        data: telurUtuhData
-                                    },
-                                ],
-                            }"
-                            labels="months"
-                        />
-                       
-                    </div>
-                    <!-- <div class="card-footer d-flex justify-content-between">
-                        <span> 
-                        <svg class="icon bg-button-rossa">
-                        <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last 6 days
-                        </span>
-                        <span>
-                        <svg class="icon bg-grey-rossa">
-                        <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last Week
-                        </span>
-                    </div> -->
-                    </div>
-                    <div class="col-lg-5">
-                    <div class="card-body populasi">
-                        
-                        <div class="d-flex justify-content-between mt-4">
-                        <div>
-                            <div class="small text-medium-emphasis mb-2">
-                            Populasi Ayam 
-                            <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
-                            </div>
-                            <h5 class="card-title mb-0">{{ totalPopulasi ? totalPopulasi : detailKandang.populasi_awal }} ekor</h5>
-                            <!-- <small>
-                            <svg class="icon color-text-rossa">
-                                <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
-                            </svg> 2,4 % vs last week
-                            </small> -->
-                            
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <button @click="getKandang()" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-success bg-button-rossa" type="button">Pindah</button>
-                        </div>
-                        
-                        </div>
-                        <div class="row text-center mt-4">
-                        <div class="col mb-sm-3 mb-0">
-                            <div class="text-medium-emphasis">Mati</div>
-                            <div class="small color-text-rossa">{{ totalMati }}</div>
-                        </div>
-                        <div class="col mb-sm-3 mb-0">
-                            <div class="text-medium-emphasis">Afkir</div>
-                            <div class="small color-text-rossa">{{ totalAfkir }}</div>
-                        </div>
-                        <div class="col mb-sm-3 mb-0">
-                            <div class="text-medium-emphasis">Pindah</div>
-                            <div class="small color-text-rossa">{{ totalPindah }}</div>
-                        </div>
-                        <div class="col mb-sm-3 mb-0">
-                            <div class="text-medium-emphasis">Terima</div>
-                            <div class="small color-text-rossa">{{ totalTerima }}</div>
-                        </div>
-                        </div>
-                        <div>
-                       
-                            <CChart
-                                type="line"
-                                :wrapper="false"
-                                :data="{
-                                    labels: namaLabels,
-                                    datasets: [
-                                    {
-                                        label: 'Mati',
-                                        backgroundColor: 'rgba(220, 220, 220, 0.2)',
-                                        borderColor: 'rgba(220, 220, 220, 1)',
-                                        pointBackgroundColor: 'rgba(220, 220, 220, 1)',
-                                        pointBorderColor: '#e55353',
-                                        data: jumlahMatiData
-                                    },
-                                
-                                    ]
-                                }"
-                             />
-                        </div>
-                    </div>
-                    <!-- <div class="card-footer d-flex justify-content-between">
-                        <span> 
-                        <svg class="icon bg-button-rossa">
-                        <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last 6 days
-                        </span>
-                        <span>
-                        <svg class="icon bg-grey-rossa">
-                        <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last Week
-                        </span>
-                    </div> -->
-                </div>
-                </div>
-                <div class="row border-top">
-                    <div class="col-lg-7 border-end">
-                    <div class="card-body">
+                <div class="col-md-12">
+                    <div class="card overflow-hidden mb-4">
                         <div class="row">
-                            <div class="mb-4">
-                               
-                                <div class="row">
-                                    <div class="col border-end">
-                                        <div class="small text-medium-emphasis mb-2">
-                                            Pakan  
-                                            <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
+                            <div class="col-lg-12 border-bottom">
+                                <div class="card-body row">
+                                    <div class="col-5">
+                                        <h4 class="d-inline me-2">Pencatatan Produksi</h4>
+                                        <div class="d-inline">
+                                            <svg class="icon">
+                                            <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-right
+                                            "></use>
+                                            </svg>
                                         </div>
-                                        <h5 class="card-title mb-0">{{ sum_berat_pakan_daily }} kg</h5>
-                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
-                                            <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
-                                        </svg>
-                                        <h5 class="card-title mb-0 text-secondary">85.7 gram/ekor</h5> -->
+                                        <h5 class="color-text-rossa d-inline ms-2">{{ detailKandang.nama }}</h5>
+                                        <!-- <img src="@/assets/img/vector-1.png" alt=""> -->
                                     </div>
-                                    <div class="col border-start">
-                                        <h5 class="card-title mb-0">Standar pakan</h5>
-                                        <h5 class="card-title mb-0 text-secondary">{{ std_gr_perekor }} gr/ekor</h5>
-                                    </div>
+                                    <!-- <div class="col-1 d-grid d-md-block text-center"> -->
+                                        <!-- <small class="color-text-rossa">{{ dateSubmitPencatatan }}</small> -->
+                                        <!-- <button class="btn btn-secondary ms-3" type="button">Hisex</button> -->
                                     
+                                    <!-- </div> -->
+                                    <div class="col-7 d-flex d-md-block text-end">
+                                        <div class="d-flex justify-content-end align-items-center flex-wrap">   
+                                            <div class="d-flex align-items-center flex-wrap"> 
+                                                <h6>Status : </h6>
+                                                <h5 v-if="status == 'submitted'" class="text-warning d-inline-block"> Pending</h5>
+                                                <h5 v-else-if="status == 'accepted'" class="text-success d-inline-block"> Terima</h5>
+                                                <h5 v-else class="text-danger"> Tolak</h5>
+                                            </div>
+                                            <button @click="getKandang()" class="btn btn-success ms-3 mb-lg-0 mb-2" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                                Input Harian
+                                                <svg class="icon">
+                                                    <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
+                                                </svg>
+                                            </button>
+                                            <template v-if="role == adminKantor || role == superadmin">
+                                                <button v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0" @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-secondary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
+                                                Ubah 
+                                                <svg class="icon">
+                                                    <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-pen"></use>
+                                                </svg>
+                                                </button>
+                                            </template>
+                                        </div>
+                                    </div>
                                 </div>
-                                <!-- <small>
-                                    <svg class="icon color-text-rossa">
-                                    <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
-                                    </svg> 2,4 % vs last week
-                                </small> -->
-                                
+                            
                             </div>
-                            <div class="col-md-5 d-flex align-items-end pie">
-                                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" fill="none">
-                                    <circle cx="90" cy="90" r="90" fill="#0FA958" fill-opacity="0.6"/>
-                                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="20px">{{ persentase_pakan }} % 
-                                        {{ detailPakan.nama ? detailPakan.nama : 'Tidak Ada' }}</text>
-                                </svg> -->
-                                <CChart
-                                    type="pie"
-                                    width="180"
-                                    :data="{
-                                        labels: labelJenisPakan,
-                                        datasets: [
-                                            {
-                                                backgroundColor: backgroundColorJenisPakan,
-                                                data: dataJenisPakan,
-                                            },
-                                        ],
-                                    }"
-                                />
-                            </div>
-                            <div class="col-md-7">
-                               
+                            
+                            <div class="col-lg-7 border-end">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mt-4">
+                                    <div class="w-100">
+                                        <div class="small text-medium-emphasis mb-2">
+                                        Produksi Telur 
+                                        <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
+                                        </div>
+                                        <div class="w-100 d-flex align-items-center justify-content-between">
+                                        <h5 class="card-title mb-0">{{ avg_total_telur }} Butir</h5>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
+                                            <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
+                                            </svg>
+                                        <h5 class="card-title mb-0 text-secondary">{{ avgall_berat_telur_gr }} gr/butir</h5>
+                                        
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
+                                            <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
+                                            </svg>
+                                        <!-- <h5 class="card-title mb-0 text-secondary">{{ ((parseInt(totalBeratTelurUtuh) + parseInt(totalBeratTelurBentes)) / (parseInt(totalTelurUtuh) + parseInt(totalTelurBentes))).toFixed(2) }} gr/butir</h5> -->
+                                        <h5 class="card-title mb-0 text-secondary">{{ avg_berat_telur_kg }} kg</h5>
+                                    
+                                        </div>
+                                        <!-- <small class="color-text-rossa">
+                                        (20,1 %)
+                                        </small> -->
+                                        <div class="row mt-3">
+                                        <div class="col text-center">
+                                            <p>Telur utuh</p>
+                                            <div class="small text-medium-emphasis mt-2">{{ totalTelurUtuh }}</div>
+                                            <div class="small text-medium-emphasis mt-2">{{ totalBeratTelurUtuh }} kg</div>
+                                        </div>
+                                        <div class="col text-center border-start">
+                                            <p>Telur bentes</p>
+                                            <div class="small text-medium-emphasis mt-2">{{ totalTelurBentes }}</div>
+                                            <div class="small text-medium-emphasis mt-2">{{ totalBeratTelurBentes }} kg</div>
+                                        </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
+                                    
+                                    </div>
+                                </div>
+                            
                                 <CChart
                                     type="line"
-
-                                    :wrapper="false"
                                     :data="{
                                         labels: namaLabels,
                                         datasets: [
-                                        {
-                                            label: 'Hari',
-                                            backgroundColor: 'rgba(220, 220, 220, 0.2)',
-                                            borderColor: 'rgba(220, 220, 220, 1)',
-                                            pointBackgroundColor: 'rgba(220, 220, 220, 1)',
-                                            pointBorderColor: '#e55353',
-                                            data: totalGramPerEkorPakan
-                                        }
-                                        ]
+                                            {
+                                                label: 'Telur Utuh',
+                                                backgroundColor: '#5CA882',
+                                                borderColor: 'rgba(220, 220, 220, 1)',
+                                                pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+                                                pointBorderColor: '#e55353',
+                                                data: telurUtuhData
+                                            },
+                                        ],
                                     }"
+                                    labels="months"
                                 />
+                            
+                            </div>
+                            <!-- <div class="card-footer d-flex justify-content-between">
+                                <span> 
+                                <svg class="icon bg-button-rossa">
+                                <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last 6 days
+                                </span>
+                                <span>
+                                <svg class="icon bg-grey-rossa">
+                                <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last Week
+                                </span>
+                            </div> -->
+                            </div>
+                            <div class="col-lg-5">
+                            <div class="card-body populasi">
+                                
+                                <div class="d-flex justify-content-between mt-4">
+                                <div>
+                                    <div class="small text-medium-emphasis mb-2">
+                                    Populasi Ayam 
+                                    <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
+                                    </div>
+                                    <h5 class="card-title mb-0">{{ totalPopulasi ? totalPopulasi : detailKandang.populasi_awal }} ekor</h5>
+                                    <!-- <small>
+                                    <svg class="icon color-text-rossa">
+                                        <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
+                                    </svg> 2,4 % vs last week
+                                    </small> -->
+                                    
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <button @click="getKandang()" data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-success bg-button-rossa" type="button">Pindah</button>
+                                </div>
+                                
+                                </div>
+                                <div class="row text-center mt-4">
+                                <div class="col mb-sm-3 mb-0">
+                                    <div class="text-medium-emphasis">Mati</div>
+                                    <div class="small color-text-rossa">{{ totalMati }}</div>
+                                </div>
+                                <div class="col mb-sm-3 mb-0">
+                                    <div class="text-medium-emphasis">Afkir</div>
+                                    <div class="small color-text-rossa">{{ totalAfkir }}</div>
+                                </div>
+                                <div class="col mb-sm-3 mb-0">
+                                    <div class="text-medium-emphasis">Pindah</div>
+                                    <div class="small color-text-rossa">{{ totalPindah }}</div>
+                                </div>
+                                <div class="col mb-sm-3 mb-0">
+                                    <div class="text-medium-emphasis">Terima</div>
+                                    <div class="small color-text-rossa">{{ totalTerima }}</div>
+                                </div>
+                                </div>
+                                <div>
+                            
+                                    <CChart
+                                        type="line"
+                                        :wrapper="false"
+                                        :data="{
+                                            labels: namaLabels,
+                                            datasets: [
+                                            {
+                                                label: 'Mati',
+                                                backgroundColor: 'rgba(220, 220, 220, 0.2)',
+                                                borderColor: 'rgba(220, 220, 220, 1)',
+                                                pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+                                                pointBorderColor: '#e55353',
+                                                data: jumlahMatiData
+                                            },
+                                        
+                                            ]
+                                        }"
+                                    />
+                                </div>
+                            </div>
+                            <!-- <div class="card-footer d-flex justify-content-between">
+                                <span> 
+                                <svg class="icon bg-button-rossa">
+                                <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last 6 days
+                                </span>
+                                <span>
+                                <svg class="icon bg-grey-rossa">
+                                <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-circle"></use> </svg> Last Week
+                                </span>
+                            </div> -->
+                        </div>
+                        </div>
+                        <div class="row border-top">
+                            <div class="col-lg-7 border-end">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="mb-4">
+                                    
+                                        <div class="row">
+                                            <div class="col border-end">
+                                                <div class="small text-medium-emphasis mb-2">
+                                                    Pakan  
+                                                    <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
+                                                </div>
+                                                <h5 class="card-title mb-0">{{ sum_berat_pakan_daily }} kg</h5>
+                                                <!-- <svg xmlns="http://www.w3.org/2000/svg" width="8" height="10" viewBox="0 0 8 10" fill="none">
+                                                    <path d="M1 9.5L7 5.5L1 1" stroke="black"/>
+                                                </svg>
+                                                <h5 class="card-title mb-0 text-secondary">85.7 gram/ekor</h5> -->
+                                            </div>
+                                            <div class="col border-start">
+                                                <h5 class="card-title mb-0">Standar pakan</h5>
+                                                <h5 class="card-title mb-0 text-secondary">{{ std_gr_perekor }} gr/ekor</h5>
+                                            </div>
+                                            
+                                        </div>
+                                        <!-- <small>
+                                            <svg class="icon color-text-rossa">
+                                            <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
+                                            </svg> 2,4 % vs last week
+                                        </small> -->
+                                        
+                                    </div>
+                                    <div class="col-md-5 d-flex align-items-end pie">
+                                        <!-- <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 180 180" fill="none">
+                                            <circle cx="90" cy="90" r="90" fill="#0FA958" fill-opacity="0.6"/>
+                                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="20px">{{ persentase_pakan }} % 
+                                                {{ detailPakan.nama ? detailPakan.nama : 'Tidak Ada' }}</text>
+                                        </svg> -->
+                                        <CChart
+                                            type="pie"
+                                            width="180"
+                                            :data="{
+                                                labels: labelJenisPakan,
+                                                datasets: [
+                                                    {
+                                                        backgroundColor: backgroundColorJenisPakan,
+                                                        data: dataJenisPakan,
+                                                    },
+                                                ],
+                                            }"
+                                        />
+                                    </div>
+                                    <div class="col-md-7">
+                                    
+                                        <CChart
+                                            type="line"
+
+                                            :wrapper="false"
+                                            :data="{
+                                                labels: namaLabels,
+                                                datasets: [
+                                                {
+                                                    label: 'Hari',
+                                                    backgroundColor: 'rgba(220, 220, 220, 0.2)',
+                                                    borderColor: 'rgba(220, 220, 220, 1)',
+                                                    pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+                                                    pointBorderColor: '#e55353',
+                                                    data: totalGramPerEkorPakan
+                                                }
+                                                ]
+                                            }"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                            <div class="col-lg-5">
+                            <div class="mt-4">
+                                <div>
+                                <div class="small text-medium-emphasis mb-2">
+                                    Ratio
+                                    <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
+                                </div>
+                                
+                                </div>
+                                <div>
+                                
+                                <svg xmlns="http://www.w3.org/2000/svg" width="146" height="145" viewBox="0 0 146 145" fill="none">
+                                    <circle cx="73.1484" cy="72.5" r="72.5" fill="#6AD0B8"/>
+                                        <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">Egg Mass {{ egg_mass_pelaporan }}</text>
+                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="118" height="117" viewBox="0 0 118 117" fill="none">
+                                    <circle cx="59.1484" cy="58.5" r="58.5" fill="#D8608B" fill-opacity="0.7"/>
+                                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">FC {{ fc_pelaporan }}</text>
+                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="136" height="135" viewBox="0 0 136 135" fill="none">
+                                    <circle cx="68.1484" cy="67.5" r="67.5" fill="#8660D8" fill-opacity="0.7"/>
+                                    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">FI {{ berat_pakan_per_ekor_gram }}</text>
+                                    </svg>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="136" height="135" viewBox="0 0 136 135" fill="none">
+                                    <circle cx="68.1484" cy="67.5" r="67.5" fill="#638889" fill-opacity="0.7"/>
+                                    <text x="50%" y="40%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">Produksi Telur</text>
+                                    <text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">{{ percentase_telur }} %</text>
+                                    </svg>
+                                </div>
+                            </div>
                             </div>
                         </div>
-                    </div>
-                    </div>
-                    <div class="col-lg-5">
-                    <div class="mt-4">
-                        <div>
-                        <div class="small text-medium-emphasis mb-2">
-                            Ratio
-                            <span class="color-text-rossa ms-3">{{ detailKandang.nama }}</span>
-                        </div>
                         
-                        </div>
-                        <div>
-                        
-                        <svg xmlns="http://www.w3.org/2000/svg" width="146" height="145" viewBox="0 0 146 145" fill="none">
-                            <circle cx="73.1484" cy="72.5" r="72.5" fill="#6AD0B8"/>
-                                <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">Egg Mass {{ egg_mass_pelaporan }}</text>
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="118" height="117" viewBox="0 0 118 117" fill="none">
-                            <circle cx="59.1484" cy="58.5" r="58.5" fill="#D8608B" fill-opacity="0.7"/>
-                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">FC {{ fc_pelaporan }}</text>
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="136" height="135" viewBox="0 0 136 135" fill="none">
-                            <circle cx="68.1484" cy="67.5" r="67.5" fill="#8660D8" fill-opacity="0.7"/>
-                            <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">FI {{ berat_pakan_per_ekor_gram }}</text>
-                            </svg>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="136" height="135" viewBox="0 0 136 135" fill="none">
-                            <circle cx="68.1484" cy="67.5" r="67.5" fill="#638889" fill-opacity="0.7"/>
-                            <text x="50%" y="40%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">Produksi Telur</text>
-                            <text x="50%" y="60%" dominant-baseline="middle" text-anchor="middle" fill="#FFFFFF" font-size="14px">{{ percentase_telur }} %</text>
-                            </svg>
-                        </div>
-                    </div>
                     </div>
                 </div>
-                </div>
             </div>
-            </div>
+            
         </div>
     </div>
+
+    
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -1080,6 +1087,7 @@
                     </Form>
                 
                 </div>
+                
                 <!-- <div class="modal-footer">
                     
                 </div> -->
@@ -1329,7 +1337,6 @@
             labels.value.push(date.toDateString()); // Tambahkan label tanggal
             namaLabels.value.push(getOnlyDate(date));
         }
-
     })
 
     function nextStep(values) {
@@ -1668,7 +1675,7 @@
                 
                     labels.value.forEach(label => {
                         telurUtuhData.value.push(telurUtuhPerTanggal[label] || null);
-                        jumlahMatiData.value.push(jumlahMatiPerTanggal[label] || null);
+                        jumlahMatiData.value.push(jumlahMatiPerTanggal[label] || 0);
                     });
 
                     console.log("Labels : ", labels);
