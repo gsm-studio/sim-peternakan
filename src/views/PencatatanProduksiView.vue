@@ -1894,9 +1894,35 @@
             totalAvgBeratTelur.value.push(avgBeratTelur[label] || null);
         });
         console.log("avgAllBeratTelurGr : ", avgAllBeratTelurGr);
-        avgall_berat_telur_gr.value = totalAvgAllBeratTelurGr.value[6] ? totalAvgAllBeratTelurGr.value[6] + '' : 0;
-        avg_total_telur.value = totalAvgTotalTelur.value[6] ? totalAvgTotalTelur.value[6] + '' : 0;
-        avg_berat_telur_kg.value = totalAvgBeratTelur.value[6] ? totalAvgBeratTelur.value[6] + '' : 0;
+
+        let lastIndex = 6;
+        let avgBeratTelurValue = totalAvgBeratTelur.value[lastIndex];
+        let avgAllBeratTelurGrValue = totalAvgAllBeratTelurGr.value[lastIndex];
+        let avgTotalTelurValue = totalAvgTotalTelur.value[lastIndex];
+        while (avgBeratTelurValue === null || avgBeratTelurValue === undefined) {
+            lastIndex--; // Kurangi indeks
+            if (lastIndex < 0) break; // Jika sudah mencapai indeks terendah, keluar dari loop
+            avgBeratTelurValue = totalAvgBeratTelur.value[lastIndex]; // Ambil nilai pada indeks yang baru
+        }
+        while (avgAllBeratTelurGrValue === null || avgAllBeratTelurGrValue === undefined) {
+            lastIndex--; // Kurangi indeks
+            if (lastIndex < 0) break; // Jika sudah mencapai indeks terendah, keluar dari loop
+            avgAllBeratTelurGrValue = totalAvgAllBeratTelurGr.value[lastIndex]; // Ambil nilai pada indeks yang baru
+        }
+        while (avgTotalTelurValue === null || avgTotalTelurValue === undefined) {
+            lastIndex--; // Kurangi indeks
+            if (lastIndex < 0) break; // Jika sudah mencapai indeks terendah, keluar dari loop
+            avgTotalTelurValue = totalAvgTotalTelur.value[lastIndex]; // Ambil nilai pada indeks yang baru
+        }
+
+        // Set nilai avg_berat_telur_kg.value berdasarkan hasil pengecekan
+        avg_berat_telur_kg.value = avgBeratTelurValue !== undefined && avgBeratTelurValue !== null ? avgBeratTelurValue + '' : 0;
+        avgall_berat_telur_gr.value = avgAllBeratTelurGrValue !== undefined && avgAllBeratTelurGrValue !== null ? avgAllBeratTelurGrValue + '' : 0;
+        avg_total_telur.value = avgTotalTelurValue !== undefined && avgTotalTelurValue !== null ? avgTotalTelurValue + '' : 0;
+
+        // avgall_berat_telur_gr.value = totalAvgAllBeratTelurGr.value[6] ? totalAvgAllBeratTelurGr.value[6] + '' : 0;
+        // avg_total_telur.value = totalAvgTotalTelur.value[6] ? totalAvgTotalTelur.value[6] + '' : 0;
+        // avg_berat_telur_kg.value = totalAvgBeratTelur.value[6] ? totalAvgBeratTelur.value[6] + '' : 0;
     }
 
     function getJenisPakanItems(items) {
