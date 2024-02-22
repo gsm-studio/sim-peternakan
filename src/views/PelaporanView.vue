@@ -6,7 +6,7 @@
             <div class="card mb-4">
             <div class="row">
                 <div class="col-lg-12 p-4">
-                <div class="d-flex justify-content-between mb-3">
+                <div class="d-flex justify-content-between flex-wrap mb-3">
                     <div class="d-flex">
                         <p>
                             <Datepicker
@@ -347,6 +347,7 @@
     import axios from 'axios'
     import moment from 'moment';
     import jsPDF from "jspdf";
+    import autoTable from 'jspdf-autotable';
     import { excelParser } from "@/helpers/excel-parser";
     import Swal from 'sweetalert2';
 
@@ -511,6 +512,38 @@
       
     };
 
+    const customHeaders = [
+        "Tanggal Submit",
+        "Nama Kandang",
+        "Usia Mgg",
+        "Populasi Awal",
+        "Populasi Kemarin",
+        "Jumlah Mati",
+        "Jumlah Afkir",
+        "Jumlah Pindah",
+        "Jumlah Terima",
+        "Populasi Total",
+        "Telur Utuh",
+        "Telur Bentes",
+        "Total Telur",
+        "Percentase Telur",
+        "Berat Telur gr",
+        "Berat Telur Utuh kg",
+        "Berat Telur Bentes kg",
+        "Berat Telur kg",
+        "Std Nilai HD",
+        "Std Berat Telur",
+        "Berat Pakan per Ekor gram",
+        "Berat Pakan",
+        "Nama Jenis Pakan",
+        "Std gr perekor",
+        "FC",
+        "Std FC",
+        "Egg Mass",
+        "Nama Strain Ayam",
+        "Nama Treatment",
+    ];
+
     function createHeaders(keys) {
         var result = [];
         for (var i = 0; i < keys.length; i += 1) {
@@ -525,6 +558,8 @@
         }
         return result;
     }
+
+  
 
     const headers = createHeaders([
         "tanggal_submit",
@@ -587,13 +622,93 @@
         } else {
             namaKandang.value = dataKandang.responseData.data.items.find(item => item.id == idKandang.value).nama;
         }
-        
+       const dataBody = generateData().map((item) => {
+            return [
+                item.tanggal_submit,
+                item.nama_kandang,
+                item.usia_mgg,
+                item.populasi_awal,
+                item.populasi_kemarin,
+                item.jumlah_mati,
+                item.jumlah_afkir,
+                item.jumlah_pindah,
+                item.jumlah_terima,
+                item.populasi_total,
+                item.telur_utuh,
+                item.telur_bentes,
+                item.total_telur,
+                item.percentase_telur,
+                item.berat_telur_gr,
+                item.berat_telur_utuh_kg,
+                item.berat_telur_bentes_kg,
+                item.berat_telur_kg,
+                item.std_nilai_hd,
+                item.std_berat_telur,
+                item.berat_pakan_per_ekor_gram,
+                item.berat_pakan,
+                item.nama_jenis_pakan,
+                item.std_gr_perekor,
+                item.fc,
+                item.std_fc,
+                item.egg_mass,
+                item.nama_strain_ayam,
+                item.nama_treatment,
+            ];
+        });
+        console.log("Data Body : ", dataBody);  
         const doc = new jsPDF("l", "px", [595, 2000]); 
-
+        // const doc = new jsPDF()
+        
+        console.log("Data Generate : ", generateData());
         doc.setFontSize(24);
         doc.text(`Nama Kandang: ${namaKandang.value}`, 10, 30)
         doc.text(`Tanggal: ${rangeDate.start} - ${rangeDate.end}`, 10, 60)
-        doc.table(10, 90, generateData(), headers, { autoSize: true });
+        // doc.table(10, 90, generateData(), headers, { autoSize: true });
+        doc.autoTable({
+            head: [customHeaders],
+            body: [
+                ...dataBody
+            ],
+            startY: 90,
+            theme: 'grid',
+            styles: {
+                fontSize: 12,
+                overflow: 'linebreak',
+                cellWidth: 'wrap'
+            },
+            columnStyles: {
+                0: {cellWidth: 'auto'},
+                1: {cellWidth: 'auto'},
+                2: {cellWidth: 'auto'},
+                3: {cellWidth: 'auto'},
+                4: {cellWidth: 'auto'},
+                5: {cellWidth: 'auto'},
+                6: {cellWidth: 'auto'},
+                7: {cellWidth: 'auto'},
+                8: {cellWidth: 'auto'},
+                9: {cellWidth: 'auto'},
+                10: {cellWidth: 'auto'},
+                11: {cellWidth: 'auto'},
+                12: {cellWidth: 'auto'},
+                13: {cellWidth: 'auto'},
+                14: {cellWidth: 'auto'},
+                15: {cellWidth: 'auto'},
+                16: {cellWidth: 'auto'},
+                17: {cellWidth: 'auto'},
+                18: {cellWidth: 'auto'},
+                19: {cellWidth: 'auto'},
+                20: {cellWidth: 'auto'},
+                21: {cellWidth: 'auto'},
+                22: {cellWidth: 'auto'},
+                23: {cellWidth: 'auto'},
+                24: {cellWidth: 'auto'},
+                25: {cellWidth: 'auto'},
+                26: {cellWidth: 'auto'},
+                27: {cellWidth: 'auto'},
+                28: {cellWidth: 'auto'},
+            },
+            margin: { top: 90, right: 10, bottom: 10, left: 10 },
+        });
         doc.save("laporan.pdf")
     }
 
@@ -764,7 +879,104 @@
         dataToExport.forEach(item => {
             item.tanggal_submit = formatTanggalSubmit(item.tanggal_submit);
         });
-        excelParser().exportDataFromJSON(dataToExport, null, null)
+
+        dataToExport.push({
+            tanggal_submit: 'Total',
+            nama_kandang: '-',
+            usia_mgg: '-',
+            populasi_awal: '-',
+            populasi_kemarin: '-',
+            jumlah_mati: dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0,  
+            jumlah_afkir: dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0,
+            jumlah_pindah: dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0,
+            jumlah_terima: dataPelaporan.responseData.data.items[0].sumall_jumlah_terima ?? 0,
+            populasi_total: '-',
+            telur_utuh: dataPelaporan.responseData.data.items[0].sumall_telur_utuh ?? 0,
+            telur_bentes: dataPelaporan.responseData.data.items[0].sumall_telur_bentes ?? 0,
+            total_telur: dataPelaporan.responseData.data.items[0].sumall_total_telur ?? 0,
+            percentase_telur: '-',
+            avg_berat_telur_gr: '-',
+            berat_telur_utuh_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_utuh_kg ?? 0,
+            berat_telur_bentes_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_bentes_kg ?? 0,
+            berat_telur_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_kg ?? 0,
+            std_nilai_hd: '-',
+            std_berat_telur: '-',
+            berat_pakan_per_ekor_gram: '-',
+            berat_pakan: dataPelaporan.responseData.data.items[0].sumall_berat_pakan ?? 0,
+            nama_jenis_pakan: '-',
+            std_gr_perekor: '-',
+            fc: '-',
+            std_fc: dataPelaporan.responseData.data.items[0].sumall_std_fc ?? 0,
+            egg_mass: dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0,
+            nama_strain_ayam: '-',
+            nama_treatment: '-',
+        });
+
+        dataToExport.push({
+            tanggal_submit: 'Rata - rata',
+            nama_kandang: '-',
+            usia_mgg: dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0,
+            populasi_awal: '-',
+            populasi_kemarin: '-',
+            jumlah_mati: dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0,
+            jumlah_afkir: '-',
+            jumlah_pindah: '-',
+            jumlah_terima: '-',
+            populasi_total: '-',
+            telur_utuh: dataPelaporan.responseData.data.items[0].avg_telur_utuh ?? 0,
+            telur_bentes: dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0,
+            total_telur: dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0,
+            percentase_telur: dataPelaporan.responseData.data.items[0].avg_percentase_telur ?? 0,
+            avg_berat_telur_gr: dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0,
+            berat_telur_utuh_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0,
+            berat_telur_bentes_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0,
+            berat_telur_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0,
+            std_nilai_hd: '-',
+            std_berat_telur: '-',
+            berat_pakan_per_ekor_gram: dataPelaporan.responseData.data.items[0].avg_berat_pakan_per_ekor_gram ?? 0,
+            berat_pakan: dataPelaporan.responseData.data.items[0].avg_berat_pakan ?? 0,
+            nama_jenis_pakan: '-',
+            std_gr_perekor: '-',
+            fc: dataPelaporan.responseData.data.items[0].avg_fc ?? 0,
+            std_fc: dataPelaporan.responseData.data.items[0].avg_std_fc ?? 0,
+            egg_mass: dataPelaporan.responseData.data.items[0].avg_egg_mass ?? 0,
+            nama_strain_ayam: '-',
+            nama_treatment: '-',
+        });
+
+        const customHeaders = {
+            "tanggal_submit": "Tanggal Submit",
+            "nama_kandang": "Nama Kandang",
+            "usia_mgg": "Usia Mgg",
+            "populasi_awal": "Populasi Awal",
+            "populasi_kemarin": "Populasi Kemarin",
+            "jumlah_mati": "Jumlah Mati",
+            "jumlah_afkir": "Jumlah Afkir",
+            "jumlah_pindah": "Jumlah Pindah",
+            "jumlah_terima": "Jumlah Terima",
+            "populasi_terakhir": "Populasi Total",
+            "telur_utuh": "Telur Utuh",
+            "telur_bentes": "Telur Bentes",
+            "total_telur": "Total Telur",
+            "percentase_telur": "Percentase Telur",
+            "avg_berat_telur_gr": "Berat Telur gr",
+            "berat_telur_utuh_kg": "Berat Telur Utuh kg",
+            "berat_telur_bentes_kg": "Berat Telur Bentes kg",
+            "berat_telur_kg": "Berat Telur kg",
+            "std_nilai_hd": "Std Nilai HD",
+            "std_berat_telur": "Std Berat Telur",
+            "berat_pakan_per_ekor_gram": "Berat Pakan per Ekor gram",
+            "berat_pakan": "Berat Pakan",
+            "nama_jenis_pakan": "Nama Jenis Pakan",
+            "std_gr_perekor": "Std gr perekor",
+            "fc": "FC",
+            "std_fc": "Std FC",
+            "egg_mass": "Egg Mas",
+            "nama_strain_ayam": "Nama Strain Ayam",
+            "nama_treatment": "Nama Treatment",
+        }
+
+        excelParser().exportDataFromJSON(dataToExport, null, null, customHeaders)
         console.log("Data Excel : ", dataToExport);
     }
    

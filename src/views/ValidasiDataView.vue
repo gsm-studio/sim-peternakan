@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-lg-12 p-4">
                 <h4 class="mb-3">Master Data <span class="text-secondary">> Validasi Data</span></h4>
-                <p class="w-50">Lorem ipsum dolor sit amet consectetur. Elementum donec gravida mauris ipsum rhoncus nec tempor venenatis tellus.</p>
+                <p class="w-50">Pastikan data yang sudah ada benar dan akurat</p>
                 <div class="mt-4 mb-4">
                 <span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="21" viewBox="0 0 20 21" fill="none">

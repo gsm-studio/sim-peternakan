@@ -11,7 +11,7 @@
                     <img class="text-center mx-auto" src="@/assets/img/rossa.png" alt="Image Rossa">
                   </div>
                   
-                  <p class="text-medium-emphasis mb-5">Lorem ipsum dolor sit amet consectetur. Elit pretium hac gravida nullam phasellus</p>
+                  <p class="text-medium-emphasis mb-5">Selamat Datang di Rossa Farm</p>
                   <Form @submit="onSubmit" :validation-schema="schema" v-slot="{ errors, isSubmitting }">
                     <div class="mb-4">
                       <Field name="username" type="text" placeholder="Email atau nomor telepon" class="form-control" :class="{ 'is-invalid': errors.username }" />

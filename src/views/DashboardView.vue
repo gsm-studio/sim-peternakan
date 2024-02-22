@@ -346,7 +346,7 @@
                 </div>
                 <div class="col-lg-5">
                   <div class="mt-4">
-                    <div class="ps-3 ps-lg-0">
+                    <div class="ps-3 ps-lg-3">
                       <div class="small text-medium-emphasis mb-2">
                         Pakan 
                         <span class="color-text-rossa ms-3">{{ namaKandang }}</span>

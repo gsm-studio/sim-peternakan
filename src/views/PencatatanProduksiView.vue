@@ -319,7 +319,7 @@
     
 
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-scrollable modal-lg">
+        <div class="modal-dialog rounded modal-dialog-scrollable modal-lg">
             <div class="modal-content p-3">
                 <div class="modal-header">
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -623,7 +623,7 @@
     </div>
 
     <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen">
+        <div class="modal-dialog rounded modal-fullscreen">
             <div class="modal-content">
                 <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel"></h5>
@@ -1476,7 +1476,9 @@
         })
             .then(response => {
                 isSubmitting.value = false;
+                getIdKandang(route.params.id);
                 getPencatatan(route.params.id, null);
+                getPelaporan(route.params.id, rangeDate.start, rangeDate.end);
                 alert('success', 'Data pencatatan berhasil ditambahkan');
                 closeModal();
                 console.log("Response Submit Pencatatan : ", response);
@@ -1526,7 +1528,9 @@
                 isSubmitting.value = false;
                 console.log("Response Update Submit : ", response);
                 alert('success', 'Data pencatatan berhasil diubah');
+                getIdKandang(route.params.id);
                 getPencatatan(detailKandang.id, null);
+                getPelaporan(route.params.id, rangeDate.start, rangeDate.end);
                 closeModal();
             })
             .catch(error => {
@@ -1915,7 +1919,6 @@
             avgTotalTelurValue = totalAvgTotalTelur.value[lastIndex]; // Ambil nilai pada indeks yang baru
         }
 
-        // Set nilai avg_berat_telur_kg.value berdasarkan hasil pengecekan
         avg_berat_telur_kg.value = avgBeratTelurValue !== undefined && avgBeratTelurValue !== null ? avgBeratTelurValue + '' : 0;
         avgall_berat_telur_gr.value = avgAllBeratTelurGrValue !== undefined && avgAllBeratTelurGrValue !== null ? avgAllBeratTelurGrValue + '' : 0;
         avg_total_telur.value = avgTotalTelurValue !== undefined && avgTotalTelurValue !== null ? avgTotalTelurValue + '' : 0;
