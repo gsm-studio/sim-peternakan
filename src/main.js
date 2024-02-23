@@ -30,6 +30,8 @@ import VueRangedatePicker from 'vue-rangedate-picker';
 import VueDatepickerUi from 'vue-datepicker-ui'
 import 'vue-datepicker-ui/lib/vuedatepickerui.css';
 
+import JsonExcel from "vue-json-excel3";
+
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -47,6 +49,7 @@ app.use(router);
 app.use(VueSweetalert2);
 app.use(VueAwesomePaginate);
 // app.use(Vue3Html2pdf);
+app.component("downloadExcel", JsonExcel);
 app.component('vue-rangedate-picker', VueRangedatePicker);
 app.component('paginate', Paginate);
 app.component('Datepicker', VueDatepickerUi);

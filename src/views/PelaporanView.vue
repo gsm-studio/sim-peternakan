@@ -132,7 +132,16 @@
                             </button>
                             <div class="dropdown-menu dropdown-menu-start p-3 shadow">
                                 <button @click="cekPrintLaporan()" type="button" class="btn btn-danger bg-button-rossa">Download PDF</button>
-                                <button @click="downloadExcel()" class="btn btn-success ms-3">Download Excel</button>
+                                <!-- <button @click="downloadExcel()" class="btn btn-success ms-3">Download Excel</button> -->
+                                <download-excel
+                                    class="btn btn-success ms-3"
+                                    :data="downloadExcels()"
+                                    :fields="json_fields"
+                                    type="xlsx" worksheet="My Worksheet"
+                                    name="laporan.xlsx"
+                                    >
+                                    Download Excel
+                                </download-excel>
                             </div>
                         </template>
                     </div>
@@ -143,6 +152,7 @@
                     <p class="color-text-rossa ms-4">Standart FC: <span class="text-secondary">7,6</span></p>
                     <p class="color-text-rossa ms-4">Egg mass: <span class="text-secondary">11,7</span></p>
                 </div> -->
+               
                 <div class="table-responsive mt-3">
                     <table id="element-to-convert" class="table pelaporan table-bordered">
                     <thead>
@@ -220,6 +230,7 @@
                             <template v-if="dataPelaporan.responseData && dataPelaporan.responseData.data.items.length > 0">
                             <tr v-for="(item, index) in dataPelaporan.responseData.data.items" :key="index" class="text-center">
                                 <td>{{ formatTanggalSubmit(item.tanggal_submit) }}</td>
+                                <!-- <td>{{ item.tanggal_submit }}</td> -->
                                 <td>{{ item.nama_kandang }}</td>
                                 <td>{{ item.usia_mgg }}</td>
                                 
@@ -350,6 +361,7 @@
     import autoTable from 'jspdf-autotable';
     import { excelParser } from "@/helpers/excel-parser";
     import Swal from 'sweetalert2';
+   
 
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
     const user = localStorage.getItem('user');
@@ -392,6 +404,9 @@
     ]);
 
     const formatTanggalSubmit = (tanggal) => {
+        return moment(tanggal).format('DD-MM-YYYY');
+    }
+    const formatTanggalSubmitExcel = (tanggal) => {
         return moment(tanggal).format('DD-MM-YYYY');
     }
    
@@ -537,7 +552,7 @@
         "Berat Pakan",
         "Nama Jenis Pakan",
         "Std gr perekor",
-        "FC",
+        "FC (Feed convertion ratio)",
         "Std FC",
         "Egg Mass",
         "Nama Strain Ayam",
@@ -656,7 +671,7 @@
             ];
         });
         console.log("Data Body : ", dataBody);  
-        const doc = new jsPDF("l", "px", [595, 2000]); 
+        const doc = new jsPDF("l", "px", [595, 2500]); 
         // const doc = new jsPDF()
         
         console.log("Data Generate : ", generateData());
@@ -874,75 +889,82 @@
         getPelaporan(is_archived.value, idKandang.value, id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
     }
 
-    function downloadExcel() {
-        const dataToExport = dataPelaporan.exportData.items;
-        dataToExport.forEach(item => {
-            item.tanggal_submit = formatTanggalSubmit(item.tanggal_submit);
-        });
+    function downloadExcels() {
+        if (dataPelaporan && dataPelaporan.exportData && dataPelaporan.exportData.items) {
+                const dataToExport = dataPelaporan.exportData.items.map(item => {
+                    // Buat salinan item agar tidak mempengaruhi data asli
+                    const newItem = {...item};
+                    // Ubah format tanggal_submit
+                    newItem.tanggal_submit = formatTanggalSubmitExcel(newItem.tanggal_submit);
+                    return newItem;
+                });
 
-        dataToExport.push({
-            tanggal_submit: 'Total',
-            nama_kandang: '-',
-            usia_mgg: '-',
-            populasi_awal: '-',
-            populasi_kemarin: '-',
-            jumlah_mati: dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0,  
-            jumlah_afkir: dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0,
-            jumlah_pindah: dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0,
-            jumlah_terima: dataPelaporan.responseData.data.items[0].sumall_jumlah_terima ?? 0,
-            populasi_total: '-',
-            telur_utuh: dataPelaporan.responseData.data.items[0].sumall_telur_utuh ?? 0,
-            telur_bentes: dataPelaporan.responseData.data.items[0].sumall_telur_bentes ?? 0,
-            total_telur: dataPelaporan.responseData.data.items[0].sumall_total_telur ?? 0,
-            percentase_telur: '-',
-            avg_berat_telur_gr: '-',
-            berat_telur_utuh_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_utuh_kg ?? 0,
-            berat_telur_bentes_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_bentes_kg ?? 0,
-            berat_telur_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_kg ?? 0,
-            std_nilai_hd: '-',
-            std_berat_telur: '-',
-            berat_pakan_per_ekor_gram: '-',
-            berat_pakan: dataPelaporan.responseData.data.items[0].sumall_berat_pakan ?? 0,
-            nama_jenis_pakan: '-',
-            std_gr_perekor: '-',
-            fc: '-',
-            std_fc: dataPelaporan.responseData.data.items[0].sumall_std_fc ?? 0,
-            egg_mass: dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0,
-            nama_strain_ayam: '-',
-            nama_treatment: '-',
-        });
+                dataToExport.push({
+                    tanggal_submit: 'Total',
+                    nama_kandang: '-',
+                    usia_mgg: '-',
+                    populasi_awal: '-',
+                    populasi_kemarin: '-',
+                    jumlah_mati: dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0,  
+                    jumlah_afkir: dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0,
+                    jumlah_pindah: dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0,
+                    jumlah_terima: dataPelaporan.responseData.data.items[0].sumall_jumlah_terima ?? 0,
+                    populasi_total: '-',
+                    telur_utuh: dataPelaporan.responseData.data.items[0].sumall_telur_utuh ?? 0,
+                    telur_bentes: dataPelaporan.responseData.data.items[0].sumall_telur_bentes ?? 0,
+                    total_telur: dataPelaporan.responseData.data.items[0].sumall_total_telur ?? 0,
+                    percentase_telur: '-',
+                    avg_berat_telur_gr: '-',
+                    berat_telur_utuh_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_utuh_kg ?? 0,
+                    berat_telur_bentes_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_bentes_kg ?? 0,
+                    berat_telur_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_kg ?? 0,
+                    std_nilai_hd: '-',
+                    std_berat_telur: '-',
+                    berat_pakan_per_ekor_gram: '-',
+                    berat_pakan: dataPelaporan.responseData.data.items[0].sumall_berat_pakan ?? 0,
+                    nama_jenis_pakan: '-',
+                    std_gr_perekor: '-',
+                    fc: '-',
+                    std_fc: dataPelaporan.responseData.data.items[0].sumall_std_fc ?? 0,
+                    egg_mass: dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0,
+                    nama_strain_ayam: '-',
+                    nama_treatment: '-',
+                });
 
-        dataToExport.push({
-            tanggal_submit: 'Rata - rata',
-            nama_kandang: '-',
-            usia_mgg: dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0,
-            populasi_awal: '-',
-            populasi_kemarin: '-',
-            jumlah_mati: dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0,
-            jumlah_afkir: '-',
-            jumlah_pindah: '-',
-            jumlah_terima: '-',
-            populasi_total: '-',
-            telur_utuh: dataPelaporan.responseData.data.items[0].avg_telur_utuh ?? 0,
-            telur_bentes: dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0,
-            total_telur: dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0,
-            percentase_telur: dataPelaporan.responseData.data.items[0].avg_percentase_telur ?? 0,
-            avg_berat_telur_gr: dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0,
-            berat_telur_utuh_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0,
-            berat_telur_bentes_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0,
-            berat_telur_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0,
-            std_nilai_hd: '-',
-            std_berat_telur: '-',
-            berat_pakan_per_ekor_gram: dataPelaporan.responseData.data.items[0].avg_berat_pakan_per_ekor_gram ?? 0,
-            berat_pakan: dataPelaporan.responseData.data.items[0].avg_berat_pakan ?? 0,
-            nama_jenis_pakan: '-',
-            std_gr_perekor: '-',
-            fc: dataPelaporan.responseData.data.items[0].avg_fc ?? 0,
-            std_fc: dataPelaporan.responseData.data.items[0].avg_std_fc ?? 0,
-            egg_mass: dataPelaporan.responseData.data.items[0].avg_egg_mass ?? 0,
-            nama_strain_ayam: '-',
-            nama_treatment: '-',
-        });
+                dataToExport.push({
+                    tanggal_submit: 'Rata - rata',
+                    nama_kandang: '-',
+                    usia_mgg: dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0,
+                    populasi_awal: '-',
+                    populasi_kemarin: '-',
+                    jumlah_mati: dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0,
+                    jumlah_afkir: '-',
+                    jumlah_pindah: '-',
+                    jumlah_terima: '-',
+                    populasi_total: '-',
+                    telur_utuh: dataPelaporan.responseData.data.items[0].avg_telur_utuh ?? 0,
+                    telur_bentes: dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0,
+                    total_telur: dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0,
+                    percentase_telur: dataPelaporan.responseData.data.items[0].avg_percentase_telur ?? 0,
+                    avg_berat_telur_gr: dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0,
+                    berat_telur_utuh_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0,
+                    berat_telur_bentes_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0,
+                    berat_telur_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0,
+                    std_nilai_hd: '-',
+                    std_berat_telur: '-',
+                    berat_pakan_per_ekor_gram: dataPelaporan.responseData.data.items[0].avg_berat_pakan_per_ekor_gram ?? 0,
+                    berat_pakan: dataPelaporan.responseData.data.items[0].avg_berat_pakan ?? 0,
+                    nama_jenis_pakan: '-',
+                    std_gr_perekor: '-',
+                    fc: dataPelaporan.responseData.data.items[0].avg_fc ?? 0,
+                    std_fc: dataPelaporan.responseData.data.items[0].avg_std_fc ?? 0,
+                    egg_mass: dataPelaporan.responseData.data.items[0].avg_egg_mass ?? 0,
+                    nama_strain_ayam: '-',
+                    nama_treatment: '-',
+                });
+            console.log("Data Excel : ", dataToExport);
+            return dataToExport;
+        }
 
         const customHeaders = {
             "tanggal_submit": "Tanggal Submit",
@@ -975,10 +997,47 @@
             "nama_strain_ayam": "Nama Strain Ayam",
             "nama_treatment": "Nama Treatment",
         }
-
-        excelParser().exportDataFromJSON(dataToExport, null, null, customHeaders)
-        console.log("Data Excel : ", dataToExport);
+        // excelParser().exportDataFromJSON(dataToExport, null, null, customHeaders)
+        // console.log("Data Excel : ", dataToExport);
     }
+
+    const json_fields = {
+        "Tanggal Submit": "tanggal_submit",
+        "Nama Kandang": "nama_kandang",
+        "Usia Mgg": "usia_mgg",
+        "Populasi Awal": "populasi_awal",
+        "Populasi Kemarin":
+        "populasi_kemarin",
+        "Jumlah Mati": "jumlah_mati",
+        "Jumlah Afkir": "jumlah_afkir",
+        "Jumlah Pindah": "jumlah_pindah",
+        "Jumlah Terima": "jumlah_terima",
+        "Populasi Total": "populasi_total",
+        "Telur Utuh": "telur_utuh",
+        "Telur Bentes": "telur_bentes",
+        "Total Telur": "total_telur",
+        "Percentase Telur": "percentase_telur",
+        "Berat Telur gr": "berat_telur_gr",
+        "Berat Telur Utuh kg": "berat_telur_utuh_kg",
+        "Berat Telur Bentes kg": "berat_telur_bentes_kg",
+        "Berat Telur kg": "berat_telur_kg",
+        "Std Nilai HD": "std_nilai_hd",
+        "Std Berat Telur": "std_berat_telur",
+        "Berat Pakan per Ekor gram": "berat_pakan_per_ekor_gram",
+        "Berat Pakan": "berat_pakan",
+        "Nama Jenis Pakan": "nama_jenis_pakan",
+        "Std gr perekor": "std_gr_perekor",
+        "FC": "fc",
+        "Std FC": "std_fc",
+        "Egg Mass": "egg_mass",
+        "Nama Strain Ayam": "nama_strain_ayam",
+        "Nama Treatment": "nama_treatment",
+    };
+          
+
+
+
+    
    
 </script>
 

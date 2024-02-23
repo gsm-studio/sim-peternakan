@@ -24,6 +24,7 @@
     "vue": "^3.3.4",
     "vue-awesome-paginate": "^1.1.46",
     "vue-datepicker-ui": "^3.1.1",
+    "vue-json-excel3": "^1.0.19",
     "vue-moment": "^4.1.0",
     "vue-rangedate-picker": "^1.0.0",
     "vue-router": "^4.2.5",
