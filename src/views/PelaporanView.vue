@@ -542,7 +542,7 @@
         "Telur Bentes",
         "Total Telur",
         "Percentase Telur",
-        "Berat Telur gr",
+        "Berat Telur gr/butir",
         "Berat Telur Utuh kg",
         "Berat Telur Bentes kg",
         "Berat Telur kg",
@@ -689,7 +689,8 @@
             styles: {
                 fontSize: 12,
                 overflow: 'linebreak',
-                cellWidth: 'wrap'
+                cellWidth: 'wrap',
+                textColor: [0, 0, 0],
             },
             columnStyles: {
                 0: {cellWidth: 'auto'},
@@ -981,7 +982,7 @@
             "telur_bentes": "Telur Bentes",
             "total_telur": "Total Telur",
             "percentase_telur": "Percentase Telur",
-            "avg_berat_telur_gr": "Berat Telur gr",
+            "berat_telur_gr": "Berat Telur gr",
             "berat_telur_utuh_kg": "Berat Telur Utuh kg",
             "berat_telur_bentes_kg": "Berat Telur Bentes kg",
             "berat_telur_kg": "Berat Telur kg",
@@ -1017,7 +1018,7 @@
         "Telur Bentes": "telur_bentes",
         "Total Telur": "total_telur",
         "Percentase Telur": "percentase_telur",
-        "Berat Telur gr": "berat_telur_gr",
+        "Berat Telur gr/butir": "avg_berat_telur_gr",
         "Berat Telur Utuh kg": "berat_telur_utuh_kg",
         "Berat Telur Bentes kg": "berat_telur_bentes_kg",
         "Berat Telur kg": "berat_telur_kg",
