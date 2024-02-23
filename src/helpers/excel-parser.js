@@ -24,7 +24,7 @@ export const excelParser = () => {
     if (!data) return;
     try {
       const fileName = newFileName || "laporan";
-      const exportType = exportFromJSON.types[fileExportType || "csv"];
+      const exportType = exportFromJSON.types[fileExportType || "xls"];
 
       // Buat array baru untuk menyimpan data yang akan diekspor
       const formattedData = data.map(item => {
