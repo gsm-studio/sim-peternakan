@@ -1275,9 +1275,9 @@
             berat_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
         }),
         yup.object({
-            jenis_pakan: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            jenis_pakan: yup.number().required(),
             jenis_treatment: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            berat_pakan: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            berat_pakan: yup.number().required(),
             catatan: yup.string().nullable(),
         }),
     ];
@@ -1652,15 +1652,15 @@
                         // const tanggalSubmit = new Date(item.tanggal_submit);
                         const todays = moments().utc();
                         const tanggalSubmit = moments(item.tanggal_submit).utc();
-                        console.log("Tanggal Submit : ", tanggalSubmit);
+                        // console.log("Tanggal Submit : ", tanggalSubmit);
                         const diffTime = Math.abs(todays - tanggalSubmit);
                         // const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
                         const diffDays = todays.diff(tanggalSubmit, 'days'); 
                         // Cek apakah tanggal submit ada di antara 7 hari terakhir
-                        console.log("Diff Days : ", item.tanggal_submit);
+                        // console.log("Diff Days : ", item.tanggal_submit);
                         if (diffDays <= 6) {
                             const tanggalKey = tanggalSubmit.format('ddd MMM DD YYYY'); // Buat kunci berdasarkan tanggal
-                            console.log("Tanggal Key : ", tanggalKey);
+                            // console.log("Tanggal Key : ", tanggalKey);
                             // Tambahkan data telur utuh ke dalam objek, menjumlahkan jika sudah ada
                             if (telurUtuhPerTanggal[tanggalKey]) {
                                 telurUtuhPerTanggal[tanggalKey] += item.telur_utuh;
@@ -1897,12 +1897,13 @@
             totalAvgTotalTelur.value.push(avgTotaltelur[label] || null);
             totalAvgBeratTelur.value.push(avgBeratTelur[label] || null);
         });
-        console.log("avgAllBeratTelurGr : ", avgAllBeratTelurGr);
 
         let lastIndex = 6;
         let avgBeratTelurValue = totalAvgBeratTelur.value[lastIndex];
         let avgAllBeratTelurGrValue = totalAvgAllBeratTelurGr.value[lastIndex];
         let avgTotalTelurValue = totalAvgTotalTelur.value[lastIndex];
+
+       
         while (avgBeratTelurValue === null || avgBeratTelurValue === undefined) {
             lastIndex--; // Kurangi indeks
             if (lastIndex < 0) break; // Jika sudah mencapai indeks terendah, keluar dari loop
@@ -1918,6 +1919,8 @@
             if (lastIndex < 0) break; // Jika sudah mencapai indeks terendah, keluar dari loop
             avgTotalTelurValue = totalAvgTotalTelur.value[lastIndex]; // Ambil nilai pada indeks yang baru
         }
+
+        console.log("totalAvgTotalTelur : ", totalAvgTotalTelur);
 
         avg_berat_telur_kg.value = avgBeratTelurValue !== undefined && avgBeratTelurValue !== null ? avgBeratTelurValue + '' : 0;
         avgall_berat_telur_gr.value = avgAllBeratTelurGrValue !== undefined && avgAllBeratTelurGrValue !== null ? avgAllBeratTelurGrValue + '' : 0;

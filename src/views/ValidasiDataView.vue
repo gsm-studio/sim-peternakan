@@ -879,8 +879,8 @@
             id_anak_kandang: yup.number().required(),
             nama_kandang: yup.number().required(),
             nama_mandor: yup.string().required(),
-            usia_hari: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
-            usia_mgg: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+            usia_hari: yup.number().required(),
+            usia_mgg: yup.number().required(),
             strain_ayam: yup.number().required(),
         }),
         yup.object({
@@ -898,9 +898,9 @@
             berat_telur_bentes: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
         }),
         yup.object({
-            jenis_pakan: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
+            jenis_pakan: yup.number().required(),
             jenis_treatment: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null) ,
-            berat_pakan: yup.number().nullable().transform((_, val) => val === Number(val) ? val : null),
+            berat_pakan: yup.number().required(),
             catatan: yup.string().nullable(),
         }),
     ];
