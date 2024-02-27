@@ -528,35 +528,35 @@
     };
 
     const customHeaders = [
-        "Tanggal Submit",
-        "Nama Kandang",
+        "Tgl Submit",
+        "Kandang",
         "Usia Mgg",
-        "Populasi Awal",
-        "Populasi Kemarin",
-        "Jumlah Mati",
-        "Jumlah Afkir",
-        "Jumlah Pindah",
-        "Jumlah Terima",
-        "Populasi Total",
-        "Telur Utuh",
-        "Telur Bentes",
-        "Total Telur",
-        "Percentase Telur",
-        "Berat Telur gr/butir",
-        "Berat Telur Utuh kg",
-        "Berat Telur Bentes kg",
-        "Berat Telur kg",
-        "Std Nilai HD",
-        "Std Berat Telur",
-        "Berat Pakan per Ekor gram",
-        "Berat Pakan",
-        "Nama Jenis Pakan",
-        "Std gr perekor",
-        "FC (Feed convertion ratio)",
+        "P. Awal",
+        "P. Kemarin",
+        "Mati",
+        "Afkir",
+        "Pindah",
+        "Terima",
+        "P. Total",
+        "Tlr Utuh",
+        "Tlr Bentes",
+        "Total Tlr",
+        "Hd %",
+        "gr/butir",
+        "Utuh (kg)",
+        "Bentes (kg)",
+        "Tlr total (kg)",
+        "Std HD %",
+        "Std g/btr",
+        "g/ekor",
+        "Pakan (kg)",
+        "Jns Pakan",
+        "Std gr/ekor",
+        "FC",
         "Std FC",
         "Egg Mass",
-        "Nama Strain Ayam",
-        "Nama Treatment",
+        "Strain",
+        "Treatment",
     ];
 
     function createHeaders(keys) {
@@ -671,59 +671,59 @@
             ];
         });
         console.log("Data Body : ", dataBody);  
-        const doc = new jsPDF("l", "px", [768, 2200]); 
-        // const doc = new jsPDF();
+        // const doc = new jsPDF("l", "px", [768, 2200]); 
+        const doc = new jsPDF("l", "mm", "legal");
         
         console.log("Data Generate : ", generateData());
-        doc.setFontSize(24);
-        doc.text(`Nama Kandang: ${namaKandang.value}`, 10, 30)
-        doc.text(`Tanggal: ${rangeDate.start} - ${rangeDate.end}`, 10, 60)
+        doc.setFontSize(18);
+        doc.text(`Nama Kandang: ${namaKandang.value}`, 10, 10)
+        doc.text(`Tanggal: ${rangeDate.start} - ${rangeDate.end}`, 10, 20)
         // doc.table(10, 90, generateData(), headers, { autoSize: true });
         doc.autoTable({
             head: [customHeaders],
             body: [
                 ...dataBody
             ],
-            startY: 90,
+            startY: 30,
             theme: 'grid',
             styles: {
-                fontSize: 12,
+                fontSize: 8,
                 overflow: 'linebreak',
-                cellWidth: 70,
+                // cellWidth: 50,
                 textColor: [0, 0, 0],
             },
-            // columnStyles: {
-            //     0: {cellWidth: 'wrap'},
-            //     1: {cellWidth: 'wrap'},
-            //     2: {cellWidth: 'wrap'},
-            //     3: {cellWidth: 'wrap'},
-            //     4: {cellWidth: 'wrap'},
-            //     5: {cellWidth: 'wrap'},
-            //     6: {cellWidth: 'wrap'},
-            //     7: {cellWidth: 'wrap'},
-            //     8: {cellWidth: 'wrap'},
-            //     9: {cellWidth: 'wrap'},
-            //     10: {cellWidth: 'wrap'},
-            //     11: {cellWidth: 'wrap'},
-            //     12: {cellWidth: 'wrap'},
-            //     13: {cellWidth: 'wrap'},
-            //     14: {cellWidth: 'wrap'},
-            //     15: {cellWidth: 'wrap'},
-            //     16: {cellWidth: 'wrap'},
-            //     17: {cellWidth: 'wrap'},
-            //     18: {cellWidth: 'wrap'},
-            //     19: {cellWidth: 'wrap'},
-            //     20: {cellWidth: 'wrap'},
-            //     21: {cellWidth: 'wrap'},
-            //     22: {cellWidth: 'wrap'},
-            //     23: {cellWidth: 'wrap'},
-            //     24: {cellWidth: 'wrap'},
-            //     25: {cellWidth: 'wrap'},
-            //     26: {cellWidth: 'wrap'},
-            //     27: {cellWidth: 'wrap'},
-            //     28: {cellWidth: 'wrap'},
-            // },
-            margin: { top: 90, right: 10, bottom: 10, left: 10 },
+            columnStyles: {
+                0: {cellWidth: '50'},
+                1: {cellWidth: '50'},
+                2: {cellWidth: '30'},
+                3: {cellWidth: '30'},
+                4: {cellWidth: '30'},
+                5: {cellWidth: '30'},
+                6: {cellWidth: '30'},
+                7: {cellWidth: '30'},
+                8: {cellWidth: '30'},
+                9: {cellWidth: '30'},
+                10: {cellWidth: '30'},
+                11: {cellWidth: '30'},
+                12: {cellWidth: '30'},
+                13: {cellWidth: '30'},
+                14: {cellWidth: '30'},
+                15: {cellWidth: '30'},
+                16: {cellWidth: '30'},
+                17: {cellWidth: '30'},
+                18: {cellWidth: '30'},
+                19: {cellWidth: '30'},
+                20: {cellWidth: '50'},
+                21: {cellWidth: '30'},
+                22: {cellWidth: '20'},
+                23: {cellWidth: '30'},
+                24: {cellWidth: '30'},
+                25: {cellWidth: '30'},
+                26: {cellWidth: '30'},
+                27: {cellWidth: '50'},
+                28: {cellWidth: '30'},
+            },
+            margin: { top: 10, right: 5, bottom: 10, left: 5 },
         });
         doc.save("laporan.pdf")
     }
@@ -968,8 +968,8 @@
         }
 
         const customHeaders = {
-            "tanggal_submit": "Tanggal Submit",
-            "nama_kandang": "Nama Kandang",
+            "tanggal_submit": "Tgl Submit",
+            "nama_kandang": "Kandang",
             "usia_mgg": "Usia Mgg",
             "populasi_awal": "Populasi Awal",
             "populasi_kemarin": "Populasi Kemarin",
@@ -988,15 +988,15 @@
             "berat_telur_kg": "Berat Telur kg",
             "std_nilai_hd": "Std Nilai HD",
             "std_berat_telur": "Std Berat Telur",
-            "berat_pakan_per_ekor_gram": "Berat Pakan per Ekor gram",
+            "berat_pakan_per_ekor_gram": "Berat Pakan / ekor gram",
             "berat_pakan": "Berat Pakan",
-            "nama_jenis_pakan": "Nama Jenis Pakan",
+            "nama_jenis_pakan": "Jenis Pakan",
             "std_gr_perekor": "Std gr perekor",
             "fc": "FC",
             "std_fc": "Std FC",
             "egg_mass": "Egg Mas",
-            "nama_strain_ayam": "Nama Strain Ayam",
-            "nama_treatment": "Nama Treatment",
+            "nama_strain_ayam": "Strain Ayam",
+            "nama_treatment": "Treatment",
         }
         // excelParser().exportDataFromJSON(dataToExport, null, null, customHeaders)
         // console.log("Data Excel : ", dataToExport);
