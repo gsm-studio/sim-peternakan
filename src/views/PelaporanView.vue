@@ -671,8 +671,8 @@
             ];
         });
         console.log("Data Body : ", dataBody);  
-        const doc = new jsPDF("l", "px", [595, 2500]); 
-        // const doc = new jsPDF()
+        const doc = new jsPDF("l", "px", [768, 2200]); 
+        // const doc = new jsPDF();
         
         console.log("Data Generate : ", generateData());
         doc.setFontSize(24);
@@ -689,40 +689,40 @@
             styles: {
                 fontSize: 12,
                 overflow: 'linebreak',
-                cellWidth: 'wrap',
+                cellWidth: 70,
                 textColor: [0, 0, 0],
             },
-            columnStyles: {
-                0: {cellWidth: 'auto'},
-                1: {cellWidth: 'auto'},
-                2: {cellWidth: 'auto'},
-                3: {cellWidth: 'auto'},
-                4: {cellWidth: 'auto'},
-                5: {cellWidth: 'auto'},
-                6: {cellWidth: 'auto'},
-                7: {cellWidth: 'auto'},
-                8: {cellWidth: 'auto'},
-                9: {cellWidth: 'auto'},
-                10: {cellWidth: 'auto'},
-                11: {cellWidth: 'auto'},
-                12: {cellWidth: 'auto'},
-                13: {cellWidth: 'auto'},
-                14: {cellWidth: 'auto'},
-                15: {cellWidth: 'auto'},
-                16: {cellWidth: 'auto'},
-                17: {cellWidth: 'auto'},
-                18: {cellWidth: 'auto'},
-                19: {cellWidth: 'auto'},
-                20: {cellWidth: 'auto'},
-                21: {cellWidth: 'auto'},
-                22: {cellWidth: 'auto'},
-                23: {cellWidth: 'auto'},
-                24: {cellWidth: 'auto'},
-                25: {cellWidth: 'auto'},
-                26: {cellWidth: 'auto'},
-                27: {cellWidth: 'auto'},
-                28: {cellWidth: 'auto'},
-            },
+            // columnStyles: {
+            //     0: {cellWidth: 'wrap'},
+            //     1: {cellWidth: 'wrap'},
+            //     2: {cellWidth: 'wrap'},
+            //     3: {cellWidth: 'wrap'},
+            //     4: {cellWidth: 'wrap'},
+            //     5: {cellWidth: 'wrap'},
+            //     6: {cellWidth: 'wrap'},
+            //     7: {cellWidth: 'wrap'},
+            //     8: {cellWidth: 'wrap'},
+            //     9: {cellWidth: 'wrap'},
+            //     10: {cellWidth: 'wrap'},
+            //     11: {cellWidth: 'wrap'},
+            //     12: {cellWidth: 'wrap'},
+            //     13: {cellWidth: 'wrap'},
+            //     14: {cellWidth: 'wrap'},
+            //     15: {cellWidth: 'wrap'},
+            //     16: {cellWidth: 'wrap'},
+            //     17: {cellWidth: 'wrap'},
+            //     18: {cellWidth: 'wrap'},
+            //     19: {cellWidth: 'wrap'},
+            //     20: {cellWidth: 'wrap'},
+            //     21: {cellWidth: 'wrap'},
+            //     22: {cellWidth: 'wrap'},
+            //     23: {cellWidth: 'wrap'},
+            //     24: {cellWidth: 'wrap'},
+            //     25: {cellWidth: 'wrap'},
+            //     26: {cellWidth: 'wrap'},
+            //     27: {cellWidth: 'wrap'},
+            //     28: {cellWidth: 'wrap'},
+            // },
             margin: { top: 90, right: 10, bottom: 10, left: 10 },
         });
         doc.save("laporan.pdf")
