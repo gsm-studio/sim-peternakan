@@ -528,8 +528,8 @@
     };
 
     const customHeaders = [
-        "Tgl Submit",
-        "Kandang",
+        "Tgl",
+        "Kdg",
         "Usia Mgg",
         "P. Awal",
         "P. Kemarin",
@@ -542,13 +542,13 @@
         "Tlr Bentes",
         "Total Tlr",
         "Hd %",
-        "gr/butir",
+        "gr / butir",
         "Utuh (kg)",
-        "Bentes (kg)",
+        "Bentes(kg)",
         "Tlr total (kg)",
         "Std HD %",
         "Std g/btr",
-        "g/ekor",
+        "g / ekor",
         "Pakan (kg)",
         "Jns Pakan",
         "Std gr/ekor",
@@ -672,10 +672,10 @@
         });
         console.log("Data Body : ", dataBody);  
         // const doc = new jsPDF("l", "px", [768, 2200]); 
-        const doc = new jsPDF("l", "mm", "legal");
+        const doc = new jsPDF("l", "mm", [260, 380]);
         
         console.log("Data Generate : ", generateData());
-        doc.setFontSize(18);
+        doc.setFontSize(14);
         doc.text(`Nama Kandang: ${namaKandang.value}`, 10, 10)
         doc.text(`Tanggal: ${rangeDate.start} - ${rangeDate.end}`, 10, 20)
         // doc.table(10, 90, generateData(), headers, { autoSize: true });
@@ -693,37 +693,37 @@
                 textColor: [0, 0, 0],
             },
             columnStyles: {
-                0: {cellWidth: '50'},
-                1: {cellWidth: '50'},
-                2: {cellWidth: '30'},
-                3: {cellWidth: '30'},
-                4: {cellWidth: '30'},
-                5: {cellWidth: '30'},
-                6: {cellWidth: '30'},
-                7: {cellWidth: '30'},
-                8: {cellWidth: '30'},
-                9: {cellWidth: '30'},
-                10: {cellWidth: '30'},
-                11: {cellWidth: '30'},
-                12: {cellWidth: '30'},
-                13: {cellWidth: '30'},
-                14: {cellWidth: '30'},
-                15: {cellWidth: '30'},
-                16: {cellWidth: '30'},
-                17: {cellWidth: '30'},
-                18: {cellWidth: '30'},
-                19: {cellWidth: '30'},
-                20: {cellWidth: '50'},
-                21: {cellWidth: '30'},
-                22: {cellWidth: '20'},
-                23: {cellWidth: '30'},
-                24: {cellWidth: '30'},
-                25: {cellWidth: '30'},
-                26: {cellWidth: '30'},
-                27: {cellWidth: '50'},
-                28: {cellWidth: '30'},
+                0: {cellWidth: 17},
+                1: {cellWidth: 15},
+                2: {cellWidth: 10},
+                3: {cellWidth: 10},
+                4: {cellWidth: 15},
+                5: {cellWidth: 10},
+                6: {cellWidth: 10},
+                7: {cellWidth: 13},
+                8: {cellWidth: 13},
+                9: {cellWidth: 13},
+                10: {cellWidth: 13},
+                11: {cellWidth: 13},
+                12: {cellWidth: 13},
+                13: {cellWidth: 13},
+                14: {cellWidth: 13},
+                15: {cellWidth: 13},
+                16: {cellWidth: 13},
+                17: {cellWidth: 13},
+                18: {cellWidth: 13},
+                19: {cellWidth: 13},
+                20: {cellWidth: 13},
+                21: {cellWidth: 12},
+                22: {cellWidth: 13},
+                23: {cellWidth: 13},
+                24: {cellWidth: 13},
+                25: {cellWidth: 13},
+                26: {cellWidth: 12},
+                27: {cellWidth: 12},
+                28: {cellWidth: 17},
             },
-            margin: { top: 10, right: 5, bottom: 10, left: 5 },
+            margin: { top: 10, right: 3, bottom: 10, left: 3 },
         });
         doc.save("laporan.pdf")
     }
