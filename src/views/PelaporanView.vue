@@ -671,8 +671,8 @@
             ];
         });
         console.log("Data Body : ", dataBody);  
-        // const doc = new jsPDF("l", "px", [768, 2200]); 
-        const doc = new jsPDF("l", "mm", [260, 380]);
+    
+        const doc = new jsPDF("l", "mm", [260, 430]);
         
         console.log("Data Generate : ", generateData());
         doc.setFontSize(14);
@@ -693,35 +693,35 @@
                 textColor: [0, 0, 0],
             },
             columnStyles: {
-                0: {cellWidth: 17},
-                1: {cellWidth: 15},
-                2: {cellWidth: 10},
-                3: {cellWidth: 10},
+                0: {cellWidth: 20},
+                1: {cellWidth: 18},
+                2: {cellWidth: 15},
+                3: {cellWidth: 15},
                 4: {cellWidth: 15},
-                5: {cellWidth: 10},
-                6: {cellWidth: 10},
+                5: {cellWidth: 13},
+                6: {cellWidth: 13},
                 7: {cellWidth: 13},
                 8: {cellWidth: 13},
                 9: {cellWidth: 13},
-                10: {cellWidth: 13},
+                10: {cellWidth: 15},
                 11: {cellWidth: 13},
-                12: {cellWidth: 13},
+                12: {cellWidth: 15},
                 13: {cellWidth: 13},
                 14: {cellWidth: 13},
                 15: {cellWidth: 13},
                 16: {cellWidth: 13},
-                17: {cellWidth: 13},
+                17: {cellWidth: 15},
                 18: {cellWidth: 13},
                 19: {cellWidth: 13},
                 20: {cellWidth: 13},
-                21: {cellWidth: 12},
-                22: {cellWidth: 13},
+                21: {cellWidth: 15},
+                22: {cellWidth: 20},
                 23: {cellWidth: 13},
                 24: {cellWidth: 13},
                 25: {cellWidth: 13},
-                26: {cellWidth: 12},
-                27: {cellWidth: 12},
-                28: {cellWidth: 17},
+                26: {cellWidth: 15},
+                27: {cellWidth: 18},
+                28: {cellWidth: 20},
             },
             margin: { top: 10, right: 3, bottom: 10, left: 3 },
         });
