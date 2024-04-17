@@ -1865,8 +1865,9 @@
             const tanggalSubmit = new Date(item.tanggal_submit);
             const diffTime = Math.abs(today - tanggalSubmit);
             const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
+            
             if (diffDays <= 6) {
+                console.log("Item : ", item);
                 const tanggalKey = tanggalSubmit.toDateString(); 
                 if (gramPerEkorPakan[tanggalKey]) {
                     gramPerEkorPakan[tanggalKey] = item.berat_pakan_per_ekor_gram;
@@ -1890,6 +1891,7 @@
                 }
             }
         });
+        
 
         labels.value.forEach(label => {
             totalGramPerEkorPakan.value.push(gramPerEkorPakan[label] || null);
@@ -1898,37 +1900,37 @@
             totalAvgBeratTelur.value.push(avgBeratTelur[label] || null);
         });
 
+        console.log("avgTotaltelur : ", avgTotaltelur);
+
         let lastIndex = 6;
         let avgBeratTelurValue = totalAvgBeratTelur.value[lastIndex];
         let avgAllBeratTelurGrValue = totalAvgAllBeratTelurGr.value[lastIndex];
         let avgTotalTelurValue = totalAvgTotalTelur.value[lastIndex];
 
-       
+        // While ini berfungsi untuk mencari nilai terakhir yang tidak null, jika null maka akan mencari ke indeks sebelumnya, dan seterusnya. While mencari dari indeks terakhir atau value terbaru dari tanggal saat ini ke tanggal 7 hari sebelumnya
+        let lastIndex1 = 6;
         while (avgBeratTelurValue === null || avgBeratTelurValue === undefined) {
-            lastIndex--; // Kurangi indeks
-            if (lastIndex < 0) break; // Jika sudah mencapai indeks terendah, keluar dari loop
-            avgBeratTelurValue = totalAvgBeratTelur.value[lastIndex]; // Ambil nilai pada indeks yang baru
+            lastIndex1--; // Kurangi indeks
+            if (lastIndex1 < 0) break; // Jika sudah mencapai indeks terendah, keluar dari loop
+            avgBeratTelurValue = totalAvgBeratTelur.value[lastIndex1]; // Ambil nilai pada indeks yang baru
         }
+        let lastIndex2 = 6;
         while (avgAllBeratTelurGrValue === null || avgAllBeratTelurGrValue === undefined) {
-            lastIndex--; // Kurangi indeks
-            if (lastIndex < 0) break; // Jika sudah mencapai indeks terendah, keluar dari loop
-            avgAllBeratTelurGrValue = totalAvgAllBeratTelurGr.value[lastIndex]; // Ambil nilai pada indeks yang baru
+            lastIndex2--; // Kurangi indeks
+            if (lastIndex2 < 0) break; // Jika sudah mencapai indeks terendah, keluar dari loop
+            avgAllBeratTelurGrValue = totalAvgAllBeratTelurGr.value[lastIndex2]; // Ambil nilai pada indeks yang baru
         }
+        let lastIndex3 = 6;
         while (avgTotalTelurValue === null || avgTotalTelurValue === undefined) {
-            lastIndex--; // Kurangi indeks
-            if (lastIndex < 0) break; // Jika sudah mencapai indeks terendah, keluar dari loop
-            avgTotalTelurValue = totalAvgTotalTelur.value[lastIndex]; // Ambil nilai pada indeks yang baru
+            lastIndex3--; // Kurangi indeks
+            if (lastIndex3 < 0) break; // Jika sudah mencapai indeks terendah, keluar dari loop
+            avgTotalTelurValue = totalAvgTotalTelur.value[lastIndex3]; // Ambil nilai pada indeks yang baru
         }
-
-        console.log("totalAvgTotalTelur : ", totalAvgTotalTelur);
 
         avg_berat_telur_kg.value = avgBeratTelurValue !== undefined && avgBeratTelurValue !== null ? avgBeratTelurValue + '' : 0;
         avgall_berat_telur_gr.value = avgAllBeratTelurGrValue !== undefined && avgAllBeratTelurGrValue !== null ? avgAllBeratTelurGrValue + '' : 0;
         avg_total_telur.value = avgTotalTelurValue !== undefined && avgTotalTelurValue !== null ? avgTotalTelurValue + '' : 0;
 
-        // avgall_berat_telur_gr.value = totalAvgAllBeratTelurGr.value[6] ? totalAvgAllBeratTelurGr.value[6] + '' : 0;
-        // avg_total_telur.value = totalAvgTotalTelur.value[6] ? totalAvgTotalTelur.value[6] + '' : 0;
-        // avg_berat_telur_kg.value = totalAvgBeratTelur.value[6] ? totalAvgBeratTelur.value[6] + '' : 0;
     }
 
     function getJenisPakanItems(items) {

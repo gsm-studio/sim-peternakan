@@ -891,7 +891,7 @@
     }
 
     function downloadExcels() {
-        if (dataPelaporan && dataPelaporan.exportData && dataPelaporan.exportData.items) {
+        if (dataPelaporan && dataPelaporan.exportData && dataPelaporan.exportData.items.length > 0) {
                 const dataToExport = dataPelaporan.exportData.items.map(item => {
                     // Buat salinan item agar tidak mempengaruhi data asli
                     const newItem = {...item};
@@ -1034,10 +1034,6 @@
         "Nama Strain Ayam": "nama_strain_ayam",
         "Nama Treatment": "nama_treatment",
     };
-          
-
-
-
     
    
 </script>
