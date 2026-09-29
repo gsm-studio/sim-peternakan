@@ -40,14 +40,8 @@
                                     <option value="0">Tidak</option>
                                     <option value="1">Ya</option>
                                 </select>
-                                <label class="form-label">Pilih Filter</label> 
-                                <select v-model="idKandang" @change="getPelaporanX(is_archived, $event.target.value, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
-                                    <option value="0" selected> 
-                                        Semua Kandang 
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
-                                        <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
-                                        </svg>
-                                    </option>
+                                <label class="form-label">Pilih Filter (kandang bisa pilih lebih dari satu, kosongkan untuk semua kandang)</label>
+                                <select v-model="idKandang" multiple size="5" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                     <template v-if="dataKandang.responseData && dataKandang.responseData.data.items.length > 0">
                                         <option v-for="item in dataKandang.responseData.data.items" :key="item.id" :value="item.id">
                                             {{ item.nama }}
@@ -56,7 +50,7 @@
                                     <template v-else>
                                         <option>Belum ada Kandang</option>
                                     </template>
-                                </select> 
+                                </select>
                                 <select v-model="id_kategori_kandang" @change="getPelaporanX(is_archived, idKandang, $event.target.value, id_treatment, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                     <option value="0" selected> 
                                         Semua Kategori Kandang 
@@ -122,8 +116,12 @@
                                     </template>
                                 </select> 
                                 <button @click="getFilterLaporan()" type="button" class="btn btn-success">Terapkan</button>
-                            </div> 
+                            </div>
                         </p>
+                        <div class="form-check form-check-inline ms-3 mt-2">
+                            <input class="form-check-input" type="checkbox" v-model="showPindahTerima" id="togglePindahTerima">
+                            <label class="form-check-label" for="togglePindahTerima">Tampilkan kolom Pindah/Terima</label>
+                        </div>
                     </div>
                     <div class="d-inline">
                         <template v-if="role == adminKantor || role == superadmin">
@@ -161,11 +159,11 @@
                             <th class="row-atas-bg" rowspan="2" scope="col">Kandang</th>
                            
                             <th class="row-atas-bg" scope="col">Usia</th>
-                            <th class="row-atas-bg" colspan="6" scope="col">Populasi</th>
+                            <th class="row-atas-bg" :colspan="showPindahTerima ? 6 : 4" scope="col">Populasi</th>
 
                             <th class="row-atas-bg" rowspan="2" scope="col">Total Populasi</th>
 
-                            <th class="row-atas-bg" colspan="5" scope="col">Produksi Telur</th>
+                            <th class="row-atas-bg" colspan="8" scope="col">Produksi Telur</th>
 
                             <th class="row-atas-bg" colspan="3" scope="col">Berat Telur</th>
 
@@ -193,13 +191,16 @@
                             <th class="row-bawah-bg" scope="col">Populasi Kemarin</th>
                             <th class="row-bawah-bg" scope="col">Mati</th>
                             <th class="row-bawah-bg" scope="col">Afkir</th>
-                            <th class="row-bawah-bg" scope="col">Pindah</th>
-                            <th class="row-bawah-bg" scope="col">Terima</th>
+                            <th class="row-bawah-bg" scope="col" v-if="showPindahTerima">Pindah</th>
+                            <th class="row-bawah-bg" scope="col" v-if="showPindahTerima">Terima</th>
 
                             <th class="row-bawah-bg" scope="col">Telur utuh</th>
                             <th class="row-bawah-bg" scope="col">Telur bentes</th>
                             <th class="row-bawah-bg" scope="col">Total Telur</th>
-                            <th class="row-bawah-bg" scope="col">%</th>
+                            <th class="row-bawah-bg" scope="col">%HD</th>
+                            <th class="row-bawah-bg" scope="col">%HH</th>
+                            <th class="row-bawah-bg" scope="col">%HD Kemarin</th>
+                            <th class="row-bawah-bg" scope="col">Selisih %HD</th>
                             <th class="row-bawah-bg" scope="col">gr/butir</th>
 
                             <th class="row-bawah-bg" scope="col">Berat Telur utuh</th>
@@ -238,8 +239,8 @@
                                 <td>{{ item.populasi_kemarin }}</td>
                                 <td>{{ item.jumlah_mati }}</td>
                                 <td>{{ item.jumlah_afkir }}</td>
-                                <td>{{ item.jumlah_pindah }}</td>
-                                <td>{{ item.jumlah_terima }}</td>
+                                <td v-if="showPindahTerima">{{ item.jumlah_pindah }}</td>
+                                <td v-if="showPindahTerima">{{ item.jumlah_terima }}</td>
 
                                 <td>{{ item.populasi_terakhir }}</td>
 
@@ -247,6 +248,9 @@
                                 <td>{{ item.telur_bentes }}</td>
                                 <td>{{ item.total_telur }}</td>
                                 <td>{{ item.percentase_telur }}</td>
+                                <td>{{ item.percentase_telur_hh }}</td>
+                                <td>{{ item.percentase_telur_kemarin }}</td>
+                                <td>{{ item.selisih_percentase_telur }}</td>
                                 <td>{{ item.avg_berat_telur_gr }}</td>
 
                                 <td>{{ item.berat_telur_utuh_kg }}</td>
@@ -280,13 +284,16 @@
                                 <!-- <td>{{ dataPelaporan.responseData.data.items[0].sumall_usia_mgg ?? 0 }}</td> -->
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_terima ?? 0 }}</td>
+                                <td v-if="showPindahTerima">{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0 }}</td>
+                                <td v-if="showPindahTerima">{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_terima ?? 0 }}</td>
                                 <!-- <td>{{ dataPelaporan.responseData.data.items[0].sumall_populasi_total ?? 0 }} </td> -->
                                 <td> - </td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_telur_utuh ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_telur_bentes ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_total_telur ?? 0 }}</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
                                 <td>-</td>
                                 <td>-</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_telur_utuh_kg ?? 0 }}</td>
@@ -310,13 +317,17 @@
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0 }}</td>
                                 <td colspan="2">-</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0 }}</td>
-                                <td colspan="3">-</td>
+                                <td>-</td>
+                                <td colspan="2" v-if="showPindahTerima">-</td>
                                 <!-- <td>{{ dataPelaporan.responseData.data.items[0].avg_populasi_total ?? 0 }} </td> -->
                                 <td> - </td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_telur_utuh ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_percentase_telur ?? 0 }}</td>
+                                <td>-</td>
+                                <td>-</td>
+                                <td>-</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0 }}</td>
@@ -385,8 +396,12 @@
     const id_kategori_kandang = ref(0);
     const id_treatment = ref(0);
     const isLoading = ref(false);
+    const showPindahTerima = ref(true);
 
-    const idKandang = ref(0);
+    const idKandang = ref([]);
+    function idKandangParam() {
+        return idKandang.value.length > 0 ? idKandang.value.join(',') : null;
+    }
     const date = ref(0);
     const rangeDate = reactive({
         start: null,
@@ -413,7 +428,7 @@
     onMounted(() => {
         rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(selectedDate.value[1]).format("YYYY-MM-DD");
-        getPelaporan(is_archived.value, idKandang.value, id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
+        getPelaporan(is_archived.value, idKandangParam(), id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
         getKandang();
         getTreatment();
         getKaryawan();
@@ -440,6 +455,9 @@
             telur_bentes: item.telur_bentes ? item.telur_bentes : '-',
             total_telur: item.total_telur ? item.total_telur : '-',
             percentase_telur: item.percentase_telur ? item.percentase_telur : '-',
+            percentase_telur_hh: item.percentase_telur_hh ? item.percentase_telur_hh : '-',
+            percentase_telur_kemarin: item.percentase_telur_kemarin ? item.percentase_telur_kemarin : '-',
+            selisih_percentase_telur: item.selisih_percentase_telur ? item.selisih_percentase_telur : '-',
             berat_telur_gr: item.avg_berat_telur_gr ? item.avg_berat_telur_gr : '-',
             berat_telur_utuh_kg: item.berat_telur_utuh_kg ? item.berat_telur_utuh_kg : '-',
             berat_telur_bentes_kg: item.berat_telur_bentes_kg ? item.berat_telur_bentes_kg : '-',
@@ -474,6 +492,9 @@
             telur_bentes: dataPelaporan.responseData.data.items[0].sumall_telur_bentes ?? 0,
             total_telur: dataPelaporan.responseData.data.items[0].sumall_total_telur ?? 0,
             percentase_telur: '-',
+            percentase_telur_hh: '-',
+            percentase_telur_kemarin: '-',
+            selisih_percentase_telur: '-',
             berat_telur_gr: '-',
             berat_telur_utuh_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_utuh_kg ?? 0,
             berat_telur_bentes_kg: dataPelaporan.responseData.data.items[0].sumall_berat_telur_bentes_kg ?? 0,
@@ -506,6 +527,9 @@
             telur_bentes: dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0,
             total_telur: dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0,
             percentase_telur: dataPelaporan.responseData.data.items[0].avg_percentase_telur ?? 0,
+            percentase_telur_hh: '-',
+            percentase_telur_kemarin: '-',
+            selisih_percentase_telur: '-',
             berat_telur_gr: dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0,
             berat_telur_utuh_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0,
             berat_telur_bentes_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0,
@@ -521,7 +545,7 @@
             egg_mass: dataPelaporan.responseData.data.items[0].avg_egg_mass ?? 0,
             nama_strain_ayam: '-',
             nama_treatment: '-',
-        
+
         });
         return result;
       
@@ -542,6 +566,9 @@
         "Tlr Bentes",
         "Total Tlr",
         "Hd %",
+        "Hh %",
+        "Hd Kemarin %",
+        "Selisih Hd %",
         "gr / butir",
         "Utuh (kg)",
         "Bentes(kg)",
@@ -591,6 +618,9 @@
         "telur_bentes",
         "total_telur",
         "percentase_telur",
+        "percentase_telur_hh",
+        "percentase_telur_kemarin",
+        "selisih_percentase_telur",
         "berat_telur_gr",
         "berat_telur_utuh_kg",
         "berat_telur_bentes_kg",
@@ -632,10 +662,13 @@
 
     function printLaporan() {
         const namaKandang = ref('');
-        if (idKandang.value == 0) {
+        if (idKandang.value.length === 0) {
             namaKandang.value = 'Semua Kandang';
         } else {
-            namaKandang.value = dataKandang.responseData.data.items.find(item => item.id == idKandang.value).nama;
+            namaKandang.value = idKandang.value
+                .map(id => dataKandang.responseData.data.items.find(item => item.id == id)?.nama)
+                .filter(Boolean)
+                .join(', ');
         }
        const dataBody = generateData().map((item) => {
             return [
@@ -653,6 +686,9 @@
                 item.telur_bentes,
                 item.total_telur,
                 item.percentase_telur,
+                item.percentase_telur_hh,
+                item.percentase_telur_kemarin,
+                item.selisih_percentase_telur,
                 item.berat_telur_gr,
                 item.berat_telur_utuh_kg,
                 item.berat_telur_bentes_kg,
@@ -707,21 +743,25 @@
                 11: {cellWidth: 13},
                 12: {cellWidth: 15},
                 13: {cellWidth: 13},
-                14: {cellWidth: 13},
-                15: {cellWidth: 13},
-                16: {cellWidth: 13},
-                17: {cellWidth: 15},
+                14: {cellWidth: 15},
+                15: {cellWidth: 15},
+                16: {cellWidth: 15},
+                17: {cellWidth: 13},
                 18: {cellWidth: 13},
                 19: {cellWidth: 13},
                 20: {cellWidth: 13},
                 21: {cellWidth: 15},
-                22: {cellWidth: 20},
+                22: {cellWidth: 13},
                 23: {cellWidth: 13},
                 24: {cellWidth: 13},
-                25: {cellWidth: 13},
-                26: {cellWidth: 15},
-                27: {cellWidth: 18},
-                28: {cellWidth: 20},
+                25: {cellWidth: 15},
+                26: {cellWidth: 20},
+                27: {cellWidth: 13},
+                28: {cellWidth: 13},
+                29: {cellWidth: 13},
+                30: {cellWidth: 15},
+                31: {cellWidth: 18},
+                32: {cellWidth: 20},
             },
             margin: { top: 10, right: 3, bottom: 10, left: 3 },
         });
@@ -736,7 +776,7 @@
         date.value = new Date(newValue[0]);
         rangeDate.start = moment(newValue[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(newValue[1]).format("YYYY-MM-DD");
-        getPelaporan(is_archived.value, idKandang.value, id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
+        getPelaporan(is_archived.value, idKandangParam(), id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
     });
 
     async function getPencatatan(page, id_kandang = idKandang.value, startDate = rangeDate.start, endDate = rangeDate.end) {
@@ -825,7 +865,7 @@
     }
 
     function getFilterLaporan() {
-        getPelaporan(is_archived.value, idKandang.value, id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
+        getPelaporan(is_archived.value, idKandangParam(), id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
     }
 
     async function getPelaporan(is_archived, id_kandang, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, startDate, endDate) {
@@ -881,13 +921,13 @@
     }
 
     function clearFilter() {
-        idKandang.value = 0;
+        idKandang.value = [];
         id_kategori_kandang.value = 0;
         id_treatment.value = 0;
         id_mandor.value = 0;
         id_anak_kandang.value = 0;
         is_archived.value = 0;
-        getPelaporan(is_archived.value, idKandang.value, id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
+        getPelaporan(is_archived.value, idKandangParam(), id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
     }
 
     function downloadExcels() {
@@ -1017,7 +1057,10 @@
         "Telur Utuh": "telur_utuh",
         "Telur Bentes": "telur_bentes",
         "Total Telur": "total_telur",
-        "Percentase Telur": "percentase_telur",
+        "Percentase Telur (HD)": "percentase_telur",
+        "Percentase Telur (HH)": "percentase_telur_hh",
+        "HD Kemarin": "percentase_telur_kemarin",
+        "Selisih HD": "selisih_percentase_telur",
         "Berat Telur gr/butir": "avg_berat_telur_gr",
         "Berat Telur Utuh kg": "berat_telur_utuh_kg",
         "Berat Telur Bentes kg": "berat_telur_bentes_kg",
