@@ -527,8 +527,8 @@
                                 <ErrorMessage class="text-danger" name="nama_mandor" />
                             </div>
                             <div class="mb-3">
-                                <label for="usia_hari" class="form-label">Usia Hari</label>
-                                <Field v-model="detailPencatatan.usia_hari" id="usia_hari" name="usia_hari" class="form-control text-center" type="number" autofocus />
+                                <label for="usia_hari" class="form-label">Usia Hari (0-6, sisa hari dari minggu berjalan)</label>
+                                <Field v-model="detailPencatatan.usia_hari" id="usia_hari" name="usia_hari" class="form-control text-center" type="number" min="0" max="6" autofocus />
                                 <ErrorMessage class="text-danger" name="usia_hari" />
                             </div>
                             <div class="mb-3">
@@ -879,8 +879,8 @@
             id_anak_kandang: yup.number().required(),
             nama_kandang: yup.number().required(),
             nama_mandor: yup.string().required(),
-            usia_hari: yup.number().required(),
-            usia_mgg: yup.number().required(),
+            usia_hari: yup.number().required().min(0, 'Usia Hari minimal 0').max(6, 'Usia Hari maksimal 6 (sisa hari dari minggu berjalan)'),
+            usia_mgg: yup.number().required().min(0, 'Usia Minggu minimal 0'),
             strain_ayam: yup.number().required(),
         }),
         yup.object({
@@ -1036,6 +1036,15 @@
           title: title,
           target: document.getElementById('first-modal'),
         });
+    }
+
+    function getErrorMessage(error) {
+        const errors = error.response?.data?.errors;
+        if (errors) {
+            const firstField = Object.keys(errors)[0];
+            return errors[firstField][0];
+        }
+        return error.response?.data?.message || 'Terjadi kesalahan';
     }
 
     function alertAfterSubmit(icon, title) {
@@ -1243,7 +1252,7 @@
             })
             .catch(error => {
                 isSubmitting.value = false;
-                alertAfterSubmit('error', error.response.data.message);
+                alertAfterSubmit('error', getErrorMessage(error));
                 console.error(error);
             });
     }
