@@ -190,32 +190,7 @@
                           <a class="text-decoration-none text-body dropdown-toggle" href="#" role="button" data-coreui-toggle="dropdown" data-coreui-auto-close="outside" aria-expanded="false">
                             <span id="filterTreatmentLabel">Semua tindakan</span>
                           </a>
-                          <ul class="dropdown-menu">
-                            <li>
-                              <label class="dropdown-item d-flex align-items-center mb-0">
-                                <input class="form-check-input me-2 mt-0 filter-treatment" type="checkbox" value="1" name="id_treatment[]">
-                                Vaksin
-                              </label>
-                            </li>
-                            <li>
-                              <label class="dropdown-item d-flex align-items-center mb-0">
-                                <input class="form-check-input me-2 mt-0 filter-treatment" type="checkbox" value="2" name="id_treatment[]">
-                                Vitamin
-                              </label>
-                            </li>
-                            <li>
-                              <label class="dropdown-item d-flex align-items-center mb-0">
-                                <input class="form-check-input me-2 mt-0 filter-treatment" type="checkbox" value="3" name="id_treatment[]">
-                                Obat
-                              </label>
-                            </li>
-                            <li>
-                              <label class="dropdown-item d-flex align-items-center mb-0">
-                                <input class="form-check-input me-2 mt-0 filter-treatment" type="checkbox" value="4" name="id_treatment[]">
-                                Antibiotik
-                              </label>
-                            </li>
-                          </ul>
+                          <ul class="dropdown-menu" id="filterTreatmentList"></ul>
                         </div>
                       </div>
                       <button class="btn btn-success bg-button-rossa">Download laporan</button>
@@ -256,83 +231,7 @@
                             <th scope="col">gr/butir</th>
                           </tr>
                         </thead>
-                        <tbody>
-                          <tr>
-                            <th scope="row">Kandang 1A</th>
-                            <td>14</td>
-                            <td>1</td>
-                            <td>-</td>
-                            <td>400</td>
-                            <td>-</td>
-                            <td>7000</td>
-                            <td>34</td>
-                            <td>406.0</td>
-                            <td>2.0</td>
-                            <td>24.2%</td>
-                            <td>58gr</td>
-                            
-                          </tr>
-                          <tr>
-                            <th scope="row">Kandang 1A</th>
-                            <td>14</td>
-                            <td>1</td>
-                            <td>-</td>
-                            <td>400</td>
-                            <td>-</td>
-                            <td>7000</td>
-                            <td>34</td>
-                            <td>406.0</td>
-                            <td>2.0</td>
-                            <td>24.2%</td>
-                            <td>58gr</td>
-                            
-                          </tr>
-                          <tr>
-                            <th scope="row">Kandang 1A</th>
-                            <td>14</td>
-                            <td>1</td>
-                            <td>-</td>
-                            <td>400</td>
-                            <td>-</td>
-                            <td>7000</td>
-                            <td>34</td>
-                            <td>406.0</td>
-                            <td>2.0</td>
-                            <td>24.2%</td>
-                            <td>58gr</td>
-                            
-                          </tr>
-                          <tr>
-                            <th scope="row">Kandang 1A</th>
-                            <td>14</td>
-                            <td>1</td>
-                            <td>-</td>
-                            <td>400</td>
-                            <td>-</td>
-                            <td>7000</td>
-                            <td>34</td>
-                            <td>406.0</td>
-                            <td>2.0</td>
-                            <td>24.2%</td>
-                            <td>58gr</td>
-                            
-                          </tr>
-                          <tr>
-                            <th scope="row">Kandang 1A</th>
-                            <td>14</td>
-                            <td>1</td>
-                            <td>-</td>
-                            <td>400</td>
-                            <td>-</td>
-                            <td>7000</td>
-                            <td>34</td>
-                            <td>406.0</td>
-                            <td>2.0</td>
-                            <td>24.2%</td>
-                            <td>58gr</td>
-                            
-                          </tr>
-                        </tbody>
+                        <tbody id="laporanBody"></tbody>
                       </table>
                     </div>
                     <nav aria-label="Page navigation example">
@@ -386,24 +285,6 @@
         </script>
     
       
-    <script>
-      // Filter tindakan (checklist, bisa pilih lebih dari satu).
-      // Nilai terpilih dikirim ke API sebagai id_treatment=1,2,3
-      (function () {
-        var boxes = document.querySelectorAll('.filter-treatment');
-        var label = document.getElementById('filterTreatmentLabel');
-        function selectedIds() {
-          return Array.prototype.filter.call(boxes, function (b) { return b.checked; })
-            .map(function (b) { return b.value; });
-        }
-        boxes.forEach(function (b) {
-          b.addEventListener('change', function () {
-            var n = selectedIds().length;
-            label.textContent = n === 0 ? 'Semua tindakan' : n + ' tindakan dipilih';
-            window.selectedTreatmentIds = selectedIds().join(',');
-          });
-        });
-      })();
-    </script>
+    <script src="js/pelaporan.js"></script>
   </body>
     </html>
