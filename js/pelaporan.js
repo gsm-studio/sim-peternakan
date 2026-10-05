@@ -1,8 +1,8 @@
 // Pelaporan: filter tindakan (checklist) tersambung ke API rossaapi.
-// Konfigurasi: localStorage.apiBaseUrl (default http://localhost) dan localStorage.token (JWT dari POST /api/login).
+// Konfigurasi: js/config.js (apiBaseUrl) dan localStorage.token (JWT dari POST /api/login).
 (function () {
   if (!localStorage.getItem('token')) { window.location.href = 'login.html'; return; }
-  var API = (localStorage.getItem('apiBaseUrl') || 'http://localhost').replace(/\/$/, '') + '/api';
+  var API = (localStorage.getItem('apiBaseUrl') || (window.APP_CONFIG && window.APP_CONFIG.apiBaseUrl) || '').replace(/\/$/, '') + '/api';
   var menu = document.getElementById('filterTreatmentList');
   var label = document.getElementById('filterTreatmentLabel');
   var body = document.getElementById('laporanBody');

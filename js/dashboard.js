@@ -1,8 +1,8 @@
 // Dashboard: filter + grafik tersambung ke GET /api/laporan/grafikdashboard (rossaapi).
-// Konfigurasi: localStorage.apiBaseUrl dan localStorage.token (lihat login.js).
+// Konfigurasi: js/config.js (apiBaseUrl) dan localStorage.token (lihat login.js).
 (function () {
   if (!localStorage.getItem('token')) { window.location.href = 'login.html'; return; }
-  var API = (localStorage.getItem('apiBaseUrl') || 'http://localhost').replace(/\/$/, '') + '/api';
+  var API = (localStorage.getItem('apiBaseUrl') || (window.APP_CONFIG && window.APP_CONFIG.apiBaseUrl) || '').replace(/\/$/, '') + '/api';
 
   // Pilihan metrik pada dropdown "Pilih Filter".
   var METRICS = {

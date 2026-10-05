@@ -1,6 +1,6 @@
 // Login: POST /api/login (rossaapi), simpan JWT di localStorage.token lalu masuk ke dashboard.
 (function () {
-  var API = (localStorage.getItem('apiBaseUrl') || 'http://localhost').replace(/\/$/, '') + '/api';
+  var API = (localStorage.getItem('apiBaseUrl') || (window.APP_CONFIG && window.APP_CONFIG.apiBaseUrl) || '').replace(/\/$/, '') + '/api';
   var email = document.getElementById('email');
   var password = document.getElementById('password');
   var btn = document.getElementById('btnLogin');
