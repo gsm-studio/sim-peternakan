@@ -188,18 +188,44 @@
                       <h4 class="d-inline">Dashboard</h4>
                       <small class="color-text-rossa">09 November 2023</small>
                       <div class="d-flex justify-content-between mt-4">
-                        <div>
+                        <div class="position-relative">
                           <div class="small text-medium-emphasis mb-2">
-                            Egg Mass Average 
-                            <span class="color-text-rossa ms-3">Filter</span>
+                            <span id="dashMetricLabel">Avg. % produksi</span>
+                            <a href="#" id="dashFilterToggle" class="color-text-rossa ms-3">Filter</a>
                           </div>
-                          <h5 class="card-title mb-0">52 gr/butir</h5>
-                          <small>
-                            <svg class="icon color-text-rossa">
-                              <use xlink:href="vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
-                            </svg> 2,4 % vs last week
-                          </small>
-                          <div class="small text-medium-emphasis mt-2">from 1-9 November, 2023</div>
+                          <div id="dashFilterPanel" class="card shadow p-3 d-none" style="position:absolute;z-index:10;width:300px;">
+                            <div class="d-flex justify-content-between mb-2">
+                              <span>Pilih Filter</span>
+                              <a href="#" id="dashClear">Clear</a>
+                            </div>
+                            <select class="form-select mb-3" id="dashMetric">
+                              <option value="hd">Avg. % produksi</option>
+                              <option value="butir">Jumlah Butir</option>
+                              <option value="fcr">FCR</option>
+                              <option value="pakan">Total Konsumsi Pakan (kg)</option>
+                            </select>
+                            <label class="mb-1" for="dashTime">Waktu</label>
+                            <select class="form-select mb-2" id="dashTime">
+                              <option value="daily">Hari</option>
+                              <option value="monthly">Bulan</option>
+                              <option value="yearly">Tahun</option>
+                            </select>
+                            <div class="d-flex gap-2 mb-3">
+                              <input type="date" class="form-control" id="dashStart">
+                              <input type="date" class="form-control" id="dashEnd">
+                            </div>
+                            <label class="mb-1">Kandang</label>
+                            <div id="dashKandang" class="border rounded p-2 mb-3" style="max-height:140px;overflow:auto;"></div>
+                            <div class="form-check form-switch mb-3">
+                              <input class="form-check-input" type="checkbox" id="dashUsia">
+                              <label class="form-check-label" for="dashUsia">Lihat Usia</label>
+                            </div>
+                            <button type="button" class="btn btn-success bg-button-rossa" id="dashApply">Terapkan</button>
+                          </div>
+                          <h5 class="card-title mb-0" id="dashValue">-</h5>
+                          <small id="dashCompare"></small>
+                          <div class="small text-medium-emphasis mt-2" id="dashRange"></div>
+                        </div>
                         </div>
                         <div class="btn-toolbar d-none d-md-block" role="toolbar" aria-label="Toolbar with buttons">
                           
@@ -442,8 +468,7 @@
     <script src="vendors/@coreui/chartjs/js/coreui-chartjs.js"></script>
     <script src="vendors/@coreui/utils/js/coreui-utils.js"></script>
     <script src="js/main.js"></script>
-    <script>
-    </script>
+    <script src="js/dashboard.js"></script>
 
   </body>
 </html>
