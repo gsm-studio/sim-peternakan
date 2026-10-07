@@ -307,39 +307,6 @@
                                 <td>-</td>
                                 <td>-</td>
                             </tr>
-                            <tr class="row-rata text-center">
-                                <td colspan="2">Rata - rata</td>
-
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0 }}</td>
-                                <td colspan="2">-</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0 }}</td>
-                                <td>-</td>
-                                <td colspan="2" v-if="showPindahTerima">-</td>
-                                <!-- <td>{{ dataPelaporan.responseData.data.items[0].avg_populasi_total ?? 0 }} </td> -->
-                                <td> - </td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_telur_utuh ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_percentase_telur ?? 0 }}</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0 }}</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_pakan_per_ekor_gram ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_berat_pakan ?? 0 }}</td>
-                                <td>-</td>
-                                <td>-</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_fc ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_std_fc ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].avg_egg_mass ?? 0 }}</td>
-                                <td>-</td>
-                                <td>-</td>
-                            </tr>
                             </template>
                             <template v-else>
                                 <tr>
@@ -1004,9 +971,6 @@
         background-color: rgba(15, 169, 88, 0.3);
     } */
     tbody .row-total td {
-        background-color: rgba(15, 169, 88, 0.3);
-    }
-    tbody .row-rata td {
         background-color: rgba(15, 169, 88, 0.3);
     }
     table {
