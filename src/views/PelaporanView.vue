@@ -27,7 +27,7 @@
                         <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
                         </svg></p> -->
                         <p>
-                            <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="dropdown-toggle ms-3 btn btn-secondary">
+                            <button data-coreui-toggle="dropdown" data-coreui-auto-close="outside" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="dropdown-toggle ms-3 btn btn-secondary">
                                 Filter
                             </button>
                             <div class="dropdown-menu dropdown-menu-start p-3 shadow">
@@ -67,22 +67,18 @@
                                         <option>Belum ada Kategori Kandang</option>
                                     </template>
                                 </select>
-                                <select v-model="id_treatment" @change="getPelaporanX(is_archived, idKandang, id_kategori_kandang, $event.target.value, id_mandor, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
-                                    <option value="0" selected> 
-                                        Semua Treatment 
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="11" height="9" viewBox="0 0 11 9" fill="none">
-                                        <path d="M1 1L5.5 7L10 1" stroke="#0FA958" stroke-width="2"/>
-                                        </svg>
-                                    </option>
-                                    <template v-if="dataTreatment.responseData">
-                                        <option v-for="item in dataTreatment.responseData.data.items" :key="item.id" :value="item.id">
-                                            {{ item.nama }}
-                                        </option>
+                                <label class="form-label">Treatment (bisa pilih lebih dari satu)</label>
+                                <div class="border rounded p-2 mb-3" style="max-height: 140px; overflow-y: auto;">
+                                    <template v-if="dataTreatment.responseData && dataTreatment.responseData.data.items.length > 0">
+                                        <div v-for="item in dataTreatment.responseData.data.items" :key="item.id" class="form-check">
+                                            <input class="form-check-input" type="checkbox" :id="'filter-treatment-' + item.id" :value="item.id" v-model="id_treatment">
+                                            <label class="form-check-label" :for="'filter-treatment-' + item.id">{{ item.nama }}</label>
+                                        </div>
                                     </template>
                                     <template v-else>
-                                        <option>Belum ada Treatment</option>
+                                        <span class="text-muted">Belum ada Treatment</span>
                                     </template>
-                                </select> 
+                                </div> 
                                 <select v-model="id_mandor" @change="getPelaporanX(is_archived, idKandang, id_kategori_kandang, id_treatment, $event.target.value, id_anak_kandang, rangeDate.start, rangeDate.end)" class="form-select form-select-sm mb-3" aria-label=".form-select-sm example">
                                     <option value="0" selected> 
                                         Semua Mandor 
@@ -161,7 +157,7 @@
                             <th class="row-atas-bg" scope="col">Usia</th>
                             <th class="row-atas-bg" :colspan="showPindahTerima ? 6 : 4" scope="col">Populasi</th>
 
-                            <th class="row-atas-bg" rowspan="2" scope="col">Total Populasi</th>
+                            <th class="row-atas-bg" rowspan="2" scope="col">Sisa Populasi</th>
 
                             <th class="row-atas-bg" colspan="8" scope="col">Produksi Telur</th>
 
@@ -394,7 +390,10 @@
     const id_strain_ayam = ref(0);
     const is_archived = ref(0);
     const id_kategori_kandang = ref(0);
-    const id_treatment = ref(0);
+    const id_treatment = ref([]);
+    function idTreatmentParam() {
+        return id_treatment.value.length > 0 ? id_treatment.value.join(',') : null;
+    }
     const isLoading = ref(false);
     const showPindahTerima = ref(true);
 
@@ -428,7 +427,7 @@
     onMounted(() => {
         rangeDate.start = moment(selectedDate.value[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(selectedDate.value[1]).format("YYYY-MM-DD");
-        getPelaporan(is_archived.value, idKandangParam(), id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
+        getPelaporan(is_archived.value, idKandangParam(), id_kategori_kandang.value, idTreatmentParam(), id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
         getKandang();
         getTreatment();
         getKaryawan();
@@ -776,7 +775,7 @@
         date.value = new Date(newValue[0]);
         rangeDate.start = moment(newValue[0]).format("YYYY-MM-DD");
         rangeDate.end = moment(newValue[1]).format("YYYY-MM-DD");
-        getPelaporan(is_archived.value, idKandangParam(), id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
+        getPelaporan(is_archived.value, idKandangParam(), id_kategori_kandang.value, idTreatmentParam(), id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
     });
 
     async function getPencatatan(page, id_kandang = idKandang.value, startDate = rangeDate.start, endDate = rangeDate.end) {
@@ -865,7 +864,7 @@
     }
 
     function getFilterLaporan() {
-        getPelaporan(is_archived.value, idKandangParam(), id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
+        getPelaporan(is_archived.value, idKandangParam(), id_kategori_kandang.value, idTreatmentParam(), id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
     }
 
     async function getPelaporan(is_archived, id_kandang, id_kategori_kandang, id_treatment, id_mandor, id_anak_kandang, startDate, endDate) {
@@ -923,11 +922,11 @@
     function clearFilter() {
         idKandang.value = [];
         id_kategori_kandang.value = 0;
-        id_treatment.value = 0;
+        id_treatment.value = [];
         id_mandor.value = 0;
         id_anak_kandang.value = 0;
         is_archived.value = 0;
-        getPelaporan(is_archived.value, idKandangParam(), id_kategori_kandang.value, id_treatment.value, id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
+        getPelaporan(is_archived.value, idKandangParam(), id_kategori_kandang.value, idTreatmentParam(), id_mandor.value, id_anak_kandang.value, rangeDate.start, rangeDate.end);
     }
 
     function downloadExcels() {
@@ -1017,7 +1016,7 @@
             "jumlah_afkir": "Jumlah Afkir",
             "jumlah_pindah": "Jumlah Pindah",
             "jumlah_terima": "Jumlah Terima",
-            "populasi_terakhir": "Populasi Total",
+            "populasi_terakhir": "Sisa Populasi",
             "telur_utuh": "Telur Utuh",
             "telur_bentes": "Telur Bentes",
             "total_telur": "Total Telur",
@@ -1053,7 +1052,7 @@
         "Jumlah Afkir": "jumlah_afkir",
         "Jumlah Pindah": "jumlah_pindah",
         "Jumlah Terima": "jumlah_terima",
-        "Populasi Total": "populasi_total",
+        "Sisa Populasi": "populasi_total",
         "Telur Utuh": "telur_utuh",
         "Telur Bentes": "telur_bentes",
         "Total Telur": "total_telur",
