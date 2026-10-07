@@ -510,42 +510,6 @@
             nama_strain_ayam: '-',
             nama_treatment: '-',
         });
-        result.push({
-            tanggal_submit: 'Rata - rata',
-            nama_kandang: '-',
-            usia_mgg: dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0,
-            populasi_awal: '-',
-            populasi_kemarin: '-',
-            jumlah_mati: dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0,
-            jumlah_afkir: '-',
-            jumlah_pindah: '-',
-            jumlah_terima: '-',
-            // populasi_total: dataPelaporan.responseData.data.items[0].avg_populasi_total ?? 0,
-            populasi_total: '-',
-            telur_utuh: dataPelaporan.responseData.data.items[0].avg_telur_utuh ?? 0,
-            telur_bentes: dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0,
-            total_telur: dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0,
-            percentase_telur: dataPelaporan.responseData.data.items[0].avg_percentase_telur ?? 0,
-            percentase_telur_hh: '-',
-            percentase_telur_kemarin: '-',
-            selisih_percentase_telur: '-',
-            berat_telur_gr: dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0,
-            berat_telur_utuh_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0,
-            berat_telur_bentes_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0,
-            berat_telur_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0,
-            std_nilai_hd: '-',
-            std_berat_telur: '-',
-            berat_pakan_per_ekor_gram: dataPelaporan.responseData.data.items[0].avg_berat_pakan_per_ekor_gram ?? 0,
-            berat_pakan: dataPelaporan.responseData.data.items[0].avg_berat_pakan ?? 0,
-            nama_jenis_pakan: '-',
-            std_gr_perekor: '-',
-            fc: dataPelaporan.responseData.data.items[0].avg_fc ?? 0,
-            std_fc: dataPelaporan.responseData.data.items[0].avg_std_fc ?? 0,
-            egg_mass: dataPelaporan.responseData.data.items[0].avg_egg_mass ?? 0,
-            nama_strain_ayam: '-',
-            nama_treatment: '-',
-
-        });
         return result;
       
     };
@@ -560,7 +524,7 @@
         "Afkir",
         "Pindah",
         "Terima",
-        "P. Total",
+        "Sisa Pop.",
         "Tlr Utuh",
         "Tlr Bentes",
         "Total Tlr",
@@ -707,7 +671,20 @@
         });
         console.log("Data Body : ", dataBody);  
     
-        const doc = new jsPDF("l", "mm", [260, 430]);
+        // Lebar halaman mengikuti total lebar kolom supaya kolom paling kanan (Strain, Treatment) tidak terpotong
+        const pdfColumnWidths = [
+            20, 18, 15, 15, 15, 13, 13, 13, 13, 13,
+            15, 13, 15, 13, 15, 15, 15, 13, 13, 13,
+            13, 15, 13, 13, 13, 15, 20, 13, 13, 13,
+            22, 28,
+        ];
+        const pdfMargin = { top: 10, right: 3, bottom: 10, left: 3 };
+        const pdfPageWidth = pdfColumnWidths.reduce((a, b) => a + b, 0) + pdfMargin.left + pdfMargin.right;
+        const pdfColumnStyles = {};
+        pdfColumnWidths.forEach((width, index) => {
+            pdfColumnStyles[index] = { cellWidth: width };
+        });
+        const doc = new jsPDF("l", "mm", [260, pdfPageWidth]);
         
         console.log("Data Generate : ", generateData());
         doc.setFontSize(14);
@@ -727,42 +704,8 @@
                 // cellWidth: 50,
                 textColor: [0, 0, 0],
             },
-            columnStyles: {
-                0: {cellWidth: 20},
-                1: {cellWidth: 18},
-                2: {cellWidth: 15},
-                3: {cellWidth: 15},
-                4: {cellWidth: 15},
-                5: {cellWidth: 13},
-                6: {cellWidth: 13},
-                7: {cellWidth: 13},
-                8: {cellWidth: 13},
-                9: {cellWidth: 13},
-                10: {cellWidth: 15},
-                11: {cellWidth: 13},
-                12: {cellWidth: 15},
-                13: {cellWidth: 13},
-                14: {cellWidth: 15},
-                15: {cellWidth: 15},
-                16: {cellWidth: 15},
-                17: {cellWidth: 13},
-                18: {cellWidth: 13},
-                19: {cellWidth: 13},
-                20: {cellWidth: 13},
-                21: {cellWidth: 15},
-                22: {cellWidth: 13},
-                23: {cellWidth: 13},
-                24: {cellWidth: 13},
-                25: {cellWidth: 15},
-                26: {cellWidth: 20},
-                27: {cellWidth: 13},
-                28: {cellWidth: 13},
-                29: {cellWidth: 13},
-                30: {cellWidth: 15},
-                31: {cellWidth: 18},
-                32: {cellWidth: 20},
-            },
-            margin: { top: 10, right: 3, bottom: 10, left: 3 },
+            columnStyles: pdfColumnStyles,
+            margin: pdfMargin,
         });
         doc.save("laporan.pdf")
     }
@@ -936,6 +879,8 @@
                     const newItem = {...item};
                     // Ubah format tanggal_submit
                     newItem.tanggal_submit = formatTanggalSubmitExcel(newItem.tanggal_submit);
+                    // "Sisa Populasi" = populasi setelah catatan hari itu (sama dengan tabel & PDF)
+                    newItem.populasi_total = newItem.populasi_terakhir;
                     return newItem;
                 });
 
@@ -967,38 +912,6 @@
                     fc: '-',
                     std_fc: dataPelaporan.responseData.data.items[0].sumall_std_fc ?? 0,
                     egg_mass: dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0,
-                    nama_strain_ayam: '-',
-                    nama_treatment: '-',
-                });
-
-                dataToExport.push({
-                    tanggal_submit: 'Rata - rata',
-                    nama_kandang: '-',
-                    usia_mgg: dataPelaporan.responseData.data.items[0].avg_usia_mgg ?? 0,
-                    populasi_awal: '-',
-                    populasi_kemarin: '-',
-                    jumlah_mati: dataPelaporan.responseData.data.items[0].avg_jumlah_mati ?? 0,
-                    jumlah_afkir: '-',
-                    jumlah_pindah: '-',
-                    jumlah_terima: '-',
-                    populasi_total: '-',
-                    telur_utuh: dataPelaporan.responseData.data.items[0].avg_telur_utuh ?? 0,
-                    telur_bentes: dataPelaporan.responseData.data.items[0].avg_telur_bentes ?? 0,
-                    total_telur: dataPelaporan.responseData.data.items[0].avg_total_telur ?? 0,
-                    percentase_telur: dataPelaporan.responseData.data.items[0].avg_percentase_telur ?? 0,
-                    avg_berat_telur_gr: dataPelaporan.responseData.data.items[0].avgall_berat_telur_gr ?? 0,
-                    berat_telur_utuh_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_utuh_kg ?? 0,
-                    berat_telur_bentes_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_bentes_kg ?? 0,
-                    berat_telur_kg: dataPelaporan.responseData.data.items[0].avg_berat_telur_kg ?? 0,
-                    std_nilai_hd: '-',
-                    std_berat_telur: '-',
-                    berat_pakan_per_ekor_gram: dataPelaporan.responseData.data.items[0].avg_berat_pakan_per_ekor_gram ?? 0,
-                    berat_pakan: dataPelaporan.responseData.data.items[0].avg_berat_pakan ?? 0,
-                    nama_jenis_pakan: '-',
-                    std_gr_perekor: '-',
-                    fc: dataPelaporan.responseData.data.items[0].avg_fc ?? 0,
-                    std_fc: dataPelaporan.responseData.data.items[0].avg_std_fc ?? 0,
-                    egg_mass: dataPelaporan.responseData.data.items[0].avg_egg_mass ?? 0,
                     nama_strain_ayam: '-',
                     nama_treatment: '-',
                 });
