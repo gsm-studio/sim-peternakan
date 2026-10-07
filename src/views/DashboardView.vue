@@ -491,7 +491,6 @@
   const filteredPakan = ref([]);
   const uniquePakan = ref([]);
   const filter = ref('avg');
-  const dataGrafikBatang = ref([]);
   const namaFilter = ref('');
   const valueFilter = ref('');
   const labelJenisPakan = ref([]);
@@ -655,58 +654,6 @@
   //       console.log("Data Grafik 1 : ", dataGrafik1.value);
 
   //   }
-
-  function getAvgFc() {
-        dataGrafikBatang.value = [];
-        const items = dataPelaporan.responseData.data.items;
-        const avgTanggal = {};
-        items.forEach(item => {
-            const tanggalSubmit = new Date(item.tanggal_submit);
-            const diffTime = Math.abs(today - tanggalSubmit);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            if (diffDays <= 6) {
-                const tanggalKey = tanggalSubmit.toDateString(); 
-                if (avgTanggal[tanggalKey]) {
-                  avgTanggal[tanggalKey] = parseFloat(item.avg_fc_daily) || 0; 
-                } else {
-                  avgTanggal[tanggalKey] = parseFloat(item.avg_fc_daily) || 0; 
-                }
-            }
-        });
-       
-        labels.value.forEach(label => {
-            dataGrafikBatang.value.push(avgTanggal[label] || null);
-        });
-        // valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '' : 0;
-
-  }
-
-  function getAvgEggMass() {
-        dataGrafikBatang.value = [];
-        const items = dataPelaporan.responseData.data.items;
-        const eggMassTanggal = {};
-        items.forEach(item => {
-            const tanggalSubmit = new Date(item.tanggal_submit);
-            const diffTime = Math.abs(today - tanggalSubmit);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            if (diffDays <= 6) {
-                const tanggalKey = tanggalSubmit.toDateString(); 
-                if (eggMassTanggal[tanggalKey]) {
-                  eggMassTanggal[tanggalKey] = parseFloat(item.avg_egg_mass_daily) || 0; 
-                } else {
-                  eggMassTanggal[tanggalKey] = parseFloat(item.avg_egg_mass_daily) || 0; 
-                }
-            }
-        });
-       
-        labels.value.forEach(label => {
-            dataGrafikBatang.value.push(eggMassTanggal[label] || null);
-        });
-        // valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '%' : 0;
-
-  }
 
   function defaultFilterWaktu() {
     const rangeSelectedWaktu = selectedWaktu.value;
