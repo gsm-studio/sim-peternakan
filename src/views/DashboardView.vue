@@ -32,9 +32,9 @@
                                     </svg>
                                 </option> -->
                                 <option value="avg" selected>Avg. % produksi</option>
-                                <!-- <option value="fc">FC</option> -->
-                                <!-- <option value="egg_mass">Egg mass</option> -->
                                 <option value="jmlButir">Jumlah Butir</option>
+                                <option value="fcr">FCR</option>
+                                <option value="pakan">Total Konsumsi Pakan (kg)</option>
                               </select> 
                               <label class="form-label">Waktu</label>
                               <select v-model="filterWaktu" class="form-control mb-3">
@@ -123,6 +123,12 @@
                         </div>
                        
                         <h5 class="card-title mb-0">{{ valueFilter }}</h5>
+                        <small v-if="metrikAktif == 'avg' && hdTerakhir !== null" class="d-block mt-1">
+                          HD terakhir <strong>{{ formatAngka(hdTerakhir) }}%</strong>
+                          &middot; {{ labelHdSebelumnya }} <strong>{{ hdSebelumnya !== null ? formatAngka(hdSebelumnya) + '%' : '-' }}</strong>
+                          &middot; Selisih HD
+                          <strong :class="selisihHd !== null && selisihHd < 0 ? 'text-danger' : 'color-text-rossa'">{{ selisihHd !== null ? formatSelisih(selisihHd) : '-' }}</strong>
+                        </small>
                         <!-- <small>
                           <svg class="icon color-text-rossa">
                             <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-arrow-circle-top"></use>
@@ -177,17 +183,7 @@
                             :wrapper="false"
                             :data="{
                               labels: listLabelGrafik1,
-                              datasets: [
-                                {
-                                  label: namaFilter,
-                                  backgroundColor: 'rgba(220, 220, 220, 0.2)',
-                                  borderColor: 'rgba(220, 220, 220, 1)',
-                                  pointBackgroundColor: 'rgba(220, 220, 220, 1)',
-                                  pointBorderColor: '#dc3545',
-                                  data: dataGrafik1
-                                },
-                               
-                              ]
+                              datasets: datasetsGrafik1
                             }"
                           />
                         
@@ -409,7 +405,7 @@
   import { CChart } from '@coreui/vue-chartjs'
   import { storeToRefs } from 'pinia';
   import { penjadwalanStore, pelaporanStore, kandangStore, pakanStore, karyawanStore } from '@/stores';
-  import { onMounted, reactive, ref, watch } from 'vue'
+  import { computed, onMounted, reactive, ref, watch } from 'vue'
   import axios from 'axios'
   import Swal from 'sweetalert2'
   import moment from 'moment'
@@ -495,7 +491,6 @@
   const filteredPakan = ref([]);
   const uniquePakan = ref([]);
   const filter = ref('avg');
-  const dataGrafikBatang = ref([]);
   const namaFilter = ref('');
   const valueFilter = ref('');
   const labelJenisPakan = ref([]);
@@ -518,6 +513,66 @@
   const id_kategori_kandang = ref(0);
   const id_anak_kandang = ref(0);
   const dataGrafik1 = ref([]);
+  const dataHdSebelumnya = ref([]);
+  const metrikAktif = ref('avg');
+  const hdTerakhir = ref(null);
+  const hdSebelumnya = ref(null);
+  const selisihHd = ref(null);
+  const labelHdSebelumnya = ref('HD kemarin');
+
+  // Pilihan metrik pada dropdown "Pilih Filter"
+  const METRIK = {
+    avg: { nama: 'Avg. % produksi', field: 'avg_percentase_telur', satuan: '%', agregat: 'avg' },
+    jmlButir: { nama: 'Jumlah Butir', field: 'sum_jumlah_butir', satuan: '', agregat: 'sum' },
+    fcr: { nama: 'FCR', field: 'fcr', satuan: '', agregat: 'avg' },
+    pakan: { nama: 'Total Konsumsi Pakan (kg)', field: 'total_konsumsi_pakan_kg', satuan: ' kg', agregat: 'sum' },
+  };
+  const LABEL_SEBELUMNYA = { daily: 'HD kemarin', monthly: 'HD bulan lalu', yearly: 'HD tahun lalu', period: 'HD periode sebelumnya' };
+
+  const formatAngka = (v) => Number(v).toLocaleString('id-ID', { maximumFractionDigits: 2 });
+  const formatSelisih = (v) => (v > 0 ? '+' : '') + formatAngka(v) + '%';
+
+  const datasetsGrafik1 = computed(() => {
+    const sets = [{
+      label: namaFilter.value,
+      backgroundColor: 'rgba(220, 220, 220, 0.2)',
+      borderColor: 'rgba(220, 220, 220, 1)',
+      pointBackgroundColor: 'rgba(220, 220, 220, 1)',
+      pointBorderColor: '#dc3545',
+      data: dataGrafik1.value,
+    }];
+    if (metrikAktif.value == 'avg') {
+      sets.push({
+        label: labelHdSebelumnya.value,
+        borderColor: '#5CA882',
+        pointBackgroundColor: '#5CA882',
+        borderDash: [8, 5],
+        borderWidth: 1,
+        data: dataHdSebelumnya.value,
+      });
+    }
+    return sets;
+  });
+
+  // Angka utama di bawah judul metrik + HD kemarin / selisih HD (dari data grafik terakhir yang diterapkan)
+  function updateHeadline() {
+    const m = METRIK[metrikAktif.value] || METRIK.avg;
+    namaFilter.value = m.nama;
+    const items = (dataPelaporan.dataGrafik1 && dataPelaporan.dataGrafik1.data && dataPelaporan.dataGrafik1.data.items) || [];
+    const nilai = items.map(item => item[m.field]).filter(v => v !== null && v !== undefined).map(Number);
+    if (nilai.length == 0) {
+      valueFilter.value = 0;
+    } else {
+      const total = nilai.reduce((a, b) => a + b, 0);
+      const hasil = m.agregat == 'sum' ? total : total / nilai.length;
+      valueFilter.value = formatAngka(hasil) + m.satuan;
+    }
+    const terakhir = items.length > 0 ? items[items.length - 1] : null;
+    const angka = (v) => (v === null || v === undefined ? null : Number(v));
+    hdTerakhir.value = terakhir ? angka(terakhir.avg_percentase_telur) : null;
+    hdSebelumnya.value = terakhir ? angka(terakhir.hd_sebelumnya) : null;
+    selisihHd.value = terakhir ? angka(terakhir.selisih_hd) : null;
+  }
   const view_by_usia = ref('false');
 
   onMounted(() => {
@@ -569,22 +624,8 @@
     view_by_usia.value = 'false';
   }
 
-  function getFilter(value) {
-        if (value === 'avg') {
-          namaFilter.value = 'Avg % produksi';
-          valueFilter.value = detailPelaporan.avg_percentase_telur ? detailPelaporan.avg_percentase_telur + '%' : 0;
-          
-        } else if (value === 'fc') {
-          namaFilter.value = 'Avg FC';
-          valueFilter.value = detailPelaporan.avg_fc ? detailPelaporan.avg_fc + '' : 0;
-          getAvgFc();
-          
-        } else if (value === 'egg_mass') {
-          namaFilter.value = 'Avg Egg Mass';
-          valueFilter.value = detailPelaporan.avg_egg_mass ? detailPelaporan.avg_egg_mass + '' : 0;
-          getAvgEggMass();
-        
-        }
+  function getFilter() {
+    updateHeadline();
   }
 
   // function getPresentaseProduksi() {
@@ -614,58 +655,6 @@
 
   //   }
 
-  function getAvgFc() {
-        dataGrafikBatang.value = [];
-        const items = dataPelaporan.responseData.data.items;
-        const avgTanggal = {};
-        items.forEach(item => {
-            const tanggalSubmit = new Date(item.tanggal_submit);
-            const diffTime = Math.abs(today - tanggalSubmit);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            if (diffDays <= 6) {
-                const tanggalKey = tanggalSubmit.toDateString(); 
-                if (avgTanggal[tanggalKey]) {
-                  avgTanggal[tanggalKey] = parseFloat(item.avg_fc_daily) || 0; 
-                } else {
-                  avgTanggal[tanggalKey] = parseFloat(item.avg_fc_daily) || 0; 
-                }
-            }
-        });
-       
-        labels.value.forEach(label => {
-            dataGrafikBatang.value.push(avgTanggal[label] || null);
-        });
-        // valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '' : 0;
-
-  }
-
-  function getAvgEggMass() {
-        dataGrafikBatang.value = [];
-        const items = dataPelaporan.responseData.data.items;
-        const eggMassTanggal = {};
-        items.forEach(item => {
-            const tanggalSubmit = new Date(item.tanggal_submit);
-            const diffTime = Math.abs(today - tanggalSubmit);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-            if (diffDays <= 6) {
-                const tanggalKey = tanggalSubmit.toDateString(); 
-                if (eggMassTanggal[tanggalKey]) {
-                  eggMassTanggal[tanggalKey] = parseFloat(item.avg_egg_mass_daily) || 0; 
-                } else {
-                  eggMassTanggal[tanggalKey] = parseFloat(item.avg_egg_mass_daily) || 0; 
-                }
-            }
-        });
-       
-        labels.value.forEach(label => {
-            dataGrafikBatang.value.push(eggMassTanggal[label] || null);
-        });
-        // valueFilter.value = dataGrafikBatang.value[6] ? dataGrafikBatang.value[6] + '%' : 0;
-
-  }
-
   function defaultFilterWaktu() {
     const rangeSelectedWaktu = selectedWaktu.value;
     const startDate = rangeSelectedWaktu[0];
@@ -685,6 +674,17 @@
 
   function submitFilter() {
     getPelaporanGrafik1();
+    // kartu Populasi & Pakan ikut filter yang sama
+    const mulai = moment(selectedWaktu.value[0]).format('YYYY-MM-DD');
+    const selesai = moment(selectedWaktu.value[1]).format('YYYY-MM-DD');
+    formatRangeDate.start = moment(selectedWaktu.value[0]).format('DD MMMM YYYY');
+    formatRangeDate.end = moment(selectedWaktu.value[1]).format('DD MMMM YYYY');
+    getPelaporan(filterKandang.value, mulai, selesai, {
+      id_kategori_kandang: id_kategori_kandang.value,
+      id_anak_kandang: id_anak_kandang.value,
+      time_filter_type: filterWaktu.value,
+      period: period.value,
+    });
     listLabelGrafik1.value = [];
     // const rangeSelectedWaktu = selectedWaktu.value;
     // const startDate = rangeSelectedWaktu[0];
@@ -723,38 +723,15 @@
   }
 
   function setDataGrafik1() {
-      dataGrafik1.value = [];
-      dataPelaporan.dataGrafik1.data.items.forEach(item => {
-        listLabelGrafik1.value.push(item.grafik_x_value);
-      });
-    
-      if (filter.value == "avg") {
-        namaFilter.value = 'Avg. % produksi';
-        dataPelaporan.dataGrafik1.data.items.forEach(item => {
-          if(filterWaktu.value == "daily") {
-            dataGrafik1.value.push(item.avg_percentase_telur);
-          } else if(filterWaktu.value == "monthly") {
-            dataGrafik1.value.push(item.avg_percentase_telur);
-          } else if(filterWaktu.value == "yearly") {
-            dataGrafik1.value.push(item.avg_percentase_telur);
-          } else {
-            dataGrafik1.value.push(item.avg_percentase_telur);
-          }
-        });
-      } else {
-        namaFilter.value = 'Jumlah Butir';
-        dataPelaporan.dataGrafik1.data.items.forEach(item => {
-          if(filterWaktu.value == "daily") {
-            dataGrafik1.value.push(item.sum_jumlah_butir);
-          } else if(filterWaktu.value == "monthly") {
-            dataGrafik1.value.push(item.sum_jumlah_butir);
-          } else if(filterWaktu.value == "yearly") {
-            dataGrafik1.value.push(item.sum_jumlah_butir);
-          } else {
-            dataGrafik1.value.push(item.sum_jumlah_butir);
-          }
-        });
-      }
+      const m = METRIK[filter.value] || METRIK.avg;
+      const items = dataPelaporan.dataGrafik1.data.items;
+      metrikAktif.value = METRIK[filter.value] ? filter.value : 'avg';
+      listLabelGrafik1.value = items.map(item => item.grafik_x_value);
+      dataGrafik1.value = items.map(item => item[m.field]);
+      dataHdSebelumnya.value = items.map(item => item.hd_sebelumnya);
+      const lihatUsia = view_by_usia.value === true || view_by_usia.value === 'true';
+      labelHdSebelumnya.value = lihatUsia ? 'HD minggu sebelumnya' : (LABEL_SEBELUMNYA[filterWaktu.value] || 'HD sebelumnya');
+      updateHeadline();
   }
 
   function inputWaktu() {
@@ -863,16 +840,24 @@
             })
     }
 
-  async function getPelaporan(id_kandang,  startDate, endDate) {
+  async function getPelaporan(id_kandang,  startDate, endDate, extra = {}) {
         if (id_kandang == 0) {
             id_kandang = null;
         }
-        getIdKandang(id_kandang);
+        if (id_kandang) {
+            getIdKandang(id_kandang);
+        } else {
+            namaKandang.value = 'Semua kandang';
+        }
         const user = localStorage.getItem('user');
         const token = JSON.parse(user);
         axios.get(baseUrl + '/laporan', {
             params: {
                 id_kandang: id_kandang,
+                id_kategori_kandang: extra.id_kategori_kandang ? extra.id_kategori_kandang : null,
+                id_anak_kandang: extra.id_anak_kandang ? extra.id_anak_kandang : null,
+                time_filter_type: extra.time_filter_type ? extra.time_filter_type : null,
+                period: extra.period ? extra.period : null,
                 start_date: startDate,
                 end_date: endDate,
                
@@ -916,7 +901,7 @@
                 
                 });
 
-                getFilter(filter.value);
+                getFilter();
                
                 if(dataPelaporan.responseData.data.items.length > 0) {
                     detailPelaporan.avg_egg_mass = parseFloat(dataPelaporan.responseData.data.items[0].avg_egg_mass).toFixed(2);
@@ -974,7 +959,6 @@
                 } 
                 filteredPakan.value = dataPelaporan.responseData.data.items.filter(item => item.nama_jenis_pakan !== null && item.nama_jenis_pakan !== undefined);
                 uniquePakan.value = [...new Set(filteredPakan.value.map(item => item.nama_jenis_pakan))];
-                valueFilter.value = detailPelaporan.avg_percentase_telur ? detailPelaporan.avg_percentase_telur + '%' : 0;
                 getJenisPakanItems(dataPelaporan.responseData.data.jenis_pakan_items);
                 console.log("Pelaporan : ", response);
             })
