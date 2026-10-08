@@ -276,8 +276,10 @@
                             </tr>
                             <tr class="row-total text-center">
                                 <td colspan="2">Total</td>
-                                <td colspan="3">-</td>
+                                <td>-</td>
                                 <!-- <td>{{ dataPelaporan.responseData.data.items[0].sumall_usia_mgg ?? 0 }}</td> -->
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_populasi_awal ?? 0 }}</td>
+                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_populasi_kemarin ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0 }}</td>
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0 }}</td>
                                 <td v-if="showPindahTerima">{{ dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0 }}</td>
@@ -446,8 +448,8 @@
             tanggal_submit: 'Total',
             nama_kandang: '-',
             usia_mgg: '-',
-            populasi_awal: '-',
-            populasi_kemarin: '-',
+            populasi_awal: dataPelaporan.responseData.data.items[0].sumall_populasi_awal ?? 0,
+            populasi_kemarin: dataPelaporan.responseData.data.items[0].sumall_populasi_kemarin ?? 0,
             jumlah_mati: dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0,
             jumlah_afkir: dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0,
             jumlah_pindah: dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0,
@@ -855,8 +857,8 @@
                     tanggal_submit: 'Total',
                     nama_kandang: '-',
                     usia_mgg: '-',
-                    populasi_awal: '-',
-                    populasi_kemarin: '-',
+                    populasi_awal: dataPelaporan.responseData.data.items[0].sumall_populasi_awal ?? 0,
+                    populasi_kemarin: dataPelaporan.responseData.data.items[0].sumall_populasi_kemarin ?? 0,
                     jumlah_mati: dataPelaporan.responseData.data.items[0].sumall_jumlah_mati ?? 0,  
                     jumlah_afkir: dataPelaporan.responseData.data.items[0].sumall_jumlah_afkir ?? 0,
                     jumlah_pindah: dataPelaporan.responseData.data.items[0].sumall_jumlah_pindah ?? 0,

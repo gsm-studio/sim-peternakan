@@ -354,6 +354,7 @@
                       <div class="pakan d-flex justify-content-around mb-3">
                         <h5 class="card-title mb-0">{{ detailPelaporan.sumall_berat_pakan }} kg</h5>
                         <h5 class="card-title mb-0">{{ detailPelaporan.avg_berat_pakan_per_ekor_gram }} gram/ekor</h5>
+                        <h5 class="card-title mb-0">FCR {{ detailPelaporan.avg_fc }}</h5>
                       </div>
                       <!-- <small>
                         <svg class="icon color-text-rossa">
