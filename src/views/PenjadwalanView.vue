@@ -9,7 +9,7 @@
                 <h4 class="mb-5">Penjadwalan</h4>
                 <div class="d-flex justify-content-between">
                     <!-- Button trigger modal -->
-                    <template v-if="role == adminKantor || role == superadmin">
+                    <template v-if="role == adminKantor || isSuperadmin">
                         <button type="button" class="btn btn-success bg-button-rossa" data-bs-toggle="modal" data-bs-target="#createModal">
                             Atur Jadwal
                         </button>
@@ -107,7 +107,7 @@
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-end">
                                         <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdPenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
-                                        <template v-if="role == adminKantor || role == superadmin">
+                                        <template v-if="role == adminKantor || isSuperadmin">
                                             <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdPenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
                                             <a @click="deletePenjadwalan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
                                         </template>
@@ -259,8 +259,7 @@
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
     const user = localStorage.getItem('user');
     const role = JSON.parse(user) ? JSON.parse(user).data.roles[0].nama : '';
-    const superadmin = ref('Super Admin');
-    const adminKandang = ref('Admin Kandang');
+    const isSuperadmin = JSON.parse(user) ? JSON.parse(user).data.roles.some(r => r.nama === 'Super Admin') : false;
     const adminKantor = ref('Admin Kantor');
 
     const schema = Yup.object().shape({

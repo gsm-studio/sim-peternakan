@@ -8,7 +8,7 @@
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
 
     const namaUser = ref(authStore.user.data.nama);
-    const roleUser = ref(authStore.user.data.roles[0].nama);
+    const roleUser = ref(authStore.user.data.roles.find(r => r.nama === 'Super Admin')?.nama || authStore.user.data.roles[0].nama);
 
     const today = new Date();
     const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();

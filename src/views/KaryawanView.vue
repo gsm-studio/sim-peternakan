@@ -108,7 +108,7 @@
                                             </a>
                                             <div class="dropdown-menu dropdown-menu-end">
                                                 <a data-bs-toggle="modal" data-bs-target="#detailModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Detail</a>
-                                                <template v-if="role == superadmin">
+                                                <template v-if="isSuperadmin">
                                                     <a data-bs-toggle="modal" data-bs-target="#editModal" @click="getIdKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Edit</a>
                                                     <template v-if="item.id !== 39">
                                                         <a @click="validasiDeleteKaryawan(item.id)" class="dropdown-item" href="javascript:void(0)">Hapus</a>
@@ -262,10 +262,7 @@
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
     const user = localStorage.getItem('user');
     const getIdUser = JSON.parse(user) ? JSON.parse(user).data.id : '';
-    const role = JSON.parse(user) ? JSON.parse(user).data.roles[0].nama : '';
-    const superadmin = ref('Super Admin');
-    const adminKandang = ref('Admin Kandang');
-    const adminKantor = ref('Admin Kantor');
+    const isSuperadmin = JSON.parse(user) ? JSON.parse(user).data.roles.some(r => r.nama === 'Super Admin') : false;
 
     const schema = Yup.object().shape({
         nama: Yup.string().required('Nama is required'),

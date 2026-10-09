@@ -39,7 +39,7 @@
                                                     <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-plus"></use>
                                                 </svg>
                                             </button>
-                                            <template v-if="role == adminKantor || role == superadmin">
+                                            <template v-if="role == adminKantor || isSuperadmin">
                                                 <button v-if="dataPencatatan.responseData && dataPencatatan.responseData.data.items.length > 0" @click="getIdPencatatan(detailPencatatan.id)" class="btn btn-secondary ms-3" type="button" data-bs-toggle="modal" data-bs-target="#editModal">
                                                 Ubah 
                                                 <svg class="icon">
@@ -1114,8 +1114,7 @@
     const route = useRoute();
     const user = localStorage.getItem('user');
     const role = JSON.parse(user) ? JSON.parse(user).data.roles[0].nama : '';
-    const superadmin = ref('Super Admin');
-    const adminKandang = ref('Admin Kandang');
+    const isSuperadmin = JSON.parse(user) ? JSON.parse(user).data.roles.some(r => r.nama === 'Super Admin') : false;
     const adminKantor = ref('Admin Kantor');
 
     const apiError = ref(null);
