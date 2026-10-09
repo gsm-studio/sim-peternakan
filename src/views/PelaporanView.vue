@@ -120,7 +120,7 @@
                         </div>
                     </div>
                     <div class="d-inline">
-                        <template v-if="role == adminKantor || role == superadmin">
+                        <template v-if="role == adminKantor || isSuperadmin">
                             <button data-coreui-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" type="button" class="dropdown-toggle ms-3 btn btn-secondary bg-button-rossa">
                                 Download Laporan
                             </button>
@@ -342,8 +342,7 @@
     const baseUrl = `${import.meta.env.VITE_API_URL}`;
     const user = localStorage.getItem('user');
     const role = JSON.parse(user) ? JSON.parse(user).data.roles[0].nama : '';
-    const superadmin = ref('Super Admin');
-    const adminKandang = ref('Admin Kandang');
+    const isSuperadmin = JSON.parse(user) ? JSON.parse(user).data.roles.some(r => r.nama === 'Super Admin') : false;
     const adminKantor = ref('Admin Kantor');
 
     const dataPencatatan = reactive(pencatatanStore());

@@ -7,8 +7,7 @@
   const baseUrl = `${import.meta.env.VITE_API_URL}`;
   const user = localStorage.getItem('user');
   const role = JSON.parse(user) ? JSON.parse(user).data.roles[0].nama : '';
-  const superadmin = ref('Super Admin');
-  const admin = ref('');
+  const isSuperadmin = JSON.parse(user) ? JSON.parse(user).data.roles.some(r => r.nama === 'Super Admin') : false;
   const adminKandang = ref('Admin Kandang');
   const adminKantor = ref('Admin Kantor');
 
@@ -55,7 +54,7 @@
             Dashboard
           </router-link>
         </li>
-        <template v-if="role == adminKantor || role == adminKandang || role == superadmin">
+        <template v-if="role == adminKantor || role == adminKandang || isSuperadmin">
           <li class="nav-group">
             <a class="nav-link nav-group-toggle" href="#">
               <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="14" height="18" viewBox="0 0 14 18" fill="none">
@@ -79,7 +78,7 @@
             </ul>
           </li>
         </template>
-        <template v-if="role == adminKantor || role == adminKandang || role == superadmin">
+        <template v-if="role == adminKantor || role == adminKandang || isSuperadmin">
           <li class="nav-item">
             <router-link to="/pelaporan" class="nav-link" >
               <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
@@ -89,7 +88,7 @@
             </router-link>
           </li>
         </template>
-        <template v-if="role == adminKantor || role == adminKandang || role == superadmin">
+        <template v-if="role == adminKantor || role == adminKandang || isSuperadmin">
           <li class="nav-item">
               <router-link to="/penjadwalan" class="nav-link">
               <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -99,7 +98,7 @@
             </router-link>
           </li>
         </template>
-        <template v-if="role == superadmin">
+        <template v-if="isSuperadmin">
           <li class="nav-item">
             <router-link to="/validasi-data" class="nav-link">
               <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="26" height="21" viewBox="0 0 26 21" fill="none">
@@ -119,7 +118,7 @@
                 
               </a>
         </li>
-        <template v-if="role == adminKantor || role == superadmin">
+        <template v-if="role == adminKantor || isSuperadmin">
           <li class="nav-group">
             <a class="nav-link nav-group-toggle" href="#">
             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
@@ -209,7 +208,7 @@
             </ul>
           </li>
         </template>
-        <template v-if="role == superadmin">
+        <template v-if="isSuperadmin">
           <li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
             <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" width="19" height="16" viewBox="0 0 19 16" fill="none">
               <g clip-path="url(#clip0_4_114)">
