@@ -178,6 +178,8 @@
                             <th class="row-atas-bg" rowspan="2" scope="col">Strain</th>
 
                             <th class="row-atas-bg" rowspan="2" scope="col">Treatment</th>
+
+                            <th class="row-atas-bg" rowspan="2" scope="col">Catatan</th>
                         </tr>
                         <tr>
                         
@@ -271,8 +273,10 @@
                                 <td>{{ item.nama_strain_ayam }}</td>
 
                                 <td>{{ item.nama_treatment }}</td>
-                            
-                            
+
+                                <td>{{ item.catatan }}</td>
+
+
                             </tr>
                             <tr class="row-total text-center">
                                 <td colspan="2">Total</td>
@@ -308,11 +312,12 @@
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0 }}</td>
                                 <td>-</td>
                                 <td>-</td>
+                                <td>-</td>
                             </tr>
                             </template>
                             <template v-else>
                                 <tr>
-                                    <td colspan="27" class="text-center">Data tidak ditemukan</td>
+                                    <td colspan="28" class="text-center">Data tidak ditemukan</td>
                                 </tr>
                             </template> 
                         </template>
@@ -440,6 +445,7 @@
             egg_mass: item.egg_mass ? item.egg_mass : '-',
             nama_strain_ayam: item.nama_strain_ayam ? item.nama_strain_ayam : '-',
             nama_treatment: item.nama_treatment ? item.nama_treatment : '-',
+            catatan: item.catatan ? item.catatan : '-',
 
         });
         });
@@ -477,6 +483,7 @@
             egg_mass: dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0,
             nama_strain_ayam: '-',
             nama_treatment: '-',
+            catatan: '-',
         });
         return result;
       
@@ -515,6 +522,7 @@
         "Egg Mass",
         "Strain",
         "Treatment",
+        "Catatan",
     ];
 
     function createHeaders(keys) {
@@ -635,16 +643,17 @@
                 item.egg_mass,
                 item.nama_strain_ayam,
                 item.nama_treatment,
+                item.catatan,
             ];
         });
         console.log("Data Body : ", dataBody);  
     
-        // Lebar halaman mengikuti total lebar kolom supaya kolom paling kanan (Strain, Treatment) tidak terpotong
+        // Lebar halaman mengikuti total lebar kolom supaya kolom paling kanan (Strain, Treatment, Catatan) tidak terpotong
         const pdfColumnWidths = [
             20, 18, 15, 15, 15, 13, 13, 13, 13, 13,
             15, 13, 15, 13, 15, 15, 15, 13, 13, 13,
             13, 15, 13, 13, 13, 15, 20, 13, 13, 13,
-            22, 28,
+            22, 28, 30,
         ];
         const pdfMargin = { top: 10, right: 3, bottom: 10, left: 3 };
         const pdfPageWidth = pdfColumnWidths.reduce((a, b) => a + b, 0) + pdfMargin.left + pdfMargin.right;
@@ -882,6 +891,7 @@
                     egg_mass: dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0,
                     nama_strain_ayam: '-',
                     nama_treatment: '-',
+                    catatan: '-',
                 });
             console.log("Data Excel : ", dataToExport);
             return dataToExport;
@@ -917,6 +927,7 @@
             "egg_mass": "Egg Mas",
             "nama_strain_ayam": "Strain Ayam",
             "nama_treatment": "Treatment",
+            "catatan": "Catatan",
         }
         // excelParser().exportDataFromJSON(dataToExport, null, null, customHeaders)
         // console.log("Data Excel : ", dataToExport);
@@ -956,6 +967,7 @@
         "Egg Mass": "egg_mass",
         "Nama Strain Ayam": "nama_strain_ayam",
         "Nama Treatment": "nama_treatment",
+        "Catatan": "catatan",
     };
     
    
