@@ -95,8 +95,9 @@ router.beforeEach(async (to) => {
   const publicPages = ['/login'];
   const authRequired = !publicPages.includes(to.path);
   const auth = useAuthStore();
-  const role = auth.user ? auth.user.data.roles[0].nama : null;
-  const superadmin = ref('Super Admin');
+  const roles = auth.user ? auth.user.data.roles : [];
+  const isSuperadmin = roles.some(r => r.nama === 'Super Admin');
+  const role = roles[0] ? roles[0].nama : null;
   const adminKandang = ref('Admin Kandang');
   const adminKantor = ref('Admin Kantor');
   const getPathUrl = ref(to.path);
@@ -104,6 +105,12 @@ router.beforeEach(async (to) => {
   if (authRequired && !auth.user) {
       auth.returnUrl = to.fullPath;
       return '/login';
+  }
+
+  // Super Admin bebas dari semua pembatasan halaman di bawah ini, apapun
+  // role lain yang juga dimiliki dan posisinya di array roles.
+  if (isSuperadmin) {
+    return;
   }
 
   if (role == adminKantor.value && getPathUrl.value == '/validasi-data') {
