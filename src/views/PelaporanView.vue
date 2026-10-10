@@ -307,9 +307,9 @@
                                 <td>{{ dataPelaporan.responseData.data.items[0].sumall_berat_pakan ?? 0 }}</td>
                                 <td>-</td>
                                 <td>-</td>
+                                <td>{{ calculateTotalFc() }}</td>
                                 <td>-</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_std_fc ?? 0 }}</td>
-                                <td>{{ dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0 }}</td>
+                                <td>-</td>
                                 <td>-</td>
                                 <td>-</td>
                                 <td>-</td>
@@ -373,6 +373,14 @@
     const idKandang = ref([]);
     function idKandangParam() {
         return idKandang.value.length > 0 ? idKandang.value.join(',') : null;
+    }
+    // Total FC = Total Pakan (kg) / (Total Berat Telur Utuh + Total Berat Telur Bentes dalam kg)
+    function calculateTotalFc() {
+        const items = dataPelaporan.responseData?.data?.items;
+        if (!items || !items[0]) return '-';
+        const totalPakan = Number(items[0].sumall_berat_pakan) || 0;
+        const totalTelurKg = (Number(items[0].sumall_berat_telur_utuh_kg) || 0) + (Number(items[0].sumall_berat_telur_bentes_kg) || 0);
+        return totalTelurKg > 0 ? (totalPakan / totalTelurKg).toFixed(2) : '-';
     }
     const date = ref(0);
     const rangeDate = reactive({
@@ -478,9 +486,9 @@
             berat_pakan: dataPelaporan.responseData.data.items[0].sumall_berat_pakan ?? 0,
             nama_jenis_pakan: '-',
             std_gr_perekor: '-',
-            fc: '-',
-            std_fc: dataPelaporan.responseData.data.items[0].sumall_std_fc ?? 0,
-            egg_mass: dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0,
+            fc: calculateTotalFc(),
+            std_fc: '-',
+            egg_mass: '-',
             nama_strain_ayam: '-',
             nama_treatment: '-',
             catatan: '-',
@@ -886,9 +894,9 @@
                     berat_pakan: dataPelaporan.responseData.data.items[0].sumall_berat_pakan ?? 0,
                     nama_jenis_pakan: '-',
                     std_gr_perekor: '-',
-                    fc: '-',
-                    std_fc: dataPelaporan.responseData.data.items[0].sumall_std_fc ?? 0,
-                    egg_mass: dataPelaporan.responseData.data.items[0].sumall_egg_mass ?? 0,
+                    fc: calculateTotalFc(),
+                    std_fc: '-',
+                    egg_mass: '-',
                     nama_strain_ayam: '-',
                     nama_treatment: '-',
                     catatan: '-',
