@@ -18,25 +18,27 @@
         console.log(getToday);
         getKaryawan();
         console.log("Data User : ", authStore.user.data.nama);
+    })
 
-        const btnHideSidebar = document.getElementById('btnHideSidebar');
+    // Toggle langsung lewat class "show" pada #sidebar (sesuai CSS CoreUI untuk
+    // breakpoint mobile), bukan lewat coreui.Sidebar.getInstance(...).toggle().
+    // Instance Sidebar itu tidak pernah dibuat (tidak ada new coreui.Sidebar(...)
+    // di manapun di aplikasi ini), jadi getInstance() selalu null dan .toggle()
+    // gagal diam-diam -- tombol menu di layar mobile tidak pernah benar-benar
+    // membuka/menutup sidebar, cuma icon-nya saja yang berubah.
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
         const menuIcon = document.getElementById('menuIcon');
         const arrowLeftIcon = document.getElementById('arrowLeftIcon');
-        let sidebarVisible = true;
-
-        btnHideSidebar.addEventListener('click', function () {
-
-            sidebarVisible = !sidebarVisible;
-
-            if (sidebarVisible) {
-                menuIcon.style.display = 'none';
-                arrowLeftIcon.style.display = 'inline-block';
-            } else {
-                menuIcon.style.display = 'inline-block';
-                arrowLeftIcon.style.display = 'none';
-            }
-        });
-    })
+        if (!sidebar) {
+            return;
+        }
+        const isShown = sidebar.classList.toggle('show');
+        if (menuIcon && arrowLeftIcon) {
+            menuIcon.style.display = isShown ? 'none' : 'inline-block';
+            arrowLeftIcon.style.display = isShown ? 'inline-block' : 'none';
+        }
+    }
 
  
 
@@ -68,7 +70,7 @@
     <header class="header header-sticky mb-4">
         <div class="container-fluid">
             <div class="d-flex align-items-center">
-            <button id="btnHideSidebar" class="header-toggler px-md-0 me-md-3" type="button" onclick="coreui.Sidebar.getInstance(document.querySelector('#sidebar')).toggle()">
+            <button id="btnHideSidebar" class="header-toggler px-md-0 me-md-3" type="button" @click="toggleSidebar">
                 <svg class="icon icon-lg" id="menuIcon" style="display:none;">
                     <use xlink:href="@/assets/vendors/@coreui/icons/svg/free.svg#cil-menu"></use>
                 </svg>
