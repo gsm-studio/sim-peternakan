@@ -7,7 +7,7 @@
             <div class="row">
                 <div class="col-lg-12 p-4">
                 <div class="d-flex justify-content-between flex-wrap mb-3">
-                    <div class="d-flex">
+                    <div class="d-flex flex-wrap">
                         <p>
                             <Datepicker
                                 :date-format="{
