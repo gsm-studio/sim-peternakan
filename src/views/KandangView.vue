@@ -155,7 +155,7 @@
                             :items-per-page="pageSize"
                             :max-pages-shown="3"
                             v-model="currentPage"
-                            :on-click="onClickHandler"
+                            @click="onClickHandler"
                         />
                     </div>
                 </div>
@@ -403,8 +403,8 @@
     const id_mandor = ref(0);
     const id_anak_kandang = ref(0);
     const onClickHandler = (page) => {
-        getKandang(currentPage.value, id_mandor.value, id_anak_kandang.value);
-        
+        currentPage.value = page;
+        getKandang(page, id_mandor.value, id_anak_kandang.value);
     };
     const isLoading = ref(false);
     const formatTanggal = (tanggal) => {
