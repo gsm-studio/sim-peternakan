@@ -16,6 +16,23 @@
       console.log("Role : ", role);
   })
 
+  // Sidebar di layar mobile adalah overlay fixed dengan z-index di atas header,
+  // jadi tombol hamburger di header ikut tertutup saat menu terbuka dan tidak
+  // bisa dipakai lagi untuk menutup. Tombol close ini ditaruh di dalam sidebar
+  // sendiri supaya selalu bisa dijangkau untuk menutup menu.
+  function closeSidebarMobile() {
+      const sidebar = document.getElementById('sidebar');
+      const menuIcon = document.getElementById('menuIcon');
+      const arrowLeftIcon = document.getElementById('arrowLeftIcon');
+      if (sidebar) {
+          sidebar.classList.remove('show');
+      }
+      if (menuIcon && arrowLeftIcon) {
+          menuIcon.style.display = 'inline-block';
+          arrowLeftIcon.style.display = 'none';
+      }
+  }
+
   async function getKandang() {
       
       const token = JSON.parse(user);
@@ -40,6 +57,7 @@
 
 <template>
    <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
+      <button type="button" class="btn-close btn-close-white d-md-none position-absolute top-0 end-0 m-3" aria-label="Tutup menu" @click="closeSidebarMobile"></button>
       <div class="sidebar-brand d-none d-md-flex">
         <img src="@/assets/img/rossa.png" alt="Rossa Logo" />
       </div>
