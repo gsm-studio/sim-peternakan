@@ -263,15 +263,25 @@
     color: #FFF !important;
   }
 
-  /* Saat sidebar mengecil ke mode icon-only (desktop, class sidebar-narrow),
-     .nav-icon bawaan CoreUI punya lebar tetap (--cui-sidebar-nav-icon-width)
-     yang pas dengan lebar narrow itu sendiri, plus padding kiri-kanan di
-     .nav-link -- hasilnya icon nempel ke kiri, bukan di tengah kolom sempit
-     itu. Dipaksa center khusus untuk mode narrow. */
+  /* Saat sidebar mengecil ke mode icon-only (desktop, class sidebar-narrow):
+     1. .nav-icon bawaan CoreUI punya lebar tetap (--cui-sidebar-nav-icon-width)
+        yang pas dengan lebar narrow itu sendiri, plus padding kiri-kanan di
+        .nav-link -- hasilnya icon nempel ke kiri, bukan di tengah kolom
+        sempit itu. Dipaksa center khusus untuk mode narrow.
+     2. Label menu ("Dashboard", "Pelaporan", dst) adalah teks polos
+        langsung di dalam <a class="nav-link">, bukan dibungkus <span>
+        ber-class seperti .nav-label yang CSS CoreUI tahu cara sembunyikan
+        otomatis di mode narrow. Akibatnya teksnya tetap coba dirender dan
+        meluber/terpotong tidak terbaca di kolom sempit itu. font-size:0
+        di .nav-link membuat teks itu kolaps jadi tidak terlihat/tidak makan
+        tempat, sementara .nav-icon (SVG dengan atribut width/height sendiri,
+        plus font-size eksplisit dari CoreUI) tidak terpengaruh -- hasilnya
+        cuma icon yang tersisa, seperti yang diharapkan. */
   #sidebar.sidebar-narrow .sidebar-nav .nav-link {
     justify-content: center;
     padding-left: 0;
     padding-right: 0;
+    font-size: 0;
   }
   #sidebar.sidebar-narrow .sidebar-nav .nav-icon {
     flex: 0 0 auto;
