@@ -18,26 +18,49 @@
         console.log(getToday);
         getKaryawan();
         console.log("Data User : ", authStore.user.data.nama);
+        syncToggleIcon();
     })
 
-    // Toggle langsung lewat class "show" pada #sidebar (sesuai CSS CoreUI untuk
-    // breakpoint mobile), bukan lewat coreui.Sidebar.getInstance(...).toggle().
-    // Instance Sidebar itu tidak pernah dibuat (tidak ada new coreui.Sidebar(...)
-    // di manapun di aplikasi ini), jadi getInstance() selalu null dan .toggle()
-    // gagal diam-diam -- tombol menu di layar mobile tidak pernah benar-benar
-    // membuka/menutup sidebar, cuma icon-nya saja yang berubah.
-    function toggleSidebar() {
+    const MOBILE_BREAKPOINT = 768;
+
+    function sidebarIsExpanded(sidebar) {
+        const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+        // Mobile: sidebar adalah overlay yang disembunyikan secara default,
+        // "terbuka" berarti class show ada.
+        // Desktop: sidebar tampil penuh secara default, "terbuka/melebar"
+        // berarti class sidebar-narrow-unfoldable (mode icon-only) TIDAK ada.
+        return isMobile
+            ? sidebar.classList.contains('show')
+            : !sidebar.classList.contains('sidebar-narrow-unfoldable');
+    }
+
+    function syncToggleIcon() {
         const sidebar = document.getElementById('sidebar');
         const menuIcon = document.getElementById('menuIcon');
         const arrowLeftIcon = document.getElementById('arrowLeftIcon');
+        if (!sidebar || !menuIcon || !arrowLeftIcon) {
+            return;
+        }
+        const expanded = sidebarIsExpanded(sidebar);
+        menuIcon.style.display = expanded ? 'none' : 'inline-block';
+        arrowLeftIcon.style.display = expanded ? 'inline-block' : 'none';
+    }
+
+    // Toggle langsung lewat class pada #sidebar (sesuai CSS CoreUI), bukan lewat
+    // coreui.Sidebar.getInstance(...).toggle(). Instance Sidebar itu tidak pernah
+    // dibuat (tidak ada new coreui.Sidebar(...) di manapun di aplikasi ini), jadi
+    // getInstance() selalu null dan .toggle() gagal diam-diam.
+    // Di layar mobile sidebar adalah overlay yang di-show/hide lewat class "show".
+    // Di layar desktop sidebar selalu tampil; tombol ini mengecilkannya jadi
+    // mode icon-only lewat class "sidebar-narrow-unfoldable", bukan menyembunyikannya.
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sidebar');
         if (!sidebar) {
             return;
         }
-        const isShown = sidebar.classList.toggle('show');
-        if (menuIcon && arrowLeftIcon) {
-            menuIcon.style.display = isShown ? 'none' : 'inline-block';
-            arrowLeftIcon.style.display = isShown ? 'inline-block' : 'none';
-        }
+        const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
+        sidebar.classList.toggle(isMobile ? 'show' : 'sidebar-narrow-unfoldable');
+        syncToggleIcon();
     }
 
  
