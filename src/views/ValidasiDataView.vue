@@ -269,7 +269,7 @@
                         :items-per-page="pageSize"
                         :max-pages-shown="3"
                         v-model="currentPage"
-                        :on-click="onClickHandler"
+                        @click="onClickHandler"
                     />
                 </div>
                 </div>
@@ -864,13 +864,12 @@
     const totalItems = ref(0);
     const isSubmitting = ref(false);
     const onClickHandler = (page) => {
-        // getPencatatan(page);
+        currentPage.value = page;
         if(search.value == "") {
-            getPencatatan(currentPage.value, id_mandor.value, id_kandang.value, id_anak_kandang.value, id_strain_ayam.value, id_treatment.value, id_jenis_pakan.value, is_archived.value)
+            getPencatatan(page, id_mandor.value, id_kandang.value, id_anak_kandang.value, id_strain_ayam.value, id_treatment.value, id_jenis_pakan.value, is_archived.value)
         } else {
-            searchPencatatan(search.value);
+            searchPencatatan(page, search.value);
         }
-        
     };
 
     const schemas = [
@@ -1008,7 +1007,7 @@
 
     function searchItem() {
         console.log(search.value);
-        searchPencatatan(search.value);
+        searchPencatatan(1, search.value);
     }
 
     function closeModal() {
@@ -1420,7 +1419,8 @@
             });
     }
 
-    async function searchPencatatan(keyword) {
+    async function searchPencatatan(page_number, keyword) {
+        currentPage.value = page_number;
         if(is_archived.value == 0) {
             is_archived.value = false;
         } else if(is_archived.value == 1) {
@@ -1438,7 +1438,7 @@
             params: {
                 search_value: keyword.toLowerCase(),
                 is_archived: is_archived.value,
-                page_number: currentPage.value,
+                page_number: page_number,
                 page_size: pageSize.value,
             },
         })

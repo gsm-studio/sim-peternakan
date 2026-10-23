@@ -130,7 +130,7 @@
                         :items-per-page="pageSize"
                         :max-pages-shown="3"
                         v-model="currentPage"
-                        :on-click="onClickHandler"
+                        @click="onClickHandler"
                     />
                 </div>
                 </div>
