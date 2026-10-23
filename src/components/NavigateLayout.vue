@@ -57,9 +57,9 @@
 
 <template>
    <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar">
-      <button type="button" class="btn-close d-md-none position-absolute top-0 end-0 m-3" aria-label="Tutup menu" @click="closeSidebarMobile"></button>
+      <button type="button" class="btn-close d-md-none position-absolute top-0 end-0 m-3" style="opacity: 1; z-index: 1032; width: 1.5rem; height: 1.5rem;" aria-label="Tutup menu" @click="closeSidebarMobile"></button>
       <div class="sidebar-brand d-none d-md-flex">
-        <img src="@/assets/img/rossa.png" alt="Rossa Logo" />
+        <img src="@/assets/img/rossa.png" alt="Rossa Logo" style="max-width: 100%; height: auto;" />
       </div>
       <ul class="sidebar-nav" data-coreui="navigation" data-simplebar="">
         <li class="nav-title">MENU</li>

@@ -28,10 +28,10 @@
         // Mobile: sidebar adalah overlay yang disembunyikan secara default,
         // "terbuka" berarti class show ada.
         // Desktop: sidebar tampil penuh secara default, "terbuka/melebar"
-        // berarti class sidebar-narrow-unfoldable (mode icon-only) TIDAK ada.
+        // berarti class sidebar-narrow (mode icon-only) TIDAK ada.
         return isMobile
             ? sidebar.classList.contains('show')
-            : !sidebar.classList.contains('sidebar-narrow-unfoldable');
+            : !sidebar.classList.contains('sidebar-narrow');
     }
 
     function syncToggleIcon() {
@@ -51,15 +51,19 @@
     // dibuat (tidak ada new coreui.Sidebar(...) di manapun di aplikasi ini), jadi
     // getInstance() selalu null dan .toggle() gagal diam-diam.
     // Di layar mobile sidebar adalah overlay yang di-show/hide lewat class "show".
-    // Di layar desktop sidebar selalu tampil; tombol ini mengecilkannya jadi
-    // mode icon-only lewat class "sidebar-narrow-unfoldable", bukan menyembunyikannya.
+    // Di layar desktop, dipakai class "sidebar-narrow" (bukan
+    // "sidebar-narrow-unfoldable") supaya sidebar tetap di alur layout normal
+    // (position: relative, mendorong/mengubah lebar konten) dan TIDAK berubah
+    // jadi overlay fixed yang melebar sendiri saat di-hover -- perilaku
+    // "unfoldable" CoreUI itu yang sebelumnya bikin sidebar menutupi
+    // tanggal/tombol di header saat di-hover.
     function toggleSidebar() {
         const sidebar = document.getElementById('sidebar');
         if (!sidebar) {
             return;
         }
         const isMobile = window.innerWidth < MOBILE_BREAKPOINT;
-        sidebar.classList.toggle(isMobile ? 'show' : 'sidebar-narrow-unfoldable');
+        sidebar.classList.toggle(isMobile ? 'show' : 'sidebar-narrow');
         syncToggleIcon();
     }
 
