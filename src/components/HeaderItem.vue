@@ -152,7 +152,16 @@
 <style scoped>
     .icon-lg {
         width: 2rem !important;
-        height: 2rem !important; 
+        height: 2rem !important;
         font-size: 2rem !important;
+    }
+
+    /* iPhone dengan notch/Dynamic Island (safe-area-inset-top > 0) --
+       header sticky ditambah padding supaya tidak mepet ke area status bar.
+       env() dengan fallback 0px tidak berefek sama sekali di perangkat
+       tanpa notch (Android, dll), jadi aman tidak mengubah tampilan selain
+       iPhone. */
+    .header.header-sticky {
+        padding-top: env(safe-area-inset-top, 0px);
     }
 </style>
