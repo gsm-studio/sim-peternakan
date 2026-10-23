@@ -262,4 +262,19 @@
     background-color: #57c87d !important;
     color: #FFF !important;
   }
+
+  /* Saat sidebar mengecil ke mode icon-only (desktop, class sidebar-narrow),
+     .nav-icon bawaan CoreUI punya lebar tetap (--cui-sidebar-nav-icon-width)
+     yang pas dengan lebar narrow itu sendiri, plus padding kiri-kanan di
+     .nav-link -- hasilnya icon nempel ke kiri, bukan di tengah kolom sempit
+     itu. Dipaksa center khusus untuk mode narrow. */
+  #sidebar.sidebar-narrow .sidebar-nav .nav-link {
+    justify-content: center;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  #sidebar.sidebar-narrow .sidebar-nav .nav-icon {
+    flex: 0 0 auto;
+    margin: 0;
+  }
 </style>

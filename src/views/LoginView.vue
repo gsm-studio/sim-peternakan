@@ -71,9 +71,17 @@ function onSubmit(values, { setErrors }) {
     const { username, password } = values;
 
     return authStore.login(username, password)
-        .catch(error => 
+        .catch(error =>
         console.log(error) ||
         setErrors({ apiError: error }));
-    
+
 }
 </script>
+
+<style scoped>
+/* Sama seperti App.vue: 100dvh konsisten di iOS (toolbar dinamis) dan
+   Android, beda dengan 100vh yang di iOS dihitung dari viewport terbesar. */
+.login-page.min-vh-100 {
+    min-height: 100dvh !important;
+}
+</style>
